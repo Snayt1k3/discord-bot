@@ -12,8 +12,7 @@ import (
 
 
 func main() {
-	sess, err := discordgo.New("Bot MTAxMTI4NTIzNjIxMjA2MDIzMA.GxaXS1.SjKesejoUuqIZb3TRFxNj5NF7pQAORHmTfk8mk")
-
+	sess, err := discordgo.New("Bot")
 	if err != nil {
 		log.Fatal(err)
 	}
