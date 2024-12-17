@@ -4,7 +4,7 @@ import (
 	"log/slog"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/snayt1k3/discord-bot/bot/config"
+	"bot/config"
 )
 
 const helpMessage string = ""

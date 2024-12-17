@@ -16,7 +16,7 @@ type configuration struct {
 
 var config *configuration
 
-func load() {
+func Load() {
 	err := godotenv.Load()
 
 	if err != nil {

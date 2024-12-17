@@ -1,43 +1,27 @@
 package main
 
 import (
+	"bot/config"
+	"bot/internal/discord"
+	"bot/internal/handlers"
 	"fmt"
-	"log"
+
 	"os"
 	"os/signal"
 	"syscall"
-
-	"github.com/bwmarrin/discordgo"
 )
 
 
 func main() {
-	sess, err := discordgo.New("Bot")
-	if err != nil {
-		log.Fatal(err)
-	}
+	config.Load()
 
-	sess.AddHandler(func (s *discordgo.Session, m *discordgo.MessageCreate) {
-		if m.Author.ID == s.State.User.ID {
-			return
-		}
+	discord.InitSession()
+	addHandlers()
+	discord.InitConnection()
 
-		if m.Content == "hello" {
-			s.ChannelMessageSend(m.ChannelID, "World!")
-		}
-	})
+	defer discord.Session.Close()
 
-	sess.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
-	
-	err = sess.Open()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer sess.Close()
-
-	fmt.Println("The bot is online!")
+	fmt.Println("Bot is running. Press Ctrl + C to exit.")
 	
 	sc := make(chan os.Signal, 1)
 
@@ -46,3 +30,8 @@ func main() {
 }
 
 
+
+func addHandlers(){
+	discord.Session.AddHandler(handlers.ReadyHandler)
+	discord.Session.AddHandler(handlers.MessageCreateHandler)
+}
