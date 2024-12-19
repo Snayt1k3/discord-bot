@@ -1,6 +1,7 @@
-package roles
+package handlers
 
 import (
+
 	"log/slog"
 
 	"github.com/bwmarrin/discordgo"
@@ -10,13 +11,10 @@ var reactionRoleMap = map[string]string{
 	"🥒": "659728499195641857", // Роль: Овощ
 }
 
-var messageId = "1015669836891820043"  // cообщение за котором закреплены реакции
+var messageId = "1015669836891820043" // cообщение за котором закреплены реакции
 
-
-func OnMessageReactionAdd (s *discordgo.Session, r discordgo.MessageReactionAdd){
-	if s.State.User.ID != r.UserID {
-		return
-	}
+func OnMessageReactionAdd(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
+	slog.Info("%v reacted with %v", r.UserID, r.Emoji.Name)
 
 	if r.MessageID != messageId {
 		return
@@ -36,10 +34,8 @@ func OnMessageReactionAdd (s *discordgo.Session, r discordgo.MessageReactionAdd)
 
 }
 
-func OnMessageReactionRemove (s *discordgo.Session, r discordgo.MessageReactionRemove) {
-	if s.State.User.ID != r.UserID {
-		return
-	}
+func OnMessageReactionRemove(s *discordgo.Session, r *discordgo.MessageReactionRemove) {
+	slog.Info("%v remove reaction %v", r.UserID, r.Emoji.Name)
 
 	if r.MessageID != messageId {
 		return

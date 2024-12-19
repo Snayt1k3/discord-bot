@@ -18,7 +18,6 @@ func InitSession() {
 		slog.Error("failed to create discord session", "error", err)
 	}
 
-	Session.Identify.Intents = discordgo.IntentsGuildMessages | discordgo.IntentGuildMessageTyping | discordgo.IntentGuildVoiceStates | discordgo.IntentGuilds
 }
 
 func InitConnection() {

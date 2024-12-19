@@ -17,7 +17,7 @@ type configuration struct {
 var config *configuration
 
 func Load() {
-	err := godotenv.Load()
+	err := godotenv.Load("/Users/macbook/GolangProjects/ds-bot/.env")
 
 	if err != nil {
 		slog.Error("failed to load environment variables")

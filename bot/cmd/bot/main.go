@@ -2,7 +2,6 @@ package main
 
 import (
 	"bot/config"
-	"bot/internal/commands/roles"
 	"bot/internal/discord"
 	"bot/internal/handlers"
 	"fmt"
@@ -35,6 +34,6 @@ func main() {
 func addHandlers(){
 	discord.Session.AddHandler(handlers.ReadyHandler)
 	discord.Session.AddHandler(handlers.MessageCreateHandler)
-	discord.Session.AddHandler(roles.OnMessageReactionAdd)
-	discord.Session.AddHandler(roles.OnMessageReactionRemove)
+	discord.Session.AddHandler(handlers.OnMessageReactionAdd)
+	discord.Session.AddHandler(handlers.OnMessageReactionRemove)
 }
