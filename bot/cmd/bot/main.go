@@ -36,4 +36,5 @@ func addHandlers(){
 	discord.Session.AddHandler(handlers.MessageCreateHandler)
 	discord.Session.AddHandler(handlers.OnMessageReactionAdd)
 	discord.Session.AddHandler(handlers.OnMessageReactionRemove)
+	discord.Session.AddHandler(handlers.OnNewMemberJoin)
 }
