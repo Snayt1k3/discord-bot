@@ -13,26 +13,26 @@ import (
 )
 
 type Lavalink struct {
-	client disgolink.Client
-	queue QueueManager
+	Client disgolink.Client
+	Queue QueueManager
 }
 
 var LavalinkClient *Lavalink
 
 
 func InitLavalink(){
-	LavalinkClient = &Lavalink{queue: QueueManager{}}
+	LavalinkClient = &Lavalink{Queue: QueueManager{}}
 
 	Lclient := disgolink.New(
 		snowflake.MustParse(discord.Session.State.User.ID),
 		// TODO: добавить хендлеры для музыки 
 	)
-	LavalinkClient.client = Lclient
+	LavalinkClient.Client = Lclient
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	node, err := LavalinkClient.client.AddNode(ctx, disgolink.NodeConfig{
+	node, err := LavalinkClient.Client.AddNode(ctx, disgolink.NodeConfig{
 		Name:     config.GetLavalinkNodeName(),
 		Address:  config.GetLavalinkAddr(),
 		Password: config.GetLavalinkPass(),
