@@ -1,0 +1,16 @@
+server:
+  port: 2333
+
+lavalink:
+  server:
+    password: youshallnotpass
+
+metrics:
+  prometheus:
+    enabled: false
+
+
+logging:
+  file:
+    enabled: false
+  path: ./logs/

@@ -2,8 +2,10 @@ package main
 
 import (
 	"bot/config"
+
 	"bot/internal/discord"
 	"bot/internal/handlers"
+	"bot/internal/lavalink"
 	"fmt"
 
 	"os"
@@ -19,6 +21,7 @@ func main() {
 	addHandlers()
 	discord.InitConnection()
 
+	lavalink.InitLavalink()
 	defer discord.Session.Close()
 
 	fmt.Println("Bot is running. Press Ctrl + C to exit.")
