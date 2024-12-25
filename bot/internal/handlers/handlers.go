@@ -12,7 +12,7 @@ const helpMessage string = ""
 // ReadyHandler will be called when the bot receives the "ready" event from Discord.
 func ReadyHandler(s *discordgo.Session, event *discordgo.Ready) {
 	// Set the playing status.
-	err := s.UpdateGameStatus(0, config.GetBotStatus())
+	err := s.UpdateCustomStatus(config.GetBotStatus())
 	if err != nil {
 		slog.Warn("failed to update game status", "error", err)
 	}
