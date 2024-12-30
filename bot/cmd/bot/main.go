@@ -3,12 +3,12 @@ package main
 import (
 	"bot/config"
 
+	"bot/internal/commands"
 	"bot/internal/discord"
 	"bot/internal/handlers"
 	"bot/internal/lavalink"
-	"bot/internal/commands"
-	"log/slog"
 	"fmt"
+	"log/slog"
 
 	"os"
 	"os/signal"
@@ -28,13 +28,12 @@ func main() {
 	defer lavalink.LavalinkClient.Client.Close()
 
 	// TODO: Добавить handler для GuildAdd ивентов
-
 	for _, cmd := range commands.CommandsList {
 		_, err := discord.Session.ApplicationCommandCreate(config.GetApplicationId(), config.GetGuildId(), cmd)
 		if err != nil {
-			slog.Info("Error creating command '%s' for guild '%s': %v", cmd.Name, cmd.GuildID, err)
+			slog.Info(fmt.Sprintf("Error creating command '%s' for guild '%s': %v", cmd.Name, config.GetGuildId(), err))
 		} else {
-			slog.Info("Command '%s' registered for guild '%s'", cmd.Name, cmd.GuildID)
+			slog.Info(fmt.Sprintf("Command '%s' registered for guild '%s'", cmd.Name, config.GetGuildId()))
 		}
 	}
 
@@ -49,10 +48,14 @@ func main() {
 
 
 
+
 func addHandlers(){
 	discord.Session.AddHandler(handlers.ReadyHandler)
 	discord.Session.AddHandler(handlers.MessageCreateHandler)
 	discord.Session.AddHandler(handlers.OnMessageReactionAdd)
 	discord.Session.AddHandler(handlers.OnMessageReactionRemove)
 	discord.Session.AddHandler(handlers.OnNewMemberJoin)
+	discord.Session.AddHandler(commands.CommandHandler)
+	discord.Session.AddHandler(handlers.OnVoiceServerUpdate)
+	discord.Session.AddHandler(handlers.OnVoiceStateUpdate)
 }

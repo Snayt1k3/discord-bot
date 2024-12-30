@@ -47,6 +47,7 @@ func PlayCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 	}
 
 	player := lv.LavalinkClient.Client.Player(snowflake.MustParse(i.GuildID))
+
 	queue := lv.LavalinkClient.Queue.Get(i.GuildID)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -104,7 +105,7 @@ func PlayCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 	if err := s.ChannelVoiceJoinManual(i.GuildID, voiceState.ChannelID, false, false); err != nil {
 		return err
 	}
-
+	
 	return player.Update(context.TODO(), lavalink.WithTrack(*toPlay))
 
 }

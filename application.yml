@@ -2,8 +2,14 @@ server:
   port: 2333
 
 lavalink:
+  plugins:
+      - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.3.0"
+      - dependency: "dev.lavalink.youtube:youtube-plugin:1.11.3"
+
   server:
     password: youshallnotpass
+    sources:
+      youtube: false
 
 metrics:
   prometheus:
@@ -14,3 +20,24 @@ logging:
   file:
     enabled: false
   path: ./logs/
+
+plugins:
+  youtube:
+    enabled: true # Whether this source can be used.
+    allowSearch: true # Whether "ytsearch:" and "ytmsearch:" can be used.
+    allowDirectVideoIds: true # Whether just video IDs can match. If false, only complete URLs will be loaded.
+    allowDirectPlaylistIds: true # Whether just playlist IDs can match. If false, only complete URLs will be loaded.
+    # The clients to use for track loading. See below for a list of valid clients.
+    # Clients are queried in the order they are given (so the first client is queried first and so on...)
+    clients:
+      - MUSIC
+      - ANDROID_VR
+      - WEB
+      - WEBEMBEDDED 
+  lavasrc:
+    providers: # Custom providers for track loading. This is the default
+#      - "dzisrc:%ISRC%" # Deezer ISRC provider
+#      - "dzsearch:%QUERY%" # Deezer search provider
+      - "ytsearch:\"%ISRC%\"" # Will be ignored if track does not have an ISRC. See https://en.wikipedia.org/wiki/International_Standard_Recording_Code
+      - "ytsearch:%QUERY%" # Will be used if track has no ISRC or no track could be found for the ISRC
+#        you can add multiple other fallback sources here

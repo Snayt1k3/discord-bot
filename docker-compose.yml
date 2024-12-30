@@ -11,6 +11,6 @@ services:
       - SERVER_PORT=2333
       - LAVALINK_PASSWORD=youshallnotpass
     volumes:
-      - ./application.yml:/app/application.yml # Привязываем ваш конфиг
+      - ./application.yml:/opt/Lavalink/application.yml # Привязываем ваш конфиг
 volumes:
   db_data:
