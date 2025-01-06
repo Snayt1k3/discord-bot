@@ -1,13 +1,12 @@
-package music
+package handlers
 
 import (
-	lv "bot/internal/lavalink"
 	"context"
 	"fmt"
 	"log/slog"
 	"regexp"
 	"time"
-
+	"bot/internal/discord"
 	"github.com/bwmarrin/discordgo"
 	"github.com/disgoorg/disgolink/v3/disgolink"
 	"github.com/disgoorg/disgolink/v3/lavalink"
@@ -15,9 +14,7 @@ import (
 	"github.com/disgoorg/snowflake/v2"
 )
 
-// TODO: Сделать сервис с настройками
 var (
-	musicChannelId = ""
 	urlPattern    = regexp.MustCompile("^https?://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]?")
 	searchPattern = regexp.MustCompile(`^(.{2})search:(.+)`)
 )
@@ -46,16 +43,16 @@ func PlayCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 		return err
 	}
 
-	player := lv.LavalinkClient.Client.Player(snowflake.MustParse(i.GuildID))
+	player := discord.Bot.Lavalink.Player(snowflake.MustParse(i.GuildID))
 
-	queue := lv.LavalinkClient.Queue.Get(i.GuildID)
+	queue := discord.Bot.Queues.Get(i.GuildID)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var toPlay *lavalink.Track
 
-	lv.LavalinkClient.Client.BestNode().LoadTracksHandler(ctx, identifier, disgolink.NewResultHandler(
+	discord.Bot.Lavalink.BestNode().LoadTracksHandler(ctx, identifier, disgolink.NewResultHandler(
 		func(track lavalink.Track) {
 			_, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
 				Content: json.Ptr(fmt.Sprintf("Загружаю трек: [`%s`](<%s>)", track.Info.Title, *track.Info.URI)),
@@ -111,7 +108,7 @@ func PlayCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 }
 
 func StopCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	queue := lv.LavalinkClient.Queue.Get(i.GuildID)
+	queue := discord.Bot.Queues.Get(i.GuildID)
 	queue.Clear()
 
 	voiceState, _ := s.State.VoiceState(i.GuildID, s.State.User.ID)
@@ -128,7 +125,7 @@ func StopCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 }
 
 func SkipCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
-	queue := lv.LavalinkClient.Queue.Get(i.GuildID)
+	queue := discord.Bot.Queues.Get(i.GuildID)
 	track, exists := queue.Next()
 
 	if !exists {
@@ -140,13 +137,13 @@ func SkipCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 		})
 	}
 
-	player := lv.LavalinkClient.Client.Player(snowflake.MustParse(i.GuildID))
+	player := discord.Bot.Lavalink.Player(snowflake.MustParse(i.GuildID))
 
 	if err := player.Update(context.TODO(), lavalink.WithTrack(track)); err != nil {
 		slog.Error("Failed to play next track: ", "error", err)
 	}
 
-	s.ChannelMessageSendEmbed(musicChannelId, &discordgo.MessageEmbed{
+	s.ChannelMessageSendEmbed(i.ChannelID, &discordgo.MessageEmbed{
 		Title:       "Сейчас играет 🎶",
 		Description: fmt.Sprintf("[%s](%s)", track.Info.Title, *track.Info.URI),
 		Thumbnail: &discordgo.MessageEmbedThumbnail{

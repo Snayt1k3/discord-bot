@@ -2,7 +2,7 @@ package commands
 
 import (
 	"bot/config"
-	"bot/internal/handlers/music"
+	"bot/internal/handlers"
 	"log/slog"
 
 	"github.com/bwmarrin/discordgo"
@@ -51,10 +51,10 @@ func OnGuildCreate(s *discordgo.Session, g *discordgo.GuildCreate) {
 func CommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	switch i.ApplicationCommandData().Name {
 	case "play":
-		music.PlayCommandHandler(s, i)
+		handlers.PlayCommandHandler(s, i)
 	case "skip":
-		music.SkipCommandHandler(s, i)
+		handlers.SkipCommandHandler(s, i)
 	case "stop":
-		music.StopCommandHandler(s, i)
+		handlers.StopCommandHandler(s, i)
 	}
 }

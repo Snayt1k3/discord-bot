@@ -1,4 +1,4 @@
-package lavalink
+package discord
 
 import "github.com/disgoorg/disgolink/v3/lavalink"
 
@@ -26,20 +26,20 @@ func (q *Queue) Clear() {
 }
 
 type QueueManager struct {
-	queues map[string]*Queue
+	Queues map[string]*Queue
 }
 
 func (q *QueueManager) Get(guildID string) *Queue {
-	queue, ok := q.queues[guildID]
+	queue, ok := q.Queues[guildID]
 	if !ok {
 		queue = &Queue{
 			Tracks: make([]lavalink.Track, 0),
 		}
-		q.queues[guildID] = queue
+		q.Queues[guildID] = queue
 	}
 	return queue
 }
 
 func (q *QueueManager) Delete(guildID string) {
-	delete(q.queues, guildID)
+	delete(q.Queues, guildID)
 }
