@@ -20,7 +20,7 @@ func RunBot() {
 	discord.InitLavalink()
 	discord.InitConnection()
 	addHandlers()
-	
+
 	defer discord.Bot.Session.Close()
 
 	fmt.Println("Bot is running. Press Ctrl + C to exit.")

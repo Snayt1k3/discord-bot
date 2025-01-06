@@ -40,3 +40,7 @@ func OnVoiceStateUpdate(session *discordgo.Session, event *discordgo.VoiceStateU
 func OnVoiceServerUpdate(session *discordgo.Session, event *discordgo.VoiceServerUpdate) {
 	discord.Bot.Lavalink.OnVoiceServerUpdate(context.TODO(), snowflake.MustParse(event.GuildID), event.Token, event.Endpoint)
 }
+
+func HelpHandler(session *discordgo.Session, i *discordgo.InteractionCreate) {
+	
+}

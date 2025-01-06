@@ -37,13 +37,13 @@ func InitBot() {
 
 func InitLavalink() {
 	Bot.Lavalink = disgolink.New(snowflake.MustParse(Bot.Session.State.User.ID),
-		// disgolink.WithListenerFunc(b.onPlayerPause),
-		// disgolink.WithListenerFunc(b.onPlayerResume),
-		// disgolink.WithListenerFunc(b.onTrackStart),
-		// disgolink.WithListenerFunc(b.onTrackEnd),
-		// disgolink.WithListenerFunc(b.onTrackException),
-		// disgolink.WithListenerFunc(b.onTrackStuck),
-		// disgolink.WithListenerFunc(b.onWebSocketClosed),
+		disgolink.WithListenerFunc(onPlayerPause),
+		disgolink.WithListenerFunc(onPlayerResume),
+		disgolink.WithListenerFunc(onTrackStart),
+		disgolink.WithListenerFunc(onTrackEnd),
+		disgolink.WithListenerFunc(onTrackException),
+		disgolink.WithListenerFunc(onTrackStuck),
+		disgolink.WithListenerFunc(onWebSocketClosed),
 	)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)

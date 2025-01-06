@@ -4,7 +4,6 @@ import (
 	"bot/config"
 	"bot/internal/handlers"
 	"log/slog"
-
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -30,7 +29,10 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		Name: 		 "skip",
 		Description: "Skip current song",
 	},
-
+	{
+		Name: 		 "help",
+		Description: "helpful message",
+	},
 }
 
 
@@ -56,5 +58,7 @@ func CommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		handlers.SkipCommandHandler(s, i)
 	case "stop":
 		handlers.StopCommandHandler(s, i)
+	case "help":
+		handlers.HelpHandler(s, i)
 	}
 }
