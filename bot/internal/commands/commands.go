@@ -26,13 +26,22 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		Description: "Stop playing music",
 	},
 	{
-		Name: 		 "skip",
-		Description: "Skip current song",
+		Name:        "skip",
+		Description: "Skip the current song",
 	},
 	{
-		Name: 		 "help",
-		Description: "helpful message",
+		Name:        "help",
+		Description: "Display a list of available commands",
 	},
+	{
+		Name:        "resume",
+		Description: "Resume the paused song",
+	},
+	{
+		Name:        "pause",
+		Description: "Pause the currently playing song",
+	},
+
 }
 
 

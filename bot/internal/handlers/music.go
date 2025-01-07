@@ -32,7 +32,7 @@ func PlayCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 		return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
-				Content: "Вы в не голосовом канале!",
+				Content: "You are not in a voice channel!",
 			},
 		})
 	}
@@ -55,7 +55,7 @@ func PlayCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 	discord.Bot.Lavalink.BestNode().LoadTracksHandler(ctx, identifier, disgolink.NewResultHandler(
 		func(track lavalink.Track) {
 			_, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
-				Content: json.Ptr(fmt.Sprintf("Загружаю трек: [`%s`](<%s>)", track.Info.Title, *track.Info.URI)),
+				Content: json.Ptr(fmt.Sprintf("Loading: [`%s`](<%s>)", track.Info.Title, *track.Info.URI)),
 			})
 			if player.Track() == nil {
 				toPlay = &track
@@ -65,7 +65,7 @@ func PlayCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 		},
 		func(playlist lavalink.Playlist) {
 			_, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
-				Content: json.Ptr(fmt.Sprintf("Загружаю плейлист: `%s` c `%d` треками", playlist.Info.Name, len(playlist.Tracks))),
+				Content: json.Ptr(fmt.Sprintf("Loading playlist: `%s` with `%d` tracks", playlist.Info.Name, len(playlist.Tracks))),
 			})
 			if player.Track() == nil {
 				toPlay = &playlist.Tracks[0]
@@ -76,7 +76,7 @@ func PlayCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 		},
 		func(tracks []lavalink.Track) {
 			_, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
-				Content: json.Ptr(fmt.Sprintf("Загружаю результаты: [`%s`](<%s>)", tracks[0].Info.Title, *tracks[0].Info.URI)),
+				Content: json.Ptr(fmt.Sprintf("Loading: [`%s`](<%s>)", tracks[0].Info.Title, *tracks[0].Info.URI)),
 			})
 			if player.Track() == nil {
 				toPlay = &tracks[0]
@@ -86,12 +86,12 @@ func PlayCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 		},
 		func() {
 			_, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
-				Content: json.Ptr(fmt.Sprintf("Ничего не найдено: `%s`", identifier)),
+				Content: json.Ptr(fmt.Sprintf("No matches: `%s`", identifier)),
 			})
 		},
 		func(err error) {
 			_, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
-				Content: json.Ptr(fmt.Sprintf("Ошибка при поиске: `%s`", err)),
+				Content: json.Ptr(fmt.Sprintf("Error while searching: `%s`", err)),
 			})
 		},
 	))
@@ -132,7 +132,7 @@ func SkipCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 		return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
-				Content: "Очередь пуста. Добавьте новую песню с помощью команды /play.",
+				Content: "The queue is empty. Add a new song using the /play command.",
 			},
 		})
 	}
@@ -144,14 +144,14 @@ func SkipCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 	}
 
 	s.ChannelMessageSendEmbed(i.ChannelID, &discordgo.MessageEmbed{
-		Title:       "Сейчас играет 🎶",
+		Title:       "Now is playing 🎶",
 		Description: fmt.Sprintf("[%s](%s)", track.Info.Title, *track.Info.URI),
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
 				URL: *track.Info.ArtworkURL,
 		},
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name:   "Длительность",
+				Name:   "Duration",
 				Value:  track.Info.Length.String(),
 				Inline: true,
 			},
@@ -162,3 +162,55 @@ func SkipCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 
 }
 
+func PauseHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	player := discord.Bot.Lavalink.Player(snowflake.MustParse(i.GuildID))
+
+	if player == nil {
+		return nil
+	}
+
+	if player.Paused() {
+		return nil
+	}
+
+	if err := player.Update(context.TODO(), lavalink.WithPaused(false)); err != nil {
+		return discord.Bot.Session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+			Type: discordgo.InteractionResponseChannelMessageWithSource,
+			Data: &discordgo.InteractionResponseData{
+				Content: "Error while pausing",
+			}})
+	}
+
+	return discord.Bot.Session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: "Player is now Paused",
+		},
+	})
+}
+func ResumeHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	player := discord.Bot.Lavalink.Player(snowflake.MustParse(i.GuildID))
+
+	if player == nil {
+		return nil
+	}
+
+	if !player.Paused() {
+		return nil
+	}
+
+	if err := player.Update(context.TODO(), lavalink.WithPaused(true)); err != nil {
+		return discord.Bot.Session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+			Type: discordgo.InteractionResponseChannelMessageWithSource,
+			Data: &discordgo.InteractionResponseData{
+				Content: "Error while resuming",
+			}})
+	}
+
+	return discord.Bot.Session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: "Player is now Resumed",
+		},
+	})
+}
