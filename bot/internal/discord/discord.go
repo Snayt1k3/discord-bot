@@ -1,6 +1,8 @@
 package discord
 
 import (
+	"bot/config"
+	"fmt"
 	"log/slog"
 	"os"
 
@@ -54,4 +56,21 @@ func JoinVoiceChannel(guildID string, voiceChannelID string, mute bool, deafen b
 	}
 
 	return voiceConnection, err
+}
+
+func SendMusicEmbedMessage(title string, url string, duration string, thumbnail string) {
+	Bot.Session.ChannelMessageSendEmbed(config.MusicChannelId, &discordgo.MessageEmbed{
+		Title:       "Now is playing 🎶",
+		Description: fmt.Sprintf("[%s](%s)", title, url),
+		Thumbnail: &discordgo.MessageEmbedThumbnail{
+				URL: thumbnail,
+		},
+		Fields: []*discordgo.MessageEmbedField{
+			{
+				Name:   "Duration",
+				Value:  duration,
+				Inline: true,
+			},
+		},
+	})
 }

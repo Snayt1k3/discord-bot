@@ -116,11 +116,19 @@ func StopCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		return
 	}
 
+
 	err := s.ChannelVoiceJoinManual(i.GuildID, "", false, false)
 
 	if err != nil {
 		slog.Error("Error while disconnecting: ", "error", err)
 	}
+
+	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: "Music has been stopped and the queue has been cleared! 🎵",
+		},
+	})
 
 }
 
@@ -143,21 +151,7 @@ func SkipCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 		slog.Error("Failed to play next track: ", "error", err)
 	}
 
-	s.ChannelMessageSendEmbed(i.ChannelID, &discordgo.MessageEmbed{
-		Title:       "Now is playing 🎶",
-		Description: fmt.Sprintf("[%s](%s)", track.Info.Title, *track.Info.URI),
-		Thumbnail: &discordgo.MessageEmbedThumbnail{
-				URL: *track.Info.ArtworkURL,
-		},
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:   "Duration",
-				Value:  track.Info.Length.String(),
-				Inline: true,
-			},
-		},
-	})
-
+	discord.SendMusicEmbedMessage(track.Info.Title, *track.Info.URI, track.Info.Length.String(), *track.Info.ArtworkURL)
 	return nil
 
 }

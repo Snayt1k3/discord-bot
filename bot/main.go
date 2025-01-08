@@ -2,24 +2,26 @@ package bot
 
 import (
 	"bot/config"
+	"log"
 
 	"bot/internal/commands"
 	"bot/internal/handlers"
 	"fmt"
 
+	"bot/internal/discord"
 	"os"
 	"os/signal"
 	"syscall"
-	"bot/internal/discord"
-
 )
 
 func RunBot() {
 	config.Load()
 	discord.InitBot()
-	discord.InitLavalink()
 	discord.InitConnection()
+	discord.InitLavalink()
+	
 	addHandlers()
+	registerCommands()
 
 	defer discord.Bot.Session.Close()
 
@@ -30,7 +32,15 @@ func RunBot() {
 }
 
 
-
+func registerCommands(){ // todo: Убрать, на первую необходимость
+	for _, command := range commands.CommandsList {
+		_, err := discord.Bot.Session.ApplicationCommandCreate(discord.Bot.Session.State.User.ID, "", command)
+		if err != nil {
+			log.Fatalf("Failed to create command %s: %v", command.Name, err)
+		}
+		log.Printf("Command %s registered successfully.", command.Name)
+	}
+}
 
 func addHandlers(){
 	discord.Bot.Session.AddHandler(handlers.ReadyHandler)

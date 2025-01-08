@@ -4,10 +4,7 @@ import (
 	"context"
 	"log/slog"
 	"time"
-
 	"bot/config"
-	
-
 	"github.com/bwmarrin/discordgo"
 	"github.com/disgoorg/disgolink/v3/disgolink"
 	"github.com/disgoorg/snowflake/v2"
@@ -32,7 +29,6 @@ func InitBot() {
 	if err != nil {
 		slog.Error("failed to create discord session", "error", err)
 	}
-
 }
 
 func InitLavalink() {

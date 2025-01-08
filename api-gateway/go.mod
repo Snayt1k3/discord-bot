@@ -1,3 +1,3 @@
-module github.com/snayt1k3/discord-bot/api-gateway
+module api-gateway
 
 go 1.23.3

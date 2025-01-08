@@ -37,8 +37,12 @@ func onTrackEnd(player disgolink.Player, event lavalink.TrackEndEvent) {
 	nextTrack, ok = queue.Next()
 
 	if !ok {
+		// leaving from voice 
+		JoinVoiceChannel(event.GuildID().String(), "", false, false)
 		return
 	}
+
+	SendMusicEmbedMessage(nextTrack.Info.Title, *nextTrack.Info.URI, nextTrack.Info.Length.String(), *nextTrack.Info.ArtworkURL)
 	if err := player.Update(context.TODO(), lavalink.WithTrack(nextTrack)); err != nil {
 		slog.Error("Failed to play next track: ", err)
 	}
