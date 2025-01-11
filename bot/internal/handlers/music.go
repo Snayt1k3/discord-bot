@@ -32,7 +32,7 @@ func PlayCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 		return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
-				Content: "You are not in a voice channel!",
+				Content: "⚠️ You are not in a voice channel! 🎤",
 			},
 		})
 	}
@@ -150,7 +150,12 @@ func SkipCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 	if err := player.Update(context.TODO(), lavalink.WithTrack(track)); err != nil {
 		slog.Error("Failed to play next track: ", "error", err)
 	}
-
+	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: "🎉 Successfully skipped. 🚀",
+		},
+	})
 	discord.SendMusicEmbedMessage(track.Info.Title, *track.Info.URI, track.Info.Length.String(), *track.Info.ArtworkURL)
 	return nil
 

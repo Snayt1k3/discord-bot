@@ -9,8 +9,17 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx4G -Xms2G
       - SERVER_PORT=2333
-      - LAVALINK_PASSWORD=youshallnotpass
+      - LAVALINK_PASSWORD=$LAVALINK_PASS
     volumes:
-      - ./application.yml:/opt/Lavalink/application.yml # Привязываем ваш конфиг
-volumes:
-  db_data:
+      - ./application.yml:/opt/Lavalink/application.yml
+  
+  frieren:
+    build: 
+      context: ./bot
+      dockerfile: Dockerfile
+    
+    depends_on:
+      - lavalink
+    env_file:
+      - .env
+

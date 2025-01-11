@@ -22,7 +22,7 @@ type configuration struct {
 var config *configuration
 
 func Load() {
-	err := godotenv.Load("/Users/macbook/GolangProjects/frieren/.env")
+	err := godotenv.Load()
 	// TODO: Убрать
 	if err != nil {
 		slog.Error("failed to load environment variables")

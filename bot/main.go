@@ -1,4 +1,4 @@
-package bot
+package main
 
 import (
 	"bot/config"
@@ -14,7 +14,7 @@ import (
 	"syscall"
 )
 
-func RunBot() {
+func main() {
 	config.Load()
 	discord.InitBot()
 	discord.InitConnection()
@@ -50,5 +50,4 @@ func addHandlers(){
 	discord.Bot.Session.AddHandler(commands.CommandHandler)
 	discord.Bot.Session.AddHandler(handlers.OnVoiceServerUpdate)
 	discord.Bot.Session.AddHandler(handlers.OnVoiceStateUpdate)
-	
 }
