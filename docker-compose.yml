@@ -2,24 +2,41 @@ version: '3.8'
 
 services:
   lavalink:
-    image: fredboat/lavalink:latest
+    # pin the image version to Lavalink v4
+    image: ghcr.io/lavalink-devs/lavalink:4
     container_name: lavalink
-    ports:
-      - "2333:2333"
+    restart: unless-stopped
     environment:
-      - _JAVA_OPTIONS=-Xmx4G -Xms2G
+      # set Java options here
+      - _JAVA_OPTIONS=-Xmx1G
+      # set lavalink server port
       - SERVER_PORT=2333
-      - LAVALINK_PASSWORD=$LAVALINK_PASS
+      # set password for lavalink
+      - LAVALINK_SERVER_PASSWORD=youshallnotpass
     volumes:
+      # mount application.yml from the same directory or use environment variables
       - ./application.yml:/opt/Lavalink/application.yml
-  
+      # persist plugins between restarts, make sure to set the correct permissions (user: 322, group: 322)
+      - ./plugins/:/opt/Lavalink/plugins/
+    networks:
+      - lavalink
+    expose:
+      # lavalink exposes port 2333 to connect to for other containers (this is for documentation purposes only)
+      - 2333
+    ports:
+      # you only need this if you want to make your lavalink accessible from outside of containers
+      - "2333:2333"
   frieren:
     build: 
       context: ./bot
       dockerfile: Dockerfile
-    
+    networks:
+      - lavalink
     depends_on:
       - lavalink
     env_file:
       - .env
 
+networks:
+  lavalink:
+    name: lavalink  

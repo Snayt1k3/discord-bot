@@ -21,91 +21,108 @@ var (
 
 
 func PlayCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
-	identifier := i.ApplicationCommandData().Options[0].StringValue()
-	
-	if !urlPattern.MatchString(identifier) && !searchPattern.MatchString(identifier) {
-		identifier = lavalink.SearchTypeYouTube.Apply(identifier)
-	}
+    identifier := i.ApplicationCommandData().Options[0].StringValue()
 
-	voiceState, err := s.State.VoiceState(i.GuildID, i.Member.User.ID)
-	if err != nil {
-		return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-			Type: discordgo.InteractionResponseChannelMessageWithSource,
-			Data: &discordgo.InteractionResponseData{
-				Content: "⚠️ You are not in a voice channel! 🎤",
-			},
-		})
-	}
+    // Проверка идентификатора
+    if !urlPattern.MatchString(identifier) && !searchPattern.MatchString(identifier) {
+        identifier = lavalink.SearchTypeYouTube.Apply(identifier)
+    }
 
-	if err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
-	}); err != nil {
-		return err
-	}
+    // Проверка голосового состояния пользователя
+    voiceState, err := s.State.VoiceState(i.GuildID, i.Member.User.ID)
+    if err != nil || voiceState == nil {
+        return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+            Type: discordgo.InteractionResponseChannelMessageWithSource,
+            Data: &discordgo.InteractionResponseData{
+                Content: "⚠️ You are not in a voice channel! 🎤",
+            },
+        })
+    }
 
-	player := discord.Bot.Lavalink.Player(snowflake.MustParse(i.GuildID))
+    // Отправка предварительного ответа
+    if err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+        Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+    }); err != nil {
+        return err
+    }
 
-	queue := discord.Bot.Queues.Get(i.GuildID)
+    // Проверка Lavalink
+    if discord.Bot.Lavalink == nil {
+        return fmt.Errorf("Lavalink is not initialized")
+    }
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+    player := discord.Bot.Lavalink.Player(snowflake.MustParse(i.GuildID))
+    if player == nil {
+        return fmt.Errorf("Player not found for guild: %s", i.GuildID)
+    }
 
-	var toPlay *lavalink.Track
+    queue := discord.Bot.Queues.Get(i.GuildID)
+    if queue == nil {
+        return fmt.Errorf("Queue not initialized for guild: %s", i.GuildID)
+    }
 
-	discord.Bot.Lavalink.BestNode().LoadTracksHandler(ctx, identifier, disgolink.NewResultHandler(
-		func(track lavalink.Track) {
-			_, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
-				Content: json.Ptr(fmt.Sprintf("Loading: [`%s`](<%s>)", track.Info.Title, *track.Info.URI)),
-			})
-			if player.Track() == nil {
-				toPlay = &track
-			} else {
-				queue.Add(track)
-			}
-		},
-		func(playlist lavalink.Playlist) {
-			_, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
-				Content: json.Ptr(fmt.Sprintf("Loading playlist: `%s` with `%d` tracks", playlist.Info.Name, len(playlist.Tracks))),
-			})
-			if player.Track() == nil {
-				toPlay = &playlist.Tracks[0]
-				queue.Add(playlist.Tracks[1:]...)
-			} else {
-				queue.Add(playlist.Tracks...)
-			}
-		},
-		func(tracks []lavalink.Track) {
-			_, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
-				Content: json.Ptr(fmt.Sprintf("Loading: [`%s`](<%s>)", tracks[0].Info.Title, *tracks[0].Info.URI)),
-			})
-			if player.Track() == nil {
-				toPlay = &tracks[0]
-			} else {
-				queue.Add(tracks[0])
-			}
-		},
-		func() {
-			_, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
-				Content: json.Ptr(fmt.Sprintf("No matches: `%s`", identifier)),
-			})
-		},
-		func(err error) {
-			_, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
-				Content: json.Ptr(fmt.Sprintf("Error while searching: `%s`", err)),
-			})
-		},
-	))
-	if toPlay == nil {
-		return nil
-	}
+    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+    defer cancel()
 
-	if err := s.ChannelVoiceJoinManual(i.GuildID, voiceState.ChannelID, false, false); err != nil {
-		return err
-	}
-	
-	return player.Update(context.TODO(), lavalink.WithTrack(*toPlay))
+    var toPlay *lavalink.Track
 
+    discord.Bot.Lavalink.BestNode().LoadTracksHandler(ctx, identifier, disgolink.NewResultHandler(
+        func(track lavalink.Track) {
+            _, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+                Content: json.Ptr(fmt.Sprintf("Loading: [`%s`](<%s>)", track.Info.Title, *track.Info.URI)),
+            })
+            if player.Track() == nil {
+                toPlay = &track
+            } else {
+                queue.Add(track)
+            }
+        },
+        func(playlist lavalink.Playlist) {
+            _, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+                Content: json.Ptr(fmt.Sprintf("Loading playlist: `%s` with `%d` tracks", playlist.Info.Name, len(playlist.Tracks))),
+            })
+            if player.Track() == nil {
+                toPlay = &playlist.Tracks[0]
+                queue.Add(playlist.Tracks[1:]...)
+            } else {
+                queue.Add(playlist.Tracks...)
+            }
+        },
+        func(tracks []lavalink.Track) {
+            _, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+                Content: json.Ptr(fmt.Sprintf("Loading: [`%s`](<%s>)", tracks[0].Info.Title, *tracks[0].Info.URI)),
+            })
+            if player.Track() == nil {
+                toPlay = &tracks[0]
+            } else {
+                queue.Add(tracks[0])
+            }
+        },
+        func() {
+            _, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+                Content: json.Ptr(fmt.Sprintf("No matches: `%s`", identifier)),
+            })
+        },
+        func(err error) {
+            _, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+                Content: json.Ptr(fmt.Sprintf("Error while searching: `%s`", err)),
+            })
+        },
+    ))
+
+    if toPlay == nil {
+        return nil // Ничего не загружено
+    }
+
+    // Присоединение к голосовому каналу
+    if err := s.ChannelVoiceJoinManual(i.GuildID, voiceState.ChannelID, false, false); err != nil {
+        return err
+    }
+
+    // Обновление трека
+    return player.Update(context.TODO(), lavalink.WithTrack(*toPlay))
 }
+
 
 func StopCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	queue := discord.Bot.Queues.Get(i.GuildID)

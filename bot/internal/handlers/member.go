@@ -14,8 +14,7 @@ var (
 )
 
 func OnNewMemberJoin(s *discordgo.Session, u *discordgo.GuildMemberAdd) {
-	formattedMessage := fmt.Sprintf(messageTemplate, u.Member.Nick)
-
+	formattedMessage := fmt.Sprintf(messageTemplate, u.Member.User.Mention())
 	go discord.SendChannelMessage(channelId, formattedMessage)
 
 }
