@@ -2,58 +2,94 @@ syntax = "proto3";
 
 package settings;
 
+// Указываем пакет для генерации Go-кода
 option go_package = "proto/";
 
+// Сервис SettingsService с методами для работы с настройками
 service SettingsService {
-  rpc GetAllSettings(GetAllSettingsRequest) returns (GetAllSettingsResponse);
+  // Методы для работы с настройками бота
+  rpc GetBotSettings(GetBotSettingsRequest) returns (GetBotSettingsResponse);
+  rpc UpdateBotSettings(UpdateBotSettingsRequest) returns (UpdateBotSettingsResponse);
+
+  // Методы для работы с настройками гильдии
   rpc GetSettingsByGuild(GetSettingsByGuildRequest) returns (GetSettingsByGuildResponse);
-  rpc CreateSetting(CreateSettingRequest) returns (CreateSettingResponse);
-  rpc UpdateSetting(UpdateSettingRequest) returns (UpdateSettingResponse);
-  rpc DeleteSetting(DeleteSettingRequest) returns (DeleteSettingResponse);
+  rpc GetAllGuildSettings(GetAllGuildSettingsRequest) returns (GetAllGuildSettingsResponse);
+  rpc UpdateGuildSettings(UpdateGuildSettingsRequest) returns (UpdateGuildSettingsResponse);
+  rpc DeleteGuildSetting(DeleteGuildSettingRequest) returns (DeleteGuildSettingResponse);
 }
 
-message GetAllSettingsRequest {}
-message GetAllSettingsResponse {
-  repeated Setting settings = 1;
+// --- Модели данных ---
+
+// Настройки бота
+message BotSettings {
+  string id = 1;
+  string bot_status = 2;
+  string description = 3;
+  string help_message = 4;
+  repeated string hello_messages = 5;
 }
 
+// Настройки ролей
+message RolesSettings {
+  string message_id = 1;
+  map<string, string> matching = 2;
+}
+
+// JSON-объект настроек гильдии
+message SettingsJson {
+  RolesSettings roles = 1;
+}
+
+// Настройки гильдии
+message GuildSettings {
+  string id = 1;
+  string guild_id = 2;
+  SettingsJson settings = 3;
+}
+
+// --- Запросы и ответы для методов ---
+
+// --- Методы для настроек бота ---
+message GetBotSettingsRequest {}
+message GetBotSettingsResponse {
+  BotSettings bot_settings = 1;
+}
+
+message UpdateBotSettingsRequest {
+  string bot_status = 1;
+  string description = 2;
+  string help_message = 3;
+  repeated string hello_messages = 4;
+}
+
+message UpdateBotSettingsResponse {
+  BotSettings bot_settings = 1;
+}
+
+// --- Методы для настроек гильдии ---
 message GetSettingsByGuildRequest {
   string guild_id = 1;
 }
 message GetSettingsByGuildResponse {
-  repeated Setting settings = 1;
+  GuildSettings settings = 1;
 }
 
-message CreateSettingRequest {
-  string type = 1;
-  string value = 2;
-  string guild_id = 3;
-}
-message CreateSettingResponse {
-  bool success = 1;
-  string id = 2;
+message GetAllGuildSettingsRequest {}
+message GetAllGuildSettingsResponse {
+  repeated GuildSettings settings = 1;
 }
 
-message UpdateSettingRequest {
+message UpdateGuildSettingsRequest {
   string id = 1;
-  string type = 2;
-  string value = 3;
-  string guild_id = 4;
+  RolesSettings roles = 2;
 }
-message UpdateSettingResponse {
-  bool success = 1;
+message UpdateGuildSettingsResponse {
+  GuildSettings guild_settings = 1;
 }
 
-message DeleteSettingRequest {
+message DeleteGuildSettingRequest {
   string id = 1;
 }
-message DeleteSettingResponse {
+message DeleteGuildSettingResponse {
   bool success = 1;
-}
-
-message Setting {
-  string id = 1;
-  string type = 2;
-  string value = 3;
-  string guild_id = 4;
 }
