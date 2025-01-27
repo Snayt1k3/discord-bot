@@ -68,6 +68,25 @@ func (r *GuildSettingRepository) GetAll() ([]models.GuildSetting, error) {
 	return settings, nil
 }
 
+func (r *GuildSettingRepository) Filter(filters map[string]interface{}) ([]models.GuildSetting, error) {
+	var guildSettings []models.GuildSetting
+
+	// Строим запрос с фильтрацией
+	query := r.db.Model(&models.GuildSetting{})
+
+	// Проходим по фильтрам
+	for key, value := range filters {
+		query = query.Where(key+" = ?", value)  // Фильтруем по ключу и значению
+	}
+
+	// Выполняем запрос и получаем результаты
+	if err := query.Find(&guildSettings).Error; err != nil {
+		return nil, err
+	}
+
+	// Возвращаем найденные записи
+	return guildSettings, nil
+}
 // Реализация методов для BotSettingRepository
 
 func (r *BotSettingRepository) Create(setting *models.BotSetting) (*models.BotSetting, error) {
@@ -75,6 +94,26 @@ func (r *BotSettingRepository) Create(setting *models.BotSetting) (*models.BotSe
 		return nil, err
 	}
 	return setting, nil
+}
+
+func (r *BotSettingRepository) Filter(filters map[string]interface{}) ([]models.BotSetting, error) {
+	var guildSettings []models.BotSetting
+
+	// Строим запрос с фильтрацией
+	query := r.db.Model(&models.BotSetting{})
+
+	// Проходим по фильтрам
+	for key, value := range filters {
+		query = query.Where(key+" = ?", value)  // Фильтруем по ключу и значению
+	}
+
+	// Выполняем запрос и получаем результаты
+	if err := query.Find(&guildSettings).Error; err != nil {
+		return nil, err
+	}
+
+	// Возвращаем найденные записи
+	return guildSettings, nil
 }
 
 func (r *BotSettingRepository) GetByID(id uint) (*models.BotSetting, error) {

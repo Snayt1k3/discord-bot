@@ -6,4 +6,5 @@ type Repository[T any] interface {
 	Update(model *T) error
 	Delete(id uint) error
 	GetAll() ([]T, error)
+	Filter(filters map[string]interface{}) ([]T, error)  // Новый метод для фильтрации
 }

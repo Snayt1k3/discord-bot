@@ -4,9 +4,8 @@ import (
 	"settings-service/internal/dto"
 	"settings-service/internal/interfaces"
 	"settings-service/internal/models"
+
 )
-
-
 
 type SettingsService struct {
 	GuildRepo interfaces.Repository[models.GuildSetting]
@@ -15,13 +14,13 @@ type SettingsService struct {
 
 // Обновление настроек бота
 func (s *SettingsService) UpdateBotSettings(data dto.BotSettingsUpdate) (dto.BotSettingsDTO, error) {
-	// Извлекаем текущие настройки бота
-	botSetting, err := s.BotRepo.GetByID(1) // Предположим, что для бота используется ID = 1
+	// Получаем текущие настройки бота
+	botSetting, err := s.BotRepo.GetByID(1) // Предположим, что у нас есть один экземпляр настроек бота
 	if err != nil {
 		return dto.BotSettingsDTO{}, err
 	}
 
-	// Обновляем поля бота
+	// Обновляем настройки
 	botSetting.BotStatus = data.BotStatus
 	botSetting.Description = data.Description
 	botSetting.HelpMessage = data.HelpMessage
@@ -33,111 +32,123 @@ func (s *SettingsService) UpdateBotSettings(data dto.BotSettingsUpdate) (dto.Bot
 		return dto.BotSettingsDTO{}, err
 	}
 
-	// Возвращаем DTO с обновленными данными
+	// Возвращаем обновленные данные
 	return dto.BotSettingsDTO{
-		ID:           botSetting.ID,
-		BotStatus:    botSetting.BotStatus,
-		Description:  botSetting.Description,
-		HelpMessage:  botSetting.HelpMessage,
+		ID:            botSetting.ID,
+		BotStatus:     botSetting.BotStatus,
+		Description:   botSetting.Description,
+		HelpMessage:   botSetting.HelpMessage,
 		HelloMessages: botSetting.HelloMessages,
 	}, nil
 }
 
-// Получение настроек бота
+// Получение текущих настроек бота
 func (s *SettingsService) GetBotSettings() (dto.BotSettingsDTO, error) {
-	// Извлекаем настройки бота по ID
-	botSetting, err := s.BotRepo.GetByID(1) // Используем ID = 1 для примера
+	// Получаем текущие настройки бота
+	botSetting, err := s.BotRepo.GetByID(1) // Предположим, что у нас есть один экземпляр настроек бота
 	if err != nil {
 		return dto.BotSettingsDTO{}, err
 	}
 
-	// Возвращаем DTO с настройками
+	// Возвращаем данные
 	return dto.BotSettingsDTO{
-		ID:           botSetting.ID,
-		BotStatus:    botSetting.BotStatus,
-		Description:  botSetting.Description,
-		HelpMessage:  botSetting.HelpMessage,
+		ID:            botSetting.ID,
+		BotStatus:     botSetting.BotStatus,
+		Description:   botSetting.Description,
+		HelpMessage:   botSetting.HelpMessage,
 		HelloMessages: botSetting.HelloMessages,
 	}, nil
 }
 
-// Получение настроек гильдии по ID
-func (s *SettingsService) GetByGuildID(id int) (dto.GuildSettingsDTO, error) {
-	// Извлекаем настройки гильдии по ID
-	guildSetting, err := s.GuildRepo.GetByID(uint(id))
-	if err != nil {
+// Получение настроек гильдии по GuildID
+func (s *SettingsService) GetByGuildID(id string) (dto.GuildSettingsDTO, error) {
+	// Получаем настройки гильдии
+	guildSetting, err := s.GuildRepo.Filter(map[string]interface{}{"guild_id": id})
+	if err != nil || len(guildSetting) == 0{
 		return dto.GuildSettingsDTO{}, err
 	}
 
-	// Возвращаем DTO с настройками для гильдии
+	// Возвращаем данные
 	return dto.GuildSettingsDTO{
-		ID:        guildSetting.ID,
-		GuildID:   guildSetting.GuildID,
-		Settings:  guildSetting.Settings,
+		ID:      guildSetting[0].ID,
+		GuildID: guildSetting[0].GuildID,
+		Settings: dto.SettingsJson{
+			Roles: dto.RolesSettings{
+				MesssageId: guildSetting[0].Settings.Roles.MesssageId,
+				Matching:   guildSetting[0].Settings.Roles.Matching,
+			},
+		},
 	}, nil
 }
 
 // Получение всех настроек гильдий
 func (s *SettingsService) GetAllGuildSettings() ([]dto.GuildSettingsDTO, error) {
-	// Извлекаем все настройки гильдий
-	guildSettings, err := s.GuildRepo.GetAll()
+	// Получаем все настройки гильдий
+	guildSettingsList, err := s.GuildRepo.GetAll()
 	if err != nil {
 		return nil, err
 	}
 
-	// Преобразуем данные в DTO
+	// Преобразуем в DTO и возвращаем
 	var result []dto.GuildSettingsDTO
-	for _, setting := range guildSettings {
+	for _, guildSetting := range guildSettingsList {
 		result = append(result, dto.GuildSettingsDTO{
-			ID:        setting.ID,
-			GuildID:   setting.GuildID,
-			Settings:  setting.Settings,
+			ID:      guildSetting.ID,
+			GuildID: guildSetting.GuildID,
+			Settings: dto.SettingsJson{
+				Roles: dto.RolesSettings{
+					MesssageId: guildSetting.Settings.Roles.MesssageId,
+					Matching:   guildSetting.Settings.Roles.Matching,
+				},
+			},
 		})
 	}
-
 	return result, nil
 }
 
 // Обновление настроек гильдии
-func (s *SettingsService) UpdateGuildSettings(id int, data dto.GuildSettingsUpdateDTO) (dto.GuildSettingsDTO, error) {
-	// Извлекаем настройки гильдии по ID
-	guildSetting, err := s.GuildRepo.GetByID(uint(id))
-	if err != nil {
+func (s *SettingsService) UpdateGuildSettings(id string, data dto.GuildSettingsUpdateDTO) (dto.GuildSettingsDTO, error) {
+	// Получаем текущие настройки гильдии
+	guildSettings, err := s.GuildRepo.Filter(map[string]interface{}{"guild_id": id})
+	
+	if err != nil || len(guildSettings) == 0{
 		return dto.GuildSettingsDTO{}, err
 	}
-
-	// Обновляем поля
-	guildSetting.Settings.Roles = data.Roles
+	
+	firstGuildSetting := guildSettings[0]
+	// Обновляем настройки
+	firstGuildSetting.Settings.Roles.MesssageId = data.Roles.MesssageId
+	firstGuildSetting.Settings.Roles.Matching = data.Roles.Matching
 
 	// Сохраняем обновленные настройки
-	err = s.GuildRepo.Update(guildSetting)
+	err = s.GuildRepo.Update(&firstGuildSetting)
 	if err != nil {
 		return dto.GuildSettingsDTO{}, err
 	}
 
-	// Возвращаем DTO с обновленными данными
+	// Возвращаем обновленные данные
 	return dto.GuildSettingsDTO{
-		ID:        guildSetting.ID,
-		GuildID:   guildSetting.GuildID,
-		Settings:  guildSetting.Settings,
+		ID:      firstGuildSetting.ID,
+		GuildID: firstGuildSetting.GuildID,
+		Settings: dto.SettingsJson{
+			Roles: dto.RolesSettings{
+				MesssageId: firstGuildSetting.Settings.Roles.MesssageId,
+				Matching:   firstGuildSetting.Settings.Roles.Matching,
+			},
+		},
 	}, nil
 }
 
 // Удаление настроек гильдии
-func (s *SettingsService) DeleteGuildSetting(id int, data dto.GuildSettingsDeleteDTO) error {
-	// Извлекаем настройки гильдии по ID
-	guildSetting, err := s.GuildRepo.GetByID(uint(id))
-	if err != nil {
+func (s *SettingsService) DeleteGuildSetting(id string) error {
+	// Получаем текущие настройки гильдии
+	guildSettings, err := s.GuildRepo.Filter(map[string]interface{}{"guild_id": id})
+	if err != nil || len(guildSettings) == 0{
 		return err
 	}
 
-	// Удаляем данные в зависимости от запроса
-	if data.Roles {
-		guildSetting.Settings.Roles = dto.RolesSettings{}
-	}
-
-	// Сохраняем изменения
-	err = s.GuildRepo.Update(guildSetting)
+	// Удаляем настройки
+	err = s.GuildRepo.Delete(guildSettings[0].ID)
 	if err != nil {
 		return err
 	}

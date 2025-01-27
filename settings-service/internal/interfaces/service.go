@@ -10,9 +10,9 @@ type SettingsInterface interface {
 	GetBotSettings()(dto.BotSettingsDTO, error)
 
 	// guild settings methods
-	GetByGuildID(id int) (dto.GuildSettingsDTO, error)
-	GetAllGuildSettings() (dto.GuildSettingsDTO, error)
-	UpdateGuildSettings(id int, data dto.GuildSettingsUpdateDTO) (dto.GuildSettingsDTO, error)
-	DeteleGuildSetting(id int, data dto.GuildSettingsDeleteDTO)
+	GetByGuildID(id string) (dto.GuildSettingsDTO, error)
+	GetAllGuildSettings() ([]dto.GuildSettingsDTO, error)
+	UpdateGuildSettings(id string, data dto.GuildSettingsUpdateDTO) (dto.GuildSettingsDTO, error)
+	DeleteGuildSetting(id string) (error)
 
 }
