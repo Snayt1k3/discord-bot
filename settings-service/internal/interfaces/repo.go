@@ -1,9 +1,9 @@
 package interfaces
 
 type Repository[T any] interface {
-    Create(user T) (int, error)      
-    GetByID(id int) (T, error)      
-    Update(user T) error            
-    Delete(id int) error               
-    GetAll() ([]T, error)           
+	Create(model *T) (*T, error)
+	GetByID(id uint) (*T, error)
+	Update(model *T) error
+	Delete(id uint) error
+	GetAll() ([]T, error)
 }
