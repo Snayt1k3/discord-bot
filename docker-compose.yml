@@ -1,25 +1,65 @@
-version: '3.8'
-
 services:
-  lavalink:
-    image: fredboat/lavalink:latest
-    container_name: lavalink
-    ports:
-      - "2333:2333"
-    environment:
-      - _JAVA_OPTIONS=-Xmx4G -Xms2G
-      - SERVER_PORT=2333
-      - LAVALINK_PASSWORD=$LAVALINK_PASS
-    volumes:
-      - ./application.yml:/opt/Lavalink/application.yml
-  
-  frieren:
-    build: 
-      context: ./bot
-      dockerfile: Dockerfile
-    
-    depends_on:
-      - lavalink
-    env_file:
-      - .env
+  # lavalink:
+  #   image: ghcr.io/lavalink-devs/lavalink:4
+  #   container_name: lavalink
+  #   restart: unless-stopped
+  #   environment:
+  #     - _JAVA_OPTIONS=-Xmx4G
+  #     - SERVER_PORT=2333
+  #     - LAVALINK_SERVER_PASSWORD=youshallnotpass
+  #   volumes:
+  #     - ./application.yml:/opt/Lavalink/application.yml
+  #     - ./plugins/:/opt/Lavalink/plugins/
+  #   networks:
+  #     - lavalink
+  #   expose:
+  #     - 2333
+  #   ports:
+  #     - "2333:2333"
+  # frieren:
+  #   build: 
+  #     context: ./bot
+  #     dockerfile: Dockerfile
+  #   networks:
+  #     - lavalink
+  #   depends_on:
+  #     - lavalink
+  #   env_file:
+  #     - .env
+  #   restart: always
 
+  settings-service:
+    container_name: settings-service
+    build: 
+      context: ./settings-service
+      dockerfile: Dockerfile
+    networks:
+      - bot
+    env_file:
+      - ./settings-service/.env
+    depends_on:
+      - settings-db
+    restart: always
+
+  settings-db:
+    image: postgres:latest
+    restart: on-failure:5
+    container_name: settings-db
+
+    env_file:
+      - settings-service/.env
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - bot
+
+volumes:
+  pgdata:
+
+networks:
+  bot:
+    name: bot  

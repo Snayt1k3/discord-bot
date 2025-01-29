@@ -19,15 +19,14 @@ type Config struct {
 // Загрузка переменных из .env файла
 func LoadConfig() (*Config, error) {
 
-	// Инициализируем конфигурацию из переменных окружения
 	config := &Config{
-		Host:     os.Getenv("DB_HOST"),
-		Port:     os.Getenv("DB_PORT"),
-		User:     os.Getenv("DB_USER"),
-		Password: os.Getenv("DB_PASSWORD"),
-		DBName:   os.Getenv("DB_NAME"),
-		SSLMode:  os.Getenv("DB_SSLMODE"),
-		TimeZone: os.Getenv("DB_TIMEZONE"),
+		Host:     os.Getenv("POSTGRES_HOST"),
+		Port:     os.Getenv("POSTGRES_PORT"),
+		User:     os.Getenv("POSTGRES_USER"),
+		Password: os.Getenv("POSTGRES_PASSWORD"),
+		DBName:   os.Getenv("POSTGRES_DB"),
+		SSLMode:  os.Getenv("POSTGRES_SSLMODE"),
+		TimeZone: os.Getenv("POSTGRES_TIMEZONE"),
 		GrpcPort: os.Getenv("GRPC_PORT"),
 	}
 
@@ -39,10 +38,9 @@ func LoadConfig() (*Config, error) {
 	return config, nil
 }
 
-// Формирование строки подключения (DSN) для PostgreSQL
 func (c *Config) DSN() string {
 	return fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s timezone=%s",
 		c.Host, c.User, c.Password, c.DBName, c.Port, c.SSLMode, c.TimeZone,
 	)
 }
