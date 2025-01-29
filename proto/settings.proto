@@ -15,7 +15,6 @@ service SettingsService {
   rpc GetSettingsByGuild(GetSettingsByGuildRequest) returns (GetSettingsByGuildResponse);
   rpc GetAllGuildSettings(GetAllGuildSettingsRequest) returns (GetAllGuildSettingsResponse);
   rpc UpdateGuildSettings(UpdateGuildSettingsRequest) returns (UpdateGuildSettingsResponse);
-  rpc DeleteGuildSetting(DeleteGuildSettingRequest) returns (DeleteGuildSettingResponse);
 }
 
 // --- Модели данных ---
@@ -33,6 +32,7 @@ message BotSettings {
 message RolesSettings {
   string message_id = 1;
   map<string, string> matching = 2;
+  bool is_disabled = 3; // Новый флаг, указывающий на отключение ролей
 }
 
 // JSON-объект настроек гильдии
@@ -85,11 +85,4 @@ message UpdateGuildSettingsRequest {
 }
 message UpdateGuildSettingsResponse {
   GuildSettings guild_settings = 1;
-}
-
-message DeleteGuildSettingRequest {
-  string id = 1;
-}
-message DeleteGuildSettingResponse {
-  bool success = 1;
 }

@@ -24,7 +24,6 @@ const (
 	SettingsService_GetSettingsByGuild_FullMethodName  = "/settings.SettingsService/GetSettingsByGuild"
 	SettingsService_GetAllGuildSettings_FullMethodName = "/settings.SettingsService/GetAllGuildSettings"
 	SettingsService_UpdateGuildSettings_FullMethodName = "/settings.SettingsService/UpdateGuildSettings"
-	SettingsService_DeleteGuildSetting_FullMethodName  = "/settings.SettingsService/DeleteGuildSetting"
 )
 
 // SettingsServiceClient is the client API for SettingsService service.
@@ -40,7 +39,6 @@ type SettingsServiceClient interface {
 	GetSettingsByGuild(ctx context.Context, in *GetSettingsByGuildRequest, opts ...grpc.CallOption) (*GetSettingsByGuildResponse, error)
 	GetAllGuildSettings(ctx context.Context, in *GetAllGuildSettingsRequest, opts ...grpc.CallOption) (*GetAllGuildSettingsResponse, error)
 	UpdateGuildSettings(ctx context.Context, in *UpdateGuildSettingsRequest, opts ...grpc.CallOption) (*UpdateGuildSettingsResponse, error)
-	DeleteGuildSetting(ctx context.Context, in *DeleteGuildSettingRequest, opts ...grpc.CallOption) (*DeleteGuildSettingResponse, error)
 }
 
 type settingsServiceClient struct {
@@ -101,16 +99,6 @@ func (c *settingsServiceClient) UpdateGuildSettings(ctx context.Context, in *Upd
 	return out, nil
 }
 
-func (c *settingsServiceClient) DeleteGuildSetting(ctx context.Context, in *DeleteGuildSettingRequest, opts ...grpc.CallOption) (*DeleteGuildSettingResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DeleteGuildSettingResponse)
-	err := c.cc.Invoke(ctx, SettingsService_DeleteGuildSetting_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // SettingsServiceServer is the server API for SettingsService service.
 // All implementations must embed UnimplementedSettingsServiceServer
 // for forward compatibility.
@@ -124,7 +112,6 @@ type SettingsServiceServer interface {
 	GetSettingsByGuild(context.Context, *GetSettingsByGuildRequest) (*GetSettingsByGuildResponse, error)
 	GetAllGuildSettings(context.Context, *GetAllGuildSettingsRequest) (*GetAllGuildSettingsResponse, error)
 	UpdateGuildSettings(context.Context, *UpdateGuildSettingsRequest) (*UpdateGuildSettingsResponse, error)
-	DeleteGuildSetting(context.Context, *DeleteGuildSettingRequest) (*DeleteGuildSettingResponse, error)
 	mustEmbedUnimplementedSettingsServiceServer()
 }
 
@@ -149,9 +136,6 @@ func (UnimplementedSettingsServiceServer) GetAllGuildSettings(context.Context, *
 }
 func (UnimplementedSettingsServiceServer) UpdateGuildSettings(context.Context, *UpdateGuildSettingsRequest) (*UpdateGuildSettingsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateGuildSettings not implemented")
-}
-func (UnimplementedSettingsServiceServer) DeleteGuildSetting(context.Context, *DeleteGuildSettingRequest) (*DeleteGuildSettingResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteGuildSetting not implemented")
 }
 func (UnimplementedSettingsServiceServer) mustEmbedUnimplementedSettingsServiceServer() {}
 func (UnimplementedSettingsServiceServer) testEmbeddedByValue()                         {}
@@ -264,24 +248,6 @@ func _SettingsService_UpdateGuildSettings_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SettingsService_DeleteGuildSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteGuildSettingRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SettingsServiceServer).DeleteGuildSetting(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: SettingsService_DeleteGuildSetting_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SettingsServiceServer).DeleteGuildSetting(ctx, req.(*DeleteGuildSettingRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // SettingsService_ServiceDesc is the grpc.ServiceDesc for SettingsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -308,10 +274,6 @@ var SettingsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateGuildSettings",
 			Handler:    _SettingsService_UpdateGuildSettings_Handler,
-		},
-		{
-			MethodName: "DeleteGuildSetting",
-			Handler:    _SettingsService_DeleteGuildSetting_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

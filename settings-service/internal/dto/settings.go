@@ -4,6 +4,7 @@ package dto
 type RolesSettings struct {
 	MesssageId string `json:"message_id"`
 	Matching map[string]string `json:"matching"`
+	IsDisabled bool `json:"is_disabled"`
 }
 
 type SettingsJson struct {

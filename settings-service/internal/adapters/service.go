@@ -119,6 +119,7 @@ func (s *SettingsService) UpdateGuildSettings(id string, data dto.GuildSettingsU
 	// Обновляем настройки
 	firstGuildSetting.Settings.Roles.MesssageId = data.Roles.MesssageId
 	firstGuildSetting.Settings.Roles.Matching = data.Roles.Matching
+	firstGuildSetting.Settings.Roles.IsDisabled = data.Roles.IsDisabled
 
 	// Сохраняем обновленные настройки
 	err = s.GuildRepo.Update(&firstGuildSetting)

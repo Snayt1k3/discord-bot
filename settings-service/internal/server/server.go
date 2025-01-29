@@ -123,6 +123,7 @@ func (s *SettingsServer) UpdateGuildSettings(ctx context.Context, req *pb.Update
 		Roles: dto.RolesSettings{
 			MesssageId: req.Roles.MessageId,
 			Matching:   req.Roles.Matching,
+			IsDisabled: req.Roles.IsDisabled,
 		},
 	}
 
@@ -146,18 +147,4 @@ func (s *SettingsServer) UpdateGuildSettings(ctx context.Context, req *pb.Update
 		},
 	}
 	return response, nil
-}
-
-// Удалить настройки гильдии
-func (s *SettingsServer) DeteleSetting(ctx context.Context, req *pb.DeleteGuildSettingRequest) (*pb.DeleteGuildSettingResponse, error) {
-	// Вызываем сервис для удаления настроек
-	err := s.SettingsService.DeleteGuildSetting(req.Id)
-	if err != nil {
-		return nil, err
-	}
-
-	// Возвращаем успешный ответ
-	return &pb.DeleteGuildSettingResponse{
-		Success: true,
-	}, nil
 }
