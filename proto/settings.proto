@@ -35,16 +35,11 @@ message RolesSettings {
   bool is_disabled = 3; // Новый флаг, указывающий на отключение ролей
 }
 
-// JSON-объект настроек гильдии
-message SettingsJson {
-  RolesSettings roles = 1;
-}
-
 // Настройки гильдии
 message GuildSettings {
   string id = 1;
   string guild_id = 2;
-  SettingsJson settings = 3;
+  RolesSettings roles = 3; // Вместо settings теперь roles
 }
 
 // --- Запросы и ответы для методов ---

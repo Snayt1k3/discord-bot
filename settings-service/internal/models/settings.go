@@ -10,7 +10,7 @@ import (
 type GuildSetting struct {
 	ID      uint   `gorm:"primaryKey"` 
 	GuildID string `gorm:"unique"`     
-	Settings dto.SettingsJson `gorm:"type:json;not null"`
+	Roles dto.RolesSettings `gorm:"type:json;not null"`
 	CreatedAt    time.Time      
 	UpdatedAt    time.Time     
 }

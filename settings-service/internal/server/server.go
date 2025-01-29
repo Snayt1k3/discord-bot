@@ -76,11 +76,10 @@ func (s *SettingsServer) GetByGuildID(ctx context.Context, req *pb.GetSettingsBy
 		Settings: &pb.GuildSettings{
 			Id:      string(guildSettings.ID),
 			GuildId: guildSettings.GuildID,
-			Settings: &pb.SettingsJson{
-				Roles: &pb.RolesSettings{
-					MessageId: guildSettings.Settings.Roles.MesssageId,
-					Matching:  guildSettings.Settings.Roles.Matching,
-				},
+			Roles: &pb.RolesSettings{
+				MessageId: guildSettings.Roles.MesssageId,
+				Matching:  guildSettings.Roles.Matching,
+				IsDisabled: guildSettings.Roles.IsDisabled,
 			},
 		},
 	}
@@ -101,13 +100,13 @@ func (s *SettingsServer) GetAllGuildSettings(ctx context.Context, req *pb.GetAll
 		settingsList = append(settingsList, &pb.GuildSettings{
 			Id:      string(setting.ID),
 			GuildId: setting.GuildID,
-			Settings: &pb.SettingsJson{
-				Roles: &pb.RolesSettings{
-					MessageId: setting.Settings.Roles.MesssageId,
-					Matching:  setting.Settings.Roles.Matching,
-				},
+			Roles: &pb.RolesSettings{
+				MessageId: setting.Roles.MesssageId,
+				Matching:  setting.Roles.Matching,
+				IsDisabled: setting.Roles.IsDisabled,
 			},
-		})
+			},
+		)
 	}
 
 	response := &pb.GetAllGuildSettingsResponse{
@@ -138,12 +137,12 @@ func (s *SettingsServer) UpdateGuildSettings(ctx context.Context, req *pb.Update
 		GuildSettings: &pb.GuildSettings{
 			Id:      string(updatedGuildSettings.ID),
 			GuildId: updatedGuildSettings.GuildID,
-			Settings: &pb.SettingsJson{
+
 				Roles: &pb.RolesSettings{
-					MessageId: updatedGuildSettings.Settings.Roles.MesssageId,
-					Matching:  updatedGuildSettings.Settings.Roles.Matching,
+					MessageId: updatedGuildSettings.Roles.MesssageId,
+					Matching:  updatedGuildSettings.Roles.Matching,
+					IsDisabled: updatedGuildSettings.Roles.IsDisabled,
 				},
-			},
 		},
 	}
 	return response, nil

@@ -1,9 +1,7 @@
 package adapters
 
 import (
-	"errors"
 	"settings-service/internal/models"
-
 	"gorm.io/gorm"
 )
 
@@ -26,7 +24,6 @@ func NewBotSettingRepository(db *gorm.DB) *BotSettingRepository {
 }
 
 
-// Реализация методов для GuildSettingRepository
 
 func (r *GuildSettingRepository) Create(setting *models.GuildSetting) (*models.GuildSetting, error) {
 	if err := r.db.Create(setting).Error; err != nil {
@@ -35,21 +32,22 @@ func (r *GuildSettingRepository) Create(setting *models.GuildSetting) (*models.G
 	return setting, nil
 }
 
-func (r *GuildSettingRepository) GetByID(id uint) (*models.GuildSetting, error) {
-	var setting models.GuildSetting
-	if err := r.db.First(&setting, id).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("guild setting not found")
+func (r *GuildSettingRepository) Updates(id string, fields map[string]interface{}) error {
+	for key, value := range fields {
+		if value == nil || value == "" {
+			delete(fields, key)
 		}
-		return nil, err
 	}
-	return &setting, nil
-}
 
-func (r *GuildSettingRepository) Update(setting *models.GuildSetting) error {
-	if err := r.db.Save(setting).Error; err != nil {
+	var setting models.GuildSetting
+	if err := r.db.First(&setting, "id = ?", id).Error; err != nil {
 		return err
 	}
+
+	if err := r.db.Model(&setting).Updates(fields).Error; err != nil {
+		return err 
+	}
+
 	return nil
 }
 
@@ -71,23 +69,19 @@ func (r *GuildSettingRepository) GetAll() ([]models.GuildSetting, error) {
 func (r *GuildSettingRepository) Filter(filters map[string]interface{}) ([]models.GuildSetting, error) {
 	var guildSettings []models.GuildSetting
 
-	// Строим запрос с фильтрацией
 	query := r.db.Model(&models.GuildSetting{})
 
-	// Проходим по фильтрам
 	for key, value := range filters {
-		query = query.Where(key+" = ?", value)  // Фильтруем по ключу и значению
+		query = query.Where(key+" = ?", value)
 	}
 
-	// Выполняем запрос и получаем результаты
 	if err := query.Find(&guildSettings).Error; err != nil {
 		return nil, err
 	}
 
-	// Возвращаем найденные записи
 	return guildSettings, nil
 }
-// Реализация методов для BotSettingRepository
+
 
 func (r *BotSettingRepository) Create(setting *models.BotSetting) (*models.BotSetting, error) {
 	if err := r.db.Create(setting).Error; err != nil {
@@ -96,43 +90,41 @@ func (r *BotSettingRepository) Create(setting *models.BotSetting) (*models.BotSe
 	return setting, nil
 }
 
-func (r *BotSettingRepository) Filter(filters map[string]interface{}) ([]models.BotSetting, error) {
-	var guildSettings []models.BotSetting
-
-	// Строим запрос с фильтрацией
-	query := r.db.Model(&models.BotSetting{})
-
-	// Проходим по фильтрам
-	for key, value := range filters {
-		query = query.Where(key+" = ?", value)  // Фильтруем по ключу и значению
+func (r *BotSettingRepository) Updates(id string, fields map[string]interface{}) error {
+	for key, value := range fields {
+		if value == nil || value == "" {
+			delete(fields, key)
+		}
 	}
 
-	// Выполняем запрос и получаем результаты
+
+	var setting models.BotSetting
+	if err := r.db.First(&setting, "id = ?", 1).Error; err != nil {
+		return err
+	}
+
+	if err := r.db.Model(&setting).Updates(fields).Error; err != nil {
+		return err 
+	}
+	
+	return nil
+}
+
+func (r *BotSettingRepository) Filter(filters map[string]interface{}) ([]models.BotSetting, error) {
+	var guildSettings []models.BotSetting
+	query := r.db.Model(&models.BotSetting{})
+
+	for key, value := range filters {
+		query = query.Where(key+" = ?", value)  
+	}
+
 	if err := query.Find(&guildSettings).Error; err != nil {
 		return nil, err
 	}
 
-	// Возвращаем найденные записи
 	return guildSettings, nil
 }
 
-func (r *BotSettingRepository) GetByID(id uint) (*models.BotSetting, error) {
-	var setting models.BotSetting
-	if err := r.db.First(&setting, id).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("bot setting not found")
-		}
-		return nil, err
-	}
-	return &setting, nil
-}
-
-func (r *BotSettingRepository) Update(setting *models.BotSetting) error {
-	if err := r.db.Save(setting).Error; err != nil {
-		return err
-	}
-	return nil
-}
 
 func (r *BotSettingRepository) Delete(id uint) error {
 	if err := r.db.Delete(&models.BotSetting{}, id).Error; err != nil {
