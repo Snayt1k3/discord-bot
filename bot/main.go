@@ -3,11 +3,8 @@ package main
 import (
 	"bot/config"
 	"log"
-
-	"bot/internal/commands"
 	"bot/internal/handlers"
 	"fmt"
-
 	"bot/internal/discord"
 	"os"
 	"os/signal"
@@ -33,7 +30,7 @@ func main() {
 
 
 func registerCommands(){ // todo: Убрать, на первую необходимость
-	for _, command := range commands.CommandsList {
+	for _, command := range discord.CommandsList {
 		_, err := discord.Bot.Session.ApplicationCommandCreate(discord.Bot.Session.State.User.ID, "", command)
 		if err != nil {
 			log.Fatalf("Failed to create command %s: %v", command.Name, err)
@@ -47,7 +44,7 @@ func addHandlers(){
 	discord.Bot.Session.AddHandler(handlers.OnMessageReactionAdd)
 	discord.Bot.Session.AddHandler(handlers.OnMessageReactionRemove)
 	discord.Bot.Session.AddHandler(handlers.OnNewMemberJoin)
-	discord.Bot.Session.AddHandler(commands.CommandHandler)
+	discord.Bot.Session.AddHandler(handlers.CommandHandler)
 	discord.Bot.Session.AddHandler(handlers.OnVoiceServerUpdate)
 	discord.Bot.Session.AddHandler(handlers.OnVoiceStateUpdate)
 }

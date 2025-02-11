@@ -67,3 +67,17 @@ func HelpHandler(session *discordgo.Session, i *discordgo.InteractionCreate) {
 		},
 	)
 }
+
+
+func CommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	switch i.ApplicationCommandData().Name {
+	case "play":
+		PlayCommandHandler(s, i)
+	case "skip":
+		SkipCommandHandler(s, i)
+	case "stop":
+		StopCommandHandler(s, i)
+	case "help":
+		HelpHandler(s, i)
+	}
+}

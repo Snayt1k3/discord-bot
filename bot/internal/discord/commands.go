@@ -1,8 +1,7 @@
-package commands
+package discord
 
 import (
 	"bot/config"
-	"bot/internal/handlers"
 	"log/slog"
 	"github.com/bwmarrin/discordgo"
 )
@@ -50,24 +49,9 @@ func OnGuildCreate(s *discordgo.Session, g *discordgo.GuildCreate) {
 	for _, command := range CommandsList {
 		_, err := s.ApplicationCommandCreate(config.GetApplicationId(), g.Guild.ID, command)
 		if err != nil {
-			slog.Info("Error creating command '%s' for guild '%s': %v", command.Name, g.Guild.ID, err)
+			slog.Info("Error creating command '%s' for guild '%s': %s", command.Name, g.Guild.ID, err)
 		} else {
 			slog.Info("Command '%s' registered for new guild: %s", command.Name, g.Guild.ID)
 		}
-	}
-}
-
-
-// CommandHandler маршрутизирует команды к соответствующим обработчикам
-func CommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	switch i.ApplicationCommandData().Name {
-	case "play":
-		handlers.PlayCommandHandler(s, i)
-	case "skip":
-		handlers.SkipCommandHandler(s, i)
-	case "stop":
-		handlers.StopCommandHandler(s, i)
-	case "help":
-		handlers.HelpHandler(s, i)
 	}
 }

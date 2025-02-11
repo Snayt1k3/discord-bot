@@ -3,15 +3,15 @@ package config
 import "os"
 
 type Config struct {
-	SettingsAddress string
-	SettingsPort string
+	GrpcHost string
+	GrpcPort string
 }
 
 
 func LoadConfig() (*Config, error) {
 	config := &Config{
-		SettingsAddress: os.Getenv("SETTINGS_ADDRESS"),
-		SettingsPort: os.Getenv("SETTINGS_PORT"),
+		GrpcHost: os.Getenv("GRPC_HOST"),
+		GrpcPort: os.Getenv("GPRC_PORT"),
 	}
 
 
