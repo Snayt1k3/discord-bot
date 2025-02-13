@@ -3,11 +3,11 @@ package routes
 import (
 
 	"github.com/gin-gonic/gin"
-	pb "api-gateway/proto" 
+	"api-gateway/internal/handlers" 
 )
 
-func SetupRouter(settingsClient pb.SettingsServiceClient) *gin.Engine {
+func SetupRouter(SettingsHandlers *handlers.SettingsHandlers) *gin.Engine {
 	r := gin.Default()
-	SettingsRoutes(r, settingsClient)
+	SettingsRoutes(r, SettingsHandlers)
 	return r
 }

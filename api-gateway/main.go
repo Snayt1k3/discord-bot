@@ -4,9 +4,10 @@ import (
 	"api-gateway/config"
 	"api-gateway/internal/routes"
 	pb "api-gateway/proto"
+	"api-gateway/internal/adapters"
+	"api-gateway/internal/handlers"
 	"fmt"
 	"log"
-
 	"google.golang.org/grpc"
 )
 
@@ -25,8 +26,9 @@ func main() {
 	
 	defer conn.Close()
 
-	settingsClient := pb.NewSettingsServiceClient(conn)
-
+	protoClient := pb.NewSettingsServiceClient(conn)
+	redisClient := adapters.NewRedisAdapter(fmt.Sprintf("%v:%v", cfg.RedisHost, cfg.RedisPort), cfg.RedisPass, cfg.RedisDB)
+	settingsClient := handlers.NewClient(protoClient, redisClient)
 	r := routes.SetupRouter(settingsClient)
 
 	port := ":8080"
