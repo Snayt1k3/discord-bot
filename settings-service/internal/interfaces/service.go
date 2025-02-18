@@ -5,10 +5,6 @@ import (
 )
 
 type SettingsInterface interface {
-	// bot settings methods
-	UpdateBotSettings(data dto.BotSettingsUpdate) (dto.BotSettingsDTO, error)
-	GetBotSettings()(dto.BotSettingsDTO, error)
-
 	// guild settings methods
 	GetByGuildID(id string) (dto.GuildSettingsDTO, error)
 	GetAllGuildSettings() ([]dto.GuildSettingsDTO, error)

@@ -29,14 +29,14 @@ services:
   #   restart: always
 
   settings-service:
-    container_name: settings-service
+    container_name: $SETTINGS_ADDRESS
     build: 
       context: ./settings-service
       dockerfile: Dockerfile
     networks:
       - bot
     env_file:
-      - ./settings-service/.env
+      - .env
     depends_on:
       - settings-db
     restart: always
@@ -49,35 +49,37 @@ services:
     networks:
       - bot
     env_file:
-      - ./api-gateway/.env
+      - .env
     restart: always
 
   settings-db:
     image: postgres:latest
     restart: on-failure:5
-    container_name: settings-db
-
-    env_file:
-      - settings-service/.env
+    container_name: $SETTINGS_POSTGRES_HOST
+    environment:
+      POSTGRES_USER: $SETTINGS_POSTGRES_USER
+      POSTGRES_PASSWORD: $SETTINGS_POSTGRES_PASSWORD
+      POSTGRES_DB: $SETTINGS_POSTGRES_DB
+      POSTGRES_SSLMODE: $SETTINGS_POSTGRES_SSLMODE
+      POSTGRES_TIMEZONE: $SETTINGS_POSTGRES_TIMEZONE
     ports:
       - "5432:5432"
-    expose:
-      - 5432
     volumes:
-      - data/pgdata:/var/lib/postgresql/data
+      - ./data/pgdata:/var/lib/postgresql/data
     networks:
       - bot
+
   redis:
     image: redis:latest
-    container_name: redis
+    container_name: $REDIS_HOST
     restart: always
     ports:
       - "6379:6379"
     environment:
-      - REDIS_PASSWORD=your_redis_password
-    command: [ "redis-server", "--requirepass", "$$REDIS_PASSWORD" ]
+      - REDIS_PASSWORD=$REDIS_PASS
+    command: [ "redis-server", "--requirepass", "$REDIS_PASS" ]
     volumes:
-      - data/redis_data:/data
+      - ./data/redis_data:/data 
 
 volumes:
   data: 

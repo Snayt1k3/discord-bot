@@ -9,50 +9,7 @@ import (
 
 type SettingsService struct {
 	GuildRepo interfaces.Repository[models.GuildSetting]
-	BotRepo   interfaces.Repository[models.BotSetting]
-}
 
-// Обновление настроек бота
-func (s *SettingsService) UpdateBotSettings(data dto.BotSettingsUpdate) (dto.BotSettingsDTO, error) {
-	err := s.BotRepo.Updates("", map[string]interface{}{
-		"bot_status": data.BotStatus,
-		"description": data.Description,
-		"help_message": data.HelpMessage,
-		"hello_messsages": data.HelloMessages,
-	})
-
-	if err != nil {
-		return dto.BotSettingsDTO{}, err
-	}
-
-	botSetting, _ := s.BotRepo.Filter(map[string]interface{}{"id": 1}) // Предположим, что у нас есть один экземпляр настроек бота
-
-	// Возвращаем обновленные данные
-	return dto.BotSettingsDTO{
-		ID:            botSetting[0].ID,
-		BotStatus:     botSetting[0].BotStatus,
-		Description:   botSetting[0].Description,
-		HelpMessage:   botSetting[0].HelpMessage,
-		HelloMessages: botSetting[0].HelloMessages,
-	}, nil
-}
-
-// Получение текущих настроек бота
-func (s *SettingsService) GetBotSettings() (dto.BotSettingsDTO, error) {
-	// Получаем текущие настройки бота
-	botSetting, err := s.BotRepo.Filter(map[string]interface{}{"id": 1}) 
-	if err != nil {
-		return dto.BotSettingsDTO{}, err
-	}
-
-	// Возвращаем данные
-	return dto.BotSettingsDTO{
-		ID:            botSetting[0].ID,
-		BotStatus:     botSetting[0].BotStatus,
-		Description:   botSetting[0].Description,
-		HelpMessage:   botSetting[0].HelpMessage,
-		HelloMessages: botSetting[0].HelloMessages,
-	}, nil
 }
 
 // Получение настроек гильдии по GuildID

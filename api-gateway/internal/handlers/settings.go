@@ -21,54 +21,6 @@ func NewClient(client pb.SettingsServiceClient, redis interfaces.RedisI) *Settin
 	return &SettingsHandlers{client: client, redis: redis}
 }
 
-func (s *SettingsHandlers) GetBotSettings(c *gin.Context) {
-
-	key := "FRIEREN-SETTINGS"
-
-	exists, _ := s.redis.Exists(key)
-
-	if exists {
-		resp, err := s.redis.Get(key)
-
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		c.JSON(http.StatusOK, resp)
-		return
-	}
-	
-
-	resp, err := s.client.GetBotSettings(context.Background(), &pb.GetBotSettingsRequest{})
-	
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	
-	}
-
-	err = s.redis.Set(key, resp.String(), 60 * 5)
-
-	if err != nil {
-		slog.Error("Error while set data in redis", "error", err)
-	}
-	c.JSON(http.StatusOK, resp)
-}
-
-func (s *SettingsHandlers) UpdateBotSettings(c *gin.Context) {
-	var req pb.UpdateBotSettingsRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	resp, err := s.client.UpdateBotSettings(context.Background(), &req)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, resp)
-}
 
 func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 	guildID := c.Param("guild_id")

@@ -8,7 +8,7 @@ import (
 	"settings-service/internal/adapters"
 	"settings-service/internal/server"
 	pb "settings-service/proto"
-
+	"settings-service/internal/models"
 	"google.golang.org/grpc"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -22,17 +22,16 @@ func main() {
 	}
 
 	db, err := gorm.Open(postgres.Open(cfg.DSN()), &gorm.Config{})
-	
+
 	if err != nil {
 		log.Fatalf("Error connecting to the database: %v", err)
 	}
-
+	models.AutoMigrate(db)
 	guildRepo := adapters.NewGuildSettingRepository(db)
-	botRepo := adapters.NewBotSettingRepository(db)
+
 
 	settingsService := &adapters.SettingsService{
 		GuildRepo: guildRepo,
-		BotRepo:   botRepo,
 	}
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%v", cfg.GrpcPort))

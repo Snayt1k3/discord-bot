@@ -19,8 +19,6 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SettingsService_GetBotSettings_FullMethodName      = "/settings.SettingsService/GetBotSettings"
-	SettingsService_UpdateBotSettings_FullMethodName   = "/settings.SettingsService/UpdateBotSettings"
 	SettingsService_GetSettingsByGuild_FullMethodName  = "/settings.SettingsService/GetSettingsByGuild"
 	SettingsService_GetAllGuildSettings_FullMethodName = "/settings.SettingsService/GetAllGuildSettings"
 	SettingsService_UpdateGuildSettings_FullMethodName = "/settings.SettingsService/UpdateGuildSettings"
@@ -30,11 +28,8 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// Сервис SettingsService с методами для работы с настройками
+// Сервис SettingsService с методами для работы с настройками гильдии
 type SettingsServiceClient interface {
-	// Методы для работы с настройками бота
-	GetBotSettings(ctx context.Context, in *GetBotSettingsRequest, opts ...grpc.CallOption) (*GetBotSettingsResponse, error)
-	UpdateBotSettings(ctx context.Context, in *UpdateBotSettingsRequest, opts ...grpc.CallOption) (*UpdateBotSettingsResponse, error)
 	// Методы для работы с настройками гильдии
 	GetSettingsByGuild(ctx context.Context, in *GetSettingsByGuildRequest, opts ...grpc.CallOption) (*GetSettingsByGuildResponse, error)
 	GetAllGuildSettings(ctx context.Context, in *GetAllGuildSettingsRequest, opts ...grpc.CallOption) (*GetAllGuildSettingsResponse, error)
@@ -47,26 +42,6 @@ type settingsServiceClient struct {
 
 func NewSettingsServiceClient(cc grpc.ClientConnInterface) SettingsServiceClient {
 	return &settingsServiceClient{cc}
-}
-
-func (c *settingsServiceClient) GetBotSettings(ctx context.Context, in *GetBotSettingsRequest, opts ...grpc.CallOption) (*GetBotSettingsResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetBotSettingsResponse)
-	err := c.cc.Invoke(ctx, SettingsService_GetBotSettings_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *settingsServiceClient) UpdateBotSettings(ctx context.Context, in *UpdateBotSettingsRequest, opts ...grpc.CallOption) (*UpdateBotSettingsResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateBotSettingsResponse)
-	err := c.cc.Invoke(ctx, SettingsService_UpdateBotSettings_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *settingsServiceClient) GetSettingsByGuild(ctx context.Context, in *GetSettingsByGuildRequest, opts ...grpc.CallOption) (*GetSettingsByGuildResponse, error) {
@@ -103,11 +78,8 @@ func (c *settingsServiceClient) UpdateGuildSettings(ctx context.Context, in *Upd
 // All implementations must embed UnimplementedSettingsServiceServer
 // for forward compatibility.
 //
-// Сервис SettingsService с методами для работы с настройками
+// Сервис SettingsService с методами для работы с настройками гильдии
 type SettingsServiceServer interface {
-	// Методы для работы с настройками бота
-	GetBotSettings(context.Context, *GetBotSettingsRequest) (*GetBotSettingsResponse, error)
-	UpdateBotSettings(context.Context, *UpdateBotSettingsRequest) (*UpdateBotSettingsResponse, error)
 	// Методы для работы с настройками гильдии
 	GetSettingsByGuild(context.Context, *GetSettingsByGuildRequest) (*GetSettingsByGuildResponse, error)
 	GetAllGuildSettings(context.Context, *GetAllGuildSettingsRequest) (*GetAllGuildSettingsResponse, error)
@@ -122,12 +94,6 @@ type SettingsServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedSettingsServiceServer struct{}
 
-func (UnimplementedSettingsServiceServer) GetBotSettings(context.Context, *GetBotSettingsRequest) (*GetBotSettingsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetBotSettings not implemented")
-}
-func (UnimplementedSettingsServiceServer) UpdateBotSettings(context.Context, *UpdateBotSettingsRequest) (*UpdateBotSettingsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateBotSettings not implemented")
-}
 func (UnimplementedSettingsServiceServer) GetSettingsByGuild(context.Context, *GetSettingsByGuildRequest) (*GetSettingsByGuildResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSettingsByGuild not implemented")
 }
@@ -156,42 +122,6 @@ func RegisterSettingsServiceServer(s grpc.ServiceRegistrar, srv SettingsServiceS
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&SettingsService_ServiceDesc, srv)
-}
-
-func _SettingsService_GetBotSettings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetBotSettingsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SettingsServiceServer).GetBotSettings(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: SettingsService_GetBotSettings_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SettingsServiceServer).GetBotSettings(ctx, req.(*GetBotSettingsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _SettingsService_UpdateBotSettings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateBotSettingsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SettingsServiceServer).UpdateBotSettings(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: SettingsService_UpdateBotSettings_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SettingsServiceServer).UpdateBotSettings(ctx, req.(*UpdateBotSettingsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _SettingsService_GetSettingsByGuild_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -255,14 +185,6 @@ var SettingsService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "settings.SettingsService",
 	HandlerType: (*SettingsServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "GetBotSettings",
-			Handler:    _SettingsService_GetBotSettings_Handler,
-		},
-		{
-			MethodName: "UpdateBotSettings",
-			Handler:    _SettingsService_UpdateBotSettings_Handler,
-		},
 		{
 			MethodName: "GetSettingsByGuild",
 			Handler:    _SettingsService_GetSettingsByGuild_Handler,

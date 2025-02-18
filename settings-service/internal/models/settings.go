@@ -15,16 +15,6 @@ type GuildSetting struct {
 	UpdatedAt    time.Time     
 }
 
-type BotSetting struct {
-	ID           uint   `gorm:"primaryKey"`         
-	BotStatus    string `gorm:"type:text;not null"` 
-	Description  string `gorm:"type:text"`         
-	HelpMessage  string `gorm:"type:text"`          
-	HelloMessages []string  `gorm:"type:json"`
-	CreatedAt    time.Time      
-	UpdatedAt    time.Time    
-}
-
 func AutoMigrate(db *gorm.DB) error {
-	return db.AutoMigrate(&BotSetting{}, &GuildSetting{})
+	return db.AutoMigrate(&GuildSetting{})
 }

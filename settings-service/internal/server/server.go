@@ -13,56 +13,6 @@ type SettingsServer struct {
 	pb.UnimplementedSettingsServiceServer
 }
 
-// Метод для получения настроек бота
-func (s *SettingsServer) GetBotSettings(ctx context.Context, req *pb.GetBotSettingsRequest) (*pb.GetBotSettingsResponse, error) {
-	// Получаем настройки бота через SettingsService
-	botSettings, err := s.SettingsService.GetBotSettings()
-	if err != nil {
-		return nil, err
-	}
-
-	// Преобразуем в формат gRPC
-	response := &pb.GetBotSettingsResponse{
-		BotSettings: &pb.BotSettings{
-			Id:            string(botSettings.ID),
-			BotStatus:     botSettings.BotStatus,
-			Description:   botSettings.Description,
-			HelpMessage:   botSettings.HelpMessage,
-			HelloMessages: botSettings.HelloMessages,
-		},
-	}
-	return response, nil
-}
-
-// Метод для обновления настроек бота
-func (s *SettingsServer) UpdateBotSettings(ctx context.Context, req *pb.UpdateBotSettingsRequest) (*pb.UpdateBotSettingsResponse, error) {
-	// Создаем объект обновлений на основе запроса
-	updateData := dto.BotSettingsUpdate{
-		BotStatus:   req.BotStatus,
-		Description: req.Description,
-		HelpMessage: req.HelpMessage,
-		HelloMessages: req.HelloMessages,
-	}
-
-	// Вызываем сервис для обновления настроек
-	updatedBotSettings, err := s.SettingsService.UpdateBotSettings(updateData)
-	if err != nil {
-		return nil, err
-	}
-
-	// Преобразуем обновленные данные в формат gRPC
-	response := &pb.UpdateBotSettingsResponse{
-		BotSettings: &pb.BotSettings{
-			Id:            string(updatedBotSettings.ID),
-			BotStatus:     updatedBotSettings.BotStatus,
-			Description:   updatedBotSettings.Description,
-			HelpMessage:   updatedBotSettings.HelpMessage,
-			HelloMessages: updatedBotSettings.HelloMessages,
-		},
-	}
-	return response, nil
-}
-
 // Получить настройки по Guild ID
 func (s *SettingsServer) GetByGuildID(ctx context.Context, req *pb.GetSettingsByGuildRequest) (*pb.GetSettingsByGuildResponse, error) {
 	// Получаем настройки гильдии через SettingsService

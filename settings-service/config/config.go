@@ -16,21 +16,19 @@ type Config struct {
 	GrpcPort string
 }
 
-// Загрузка переменных из .env файла
-func LoadConfig() (*Config, error) {
 
+func LoadConfig() (*Config, error) {
 	config := &Config{
-		Host:     os.Getenv("POSTGRES_HOST"),
-		Port:     os.Getenv("POSTGRES_PORT"),
-		User:     os.Getenv("POSTGRES_USER"),
-		Password: os.Getenv("POSTGRES_PASSWORD"),
-		DBName:   os.Getenv("POSTGRES_DB"),
-		SSLMode:  os.Getenv("POSTGRES_SSLMODE"),
-		TimeZone: os.Getenv("POSTGRES_TIMEZONE"),
+		Host:     os.Getenv("SETTINGS_POSTGRES_HOST"),
+		Port:     os.Getenv("SETTINGS_POSTGRES_PORT"),
+		User:     os.Getenv("SETTINGS_POSTGRES_USER"),
+		Password: os.Getenv("SETTINGS_POSTGRES_PASSWORD"),
+		DBName:   os.Getenv("SETTINGS_POSTGRES_DB"),
+		SSLMode:  os.Getenv("SETTINGS_POSTGRES_SSLMODE"),
+		TimeZone: os.Getenv("SETTINGS_POSTGRES_TIMEZONE"),
 		GrpcPort: os.Getenv("GRPC_PORT"),
 	}
 
-	// Проверяем, что все обязательные параметры заданы
 	if config.Host == "" || config.Port == "" || config.User == "" || config.Password == "" || config.DBName == "" || config.GrpcPort == "" {
 		return nil, fmt.Errorf("missing required configuration")
 	}
