@@ -6,7 +6,7 @@ services:
   #   environment:
   #     - _JAVA_OPTIONS=-Xmx4G
   #     - SERVER_PORT=2333
-  #     - LAVALINK_SERVER_PASSWORD=youshallnotpass
+  #     - LAVALINK_SERVER_PASSWORD=$LAVALINK_PASS
   #   volumes:
   #     - ./application.yml:/opt/Lavalink/application.yml
   #     - ./plugins/:/opt/Lavalink/plugins/
@@ -16,6 +16,7 @@ services:
   #     - 2333
   #   ports:
   #     - "2333:2333"
+
   # frieren:
   #   build: 
   #     context: ./bot
@@ -32,7 +33,6 @@ services:
     container_name: $SETTINGS_ADDRESS
     build: 
       context: ./settings-service
-      dockerfile: Dockerfile
     networks:
       - bot
     env_file:
@@ -45,11 +45,12 @@ services:
     container_name: api-gateway
     build: 
       context: ./api-gateway
-      dockerfile: Dockerfile
     networks:
       - bot
     env_file:
       - .env
+    ports:
+      - "8080:8080"
     restart: always
 
   settings-db:

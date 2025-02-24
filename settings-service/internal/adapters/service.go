@@ -68,7 +68,6 @@ func (s *SettingsService) UpdateGuildSettings(id string, data dto.GuildSettingsU
 
 	setting, _ := s.GuildRepo.Filter(map[string]interface{}{"guild_id": id})
 
-	// Возвращаем обновленные данные
 	return dto.GuildSettingsDTO{
 		ID:      setting[0].ID,
 		GuildID: setting[0].GuildID,
@@ -80,16 +79,12 @@ func (s *SettingsService) UpdateGuildSettings(id string, data dto.GuildSettingsU
 	}, nil
 }
 
-// Удаление настроек гильдии
-func (s *SettingsService) DeleteGuildSetting(id string) error {
-	// Получаем текущие настройки гильдии
-	guildSettings, err := s.GuildRepo.Filter(map[string]interface{}{"guild_id": id})
-	if err != nil || len(guildSettings) == 0{
-		return err
-	}
 
-	// Удаляем настройки
-	err = s.GuildRepo.Delete(guildSettings[0].ID)
+func (s *SettingsService) CreateGuildSetting(data dto.GuildSettingsCreateDTO) error {
+	model := &models.GuildSetting{GuildID: data.GuildId}
+	
+	_, err := s.GuildRepo.Create(model)
+
 	if err != nil {
 		return err
 	}

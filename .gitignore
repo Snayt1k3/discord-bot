@@ -25,3 +25,5 @@ go.work.sum
 .env
 plugins
 data
+*.pb.go
+.DS_Store

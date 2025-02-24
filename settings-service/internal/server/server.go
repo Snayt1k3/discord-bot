@@ -13,9 +13,8 @@ type SettingsServer struct {
 	pb.UnimplementedSettingsServiceServer
 }
 
-// Получить настройки по Guild ID
+
 func (s *SettingsServer) GetByGuildID(ctx context.Context, req *pb.GetSettingsByGuildRequest) (*pb.GetSettingsByGuildResponse, error) {
-	// Получаем настройки гильдии через SettingsService
 	guildSettings, err := s.SettingsService.GetByGuildID(req.GuildId)
 	if err != nil {
 		return nil, err
@@ -29,16 +28,15 @@ func (s *SettingsServer) GetByGuildID(ctx context.Context, req *pb.GetSettingsBy
 			Roles: &pb.RolesSettings{
 				MessageId: guildSettings.Roles.MesssageId,
 				Matching:  guildSettings.Roles.Matching,
-				IsDisabled: guildSettings.Roles.IsDisabled,
+
 			},
 		},
 	}
 	return response, nil
 }
 
-// Получить все настройки для гильдий
+
 func (s *SettingsServer) GetAllGuildSettings(ctx context.Context, req *pb.GetAllGuildSettingsRequest) (*pb.GetAllGuildSettingsResponse, error) {
-	// Получаем все настройки гильдий
 	guildSettingsList, err := s.SettingsService.GetAllGuildSettings()
 	if err != nil {
 		return nil, err
@@ -53,7 +51,6 @@ func (s *SettingsServer) GetAllGuildSettings(ctx context.Context, req *pb.GetAll
 			Roles: &pb.RolesSettings{
 				MessageId: setting.Roles.MesssageId,
 				Matching:  setting.Roles.Matching,
-				IsDisabled: setting.Roles.IsDisabled,
 			},
 			},
 		)
@@ -65,19 +62,17 @@ func (s *SettingsServer) GetAllGuildSettings(ctx context.Context, req *pb.GetAll
 	return response, nil
 }
 
-// Обновить настройки гильдии
+
 func (s *SettingsServer) UpdateGuildSettings(ctx context.Context, req *pb.UpdateGuildSettingsRequest) (*pb.UpdateGuildSettingsResponse, error) {
-	// Создаем объект обновлений на основе запроса
 	updateData := dto.GuildSettingsUpdateDTO{
 		Roles: dto.RolesSettings{
 			MesssageId: req.Roles.MessageId,
 			Matching:   req.Roles.Matching,
-			IsDisabled: req.Roles.IsDisabled,
 		},
 	}
 
-	// Вызываем сервис для обновления настроек
 	updatedGuildSettings, err := s.SettingsService.UpdateGuildSettings(req.Id, updateData)
+	
 	if err != nil {
 		return nil, err
 	}
@@ -91,9 +86,21 @@ func (s *SettingsServer) UpdateGuildSettings(ctx context.Context, req *pb.Update
 				Roles: &pb.RolesSettings{
 					MessageId: updatedGuildSettings.Roles.MesssageId,
 					Matching:  updatedGuildSettings.Roles.Matching,
-					IsDisabled: updatedGuildSettings.Roles.IsDisabled,
+
 				},
 		},
 	}
 	return response, nil
+}
+
+func (s *SettingsServer) CreateGuildSettings(ctx context.Context, req *pb.CreateGuildSettingsRequest) (*pb.CreateGuildSettingsResponse, error) {
+	data := dto.GuildSettingsCreateDTO{GuildId: req.GuildId}
+	
+	err := s.SettingsService.CreateGuildSetting(data)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.CreateGuildSettingsResponse{GuildId: data.GuildId}, nil
 }

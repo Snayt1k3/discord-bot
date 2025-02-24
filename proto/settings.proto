@@ -2,36 +2,33 @@ syntax = "proto3";
 
 package settings;
 
-// Указываем пакет для генерации Go-кода
 option go_package = "proto/";
 
-// Сервис SettingsService с методами для работы с настройками гильдии
+
 service SettingsService {
-  // Методы для работы с настройками гильдии
   rpc GetSettingsByGuild(GetSettingsByGuildRequest) returns (GetSettingsByGuildResponse);
   rpc GetAllGuildSettings(GetAllGuildSettingsRequest) returns (GetAllGuildSettingsResponse);
   rpc UpdateGuildSettings(UpdateGuildSettingsRequest) returns (UpdateGuildSettingsResponse);
+  rpc CreateGuildSettings(CreateGuildSettingsRequest) returns (CreateGuildSettingsResponse); // Новый метод
 }
 
 // --- Модели данных ---
 
-// Настройки ролей
+
 message RolesSettings {
   string message_id = 1;
   map<string, string> matching = 2;
-  bool is_disabled = 3; // Новый флаг, указывающий на отключение ролей
 }
 
-// Настройки гильдии
+
 message GuildSettings {
   string id = 1;
   string guild_id = 2;
-  RolesSettings roles = 3; // Вместо settings теперь roles
+  RolesSettings roles = 3;
 }
 
 // --- Запросы и ответы для методов ---
 
-// --- Методы для настроек гильдии ---
 message GetSettingsByGuildRequest {
   string guild_id = 1;
 }
@@ -50,4 +47,12 @@ message UpdateGuildSettingsRequest {
 }
 message UpdateGuildSettingsResponse {
   GuildSettings guild_settings = 1;
+}
+
+message CreateGuildSettingsRequest {
+  string guild_id = 1;
+}
+
+message CreateGuildSettingsResponse {
+  string guild_id = 1;
 }

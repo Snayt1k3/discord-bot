@@ -9,7 +9,7 @@ import (
 	"github.com/disgoorg/snowflake/v2"
 )
 
-// ReadyHandler will be called when the bot receives the "ready" event from Discord.
+
 func ReadyHandler(s *discordgo.Session, event *discordgo.Ready) {
 	// Set the playing status.
 	err := s.UpdateCustomStatus(config.GetBotStatus())
