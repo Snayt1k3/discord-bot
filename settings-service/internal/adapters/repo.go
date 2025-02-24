@@ -27,13 +27,19 @@ func (r *GuildSettingRepository) Create(setting *models.GuildSetting) (*models.G
 
 func (r *GuildSettingRepository) Updates(id string, fields map[string]interface{}) error {
 	for key, value := range fields {
-		if value == nil || value == "" {
-			delete(fields, key)
-		}
-	}
+        if value == nil {
+            delete(fields, key)
+            continue
+        }
+
+        if str, ok := value.(string); ok && str == "" {
+            delete(fields, key)
+        }
+    }
+
 
 	var setting models.GuildSetting
-	if err := r.db.First(&setting, "id = ?", id).Error; err != nil {
+	if err := r.db.First(&setting, "guild_id = ?", id).Error; err != nil {
 		return err
 	}
 

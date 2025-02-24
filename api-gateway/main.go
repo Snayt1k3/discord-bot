@@ -34,8 +34,8 @@ func main() {
 	r := routes.SetupRouter(settingsClient)
 
 	port := ":8080"
-	log.Printf("Сервер запущен на %s", port)
+	log.Printf("server is running on port %s", port)
 	if err := r.Run(port); err != nil {
-		log.Fatalf("Ошибка запуска сервера: %v", err)
+		log.Fatalf("Error while trying to start server: %v", err)
 	}
 }

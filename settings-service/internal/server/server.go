@@ -2,10 +2,10 @@ package server
 
 import (
 	"context"
+	"settings-service/internal/dto"
 	"settings-service/internal/interfaces"
 	pb "settings-service/proto"
-	"settings-service/internal/dto"
-
+	"strconv"
 )
 
 type SettingsServer struct {
@@ -14,7 +14,7 @@ type SettingsServer struct {
 }
 
 
-func (s *SettingsServer) GetByGuildID(ctx context.Context, req *pb.GetSettingsByGuildRequest) (*pb.GetSettingsByGuildResponse, error) {
+func (s *SettingsServer) GetSettingsByGuild(ctx context.Context, req *pb.GetSettingsByGuildRequest) (*pb.GetSettingsByGuildResponse, error) {
 	guildSettings, err := s.SettingsService.GetByGuildID(req.GuildId)
 	if err != nil {
 		return nil, err
@@ -23,7 +23,7 @@ func (s *SettingsServer) GetByGuildID(ctx context.Context, req *pb.GetSettingsBy
 	// Преобразуем настройки в формат gRPC
 	response := &pb.GetSettingsByGuildResponse{
 		Settings: &pb.GuildSettings{
-			Id:      string(guildSettings.ID),
+			Id:      strconv.Itoa(int((guildSettings.ID))),
 			GuildId: guildSettings.GuildID,
 			Roles: &pb.RolesSettings{
 				MessageId: guildSettings.Roles.MesssageId,
@@ -52,7 +52,7 @@ func (s *SettingsServer) UpdateGuildSettings(ctx context.Context, req *pb.Update
 	// Преобразуем обновленные данные в формат gRPC
 	response := &pb.UpdateGuildSettingsResponse{
 		GuildSettings: &pb.GuildSettings{
-			Id:      string(updatedGuildSettings.ID),
+			Id:       strconv.Itoa(int((updatedGuildSettings.ID))),
 			GuildId: updatedGuildSettings.GuildID,
 
 				Roles: &pb.RolesSettings{

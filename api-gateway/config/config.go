@@ -24,8 +24,8 @@ func LoadConfig() (*Config, error) {
 
 
 	config := &Config{
-		GrpcHost: os.Getenv("GRPC_HOST"),
-		GrpcPort: os.Getenv("GPRC_PORT"),
+		GrpcHost: os.Getenv("SETTINGS_ADDRESS"),
+		GrpcPort: os.Getenv("SETTINGS_PORT"),
 		RedisHost: os.Getenv("REDIS_HOST"),
 		RedisPort: os.Getenv("REDIS_PORT"),
 		RedisPass: os.Getenv("REDIS_PASS"),

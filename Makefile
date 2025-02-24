@@ -26,3 +26,6 @@ clean:
 	@echo "Cleaning generated files..."
 	rm -rf $(OUT_DIR) $(GATEWAY_OUT_DIR)
 	@echo "Cleanup complete."
+
+docker-up:
+	docker compose up --build

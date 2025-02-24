@@ -1,5 +1,10 @@
 package dto
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 
 type RolesSettings struct {
 	MesssageId string `json:"message_id"`
@@ -25,3 +30,20 @@ type GuildSettingsCreateDTO struct {
 	GuildId string `json:"guild_id"`
 }
 
+func (rs *RolesSettings) Scan(value interface{}) error {
+    if value == nil {
+        return nil
+    }
+
+    bytes, ok := value.([]byte)
+    if !ok {
+        return fmt.Errorf("failed to scan RolesSettings, expected []byte, got %T", value)
+    }
+
+    return json.Unmarshal(bytes, rs)
+}
+
+
+func (rs RolesSettings) Value() (interface{}, error) {
+    return json.Marshal(rs)
+}

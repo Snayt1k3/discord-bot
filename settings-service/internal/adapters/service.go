@@ -1,10 +1,10 @@
 package adapters
 
 import (
+	"encoding/json"
 	"settings-service/internal/dto"
 	"settings-service/internal/interfaces"
 	"settings-service/internal/models"
-
 )
 
 type SettingsService struct {
@@ -12,15 +12,13 @@ type SettingsService struct {
 
 }
 
-// Получение настроек гильдии по GuildID
+
 func (s *SettingsService) GetByGuildID(id string) (dto.GuildSettingsDTO, error) {
-	// Получаем настройки гильдии
 	guildSetting, err := s.GuildRepo.Filter(map[string]interface{}{"guild_id": id})
 	if err != nil || len(guildSetting) == 0{
 		return dto.GuildSettingsDTO{}, err
 	}
-
-	// Возвращаем данные
+	
 	return dto.GuildSettingsDTO{
 		ID:      guildSetting[0].ID,
 		GuildID: guildSetting[0].GuildID,
@@ -31,11 +29,16 @@ func (s *SettingsService) GetByGuildID(id string) (dto.GuildSettingsDTO, error) 
 	}, nil
 }
 
-// Обновление настроек гильдии
+
 func (s *SettingsService) UpdateGuildSettings(id string, data dto.GuildSettingsUpdateDTO) (dto.GuildSettingsDTO, error) {
 	// Получаем текущие настройки гильдии
-	err := s.GuildRepo.Updates(id, map[string]interface{}{
-		"roles": data.Roles,
+	rolesJSON, err := json.Marshal(data.Roles)
+    if err != nil {
+        return dto.GuildSettingsDTO{}, err
+    }
+	
+	err = s.GuildRepo.Updates(id, map[string]interface{}{
+		"roles": string(rolesJSON),
 	})
 
 	if err != nil {
