@@ -71,4 +71,15 @@ func (s *SettingsHandlers) UpdateGuildSettings(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-func (s *SettingsHandlers) GetAllGuildsSettings(c *gin.Context) {}
+func (s *SettingsHandlers) CreateGuildSetting (c *gin.Context) {
+	guildID := c.Param("guild_id")
+
+	resp, err := s.client.CreateGuildSettings(context.Background(), &pb.CreateGuildSettingsRequest{GuildId: guildID})
+	
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	
+	c.JSON(http.StatusOK, resp)
+}

@@ -7,9 +7,8 @@ option go_package = "proto/";
 
 service SettingsService {
   rpc GetSettingsByGuild(GetSettingsByGuildRequest) returns (GetSettingsByGuildResponse);
-  rpc GetAllGuildSettings(GetAllGuildSettingsRequest) returns (GetAllGuildSettingsResponse);
   rpc UpdateGuildSettings(UpdateGuildSettingsRequest) returns (UpdateGuildSettingsResponse);
-  rpc CreateGuildSettings(CreateGuildSettingsRequest) returns (CreateGuildSettingsResponse); // Новый метод
+  rpc CreateGuildSettings(CreateGuildSettingsRequest) returns (CreateGuildSettingsResponse);
 }
 
 // --- Модели данных ---

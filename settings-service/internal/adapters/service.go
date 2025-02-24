@@ -31,30 +31,6 @@ func (s *SettingsService) GetByGuildID(id string) (dto.GuildSettingsDTO, error) 
 	}, nil
 }
 
-// Получение всех настроек гильдий
-func (s *SettingsService) GetAllGuildSettings() ([]dto.GuildSettingsDTO, error) {
-	// Получаем все настройки гильдий
-	guildSettingsList, err := s.GuildRepo.GetAll()
-	if err != nil {
-		return nil, err
-	}
-
-	// Преобразуем в DTO и возвращаем
-	var result []dto.GuildSettingsDTO
-	for _, guildSetting := range guildSettingsList {
-		result = append(result, dto.GuildSettingsDTO{
-			ID:      guildSetting.ID,
-			GuildID: guildSetting.GuildID,
-			Roles: dto.RolesSettings{
-				MesssageId: guildSetting.Roles.MesssageId,
-				Matching:   guildSetting.Roles.Matching,
-			},
-
-		})
-	}
-	return result, nil
-}
-
 // Обновление настроек гильдии
 func (s *SettingsService) UpdateGuildSettings(id string, data dto.GuildSettingsUpdateDTO) (dto.GuildSettingsDTO, error) {
 	// Получаем текущие настройки гильдии

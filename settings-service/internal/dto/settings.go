@@ -10,7 +10,6 @@ type SettingsJson struct {
 	Roles RolesSettings `json:"roles"`
 }
 
-
 type GuildSettingsDTO struct {
 	ID uint `json:id`
 	GuildID string `json:"guild_id"`

@@ -35,34 +35,6 @@ func (s *SettingsServer) GetByGuildID(ctx context.Context, req *pb.GetSettingsBy
 	return response, nil
 }
 
-
-func (s *SettingsServer) GetAllGuildSettings(ctx context.Context, req *pb.GetAllGuildSettingsRequest) (*pb.GetAllGuildSettingsResponse, error) {
-	guildSettingsList, err := s.SettingsService.GetAllGuildSettings()
-	if err != nil {
-		return nil, err
-	}
-
-	// Преобразуем в формат gRPC
-	var settingsList []*pb.GuildSettings
-	for _, setting := range guildSettingsList {
-		settingsList = append(settingsList, &pb.GuildSettings{
-			Id:      string(setting.ID),
-			GuildId: setting.GuildID,
-			Roles: &pb.RolesSettings{
-				MessageId: setting.Roles.MesssageId,
-				Matching:  setting.Roles.Matching,
-			},
-			},
-		)
-	}
-
-	response := &pb.GetAllGuildSettingsResponse{
-		Settings: settingsList,
-	}
-	return response, nil
-}
-
-
 func (s *SettingsServer) UpdateGuildSettings(ctx context.Context, req *pb.UpdateGuildSettingsRequest) (*pb.UpdateGuildSettingsResponse, error) {
 	updateData := dto.GuildSettingsUpdateDTO{
 		Roles: dto.RolesSettings{
