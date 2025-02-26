@@ -1,9 +1,8 @@
 package routes
 
 import (
-
+	"api-gateway/internal/handlers"
 	"github.com/gin-gonic/gin"
-	"api-gateway/internal/handlers" 
 )
 
 func SetupRouter(SettingsHandlers *handlers.SettingsHandlers) *gin.Engine {

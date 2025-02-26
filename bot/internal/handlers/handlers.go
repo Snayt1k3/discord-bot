@@ -1,17 +1,15 @@
 package handlers
 
 import (
-	"context"
-	"log/slog"
 	"bot/config"
 	"bot/internal/discord"
+	"context"
 	"github.com/bwmarrin/discordgo"
 	"github.com/disgoorg/snowflake/v2"
+	"log/slog"
 )
 
-
 func ReadyHandler(s *discordgo.Session, event *discordgo.Ready) {
-	// Set the playing status.
 	err := s.UpdateCustomStatus(config.GetBotStatus())
 	if err != nil {
 		slog.Warn("failed to update game status", "error", err)
@@ -29,7 +27,7 @@ func OnVoiceStateUpdate(session *discordgo.Session, event *discordgo.VoiceStateU
 		channelID = &id
 	}
 	discord.Bot.Lavalink.OnVoiceStateUpdate(context.TODO(), snowflake.MustParse(event.GuildID), channelID, event.SessionID)
-	
+
 	if event.ChannelID == "" {
 		discord.Bot.Queues.Delete(event.GuildID)
 	}
@@ -48,7 +46,7 @@ func HelpHandler(session *discordgo.Session, i *discordgo.InteractionCreate) {
 		"- `/resume` – Resume playing the music.\n" +
 		"- `/stop` – Stop the music and clear the queue.\n" +
 		"- `/skip` – Skip the current song.\n\n" +
-		
+
 		"**Information:**\n" +
 		"- `/help` – Show this help menu.\n\n" +
 
@@ -67,7 +65,6 @@ func HelpHandler(session *discordgo.Session, i *discordgo.InteractionCreate) {
 		},
 	)
 }
-
 
 func CommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	switch i.ApplicationCommandData().Name {

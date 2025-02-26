@@ -1,17 +1,17 @@
 package discord
 
 import (
-	"context"
-	"log/slog"
-	"time"
 	"bot/config"
+	"context"
 	"github.com/bwmarrin/discordgo"
 	"github.com/disgoorg/disgolink/v3/disgolink"
 	"github.com/disgoorg/snowflake/v2"
+	"log/slog"
+	"time"
 )
 
 type DiscordBot struct {
-	Session *discordgo.Session
+	Session  *discordgo.Session
 	Lavalink disgolink.Client
 	Queues   *QueueManager
 }

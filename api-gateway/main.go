@@ -15,17 +15,17 @@ import (
 
 func main() {
 	cfg, err := config.LoadConfig()
-	
+
 	if err != nil {
 		log.Fatalf("Unable to load config: %v", err)
 	}
-	
+
 	conn, err := grpc.NewClient(fmt.Sprintf("%v:%v", cfg.GrpcHost, cfg.GrpcPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
-	
+
 	if err != nil {
 		log.Fatalf("Не удалось подключиться к gRPC-серверу: %v", err)
 	}
-	
+
 	defer conn.Close()
 
 	protoClient := pb.NewSettingsServiceClient(conn)

@@ -63,7 +63,7 @@ func SendMusicEmbedMessage(title string, url string, duration string, thumbnail 
 		Title:       "Now is playing 🎶",
 		Description: fmt.Sprintf("[%s](%s)", title, url),
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
-				URL: thumbnail,
+			URL: thumbnail,
 		},
 		Fields: []*discordgo.MessageEmbedField{
 			{

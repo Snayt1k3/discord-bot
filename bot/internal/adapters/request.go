@@ -7,12 +7,9 @@ import (
 	"net/http"
 )
 
-
-
 type DefaultHttpClient struct {
 	Client *http.Client
 }
-
 
 func NewDefaultHttpClient() *DefaultHttpClient {
 	return &DefaultHttpClient{Client: &http.Client{}}

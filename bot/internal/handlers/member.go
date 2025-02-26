@@ -7,10 +7,9 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-
 var (
-	channelId = "" // адрес канала для сообщений
-	messageTemplate = "Добро пожаловать, %v!" // шаблон сообшения
+	channelId       = ""
+	messageTemplate = "Добро пожаловать, %v!"
 )
 
 func OnNewMemberJoin(s *discordgo.Session, u *discordgo.GuildMemberAdd) {

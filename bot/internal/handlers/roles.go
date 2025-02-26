@@ -1,13 +1,10 @@
 package handlers
 
 import (
-	"log/slog"
 	"bot/config"
 	"github.com/bwmarrin/discordgo"
+	"log/slog"
 )
-
-
-
 
 func OnMessageReactionAdd(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
 	slog.Info("%v reacted with %v", r.UserID, r.Emoji.Name)

@@ -2,10 +2,9 @@ package discord
 
 import (
 	"bot/config"
-	"log/slog"
 	"github.com/bwmarrin/discordgo"
+	"log/slog"
 )
-
 
 var CommandsList = []*discordgo.ApplicationCommand{
 	{
@@ -40,9 +39,7 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		Name:        "pause",
 		Description: "Pause the currently playing song",
 	},
-
 }
-
 
 // TODO: Добавить потом в main.go
 func OnGuildCreate(s *discordgo.Session, g *discordgo.GuildCreate) {

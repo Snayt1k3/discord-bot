@@ -2,10 +2,10 @@ package main
 
 import (
 	"bot/config"
-	"log"
+	"bot/internal/discord"
 	"bot/internal/handlers"
 	"fmt"
-	"bot/internal/discord"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -16,7 +16,7 @@ func main() {
 	discord.InitBot()
 	discord.InitConnection()
 	discord.InitLavalink()
-	
+
 	addHandlers()
 	registerCommands()
 
@@ -25,11 +25,10 @@ func main() {
 	fmt.Println("Bot is running. Press Ctrl + C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
-	<- sc
+	<-sc
 }
 
-
-func registerCommands(){ // todo: Убрать, на первую необходимость
+func registerCommands() { // todo: Убрать, на первую необходимость
 	for _, command := range discord.CommandsList {
 		_, err := discord.Bot.Session.ApplicationCommandCreate(discord.Bot.Session.State.User.ID, "", command)
 		if err != nil {
@@ -39,7 +38,7 @@ func registerCommands(){ // todo: Убрать, на первую необход
 	}
 }
 
-func addHandlers(){
+func addHandlers() {
 	discord.Bot.Session.AddHandler(handlers.ReadyHandler)
 	discord.Bot.Session.AddHandler(handlers.OnMessageReactionAdd)
 	discord.Bot.Session.AddHandler(handlers.OnMessageReactionRemove)

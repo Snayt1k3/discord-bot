@@ -13,7 +13,6 @@ type SettingsServer struct {
 	pb.UnimplementedSettingsServiceServer
 }
 
-
 func (s *SettingsServer) GetSettingsByGuild(ctx context.Context, req *pb.GetSettingsByGuildRequest) (*pb.GetSettingsByGuildResponse, error) {
 	guildSettings, err := s.SettingsService.GetByGuildID(req.GuildId)
 	if err != nil {
@@ -28,7 +27,6 @@ func (s *SettingsServer) GetSettingsByGuild(ctx context.Context, req *pb.GetSett
 			Roles: &pb.RolesSettings{
 				MessageId: guildSettings.Roles.MesssageId,
 				Matching:  guildSettings.Roles.Matching,
-
 			},
 		},
 	}
@@ -44,7 +42,7 @@ func (s *SettingsServer) UpdateGuildSettings(ctx context.Context, req *pb.Update
 	}
 
 	updatedGuildSettings, err := s.SettingsService.UpdateGuildSettings(req.Id, updateData)
-	
+
 	if err != nil {
 		return nil, err
 	}
@@ -52,14 +50,13 @@ func (s *SettingsServer) UpdateGuildSettings(ctx context.Context, req *pb.Update
 	// Преобразуем обновленные данные в формат gRPC
 	response := &pb.UpdateGuildSettingsResponse{
 		GuildSettings: &pb.GuildSettings{
-			Id:       strconv.Itoa(int((updatedGuildSettings.ID))),
+			Id:      strconv.Itoa(int((updatedGuildSettings.ID))),
 			GuildId: updatedGuildSettings.GuildID,
 
-				Roles: &pb.RolesSettings{
-					MessageId: updatedGuildSettings.Roles.MesssageId,
-					Matching:  updatedGuildSettings.Roles.Matching,
-
-				},
+			Roles: &pb.RolesSettings{
+				MessageId: updatedGuildSettings.Roles.MesssageId,
+				Matching:  updatedGuildSettings.Roles.Matching,
+			},
 		},
 	}
 	return response, nil
@@ -67,7 +64,7 @@ func (s *SettingsServer) UpdateGuildSettings(ctx context.Context, req *pb.Update
 
 func (s *SettingsServer) CreateGuildSettings(ctx context.Context, req *pb.CreateGuildSettingsRequest) (*pb.CreateGuildSettingsResponse, error) {
 	data := dto.GuildSettingsCreateDTO{GuildId: req.GuildId}
-	
+
 	err := s.SettingsService.CreateGuildSetting(data)
 
 	if err != nil {

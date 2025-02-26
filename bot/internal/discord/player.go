@@ -33,11 +33,11 @@ func onTrackEnd(player disgolink.Player, event lavalink.TrackEndEvent) {
 		nextTrack lavalink.Track
 		ok        bool
 	)
-	
+
 	nextTrack, ok = queue.Next()
 
 	if !ok {
-		// leaving from voice 
+		// leaving from voice
 		JoinVoiceChannel(event.GuildID().String(), "", false, false)
 		return
 	}

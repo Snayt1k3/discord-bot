@@ -9,16 +9,14 @@ import (
 
 type SettingsService struct {
 	GuildRepo interfaces.Repository[models.GuildSetting]
-
 }
-
 
 func (s *SettingsService) GetByGuildID(id string) (dto.GuildSettingsDTO, error) {
 	guildSetting, err := s.GuildRepo.Filter(map[string]interface{}{"guild_id": id})
-	if err != nil || len(guildSetting) == 0{
+	if err != nil || len(guildSetting) == 0 {
 		return dto.GuildSettingsDTO{}, err
 	}
-	
+
 	return dto.GuildSettingsDTO{
 		ID:      guildSetting[0].ID,
 		GuildID: guildSetting[0].GuildID,
@@ -29,14 +27,13 @@ func (s *SettingsService) GetByGuildID(id string) (dto.GuildSettingsDTO, error) 
 	}, nil
 }
 
-
 func (s *SettingsService) UpdateGuildSettings(id string, data dto.GuildSettingsUpdateDTO) (dto.GuildSettingsDTO, error) {
 	// Получаем текущие настройки гильдии
 	rolesJSON, err := json.Marshal(data.Roles)
-    if err != nil {
-        return dto.GuildSettingsDTO{}, err
-    }
-	
+	if err != nil {
+		return dto.GuildSettingsDTO{}, err
+	}
+
 	err = s.GuildRepo.Updates(id, map[string]interface{}{
 		"roles": string(rolesJSON),
 	})
@@ -54,14 +51,12 @@ func (s *SettingsService) UpdateGuildSettings(id string, data dto.GuildSettingsU
 			MesssageId: setting[0].Roles.MesssageId,
 			Matching:   setting[0].Roles.Matching,
 		},
-		
 	}, nil
 }
 
-
 func (s *SettingsService) CreateGuildSetting(data dto.GuildSettingsCreateDTO) error {
 	model := &models.GuildSetting{GuildID: data.GuildId}
-	
+
 	_, err := s.GuildRepo.Create(model)
 
 	if err != nil {

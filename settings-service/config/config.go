@@ -16,7 +16,6 @@ type Config struct {
 	GrpcPort string
 }
 
-
 func LoadConfig() (*Config, error) {
 	config := &Config{
 		Host:     os.Getenv("SETTINGS_POSTGRES_HOST"),

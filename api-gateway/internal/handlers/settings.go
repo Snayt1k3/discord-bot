@@ -11,16 +11,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
 type SettingsHandlers struct {
 	client pb.SettingsServiceClient
-	redis interfaces.RedisI
+	redis  interfaces.RedisI
 }
 
 func NewClient(client pb.SettingsServiceClient, redis interfaces.RedisI) *SettingsHandlers {
 	return &SettingsHandlers{client: client, redis: redis}
 }
-
 
 func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 	guildID := c.Param("guild_id")
@@ -42,13 +40,13 @@ func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 	}
 
 	resp, err := s.client.GetSettingsByGuild(context.Background(), &pb.GetSettingsByGuildRequest{GuildId: guildID})
-	
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	err = s.redis.Set(key, resp.String(), 60 * 5)
+	err = s.redis.Set(key, resp.String(), 60*5)
 
 	if err != nil {
 		slog.Error("Error while set data in redis", "error", err)
@@ -74,15 +72,15 @@ func (s *SettingsHandlers) UpdateGuildSettings(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-func (s *SettingsHandlers) CreateGuildSetting (c *gin.Context) {
+func (s *SettingsHandlers) CreateGuildSetting(c *gin.Context) {
 	guildID := c.Param("guild_id")
 
 	resp, err := s.client.CreateGuildSettings(context.Background(), &pb.CreateGuildSettingsRequest{GuildId: guildID})
-	
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	
+
 	c.JSON(http.StatusOK, resp)
 }

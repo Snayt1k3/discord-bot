@@ -2,16 +2,16 @@ package main
 
 import (
 	"fmt"
+	"google.golang.org/grpc"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"log"
 	"net"
 	"settings-service/config"
 	"settings-service/internal/adapters"
+	"settings-service/internal/models"
 	"settings-service/internal/server"
 	pb "settings-service/proto"
-	"settings-service/internal/models"
-	"google.golang.org/grpc"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 )
 
 func main() {
@@ -28,7 +28,6 @@ func main() {
 	}
 	models.AutoMigrate(db)
 	guildRepo := adapters.NewGuildSettingRepository(db)
-
 
 	settingsService := &adapters.SettingsService{
 		GuildRepo: guildRepo,
