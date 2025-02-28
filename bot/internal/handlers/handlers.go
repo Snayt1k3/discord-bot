@@ -66,8 +66,19 @@ func HelpHandler(session *discordgo.Session, i *discordgo.InteractionCreate) {
 	)
 }
 
+// CommandHandler processes incoming Discord commands.
+// It logs the command name and calls the appropriate handler.
+//
+// Supported commands:
+//   - "play"  → PlayCommandHandler
+//   - "skip"  → SkipCommandHandler
+//   - "stop"  → StopCommandHandler
+//   - "help"  → HelpHandler
 func CommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	slog.Info("Handling command", "command", i.ApplicationCommandData().Name)
+
 	switch i.ApplicationCommandData().Name {
+
 	case "play":
 		PlayCommandHandler(s, i)
 	case "skip":
@@ -76,5 +87,6 @@ func CommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		StopCommandHandler(s, i)
 	case "help":
 		HelpHandler(s, i)
+
 	}
 }

@@ -41,14 +41,13 @@ var CommandsList = []*discordgo.ApplicationCommand{
 	},
 }
 
-// TODO: Добавить потом в main.go
 func OnGuildCreate(s *discordgo.Session, g *discordgo.GuildCreate) {
 	for _, command := range CommandsList {
 		_, err := s.ApplicationCommandCreate(config.GetApplicationId(), g.Guild.ID, command)
 		if err != nil {
-			slog.Info("Error creating command '%s' for guild '%s': %s", command.Name, g.Guild.ID, err)
+			slog.Error("Error creating command for guild", "command", command.Name, "guild_id", g.Guild.ID, "error", err)
 		} else {
-			slog.Info("Command '%s' registered for new guild: %s", command.Name, g.Guild.ID)
+			slog.Info("Command registered for new guild", "command", command.Name, "guild_id", g.Guild.ID)
 		}
 	}
 }

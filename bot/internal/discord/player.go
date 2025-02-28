@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-
 	"github.com/disgoorg/disgolink/v3/disgolink"
 	"github.com/disgoorg/disgolink/v3/lavalink"
 )
@@ -44,7 +43,7 @@ func onTrackEnd(player disgolink.Player, event lavalink.TrackEndEvent) {
 
 	SendMusicEmbedMessage(nextTrack.Info.Title, *nextTrack.Info.URI, nextTrack.Info.Length.String(), *nextTrack.Info.ArtworkURL)
 	if err := player.Update(context.TODO(), lavalink.WithTrack(nextTrack)); err != nil {
-		slog.Error("Failed to play next track: ", err)
+		slog.Error("Failed to play next track", "trak", err)
 	}
 }
 

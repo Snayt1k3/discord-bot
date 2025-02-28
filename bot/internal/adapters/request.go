@@ -5,6 +5,7 @@ import (
 	"context"
 	"io"
 	"net/http"
+	"log/slog"
 )
 
 type DefaultHttpClient struct {
@@ -33,10 +34,11 @@ func (d *DefaultHttpClient) Delete(ctx context.Context, url string, headers map[
 
 func (d *DefaultHttpClient) doRequest(ctx context.Context, method, url string, body []byte, headers map[string]string) (*http.Response, error) {
 	var reqBody io.Reader
+	
 	if body != nil {
 		reqBody = bytes.NewBuffer(body)
 	}
-
+	slog.Info("Making request to url, ", "url", url, "method", method)
 	req, err := http.NewRequestWithContext(ctx, method, url, reqBody)
 	if err != nil {
 		return nil, err

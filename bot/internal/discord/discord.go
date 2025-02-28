@@ -32,7 +32,7 @@ func SearchVoiceChannelByUserID(userID string) (voiceChannelID string) {
 func SendChannelMessage(channelID string, message string) {
 	_, err := Bot.Session.ChannelMessageSend(channelID, message)
 	if err != nil {
-		slog.Warn("failed to send message to channel", "channelId", channelID, "message", message, "error", err)
+		slog.Error("failed to send message to channel", "channelId", channelID, "message", message, "error", err)
 	}
 }
 

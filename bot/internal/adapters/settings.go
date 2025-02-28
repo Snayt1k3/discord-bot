@@ -5,6 +5,7 @@ import (
 	"bot/internal/dto"
 	"bot/internal/interfaces"
 	"context"
+	"log/slog"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -21,6 +22,11 @@ func (s *ServiceSettingsClient) CreateSettings(guild_id string) error {
 		nil,
 		nil,
 	)
+
+	if err != nil {
+		slog.Warn("Bad response when creating settings", "err", err)
+		return err
+	}
 
 	defer resp.Body.Close()
 
@@ -39,12 +45,14 @@ func (s *ServiceSettingsClient) UpdateGuildSettings(guildId string, roles dto.Ro
 	)
 
 	if err != nil {
+		
 		return dto.GuildSettingsDTO{}, err
 	}
 
 	defer resp.Body.Close()
 
 	body, err = io.ReadAll(resp.Body)
+
 	if err != nil {
 		return dto.GuildSettingsDTO{}, err
 	}
@@ -56,7 +64,7 @@ func (s *ServiceSettingsClient) UpdateGuildSettings(guildId string, roles dto.Ro
 	if err != nil {
 		return dto.GuildSettingsDTO{}, nil
 	}
-
+	slog.Warn("Bad response when updating settings", "err", err)
 	return settings, nil
 }
 
@@ -68,6 +76,7 @@ func (s *ServiceSettingsClient) GetGuildSettings(guildId string) (dto.GuildSetti
 	)
 
 	if err != nil {
+		slog.Warn("Bad response when getting settings", "err", err)
 		return dto.GuildSettingsDTO{}, err
 	}
 

@@ -4,14 +4,20 @@ import (
 	"bot/config"
 	"bot/internal/discord"
 	"bot/internal/handlers"
-	"fmt"
-	"log"
+	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
 func main() {
+	opts := &slog.HandlerOptions{
+		Level:     slog.LevelInfo,           
+		AddSource: true,              
+	}
+	logger := slog.New(slog.NewTextHandler(os.Stdout, opts))
+	slog.SetDefault(logger)
+
 	config.Load()
 	discord.InitBot()
 	discord.InitConnection()
@@ -22,19 +28,20 @@ func main() {
 
 	defer discord.Bot.Session.Close()
 
-	fmt.Println("Bot is running. Press Ctrl + C to exit.")
+	slog.Info("Bot is running. Press Ctrl + C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
 }
 
-func registerCommands() { // todo: Убрать, на первую необходимость
+func registerCommands() {
 	for _, command := range discord.CommandsList {
 		_, err := discord.Bot.Session.ApplicationCommandCreate(discord.Bot.Session.State.User.ID, "", command)
 		if err != nil {
-			log.Fatalf("Failed to create command %s: %v", command.Name, err)
+			slog.Error("Failed to create command", "name", command.Name, "error", err)
+			continue
 		}
-		log.Printf("Command %s registered successfully.", command.Name)
+		slog.Info("Command registered successfully", "name", command.Name)
 	}
 }
 

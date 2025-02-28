@@ -16,13 +16,14 @@ func OnMessageReactionAdd(s *discordgo.Session, r *discordgo.MessageReactionAdd)
 	roleId, exists := config.ReactionRolesMap[r.Emoji.Name]
 
 	if !exists {
+		slog.Warn("Role doesn't exist", "name", r.Emoji.Name)
 		return
 	}
 
 	err := s.GuildMemberRoleAdd(r.GuildID, r.UserID, roleId)
 
 	if err != nil {
-		slog.Warn("Error adding role", "error", err)
+		slog.Error("Error adding role", "error", err)
 	}
 
 }
@@ -37,12 +38,13 @@ func OnMessageReactionRemove(s *discordgo.Session, r *discordgo.MessageReactionR
 	roleId, exists := config.ReactionRolesMap[r.Emoji.Name]
 
 	if !exists {
+		slog.Warn("Role doesn't exist", "name", r.Emoji.Name)
 		return
 	}
 
 	err := s.GuildMemberRoleRemove(r.GuildID, r.UserID, roleId)
 
 	if err != nil {
-		slog.Warn("Error removing role", "error", err)
+		slog.Error("Error removing role", "error", err)
 	}
 }
