@@ -12,7 +12,7 @@ import (
 func ReadyHandler(s *discordgo.Session, event *discordgo.Ready) {
 	err := s.UpdateCustomStatus(config.GetBotStatus())
 	if err != nil {
-		slog.Warn("failed to update game status", "error", err)
+		slog.Warn("failed to update custom status", "error", err)
 	}
 }
 
@@ -66,27 +66,53 @@ func HelpHandler(session *discordgo.Session, i *discordgo.InteractionCreate) {
 	)
 }
 
-// CommandHandler processes incoming Discord commands.
-// It logs the command name and calls the appropriate handler.
-//
-// Supported commands:
-//   - "play"  → PlayCommandHandler
-//   - "skip"  → SkipCommandHandler
-//   - "stop"  → StopCommandHandler
-//   - "help"  → HelpHandler
-func CommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	slog.Info("Handling command", "command", i.ApplicationCommandData().Name)
 
-	switch i.ApplicationCommandData().Name {
+func SettingsHandler(session *discordgo.Session, i *discordgo.InteractionCreate) {
+	isAdmin, err := discord.IsAdmin(session, i.GuildID, i.Member.User.ID)
 
-	case "play":
-		PlayCommandHandler(s, i)
-	case "skip":
-		SkipCommandHandler(s, i)
-	case "stop":
-		StopCommandHandler(s, i)
-	case "help":
-		HelpHandler(s, i)
+	if err != nil {
+		slog.Error("Error checking admin status", "err", err)
+		return
+	}
 
+	if !isAdmin {
+		session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+			Type: discordgo.InteractionResponseChannelMessageWithSource,
+			Data: &discordgo.InteractionResponseData{
+				Content: "You do not have administrator rights to perform this action!",
+				Flags:   discordgo.MessageFlagsEphemeral,
+			},
+		})
+		return
+	}
+
+	buttons := []discordgo.MessageComponent{
+		discordgo.Button{
+			Label:    "⚙️ Configure Reaction Roles",
+			Style:    discordgo.SuccessButton,
+			CustomID: "setup_reaction_roles",
+			Emoji: &discordgo.ComponentEmoji{
+				Name: "🔧",
+			},
+		},
+	}
+	
+	message := &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: "**⚙️ Server Settings**\n\n" +
+					 "Welcome to the settings panel! Here you can configure various aspects of your server.\n\n" +
+					 "🔹 *Click the button below to set up reaction roles!*",
+			Components: []discordgo.MessageComponent{
+				discordgo.ActionsRow{
+					Components: buttons,
+				},
+			},
+		},
+	}
+
+	err = session.InteractionRespond(i.Interaction, message)
+	if err != nil {
+		slog.Error("Error sending settings message", "err", err)
 	}
 }

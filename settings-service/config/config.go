@@ -25,7 +25,7 @@ func LoadConfig() (*Config, error) {
 		DBName:   os.Getenv("SETTINGS_POSTGRES_DB"),
 		SSLMode:  os.Getenv("SETTINGS_POSTGRES_SSLMODE"),
 		TimeZone: os.Getenv("SETTINGS_POSTGRES_TIMEZONE"),
-		GrpcPort: os.Getenv("GRPC_PORT"),
+		GrpcPort: os.Getenv("SETTINGS_PORT"),
 	}
 
 	if config.Host == "" || config.Port == "" || config.User == "" || config.Password == "" || config.DBName == "" || config.GrpcPort == "" {

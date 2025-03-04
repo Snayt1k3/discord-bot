@@ -74,3 +74,26 @@ func SendMusicEmbedMessage(title string, url string, duration string, thumbnail 
 		},
 	})
 }
+
+func IsAdmin(session *discordgo.Session, guildID, userID string) (bool, error) {
+	member, err := session.GuildMember(guildID, userID)
+	if err != nil {
+		return false, err
+	}
+
+	guild, err := session.State.Guild(guildID)
+	if err != nil {
+		return false, err
+	}
+
+	// Проверяем роли пользователя
+	for _, roleID := range member.Roles {
+		for _, role := range guild.Roles {
+			if role.ID == roleID && (role.Permissions&discordgo.PermissionAdministrator) != 0 {
+				return true, nil
+			}
+		}
+	}
+
+	return false, nil
+}

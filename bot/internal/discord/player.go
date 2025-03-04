@@ -3,9 +3,9 @@ package discord
 import (
 	"context"
 	"fmt"
-	"log/slog"
 	"github.com/disgoorg/disgolink/v3/disgolink"
 	"github.com/disgoorg/disgolink/v3/lavalink"
+	"log/slog"
 )
 
 func onPlayerPause(player disgolink.Player, event lavalink.PlayerPauseEvent) {

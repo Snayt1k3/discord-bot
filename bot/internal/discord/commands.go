@@ -39,6 +39,10 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		Name:        "pause",
 		Description: "Pause the currently playing song",
 	},
+	{
+		Name:        "settings",
+		Description: "Configure server settings. Only for admins",
+	},
 }
 
 func OnGuildCreate(s *discordgo.Session, g *discordgo.GuildCreate) {

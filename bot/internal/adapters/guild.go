@@ -5,17 +5,17 @@ import (
 	"bot/internal/dto"
 	"bot/internal/interfaces"
 	"context"
-	"log/slog"
 	"encoding/json"
 	"fmt"
 	"io"
+	"log/slog"
 )
 
-type ServiceSettingsClient struct {
+type GuildKeeper struct {
 	client interfaces.HttpClient
 }
 
-func (s *ServiceSettingsClient) CreateSettings(guild_id string) error {
+func (s *GuildKeeper) CreateSettings(guild_id string) error {
 	resp, err := s.client.Post(
 		context.Background(),
 		fmt.Sprintf("%v/settings/guild/%v", config.GetApiGatewayAddr(), guild_id),
@@ -34,7 +34,7 @@ func (s *ServiceSettingsClient) CreateSettings(guild_id string) error {
 
 }
 
-func (s *ServiceSettingsClient) UpdateGuildSettings(guildId string, roles dto.RolesSettings) (dto.GuildSettingsDTO, error) {
+func (s *GuildKeeper) UpdateGuildSettings(guildId string, roles dto.RolesSettings) (dto.GuildSettingsDTO, error) {
 	body, _ := json.Marshal(roles)
 
 	resp, err := s.client.Patch(
@@ -45,7 +45,7 @@ func (s *ServiceSettingsClient) UpdateGuildSettings(guildId string, roles dto.Ro
 	)
 
 	if err != nil {
-		
+
 		return dto.GuildSettingsDTO{}, err
 	}
 
@@ -68,7 +68,7 @@ func (s *ServiceSettingsClient) UpdateGuildSettings(guildId string, roles dto.Ro
 	return settings, nil
 }
 
-func (s *ServiceSettingsClient) GetGuildSettings(guildId string) (dto.GuildSettingsDTO, error) {
+func (s *GuildKeeper) GetGuildSettings(guildId string) (dto.GuildSettingsDTO, error) {
 	resp, err := s.client.Get(
 		context.Background(),
 		fmt.Sprintf("%v/settings/guild/%v", config.GetApiGatewayAddr(), guildId),
@@ -99,6 +99,6 @@ func (s *ServiceSettingsClient) GetGuildSettings(guildId string) (dto.GuildSetti
 	return settings, nil
 }
 
-func NewServiceSettingsClient() *ServiceSettingsClient {
-	return &ServiceSettingsClient{client: NewDefaultHttpClient()}
+func NewServiceSettingsClient() *GuildKeeper {
+	return &GuildKeeper{client: NewDefaultHttpClient()}
 }

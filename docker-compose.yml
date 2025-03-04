@@ -11,7 +11,7 @@ services:
       - ./application.yml:/opt/Lavalink/application.yml
       - ./plugins/:/opt/Lavalink/plugins/
     networks:
-      - lavalink
+      - bot
     expose:
       - 2333
     ports:
@@ -22,7 +22,7 @@ services:
       context: ./bot
       dockerfile: Dockerfile
     networks:
-      - lavalink
+      - bot
     depends_on:
       - lavalink
     env_file:
