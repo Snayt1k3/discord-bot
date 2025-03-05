@@ -6,10 +6,13 @@ import (
 	"bot/internal/interfaces"
 	"context"
 	"encoding/json"
+	"bot/internal/errors"
 	"fmt"
 	"io"
 	"log/slog"
 )
+
+
 
 type GuildKeeper struct {
 	client interfaces.HttpClient
@@ -78,6 +81,10 @@ func (s *GuildKeeper) GetGuildSettings(guildId string) (dto.GuildSettingsDTO, er
 	if err != nil {
 		slog.Warn("Bad response when getting settings", "err", err)
 		return dto.GuildSettingsDTO{}, err
+	}
+
+	if resp.StatusCode == 404 {
+		return dto.GuildSettingsDTO{}, errors.ErrGuildSettingsNotFound
 	}
 
 	defer resp.Body.Close()

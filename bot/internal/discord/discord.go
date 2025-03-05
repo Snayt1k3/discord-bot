@@ -97,3 +97,14 @@ func IsAdmin(session *discordgo.Session, guildID, userID string) (bool, error) {
 
 	return false, nil
 }
+
+func SendErrorMessage(session *discordgo.Session, i *discordgo.InteractionCreate) error {
+	session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: "⚠️ Oops! Something went wrong. Please try again. ⚠️",
+			Flags:   discordgo.MessageFlagsEphemeral,
+		},
+	})
+	return nil
+}

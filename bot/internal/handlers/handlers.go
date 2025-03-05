@@ -3,10 +3,13 @@ package handlers
 import (
 	"bot/config"
 	"bot/internal/discord"
+	"bot/internal/interfaces"
+	er "bot/internal/errors"
+	"errors"
 	"context"
+	"log/slog"
 	"github.com/bwmarrin/discordgo"
 	"github.com/disgoorg/snowflake/v2"
-	"log/slog"
 )
 
 func ReadyHandler(s *discordgo.Session, event *discordgo.Ready) {
@@ -66,8 +69,14 @@ func HelpHandler(session *discordgo.Session, i *discordgo.InteractionCreate) {
 	)
 }
 
+func SettingsHandler(guildKeeper interfaces.GuildKeeperInterface, session *discordgo.Session, i *discordgo.InteractionCreate) {
+	
+	_, err := guildKeeper.GetGuildSettings(i.GuildID)
 
-func SettingsHandler(session *discordgo.Session, i *discordgo.InteractionCreate) {
+	if errors.Is(err, er.ErrGuildSettingsNotFound){
+		guildKeeper.CreateSettings(i.GuildID)
+	}
+
 	isAdmin, err := discord.IsAdmin(session, i.GuildID, i.Member.User.ID)
 
 	if err != nil {
@@ -96,13 +105,13 @@ func SettingsHandler(session *discordgo.Session, i *discordgo.InteractionCreate)
 			},
 		},
 	}
-	
+
 	message := &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "**⚙️ Server Settings**\n\n" +
-					 "Welcome to the settings panel! Here you can configure various aspects of your server.\n\n" +
-					 "🔹 *Click the button below to set up reaction roles!*",
+				"Welcome to the settings panel! Here you can configure various aspects of your server.\n\n" +
+				"🔹 *Click the button below to set up reaction roles!*",
 			Components: []discordgo.MessageComponent{
 				discordgo.ActionsRow{
 					Components: buttons,

@@ -6,6 +6,9 @@ import (
 	"settings-service/internal/interfaces"
 	pb "settings-service/proto"
 	"strconv"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type SettingsServer struct {
@@ -15,8 +18,13 @@ type SettingsServer struct {
 
 func (s *SettingsServer) GetSettingsByGuild(ctx context.Context, req *pb.GetSettingsByGuildRequest) (*pb.GetSettingsByGuildResponse, error) {
 	guildSettings, err := s.SettingsService.GetByGuildID(req.GuildId)
+	
 	if err != nil {
 		return nil, err
+	}
+
+	if guildSettings.ID == 0 {
+		return nil, status.Error(codes.NotFound, "Data not found") 
 	}
 
 	// Преобразуем настройки в формат gRPC

@@ -3,12 +3,13 @@ package handlers
 import (
 	"bot/internal/adapters"
 	"bot/internal/discord"
+	"bot/internal/handlers/settings"
 	"bot/internal/interfaces"
 	"fmt"
-	"github.com/bwmarrin/discordgo"
 	"log/slog"
 	"math/rand"
 	"time"
+	"github.com/bwmarrin/discordgo"
 )
 
 var (
@@ -42,22 +43,45 @@ func (cd *CommandsDispatcher) OnMemberJoin(s *discordgo.Session, u *discordgo.Gu
 }
 
 func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	slog.Info("Handling command", "command", i.ApplicationCommandData().Name)
+	slog.Info("Handling interaction", "type", i.Type)
 
-	switch i.ApplicationCommandData().Name {
+	switch i.Type {
+	case discordgo.InteractionApplicationCommand:
+		slog.Info("Handling command", "command", i.ApplicationCommandData().Name)
+		switch i.ApplicationCommandData().Name {
 
-	case "play":
-		PlayCommandHandler(s, i)
-	case "skip":
-		SkipCommandHandler(s, i)
-	case "stop":
-		StopCommandHandler(s, i)
-	case "help":
-		HelpHandler(s, i)
-	case "resume":
-		ResumeHandler(s, i)
-	case "settings":
-		SettingsHandler(s, i)
+		case "play":
+			PlayCommandHandler(s, i)
+		case "skip":
+			SkipCommandHandler(s, i)
+		case "stop":
+			StopCommandHandler(s, i)
+		case "help":
+			HelpHandler(s, i)
+		case "resume":
+			ResumeHandler(s, i)
+		case "settings":
+			SettingsHandler(cd.guildKeeper, s, i)
+		default:
+			slog.Warn("Unknown command", "command", i.ApplicationCommandData().Name)
+		}
 
+	case discordgo.InteractionMessageComponent:
+		slog.Info("Handling button", "custom_id", i.MessageComponentData().CustomID)
+		switch i.MessageComponentData().CustomID {
+		case "setup_reaction_roles":
+			settings.ShowAllRoles(cd.guildKeeper, s, i)
+		case "role_add":
+			settings.AddRole(cd.guildKeeper, s, i)
+		case "role_remove":
+			settings.RemoveRole(cd.guildKeeper, s, i)
+		case "set_message_id":
+			settings.SetMessageId(cd.guildKeeper, s, i)
+		default:
+			slog.Warn("Unknown button interaction", "custom_id", i.MessageComponentData().CustomID)
+		}
+
+	default:
+		slog.Warn("Unhandled interaction type", "type", i.Type)
 	}
 }

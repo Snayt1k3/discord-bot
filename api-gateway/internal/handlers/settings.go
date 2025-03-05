@@ -9,6 +9,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type SettingsHandlers struct {
@@ -40,9 +42,16 @@ func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 	}
 
 	resp, err := s.client.GetSettingsByGuild(context.Background(), &pb.GetSettingsByGuildRequest{GuildId: guildID})
-
+	
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+
+		st, ok := status.FromError(err)
+		if ok && st.Code() == codes.NotFound {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Guild settings not found"})
+			return
+		}
+		
+		c.JSON(http.StatusInternalServerError, gin.H{"error": st.Message()})
 		return
 	}
 
