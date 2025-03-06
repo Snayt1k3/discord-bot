@@ -107,7 +107,6 @@ func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.Intera
 				slog.Warn("Unknown command", "command", i.ApplicationCommandData().Name)
 			}
 		}
-	
 
 	case discordgo.InteractionMessageComponent:
 		slog.Info("Handling button", "custom_id", i.MessageComponentData().CustomID)

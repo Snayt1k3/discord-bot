@@ -94,7 +94,7 @@ func (s *GuildKeeper) GetGuildSettings(guildId string) (dto.GuildSettingsRespons
 	}
 
 	var settings dto.GuildSettingsResponse
-	
+
 	err = json.Unmarshal(body, &settings)
 
 	if err != nil {

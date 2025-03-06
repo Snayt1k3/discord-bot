@@ -44,7 +44,7 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		Description: "Configure server settings. Only for admins",
 	},
 	{
-		Name: "add-role-reactions",
+		Name:        "add-role-reactions",
 		Description: "Add a role. Only for admins",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
@@ -62,7 +62,7 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		},
 	},
 	{
-		Name: "remove-role-reactions",
+		Name:        "remove-role-reactions",
 		Description: "Remove a role. Only for admins",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
@@ -74,7 +74,7 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		},
 	},
 	{
-		Name: "set-message-id",
+		Name:        "set-message-id",
 		Description: "Set the message ID for role reactions. Only for admins]",
 		Options: []*discordgo.ApplicationCommandOption{
 			{

@@ -35,7 +35,6 @@ func ShowAllRoles(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sess
 
 	roleListStr := roleList.String()
 
-
 	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseDeferredMessageUpdate,
 	})
@@ -75,7 +74,7 @@ func AddRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, 
 
 	_, err = guildKeeper.UpdateGuildSettings(i.GuildID, dto.RolesSettings{
 		MessageId: guildSetting.Settings.Roles.MessageId,
-		Matching:   guildSetting.Settings.Roles.Matching,
+		Matching:  guildSetting.Settings.Roles.Matching,
 	})
 
 	if err != nil {
@@ -83,7 +82,7 @@ func AddRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, 
 		discord.SendErrorMessage(s, i)
 		return
 	}
-	
+
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
@@ -106,15 +105,15 @@ func RemoveRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sessio
 
 	_, err = guildKeeper.UpdateGuildSettings(i.GuildID, dto.RolesSettings{
 		MessageId: guildSetting.Settings.Roles.MessageId,
-		Matching:   guildSetting.Settings.Roles.Matching,
+		Matching:  guildSetting.Settings.Roles.Matching,
 	})
-	
+
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)
 		discord.SendErrorMessage(s, i)
 		return
 	}
-	
+
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
@@ -136,7 +135,7 @@ func SetMessageId(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sess
 
 	_, err = guildKeeper.UpdateGuildSettings(i.GuildID, dto.RolesSettings{
 		MessageId: messageId,
-		Matching:   guildSetting.Settings.Roles.Matching,
+		Matching:  guildSetting.Settings.Roles.Matching,
 	})
 
 	if err != nil {
@@ -144,7 +143,7 @@ func SetMessageId(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sess
 		discord.SendErrorMessage(s, i)
 		return
 	}
-	
+
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
@@ -155,10 +154,9 @@ func SetMessageId(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sess
 
 }
 
-
 func OnMessageReactionAdd(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, r *discordgo.MessageReactionAdd) {
 	slog.Info("%v reacted with %v", r.UserID, r.Emoji.Name)
-	
+
 	guildSetting, err := guildKeeper.GetGuildSettings(r.GuildID)
 
 	if err != nil {

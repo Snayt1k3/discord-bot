@@ -5,7 +5,6 @@ import (
 	"fmt"
 )
 
-
 type RolesSettings struct {
 	MessageId string            `json:"message_id,omitempty"`
 	Matching  map[string]string `json:"matching,omitempty"`
@@ -16,7 +15,7 @@ type SettingsJson struct {
 }
 
 type GuildSettingsDTO struct {
-	ID string 			  `json:"id"`
+	ID      string        `json:"id"`
 	GuildID string        `json:"guild_id"`
 	Roles   RolesSettings `json:"roles"`
 }
