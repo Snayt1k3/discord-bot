@@ -5,9 +5,10 @@ import (
 	"fmt"
 )
 
+
 type RolesSettings struct {
-	MesssageId string            `json:"message_id"`
-	Matching   map[string]string `json:"matching"`
+	MessageId string            `json:"message_id,omitempty"`
+	Matching  map[string]string `json:"matching,omitempty"`
 }
 
 type SettingsJson struct {
@@ -15,7 +16,7 @@ type SettingsJson struct {
 }
 
 type GuildSettingsDTO struct {
-	ID      uint          `json:id`
+	ID string 			  `json:"id"`
 	GuildID string        `json:"guild_id"`
 	Roles   RolesSettings `json:"roles"`
 }
@@ -44,4 +45,8 @@ func (rs *RolesSettings) Scan(value interface{}) error {
 
 func (rs RolesSettings) Value() (interface{}, error) {
 	return json.Marshal(rs)
+}
+
+type GuildSettingsResponse struct {
+	Settings GuildSettingsDTO `json:"settings"`
 }

@@ -27,22 +27,22 @@ func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 
 	key := fmt.Sprintf("guild-settings-%v", guildID)
 
-	exists, _ := s.redis.Exists(key)
+	// exists, _ := s.redis.Exists(key)
 
-	if exists {
-		resp, err := s.redis.Get(key)
+	// if exists {
+	// 	resp, err := s.redis.Get(key)
 
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
+	// 	if err != nil {
+	// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	// 		return
+	// 	}
 
-		c.JSON(http.StatusOK, resp)
-		return
-	}
+	// 	c.JSON(http.StatusOK, resp)
+	// 	return
+	// }
 
 	resp, err := s.client.GetSettingsByGuild(context.Background(), &pb.GetSettingsByGuildRequest{GuildId: guildID})
-	
+
 	if err != nil {
 
 		st, ok := status.FromError(err)
@@ -50,7 +50,7 @@ func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Guild settings not found"})
 			return
 		}
-		
+
 		c.JSON(http.StatusInternalServerError, gin.H{"error": st.Message()})
 		return
 	}

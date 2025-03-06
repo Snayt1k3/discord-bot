@@ -3,13 +3,13 @@ package handlers
 import (
 	"bot/config"
 	"bot/internal/discord"
-	"bot/internal/interfaces"
 	er "bot/internal/errors"
-	"errors"
+	"bot/internal/interfaces"
 	"context"
-	"log/slog"
+	"errors"
 	"github.com/bwmarrin/discordgo"
 	"github.com/disgoorg/snowflake/v2"
+	"log/slog"
 )
 
 func ReadyHandler(s *discordgo.Session, event *discordgo.Ready) {
@@ -70,29 +70,11 @@ func HelpHandler(session *discordgo.Session, i *discordgo.InteractionCreate) {
 }
 
 func SettingsHandler(guildKeeper interfaces.GuildKeeperInterface, session *discordgo.Session, i *discordgo.InteractionCreate) {
-	
+
 	_, err := guildKeeper.GetGuildSettings(i.GuildID)
 
-	if errors.Is(err, er.ErrGuildSettingsNotFound){
+	if errors.Is(err, er.ErrGuildSettingsNotFound) {
 		guildKeeper.CreateSettings(i.GuildID)
-	}
-
-	isAdmin, err := discord.IsAdmin(session, i.GuildID, i.Member.User.ID)
-
-	if err != nil {
-		slog.Error("Error checking admin status", "err", err)
-		return
-	}
-
-	if !isAdmin {
-		session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-			Type: discordgo.InteractionResponseChannelMessageWithSource,
-			Data: &discordgo.InteractionResponseData{
-				Content: "You do not have administrator rights to perform this action!",
-				Flags:   discordgo.MessageFlagsEphemeral,
-			},
-		})
-		return
 	}
 
 	buttons := []discordgo.MessageComponent{

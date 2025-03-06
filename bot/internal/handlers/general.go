@@ -6,10 +6,10 @@ import (
 	"bot/internal/handlers/settings"
 	"bot/internal/interfaces"
 	"fmt"
+	"github.com/bwmarrin/discordgo"
 	"log/slog"
 	"math/rand"
 	"time"
-	"github.com/bwmarrin/discordgo"
 )
 
 var (
@@ -39,11 +39,30 @@ func (cd *CommandsDispatcher) OnMemberJoin(s *discordgo.Session, u *discordgo.Gu
 	randomIndex := randGen.Intn(len(messageTemplate))
 	formattedMessage := fmt.Sprintf(messageTemplate[randomIndex], u.Member.Nick)
 
-	discord.SendChannelMessage(channelId, formattedMessage)
+	discord.SendChannelMessage(``, formattedMessage)
+}
+
+func (cd *CommandsDispatcher) OnReady(s *discordgo.Session, r *discordgo.Ready) {
+	slog.Info("Bot is ready")
+}
+
+func (cd *CommandsDispatcher) OnMessageReactionAdd(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
+	settings.OnMessageReactionAdd(cd.guildKeeper, s, r)
+}
+
+func (cd *CommandsDispatcher) OnMessageReactionRemove(s *discordgo.Session, r *discordgo.MessageReactionRemove) {
+	settings.OnMessageReactionRemove(cd.guildKeeper, s, r)
 }
 
 func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	slog.Info("Handling interaction", "type", i.Type)
+
+	isAdmin, err := discord.IsAdmin(s, i.GuildID, i.Member.User.ID)
+
+	if err != nil {
+		slog.Error("Error checking admin status", "err", err)
+		return
+	}
 
 	switch i.Type {
 	case discordgo.InteractionApplicationCommand:
@@ -62,21 +81,39 @@ func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.Intera
 			ResumeHandler(s, i)
 		case "settings":
 			SettingsHandler(cd.guildKeeper, s, i)
-		default:
-			slog.Warn("Unknown command", "command", i.ApplicationCommandData().Name)
+		case "setup_reaction_roles", "add-role-reactions", "remove-role-reactions", "set-message-id":
+			if !isAdmin {
+				s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+					Type: discordgo.InteractionResponseChannelMessageWithSource,
+					Data: &discordgo.InteractionResponseData{
+						Content: "You do not have administrator rights to perform this action!",
+						Flags:   discordgo.MessageFlagsEphemeral,
+					},
+				})
+				return
+			}
+
+			switch i.ApplicationCommandData().Name {
+
+			case "setup_reaction_roles":
+				settings.ShowAllRoles(cd.guildKeeper, s, i)
+			case "add-role-reactions":
+				settings.AddRole(cd.guildKeeper, s, i)
+			case "remove-role-reactions":
+				settings.RemoveRole(cd.guildKeeper, s, i)
+			case "set-message-id":
+				settings.SetMessageId(cd.guildKeeper, s, i)
+			default:
+				slog.Warn("Unknown command", "command", i.ApplicationCommandData().Name)
+			}
 		}
+	
 
 	case discordgo.InteractionMessageComponent:
 		slog.Info("Handling button", "custom_id", i.MessageComponentData().CustomID)
 		switch i.MessageComponentData().CustomID {
 		case "setup_reaction_roles":
 			settings.ShowAllRoles(cd.guildKeeper, s, i)
-		case "role_add":
-			settings.AddRole(cd.guildKeeper, s, i)
-		case "role_remove":
-			settings.RemoveRole(cd.guildKeeper, s, i)
-		case "set_message_id":
-			settings.SetMessageId(cd.guildKeeper, s, i)
 		default:
 			slog.Warn("Unknown button interaction", "custom_id", i.MessageComponentData().CustomID)
 		}

@@ -43,6 +43,48 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		Name:        "settings",
 		Description: "Configure server settings. Only for admins",
 	},
+	{
+		Name: "add-role-reactions",
+		Description: "Add a role. Only for admins",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionRole,
+				Name:        "role",
+				Description: "The role to add",
+				Required:    true,
+			},
+			{
+				Type:        discordgo.ApplicationCommandOptionString,
+				Name:        "emoji",
+				Description: "The emoji to use",
+				Required:    true,
+			},
+		},
+	},
+	{
+		Name: "remove-role-reactions",
+		Description: "Remove a role. Only for admins",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionRole,
+				Name:        "role",
+				Description: "The role to remove",
+				Required:    true,
+			},
+		},
+	},
+	{
+		Name: "set-message-id",
+		Description: "Set the message ID for role reactions. Only for admins]",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionString,
+				Name:        "message_id",
+				Description: "The message ID",
+				Required:    true,
+			},
+		},
+	},
 }
 
 func OnGuildCreate(s *discordgo.Session, g *discordgo.GuildCreate) {

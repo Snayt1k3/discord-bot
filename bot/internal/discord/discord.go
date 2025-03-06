@@ -108,3 +108,25 @@ func SendErrorMessage(session *discordgo.Session, i *discordgo.InteractionCreate
 	})
 	return nil
 }
+
+
+func CreateModal(title, customID string, inputs []discordgo.MessageComponent) *discordgo.ModalSubmitInteractionData {
+	return &discordgo.ModalSubmitInteractionData{
+		CustomID: customID,
+		Components: []discordgo.MessageComponent{
+			&discordgo.ActionsRow{
+				Components: inputs,
+			},
+		},
+	}
+}
+
+
+func CreateTextInput(label, customID, placeholder string, style discordgo.TextInputStyle) *discordgo.TextInput {
+	return &discordgo.TextInput{
+		Label:       label,
+		CustomID:    customID,
+		Placeholder: placeholder,
+		Style:       style,
+	}
+}
