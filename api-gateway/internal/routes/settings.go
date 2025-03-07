@@ -10,6 +10,6 @@ func SettingsRoutes(r *gin.Engine, handler *handlers.SettingsHandlers) {
 	{
 		settings.GET("/guild/:guild_id", handler.GetGuildSettings)
 		settings.POST("/guild/:guild_id", handler.CreateGuildSetting)
-		settings.PATCH("/guild/:guild_id", handler.UpdateRolesSetting)
+		settings.PATCH("/guild/:guild_id/roles", handler.UpdateRolesSetting)
 	}
 }

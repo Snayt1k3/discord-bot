@@ -39,7 +39,7 @@ func (s *GuildKeeper) UpdateRolesSetting(guildId string, roles dto.RolesSettings
 	body, _ := json.Marshal(map[string]interface{}{"roles": roles})
 	resp, err := s.client.Patch(
 		context.Background(),
-		fmt.Sprintf("%v/settings/guild/%v", config.GetApiGatewayAddr(), guildId),
+		fmt.Sprintf("%v/settings/guild/%v/roles", config.GetApiGatewayAddr(), guildId),
 		body,
 		nil,
 	)
