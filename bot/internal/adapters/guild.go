@@ -35,9 +35,8 @@ func (s *GuildKeeper) CreateSettings(guild_id string) error {
 
 }
 
-func (s *GuildKeeper) UpdateGuildSettings(guildId string, roles dto.RolesSettings) (dto.GuildSettingsResponse, error) {
+func (s *GuildKeeper) UpdateRolesSetting(guildId string, roles dto.RolesSettings) (dto.GuildSettingsResponse, error) {
 	body, _ := json.Marshal(map[string]interface{}{"roles": roles})
-
 	resp, err := s.client.Patch(
 		context.Background(),
 		fmt.Sprintf("%v/settings/guild/%v", config.GetApiGatewayAddr(), guildId),
@@ -46,6 +45,7 @@ func (s *GuildKeeper) UpdateGuildSettings(guildId string, roles dto.RolesSetting
 	)
 
 	if err != nil {
+		slog.Warn("Bad response when updating settings", "err", err)
 		return dto.GuildSettingsResponse{}, err
 	}
 
@@ -77,7 +77,7 @@ func (s *GuildKeeper) GetGuildSettings(guildId string) (dto.GuildSettingsRespons
 	)
 
 	if err != nil {
-		slog.Warn("Bad response when getting settings", "err", err)
+		slog.Error("Failed to get guild settings", "error", err)
 		return dto.GuildSettingsResponse{}, err
 	}
 
@@ -101,7 +101,7 @@ func (s *GuildKeeper) GetGuildSettings(guildId string) (dto.GuildSettingsRespons
 		slog.Error("Failed to unmarshal guild settings", "error", err)
 		return dto.GuildSettingsResponse{}, err
 	}
-	fmt.Println(settings)
+
 	return settings, nil
 }
 

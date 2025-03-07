@@ -95,8 +95,6 @@ func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.Intera
 
 			switch i.ApplicationCommandData().Name {
 
-			case "setup_reaction_roles":
-				settings.ShowAllRoles(cd.guildKeeper, s, i)
 			case "add-role-reactions":
 				settings.AddRole(cd.guildKeeper, s, i)
 			case "remove-role-reactions":
@@ -110,8 +108,10 @@ func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.Intera
 
 	case discordgo.InteractionMessageComponent:
 		slog.Info("Handling button", "custom_id", i.MessageComponentData().CustomID)
+		
 		switch i.MessageComponentData().CustomID {
-		case "setup_reaction_roles":
+		
+		case "view_reaction_roles":
 			settings.ShowAllRoles(cd.guildKeeper, s, i)
 		default:
 			slog.Warn("Unknown button interaction", "custom_id", i.MessageComponentData().CustomID)

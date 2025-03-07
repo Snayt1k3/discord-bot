@@ -28,7 +28,6 @@ func (s *SettingsService) GetByGuildID(id string) (dto.GuildSettingsDTO, error) 
 }
 
 func (s *SettingsService) UpdateGuildSettings(id string, data dto.GuildSettingsUpdateDTO) (dto.GuildSettingsDTO, error) {
-	// Получаем текущие настройки гильдии
 	rolesJSON, err := json.Marshal(data.Roles)
 	if err != nil {
 		return dto.GuildSettingsDTO{}, err

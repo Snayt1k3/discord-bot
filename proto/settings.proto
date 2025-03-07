@@ -4,21 +4,17 @@ package settings;
 
 option go_package = "proto/";
 
-
 service SettingsService {
   rpc GetSettingsByGuild(GetSettingsByGuildRequest) returns (GetSettingsByGuildResponse);
-  rpc UpdateGuildSettings(UpdateGuildSettingsRequest) returns (UpdateGuildSettingsResponse);
   rpc CreateGuildSettings(CreateGuildSettingsRequest) returns (CreateGuildSettingsResponse);
+  rpc UpdateRolesSettings(UpdateRolesSettingsRequest) returns (UpdateRolesSettingsResponse);
 }
-
-// --- Модели данных ---
 
 
 message RolesSettings {
   string message_id = 1;
   map<string, string> matching = 2;
 }
-
 
 message GuildSettings {
   string id = 1;
@@ -35,16 +31,12 @@ message GetSettingsByGuildResponse {
   GuildSettings settings = 1;
 }
 
-message GetAllGuildSettingsRequest {}
-message GetAllGuildSettingsResponse {
-  repeated GuildSettings settings = 1;
-}
-
-message UpdateGuildSettingsRequest {
-  string id = 1;
+message UpdateRolesSettingsRequest {
+  string guild_id = 1;
   RolesSettings roles = 2;
 }
-message UpdateGuildSettingsResponse {
+
+message UpdateRolesSettingsResponse {
   GuildSettings guild_settings = 1;
 }
 

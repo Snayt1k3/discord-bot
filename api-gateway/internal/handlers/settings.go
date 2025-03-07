@@ -64,20 +64,23 @@ func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-func (s *SettingsHandlers) UpdateGuildSettings(c *gin.Context) {
+func (s *SettingsHandlers) UpdateRolesSetting(c *gin.Context) {
 	guildID := c.Param("guild_id")
-	var req pb.UpdateGuildSettingsRequest
+	var req pb.UpdateRolesSettingsRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
+		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	req.Id = guildID
-	resp, err := s.client.UpdateGuildSettings(context.Background(), &req)
+	req.GuildId = guildID
+	resp, err := s.client.UpdateRolesSettings(context.Background(), &req)
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 	c.JSON(http.StatusOK, resp)
 }
 

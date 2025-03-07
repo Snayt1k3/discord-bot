@@ -41,7 +41,7 @@ func (s *SettingsServer) GetSettingsByGuild(ctx context.Context, req *pb.GetSett
 	return response, nil
 }
 
-func (s *SettingsServer) UpdateGuildSettings(ctx context.Context, req *pb.UpdateGuildSettingsRequest) (*pb.UpdateGuildSettingsResponse, error) {
+func (s *SettingsServer) UpdateRolesSettings(ctx context.Context, req *pb.UpdateRolesSettingsRequest) (*pb.UpdateRolesSettingsResponse, error) {
 	updateData := dto.GuildSettingsUpdateDTO{
 		Roles: dto.RolesSettings{
 			MesssageId: req.Roles.MessageId,
@@ -49,14 +49,13 @@ func (s *SettingsServer) UpdateGuildSettings(ctx context.Context, req *pb.Update
 		},
 	}
 
-	updatedGuildSettings, err := s.SettingsService.UpdateGuildSettings(req.Id, updateData)
+	updatedGuildSettings, err := s.SettingsService.UpdateGuildSettings(req.GuildId, updateData)
 
 	if err != nil {
 		return nil, err
 	}
 
-	// Преобразуем обновленные данные в формат gRPC
-	response := &pb.UpdateGuildSettingsResponse{
+	response := &pb.UpdateRolesSettingsResponse{
 		GuildSettings: &pb.GuildSettings{
 			Id:      strconv.Itoa(int((updatedGuildSettings.ID))),
 			GuildId: updatedGuildSettings.GuildID,

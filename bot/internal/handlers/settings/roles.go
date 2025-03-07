@@ -6,6 +6,7 @@ import (
 	"bot/internal/interfaces"
 	"fmt"
 	"log/slog"
+	"strconv"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -24,42 +25,46 @@ func ShowAllRoles(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sess
 	var roleList strings.Builder
 	roleList.WriteString("📜 **Roles configured for this server:**\n\n")
 
-	for key, roleID := range roles.Matching {
-		role, err := s.State.Role(i.GuildID, roleID)
-		if err != nil {
-			slog.Warn("Could not fetch role", "roleID", roleID, "error", err)
-			continue
+	for emoji, roleID := range roles.Matching {
+		emojiStr := emoji 
+
+		if _, err := strconv.ParseInt(emoji, 10, 64); err == nil {
+			emojiStr = fmt.Sprintf("<:emoji:%s>", emoji)
 		}
-		roleList.WriteString(fmt.Sprintf("`%s.` **%s** (<@&%s>)\n", key, role.Name, roleID))
+
+		roleList.WriteString(fmt.Sprintf("%s - (<@&%s>)\n", emojiStr, roleID))
 	}
 
 	roleListStr := roleList.String()
 
 	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseDeferredMessageUpdate,
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: roleListStr,
+			Flags:   discordgo.MessageFlagsEphemeral,
+		},
 	})
 
 	if err != nil {
-		slog.Error("Failed to defer interaction response", "err", err)
-		return
-	}
-
-	_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
-		Content:    &roleListStr,
-		Components: nil,
-	})
-
-	if err != nil {
-		slog.Error("Failed to edit interaction response", "err", err)
+		slog.Error("Failed to respond to interaction", "err", err)
 	}
 }
 
 func AddRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate) {
-	options := strings.Split(i.ApplicationCommandData().Options[1].StringValue(), ":")
-	emojiName := options[len(options)-1]
-	roleID := i.ApplicationCommandData().Options[0].RoleValue(s, i.GuildID).ID
+	emojiRaw := i.ApplicationCommandData().Options[1].StringValue()
+	var emojiKey string
+	if strings.HasPrefix(emojiRaw, "<:") && strings.HasSuffix(emojiRaw, ">") {
+		parts := strings.Split(emojiRaw, ":")
+		if len(parts) == 3 {
+			emojiKey = strings.TrimSuffix(parts[2], ">") 
+		}
+	} else {
+		emojiKey = emojiRaw
+	}
 
+	roleID := i.ApplicationCommandData().Options[0].RoleValue(s, i.GuildID).ID
 	guildSetting, err := guildKeeper.GetGuildSettings(i.GuildID)
+
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
 		discord.SendErrorMessage(s, i)
@@ -70,9 +75,9 @@ func AddRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, 
 		guildSetting.Settings.Roles.Matching = make(map[string]string)
 	}
 
-	guildSetting.Settings.Roles.Matching[emojiName] = roleID
+	guildSetting.Settings.Roles.Matching[emojiKey] = roleID
 
-	_, err = guildKeeper.UpdateGuildSettings(i.GuildID, dto.RolesSettings{
+	_, err = guildKeeper.UpdateRolesSetting(i.GuildID, dto.RolesSettings{
 		MessageId: guildSetting.Settings.Roles.MessageId,
 		Matching:  guildSetting.Settings.Roles.Matching,
 	})
@@ -93,17 +98,28 @@ func AddRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, 
 }
 
 func RemoveRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate) {
-	emojiName := i.ApplicationCommandData().Options[0].StringValue()
+	emojiRaw := i.ApplicationCommandData().Options[1].StringValue()
+	var emojiKey string
+	
+	if strings.HasPrefix(emojiRaw, "<:") && strings.HasSuffix(emojiRaw, ">") {
+		parts := strings.Split(emojiRaw, ":")
+		if len(parts) == 3 {
+			emojiKey = strings.TrimSuffix(parts[2], ">") 
+		}
+	} else {
+		emojiKey = emojiRaw
+	}
 
 	guildSetting, err := guildKeeper.GetGuildSettings(i.GuildID)
+	
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
 		discord.SendErrorMessage(s, i)
 		return
 	}
-	guildSetting.Settings.Roles.Matching[emojiName] = ""
+	guildSetting.Settings.Roles.Matching[emojiKey] = ""
 
-	_, err = guildKeeper.UpdateGuildSettings(i.GuildID, dto.RolesSettings{
+	_, err = guildKeeper.UpdateRolesSetting(i.GuildID, dto.RolesSettings{
 		MessageId: guildSetting.Settings.Roles.MessageId,
 		Matching:  guildSetting.Settings.Roles.Matching,
 	})
@@ -117,7 +133,7 @@ func RemoveRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sessio
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
-			Content: "Message ID has been set successfully!",
+			Content: "Role has been deleted successfully!",
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
@@ -133,7 +149,7 @@ func SetMessageId(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sess
 		return
 	}
 
-	_, err = guildKeeper.UpdateGuildSettings(i.GuildID, dto.RolesSettings{
+	_, err = guildKeeper.UpdateRolesSetting(i.GuildID, dto.RolesSettings{
 		MessageId: messageId,
 		Matching:  guildSetting.Settings.Roles.Matching,
 	})

@@ -41,22 +41,22 @@ func OnVoiceServerUpdate(session *discordgo.Session, event *discordgo.VoiceServe
 }
 
 func HelpHandler(session *discordgo.Session, i *discordgo.InteractionCreate) {
-	helpMessage := "**🎵 Frieren Bot Help Menu 🎵**\n" +
-		"Hello! Here are the commands you can use:\n\n" +
-		"**Main Commands:**\n" +
-		"- `/play <song_name/link>` – Add a song to the queue and start playing.\n" +
-		"- `/pause` – Pause the music.\n" +
-		"- `/resume` – Resume playing the music.\n" +
-		"- `/stop` – Stop the music and clear the queue.\n" +
-		"- `/skip` – Skip the current song.\n\n" +
+	helpMessage := "**🌿 Frieren Bot - Traces of Music 🌿**\n" +
+		"Time passes, but music stays with us. If you wish to fill the silence, here’s what you can do:\n\n" +
+		"**🎼 Commands to Guide the Melody:**\n" +
+		"- `/play <song_name/link>` – Let the music flow, one song at a time.\n" +
+		"- `/pause` – Even melodies need a moment of rest.\n" +
+		"- `/resume` – Continue where you left off, like an old journey resumed.\n" +
+		"- `/stop` – Bring the music to a quiet end, clearing all that remains.\n" +
+		"- `/skip` – Move past this tune, towards the next story in sound.\n\n" +
 
-		"**Information:**\n" +
-		"- `/help` – Show this help menu.\n\n" +
+		"**📖 Knowledge in the Wind:**\n" +
+		"- `/help` – If you have forgotten, let this guide you once more.\n\n" +
 
-		"**Notes:**\n" +
-		"- Make sure you're in a voice channel before using music commands.\n" +
-		"- For questions or suggestions, contact the server administrator.\n\n" +
-		"**Thank you for using me!** 🎧"
+		"**🌾 A Few Words of Caution:**\n" +
+		"- A melody can only be heard if you are present—join a voice channel first.\n" +
+		"- If questions linger, seek wisdom from those who lead this place.\n\n" +
+		"Music drifts like memories in the wind. Enjoy it while it lasts. 🎧"
 
 	discord.Bot.Session.InteractionRespond(
 		i.Interaction,
@@ -79,9 +79,9 @@ func SettingsHandler(guildKeeper interfaces.GuildKeeperInterface, session *disco
 
 	buttons := []discordgo.MessageComponent{
 		discordgo.Button{
-			Label:    "⚙️ Configure Reaction Roles",
+			Label:    "⚙️ Show all roles.",
 			Style:    discordgo.SuccessButton,
-			CustomID: "setup_reaction_roles",
+			CustomID: "view_reaction_roles",
 			Emoji: &discordgo.ComponentEmoji{
 				Name: "🔧",
 			},
@@ -92,8 +92,13 @@ func SettingsHandler(guildKeeper interfaces.GuildKeeperInterface, session *disco
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "**⚙️ Server Settings**\n\n" +
-				"Welcome to the settings panel! Here you can configure various aspects of your server.\n\n" +
-				"🔹 *Click the button below to set up reaction roles!*",
+				"Welcome to the settings panel! Here you can manage various aspects of your server.\n\n" +
+				"🔹 *Click the button below to see all roles configured for this server!*\n\n" +
+				"**🔧 Admin Commands:**\n" +
+				"- `/add-role-reactions <role> <emoji>` – Add a role reaction.\n" +
+				"- `/remove-role-reactions <role>` – Remove a role reaction.\n" +
+				"- `/set-message-id <message_id>` – Set the message ID for role reactions.\n\n" +
+				"*(Only administrators can use these commands.)*",
 			Components: []discordgo.MessageComponent{
 				discordgo.ActionsRow{
 					Components: buttons,

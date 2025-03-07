@@ -47,11 +47,11 @@ func registerCommands() {
 
 func addHandlers(cd *handlers.CommandsDispatcher) {
 	discord.Bot.Session.AddHandler(handlers.ReadyHandler)
-	discord.Bot.Session.AddHandler(handlers.OnMessageReactionAdd)
-	discord.Bot.Session.AddHandler(handlers.OnMessageReactionRemove)
 	discord.Bot.Session.AddHandler(handlers.OnVoiceServerUpdate)
 	discord.Bot.Session.AddHandler(handlers.OnVoiceStateUpdate)
 
 	discord.Bot.Session.AddHandler(cd.OnMemberJoin)
 	discord.Bot.Session.AddHandler(cd.Dispatch)
+	discord.Bot.Session.AddHandler(cd.OnMessageReactionAdd)
+	discord.Bot.Session.AddHandler(cd.OnMessageReactionRemove)
 }
