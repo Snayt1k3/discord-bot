@@ -1,9 +1,14 @@
 package interfaces
 
-type Repository[T any] interface {
-	Create(model *T) (*T, error)
-	Updates(id string, fields map[string]interface{}) error
-	Delete(id uint) error
-	GetAll() ([]T, error)
-	Filter(filters map[string]interface{}) ([]T, error)
+import (
+	"settings-service/internal/dto"
+	"settings-service/internal/models"
+)
+
+type GuildRepository interface {
+	CreateGuildSetting(guild *models.GuildSetting) error
+	GetGuildSetting(guildID string) (*models.GuildSetting, error)
+	PatchGuildSetting(guildID string, updates map[string]interface{}) error
+	DeleteGuildSetting(guildID string) error
+	UpdateRoleSetting(role *dto.RolesSettings) error
 }

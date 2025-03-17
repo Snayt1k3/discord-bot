@@ -12,12 +12,12 @@ import (
 )
 
 type SettingsServer struct {
-	SettingsService interfaces.SettingsInterface
+	SettingsService interfaces.SettingsService
 	pb.UnimplementedSettingsServiceServer
 }
 
 func (s *SettingsServer) GetSettingsByGuild(ctx context.Context, req *pb.GetSettingsByGuildRequest) (*pb.GetSettingsByGuildResponse, error) {
-	guildSettings, err := s.SettingsService.GetByGuildID(req.GuildId)
+	guildSettings, err := s.SettingsService.GetSettingsByGuildID(req.GuildId)
 
 	if err != nil {
 		return nil, err
@@ -27,7 +27,6 @@ func (s *SettingsServer) GetSettingsByGuild(ctx context.Context, req *pb.GetSett
 		return nil, status.Error(codes.NotFound, "Data not found")
 	}
 
-	// Преобразуем настройки в формат gRPC
 	response := &pb.GetSettingsByGuildResponse{
 		Settings: &pb.GuildSettings{
 			Id:      strconv.Itoa(int((guildSettings.ID))),
@@ -41,42 +40,39 @@ func (s *SettingsServer) GetSettingsByGuild(ctx context.Context, req *pb.GetSett
 	return response, nil
 }
 
-func (s *SettingsServer) UpdateRolesSettings(ctx context.Context, req *pb.UpdateRolesSettingsRequest) (*pb.UpdateRolesSettingsResponse, error) {
-	updateData := dto.GuildSettingsUpdateDTO{
-		Roles: dto.RolesSettings{
-			MesssageId: req.Roles.MessageId,
-			Matching:   req.Roles.Matching,
-		},
-	}
+func (s *SettingsServer) CreateGuildSettings(ctx context.Context, req *pb.CreateGuildSettingsRequest) (*pb.CreateGuildSettingsResponse, error) {
 
-	updatedGuildSettings, err := s.SettingsService.UpdateGuildSettings(req.GuildId, updateData)
+	err := s.SettingsService.CreateGuildSettings(req.GuildId)
 
 	if err != nil {
 		return nil, err
 	}
 
-	response := &pb.UpdateRolesSettingsResponse{
-		GuildSettings: &pb.GuildSettings{
-			Id:      strconv.Itoa(int((updatedGuildSettings.ID))),
-			GuildId: updatedGuildSettings.GuildID,
+	return &pb.CreateGuildSettingsResponse{GuildId: req.GuildId}, nil
+}
 
+func (s *SettingsServer) UpdateRoleSetting(ctx context.Context, req *pb.UpdateRolesRequest) (*pb.UpdateRolesResponse, error) {
+	settings, err := s.SettingsService.UpdateRolesSettings(&dto.RolesSettings{
+		MesssageId: req.MessageId,
+		Matching:   req.Roles,
+		GuildID:    req.GuildId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.UpdateRolesResponse{
+		GuildSettings: &pb.GuildSettings{
+			Id:      strconv.Itoa(int((settings.ID))),
+			GuildId: settings.GuildID,
 			Roles: &pb.RolesSettings{
-				MessageId: updatedGuildSettings.Roles.MesssageId,
-				Matching:  updatedGuildSettings.Roles.Matching,
+				MessageId: settings.Roles.MesssageId,
+				Matching:  settings.Roles.Matching,
 			},
 		},
 	}
+
 	return response, nil
-}
 
-func (s *SettingsServer) CreateGuildSettings(ctx context.Context, req *pb.CreateGuildSettingsRequest) (*pb.CreateGuildSettingsResponse, error) {
-	data := dto.GuildSettingsCreateDTO{GuildId: req.GuildId}
-
-	err := s.SettingsService.CreateGuildSetting(data)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &pb.CreateGuildSettingsResponse{GuildId: data.GuildId}, nil
 }

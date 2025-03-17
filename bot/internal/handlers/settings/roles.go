@@ -26,7 +26,7 @@ func ShowAllRoles(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sess
 	roleList.WriteString("📜 **Roles configured for this server:**\n\n")
 
 	for emoji, roleID := range roles.Matching {
-		emojiStr := emoji 
+		emojiStr := emoji
 
 		if _, err := strconv.ParseInt(emoji, 10, 64); err == nil {
 			emojiStr = fmt.Sprintf("<:emoji:%s>", emoji)
@@ -56,7 +56,7 @@ func AddRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, 
 	if strings.HasPrefix(emojiRaw, "<:") && strings.HasSuffix(emojiRaw, ">") {
 		parts := strings.Split(emojiRaw, ":")
 		if len(parts) == 3 {
-			emojiKey = strings.TrimSuffix(parts[2], ">") 
+			emojiKey = strings.TrimSuffix(parts[2], ">")
 		}
 	} else {
 		emojiKey = emojiRaw
@@ -100,18 +100,18 @@ func AddRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, 
 func RemoveRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate) {
 	emojiRaw := i.ApplicationCommandData().Options[1].StringValue()
 	var emojiKey string
-	
+
 	if strings.HasPrefix(emojiRaw, "<:") && strings.HasSuffix(emojiRaw, ">") {
 		parts := strings.Split(emojiRaw, ":")
 		if len(parts) == 3 {
-			emojiKey = strings.TrimSuffix(parts[2], ">") 
+			emojiKey = strings.TrimSuffix(parts[2], ">")
 		}
 	} else {
 		emojiKey = emojiRaw
 	}
 
 	guildSetting, err := guildKeeper.GetGuildSettings(i.GuildID)
-	
+
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
 		discord.SendErrorMessage(s, i)

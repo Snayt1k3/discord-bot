@@ -15,10 +15,10 @@ import (
 
 type SettingsHandlers struct {
 	client pb.SettingsServiceClient
-	redis  interfaces.RedisI
+	redis  interfaces.RedisInterface
 }
 
-func NewClient(client pb.SettingsServiceClient, redis interfaces.RedisI) *SettingsHandlers {
+func NewClient(client pb.SettingsServiceClient, redis interfaces.RedisInterface) *SettingsHandlers {
 	return &SettingsHandlers{client: client, redis: redis}
 }
 
@@ -27,19 +27,19 @@ func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 
 	key := fmt.Sprintf("guild-settings-%v", guildID)
 
-	// exists, _ := s.redis.Exists(key)
+	exists, _ := s.redis.Exists(key)
 
-	// if exists {
-	// 	resp, err := s.redis.Get(key)
+	if exists {
+		resp, err := s.redis.Get(key)
 
-	// 	if err != nil {
-	// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	// 		return
-	// 	}
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 
-	// 	c.JSON(http.StatusOK, resp)
-	// 	return
-	// }
+		c.JSON(http.StatusOK, resp)
+		return
+	}
 
 	resp, err := s.client.GetSettingsByGuild(context.Background(), &pb.GetSettingsByGuildRequest{GuildId: guildID})
 
@@ -64,17 +64,21 @@ func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-func (s *SettingsHandlers) UpdateRolesSetting(c *gin.Context) {
+func (s *SettingsHandlers) UpdateRoles(c *gin.Context) {
 	guildID := c.Param("guild_id")
-	var req pb.UpdateRolesSettingsRequest
+	var req pb.UpdateRolesRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	key := fmt.Sprintf("guild-settings-%v", guildID)
+	s.redis.Delete(key)
+
 	req.GuildId = guildID
-	resp, err := s.client.UpdateRolesSettings(context.Background(), &req)
+	resp, err := s.client.UpdateRoles(context.Background(), &req)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

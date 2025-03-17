@@ -8,59 +8,61 @@ import (
 )
 
 type SettingsService struct {
-	GuildRepo interfaces.Repository[models.GuildSetting]
+	GuildRepo interfaces.GuildRepository
 }
 
-func (s *SettingsService) GetByGuildID(id string) (dto.GuildSettingsDTO, error) {
-	guildSetting, err := s.GuildRepo.Filter(map[string]interface{}{"guild_id": id})
-	if err != nil || len(guildSetting) == 0 {
-		return dto.GuildSettingsDTO{}, err
+func (s *SettingsService) GetSettingsByGuildID(id string) (*dto.GuildSettingsDTO, error) {
+	guildSetting, err := s.GuildRepo.GetGuildSetting(id)
+
+	if err != nil {
+		return &dto.GuildSettingsDTO{}, err
 	}
 
-	return dto.GuildSettingsDTO{
-		ID:      guildSetting[0].ID,
-		GuildID: guildSetting[0].GuildID,
+	var roles map[string]string
+	err = json.Unmarshal([]byte(guildSetting.Role.Role), &roles)
+
+	if err != nil {
+		return &dto.GuildSettingsDTO{}, err
+	}
+
+	return &dto.GuildSettingsDTO{
+		ID:      guildSetting.ID,
+		GuildID: guildSetting.GuildID,
 		Roles: dto.RolesSettings{
-			MesssageId: guildSetting[0].Roles.MesssageId,
-			Matching:   guildSetting[0].Roles.Matching,
+			MesssageId: guildSetting.Role.MessageID,
+			Matching:   roles,
 		},
 	}, nil
 }
 
-func (s *SettingsService) UpdateGuildSettings(id string, data dto.GuildSettingsUpdateDTO) (dto.GuildSettingsDTO, error) {
-	rolesJSON, err := json.Marshal(data.Roles)
-	if err != nil {
-		return dto.GuildSettingsDTO{}, err
-	}
-
-	err = s.GuildRepo.Updates(id, map[string]interface{}{
-		"roles": string(rolesJSON),
-	})
-
-	if err != nil {
-		return dto.GuildSettingsDTO{}, err
-	}
-
-	setting, _ := s.GuildRepo.Filter(map[string]interface{}{"guild_id": id})
-
-	return dto.GuildSettingsDTO{
-		ID:      setting[0].ID,
-		GuildID: setting[0].GuildID,
-		Roles: dto.RolesSettings{
-			MesssageId: setting[0].Roles.MesssageId,
-			Matching:   setting[0].Roles.Matching,
+func (s *SettingsService) CreateGuildSettings(guildID string) error {
+	model := &models.GuildSetting{
+		GuildID: guildID,
+		Role: models.RoleSetting{
+			MessageID: "",
+			Role:      json.RawMessage{},
 		},
-	}, nil
-}
+		Welcome: models.WelcomeSetting{
+			MessageID: "",
+			Messages:  json.RawMessage{},
+		},
+	}
 
-func (s *SettingsService) CreateGuildSetting(data dto.GuildSettingsCreateDTO) error {
-	model := &models.GuildSetting{GuildID: data.GuildId}
-
-	_, err := s.GuildRepo.Create(model)
+	err := s.GuildRepo.CreateGuildSetting(model)
 
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func (s *SettingsService) UpdateRolesSettings(roles *dto.RolesSettings) (*dto.GuildSettingsDTO, error) {
+	err := s.GuildRepo.UpdateRoleSetting(roles)
+
+	if err != nil {
+		return &dto.GuildSettingsDTO{}, err
+	}
+
+	return s.GetSettingsByGuildID(roles.GuildID)
 }

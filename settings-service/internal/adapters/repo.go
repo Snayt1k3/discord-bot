@@ -1,77 +1,51 @@
 package adapters
 
 import (
+	"encoding/json"
 	"gorm.io/gorm"
+	"settings-service/internal/dto"
+	"settings-service/internal/interfaces"
 	"settings-service/internal/models"
 )
 
-type GuildSettingRepository struct {
+type GuildRepositoryImpl struct {
 	db *gorm.DB
 }
 
-// Конструкторы для репозиториев
-func NewGuildSettingRepository(db *gorm.DB) *GuildSettingRepository {
-	return &GuildSettingRepository{db: db}
+func NewGuildRepository(db *gorm.DB) interfaces.GuildRepository {
+	return &GuildRepositoryImpl{db: db}
 }
 
-func (r *GuildSettingRepository) Create(setting *models.GuildSetting) (*models.GuildSetting, error) {
-	if err := r.db.Create(setting).Error; err != nil {
+func (r *GuildRepositoryImpl) CreateGuildSetting(guild *models.GuildSetting) error {
+	return r.db.Create(guild).Error
+}
+
+func (r *GuildRepositoryImpl) GetGuildSetting(guildID string) (*models.GuildSetting, error) {
+	var guild models.GuildSetting
+	err := r.db.Preload("Role").Preload("Welcome").Where("guild_id = ?", guildID).First(&guild).Error
+	if err != nil {
 		return nil, err
 	}
-	return setting, nil
+	return &guild, nil
 }
 
-func (r *GuildSettingRepository) Updates(id string, fields map[string]interface{}) error {
-	for key, value := range fields {
-		if value == nil {
-			delete(fields, key)
-			continue
-		}
+func (r *GuildRepositoryImpl) PatchGuildSetting(guildID string, updates map[string]interface{}) error {
+	return r.db.Model(&models.GuildSetting{}).Where("guild_id = ?", guildID).Updates(updates).Error
+}
 
-		if str, ok := value.(string); ok && str == "" {
-			delete(fields, key)
-		}
-	}
+func (r *GuildRepositoryImpl) DeleteGuildSetting(guildID string) error {
+	return r.db.Where("guild_id = ?", guildID).Delete(&models.GuildSetting{}).Error
+}
 
-	var setting models.GuildSetting
-	if err := r.db.First(&setting, "guild_id = ?", id).Error; err != nil {
+func (r *GuildRepositoryImpl) UpdateRoleSetting(role *dto.RolesSettings) error {
+
+	roleBytes, err := json.Marshal(role.Matching)
+	if err != nil {
 		return err
 	}
 
-	if err := r.db.Model(&setting).Updates(fields).Error; err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (r *GuildSettingRepository) Delete(id uint) error {
-	if err := r.db.Delete(&models.GuildSetting{}, id).Error; err != nil {
-		return err
-	}
-	return nil
-}
-
-func (r *GuildSettingRepository) GetAll() ([]models.GuildSetting, error) {
-	var settings []models.GuildSetting
-	if err := r.db.Find(&settings).Error; err != nil {
-		return nil, err
-	}
-	return settings, nil
-}
-
-func (r *GuildSettingRepository) Filter(filters map[string]interface{}) ([]models.GuildSetting, error) {
-	var guildSettings []models.GuildSetting
-
-	query := r.db.Model(&models.GuildSetting{})
-
-	for key, value := range filters {
-		query = query.Where(key+" = ?", value)
-	}
-
-	if err := query.Find(&guildSettings).Error; err != nil {
-		return nil, err
-	}
-
-	return guildSettings, nil
+	return r.db.Model(&models.RoleSetting{}).Where("guild_id = ?", role.GuildID).Updates(map[string]interface{}{
+		"message_id": role.MesssageId,
+		"role":       roleBytes,
+	}).Error
 }

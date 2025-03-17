@@ -7,7 +7,7 @@ option go_package = "proto/";
 service SettingsService {
   rpc GetSettingsByGuild(GetSettingsByGuildRequest) returns (GetSettingsByGuildResponse);
   rpc CreateGuildSettings(CreateGuildSettingsRequest) returns (CreateGuildSettingsResponse);
-  rpc UpdateRolesSettings(UpdateRolesSettingsRequest) returns (UpdateRolesSettingsResponse);
+  rpc UpdateRoles(UpdateRolesRequest) returns (UpdateRolesResponse);
 }
 
 
@@ -22,22 +22,22 @@ message GuildSettings {
   RolesSettings roles = 3;
 }
 
-// --- Запросы и ответы для методов ---
+message UpdateRolesRequest {
+  string guild_id = 1;
+  string message_id = 2;          
+  map<string, string> roles = 3;
+}
+
+message UpdateRolesResponse {
+  GuildSettings guild_settings = 1;
+}
 
 message GetSettingsByGuildRequest {
   string guild_id = 1;
 }
+
 message GetSettingsByGuildResponse {
   GuildSettings settings = 1;
-}
-
-message UpdateRolesSettingsRequest {
-  string guild_id = 1;
-  RolesSettings roles = 2;
-}
-
-message UpdateRolesSettingsResponse {
-  GuildSettings guild_settings = 1;
 }
 
 message CreateGuildSettingsRequest {

@@ -108,9 +108,9 @@ func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.Intera
 
 	case discordgo.InteractionMessageComponent:
 		slog.Info("Handling button", "custom_id", i.MessageComponentData().CustomID)
-		
+
 		switch i.MessageComponentData().CustomID {
-		
+
 		case "view_reaction_roles":
 			settings.ShowAllRoles(cd.guildKeeper, s, i)
 		default:

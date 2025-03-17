@@ -26,8 +26,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error connecting to the database: %v", err)
 	}
-	models.AutoMigrate(db)
-	guildRepo := adapters.NewGuildSettingRepository(db)
+	models.Migrate(db)
+	guildRepo := adapters.NewGuildRepository(db)
 
 	settingsService := &adapters.SettingsService{
 		GuildRepo: guildRepo,
@@ -46,7 +46,6 @@ func main() {
 
 	log.Printf("gRPC server is running on port :%v \n", cfg.GrpcPort)
 
-	// Запускаем сервер
 	if err := grpcServer.Serve(listener); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}
