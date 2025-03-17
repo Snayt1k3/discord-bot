@@ -7,7 +7,7 @@ import (
 
 type RolesSettings struct {
 	GuildID    string            `json:"guild_id"`
-	MesssageId string            `json:"message_id"`
+	MessageId string            `json:"message_id"`
 	Matching   map[string]string `json:"matching"`
 }
 

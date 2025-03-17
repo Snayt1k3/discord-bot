@@ -45,7 +45,7 @@ func (r *GuildRepositoryImpl) UpdateRoleSetting(role *dto.RolesSettings) error {
 	}
 
 	return r.db.Model(&models.RoleSetting{}).Where("guild_id = ?", role.GuildID).Updates(map[string]interface{}{
-		"message_id": role.MesssageId,
+		"message_id": role.MessageId,
 		"role":       roleBytes,
 	}).Error
 }

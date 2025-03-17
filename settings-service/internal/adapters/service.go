@@ -19,17 +19,19 @@ func (s *SettingsService) GetSettingsByGuildID(id string) (*dto.GuildSettingsDTO
 	}
 
 	var roles map[string]string
-	err = json.Unmarshal([]byte(guildSetting.Role.Role), &roles)
 
-	if err != nil {
-		return &dto.GuildSettingsDTO{}, err
+	if len(guildSetting.Role.Role) > 0 {
+		err = json.Unmarshal(guildSetting.Role.Role, &roles)
+		if err != nil {
+			return &dto.GuildSettingsDTO{}, err
+		}
 	}
 
 	return &dto.GuildSettingsDTO{
 		ID:      guildSetting.ID,
 		GuildID: guildSetting.GuildID,
 		Roles: dto.RolesSettings{
-			MesssageId: guildSetting.Role.MessageID,
+			MessageId: guildSetting.Role.MessageID,
 			Matching:   roles,
 		},
 	}, nil

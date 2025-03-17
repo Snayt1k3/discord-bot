@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+
 	"settings-service/internal/dto"
 	"settings-service/internal/interfaces"
 	pb "settings-service/proto"
@@ -18,7 +19,7 @@ type SettingsServer struct {
 
 func (s *SettingsServer) GetSettingsByGuild(ctx context.Context, req *pb.GetSettingsByGuildRequest) (*pb.GetSettingsByGuildResponse, error) {
 	guildSettings, err := s.SettingsService.GetSettingsByGuildID(req.GuildId)
-
+	
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +33,7 @@ func (s *SettingsServer) GetSettingsByGuild(ctx context.Context, req *pb.GetSett
 			Id:      strconv.Itoa(int((guildSettings.ID))),
 			GuildId: guildSettings.GuildID,
 			Roles: &pb.RolesSettings{
-				MessageId: guildSettings.Roles.MesssageId,
+				MessageId: guildSettings.Roles.MessageId,
 				Matching:  guildSettings.Roles.Matching,
 			},
 		},
@@ -53,7 +54,7 @@ func (s *SettingsServer) CreateGuildSettings(ctx context.Context, req *pb.Create
 
 func (s *SettingsServer) UpdateRoleSetting(ctx context.Context, req *pb.UpdateRolesRequest) (*pb.UpdateRolesResponse, error) {
 	settings, err := s.SettingsService.UpdateRolesSettings(&dto.RolesSettings{
-		MesssageId: req.MessageId,
+		MessageId: req.MessageId,
 		Matching:   req.Roles,
 		GuildID:    req.GuildId,
 	})
@@ -67,7 +68,7 @@ func (s *SettingsServer) UpdateRoleSetting(ctx context.Context, req *pb.UpdateRo
 			Id:      strconv.Itoa(int((settings.ID))),
 			GuildId: settings.GuildID,
 			Roles: &pb.RolesSettings{
-				MessageId: settings.Roles.MesssageId,
+				MessageId: settings.Roles.MessageId,
 				Matching:  settings.Roles.Matching,
 			},
 		},
