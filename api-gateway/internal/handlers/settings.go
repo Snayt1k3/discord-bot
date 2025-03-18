@@ -69,7 +69,6 @@ func (s *SettingsHandlers) UpdateRoles(c *gin.Context) {
 	var req pb.UpdateRolesRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

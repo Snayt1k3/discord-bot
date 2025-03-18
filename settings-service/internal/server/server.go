@@ -52,7 +52,7 @@ func (s *SettingsServer) CreateGuildSettings(ctx context.Context, req *pb.Create
 	return &pb.CreateGuildSettingsResponse{GuildId: req.GuildId}, nil
 }
 
-func (s *SettingsServer) UpdateRoleSetting(ctx context.Context, req *pb.UpdateRolesRequest) (*pb.UpdateRolesResponse, error) {
+func (s *SettingsServer) UpdateRoles(ctx context.Context, req *pb.UpdateRolesRequest) (*pb.UpdateRolesResponse, error) {
 	settings, err := s.SettingsService.UpdateRolesSettings(&dto.RolesSettings{
 		MessageId: req.MessageId,
 		Matching:   req.Roles,

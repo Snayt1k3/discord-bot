@@ -2,10 +2,12 @@ package adapters
 
 import (
 	"encoding/json"
-	"gorm.io/gorm"
+	"fmt"
 	"settings-service/internal/dto"
 	"settings-service/internal/interfaces"
 	"settings-service/internal/models"
+
+	"gorm.io/gorm"
 )
 
 type GuildRepositoryImpl struct {
@@ -38,14 +40,23 @@ func (r *GuildRepositoryImpl) DeleteGuildSetting(guildID string) error {
 }
 
 func (r *GuildRepositoryImpl) UpdateRoleSetting(role *dto.RolesSettings) error {
+	updates := map[string]interface{}{}
 
-	roleBytes, err := json.Marshal(role.Matching)
-	if err != nil {
-		return err
+	if role.MessageId != "" {
+		updates["message_id"] = role.MessageId
+	}
+	fmt.Println(role.Matching)
+	if role.Matching != nil {
+		roleBytes, err := json.Marshal(role.Matching)
+		if err != nil {
+			return err
+		}
+		updates["role"] = roleBytes
 	}
 
-	return r.db.Model(&models.RoleSetting{}).Where("guild_id = ?", role.GuildID).Updates(map[string]interface{}{
-		"message_id": role.MessageId,
-		"role":       roleBytes,
-	}).Error
+	if len(updates) == 0 {
+		return nil
+	}
+
+	return r.db.Model(&models.RoleSetting{}).Where("guild_id = ?", role.GuildID).Updates(updates).Error
 }

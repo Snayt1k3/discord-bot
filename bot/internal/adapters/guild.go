@@ -36,7 +36,7 @@ func (s *GuildKeeper) CreateSettings(guild_id string) error {
 }
 
 func (s *GuildKeeper) UpdateRolesSetting(guildId string, roles dto.RolesSettings) (dto.GuildSettingsResponse, error) {
-	body, _ := json.Marshal(map[string]interface{}{"roles": roles})
+	body, _ := json.Marshal(map[string]any{"roles": roles.Matching, "message_id": roles.MessageId})
 	resp, err := s.client.Patch(
 		context.Background(),
 		fmt.Sprintf("%v/settings/guild/%v/roles", config.GetApiGatewayAddr(), guildId),

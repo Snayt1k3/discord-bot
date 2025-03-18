@@ -141,17 +141,10 @@ func RemoveRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sessio
 
 func SetMessageId(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate) {
 	messageId := i.ApplicationCommandData().Options[0].StringValue()
-	guildSetting, err := guildKeeper.GetGuildSettings(i.GuildID)
 
-	if err != nil {
-		slog.Error("Error while getting guild settings", "err", err)
-		discord.SendErrorMessage(s, i)
-		return
-	}
-
-	_, err = guildKeeper.UpdateRolesSetting(i.GuildID, dto.RolesSettings{
+	_, err := guildKeeper.UpdateRolesSetting(i.GuildID, dto.RolesSettings{
 		MessageId: messageId,
-		Matching:  guildSetting.Settings.Roles.Matching,
+		Matching:  map[string]string{},
 	})
 
 	if err != nil {
