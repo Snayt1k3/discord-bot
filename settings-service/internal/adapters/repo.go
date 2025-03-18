@@ -60,3 +60,17 @@ func (r *GuildRepositoryImpl) UpdateRoleSetting(role *dto.RolesSettings) error {
 
 	return r.db.Model(&models.RoleSetting{}).Where("guild_id = ?", role.GuildID).Updates(updates).Error
 }
+
+func (r *GuildRepositoryImpl) UpdateWelcomeSetting(welcome *dto.WelcomeSettings) error {
+	updates := map[string]any{};{}
+
+	if welcome.ChannelId != "" {
+		updates["channel_id"] = welcome.ChannelId
+	}
+
+	if len(updates) == 0 {
+		return nil
+	}
+
+	return r.db.Model(&models.WelcomeSetting{}).Where("guild_id = ?", welcome.GuildID).Updates(updates).Error
+}

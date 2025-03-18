@@ -75,12 +75,24 @@ var CommandsList = []*discordgo.ApplicationCommand{
 	},
 	{
 		Name:        "set-message-id",
-		Description: "Set the message ID for role reactions. Only for admins]",
+		Description: "Set the message ID for role reactions. Only for admins",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
 				Type:        discordgo.ApplicationCommandOptionString,
 				Name:        "message_id",
 				Description: "The message ID",
+				Required:    true,
+			},
+		},
+	},
+	{
+		Name:        "set-welcome-channel",
+		Description: "Set the welcome channel. Only for admins",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionChannel,
+				Name:        "channel",
+				Description: "The channel to send welcome messages",
 				Required:    true,
 			},
 		},

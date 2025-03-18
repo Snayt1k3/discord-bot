@@ -1,28 +1,19 @@
 package handlers
 
 import (
+	"bot/config"
 	"bot/internal/adapters"
 	"bot/internal/discord"
 	"bot/internal/handlers/settings"
 	"bot/internal/interfaces"
 	"fmt"
-	"github.com/bwmarrin/discordgo"
 	"log/slog"
 	"math/rand"
 	"time"
+
+	"github.com/bwmarrin/discordgo"
 )
 
-var (
-	// Temporary solution
-	channelId       = ""
-	messageTemplate = []string{
-		"Еще один путешественник прибыл… %v, время на этом сервере течет иначе, чем в мире снаружи. Надеюсь, твое пребывание здесь будет долгим и спокойным.",
-		"Ты присоединился, %v… Люди говорят, что время летит незаметно в хорошей компании. Возможно, ты тоже это почувствуешь.",
-		"Еще один человек… %v, люди приходят и уходят, но, возможно, ты задержишься здесь дольше, чем кажется.",
-		"Когда-то здесь уже были другие… Но каждое новое знакомство — это возможность узнать что-то новое. Добро пожаловать, %v.",
-		"Добро пожаловать, %v. В этом месте нет конца пути, только новые встречи. Оставайся, если хочешь.",
-	}
-)
 
 type CommandsDispatcher struct {
 	guildKeeper interfaces.GuildKeeperInterface
@@ -33,13 +24,15 @@ func NewCommandsDispatcher() *CommandsDispatcher {
 }
 
 func (cd *CommandsDispatcher) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMemberAdd) {
+	settings, _ := cd.guildKeeper.GetGuildSettings(u.GuildID)
+	
 	randSource := rand.NewSource(time.Now().UnixNano())
 	randGen := rand.New(randSource)
 
-	randomIndex := randGen.Intn(len(messageTemplate))
-	formattedMessage := fmt.Sprintf(messageTemplate[randomIndex], u.Member.Nick)
+	randomIndex := randGen.Intn(len(config.HelloMessages))
+	formattedMessage := fmt.Sprintf(config.HelloMessages[randomIndex], u.Member.Nick)
 
-	discord.SendChannelMessage(``, formattedMessage)
+	discord.SendChannelMessage(settings.Settings.Welcome.ChannelId, formattedMessage)
 }
 
 func (cd *CommandsDispatcher) OnReady(s *discordgo.Session, r *discordgo.Ready) {
@@ -81,7 +74,7 @@ func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.Intera
 			ResumeHandler(s, i)
 		case "settings":
 			SettingsHandler(cd.guildKeeper, s, i)
-		case "setup_reaction_roles", "add-role-reactions", "remove-role-reactions", "set-message-id":
+		case "setup_reaction_roles", "add-role-reactions", "remove-role-reactions", "set-message-id", "set-welcome-channel":
 			if !isAdmin {
 				s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 					Type: discordgo.InteractionResponseChannelMessageWithSource,
@@ -101,6 +94,8 @@ func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.Intera
 				settings.RemoveRole(cd.guildKeeper, s, i)
 			case "set-message-id":
 				settings.SetMessageId(cd.guildKeeper, s, i)
+			case "set-welcome-channel":
+				settings.SetChannelId(cd.guildKeeper, s, i)
 			default:
 				slog.Warn("Unknown command", "command", i.ApplicationCommandData().Name)
 			}

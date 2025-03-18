@@ -55,7 +55,7 @@ func (s *SettingsServer) CreateGuildSettings(ctx context.Context, req *pb.Create
 func (s *SettingsServer) UpdateRoles(ctx context.Context, req *pb.UpdateRolesRequest) (*pb.UpdateRolesResponse, error) {
 	settings, err := s.SettingsService.UpdateRolesSettings(&dto.RolesSettings{
 		MessageId: req.MessageId,
-		Matching:   req.Roles,
+		Matching:   req.Matching,
 		GuildID:    req.GuildId,
 	})
 
@@ -76,4 +76,31 @@ func (s *SettingsServer) UpdateRoles(ctx context.Context, req *pb.UpdateRolesReq
 
 	return response, nil
 
+}
+
+func (s *SettingsServer) UpdateWelcomeChannelId(ctx context.Context, req *pb.UpdateWelcomeChannelIdRequest) (*pb.UpdateWelcomeChannelIdResponse, error) {
+	settings := &dto.WelcomeSettings{
+		ChannelId: req.ChannelId,
+		GuildID:   req.GuildId,	
+	}
+
+	updatedSettings, err := s.SettingsService.UpdateWelcomeMessageId(settings)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.UpdateWelcomeChannelIdResponse{
+		GuildSettings: &pb.GuildSettings{
+			Id:      strconv.Itoa(int((updatedSettings.ID))),
+			GuildId: updatedSettings.GuildID,
+			Roles: &pb.RolesSettings{
+				MessageId: updatedSettings.Roles.MessageId,
+				Matching:  updatedSettings.Roles.Matching,
+			},
+			Welcome: &pb.WelcomeSettings{
+				ChannelId: updatedSettings.Welcome.ChannelId,
+			},
+		},
+	}, nil
 }

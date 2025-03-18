@@ -34,6 +34,9 @@ func (s *SettingsService) GetSettingsByGuildID(id string) (*dto.GuildSettingsDTO
 			MessageId: guildSetting.Role.MessageID,
 			Matching:   roles,
 		},
+		Welcome: dto.WelcomeSettings{
+			ChannelId: guildSetting.Welcome.ChannelId,
+			},
 	}, nil
 }
 
@@ -45,8 +48,7 @@ func (s *SettingsService) CreateGuildSettings(guildID string) error {
 			Role:      json.RawMessage{},
 		},
 		Welcome: models.WelcomeSetting{
-			MessageID: "",
-			Messages:  json.RawMessage{},
+			ChannelId: "",
 		},
 	}
 
@@ -67,4 +69,14 @@ func (s *SettingsService) UpdateRolesSettings(roles *dto.RolesSettings) (*dto.Gu
 	}
 
 	return s.GetSettingsByGuildID(roles.GuildID)
+}
+
+func (s *SettingsService) UpdateWelcomeMessageId(welcome *dto.WelcomeSettings) (*dto.GuildSettingsDTO, error) {
+	err := s.GuildRepo.UpdateWelcomeSetting(welcome)
+
+	if err != nil {
+		return &dto.GuildSettingsDTO{}, err
+	}
+
+	return s.GetSettingsByGuildID(welcome.GuildID)
 }

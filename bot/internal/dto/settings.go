@@ -10,6 +10,12 @@ type RolesSettings struct {
 	Matching  map[string]string `json:"matching,omitempty"`
 }
 
+type WelcomeSettings struct {
+	ChannelId string            `json:"channel_id,omitempty"`
+}
+
+
+
 type SettingsJson struct {
 	Roles RolesSettings `json:"roles"`
 }
@@ -18,6 +24,7 @@ type GuildSettingsDTO struct {
 	ID      string        `json:"id"`
 	GuildID string        `json:"guild_id"`
 	Roles   RolesSettings `json:"roles"`
+	Welcome WelcomeSettings `json:"welcome"`
 }
 
 type GuildSettingsUpdateDTO struct {

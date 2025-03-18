@@ -1,7 +1,7 @@
 package discord
 
 import (
-	"bot/config"
+	// "bot/config"
 	"fmt"
 	"log/slog"
 	"os"
@@ -59,7 +59,7 @@ func JoinVoiceChannel(guildID string, voiceChannelID string, mute bool, deafen b
 }
 
 func SendMusicEmbedMessage(title string, url string, duration string, thumbnail string) {
-	Bot.Session.ChannelMessageSendEmbed(config.MusicChannelId, &discordgo.MessageEmbed{
+	Bot.Session.ChannelMessageSendEmbed("config.MusicChannelId", &discordgo.MessageEmbed{ // todo: Поправить канал
 		Title:       "Now is playing 🎶",
 		Description: fmt.Sprintf("[%s](%s)", title, url),
 		Thumbnail: &discordgo.MessageEmbedThumbnail{

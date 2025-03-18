@@ -105,6 +105,25 @@ func (s *GuildKeeper) GetGuildSettings(guildId string) (dto.GuildSettingsRespons
 	return settings, nil
 }
 
+func (s *GuildKeeper) UpdateWelcomeSetting(guildId string, welcome dto.WelcomeSettings) error {
+	body, _ := json.Marshal(map[string]any{"channel_id": welcome.ChannelId})
+	resp, err := s.client.Patch(
+		context.Background(),
+		fmt.Sprintf("%v/settings/guild/%v/welcome", config.GetApiGatewayAddr(), guildId),
+		body,
+		nil,
+	)
+
+	if err != nil {
+		slog.Warn("Bad response when updating settings", "err", err)
+		return err
+	}
+
+	defer resp.Body.Close()
+
+	return nil
+}
+
 func NewServiceSettingsClient() *GuildKeeper {
 	return &GuildKeeper{client: NewDefaultHttpClient()}
 }

@@ -99,3 +99,23 @@ func (s *SettingsHandlers) CreateGuildSetting(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp)
 }
+
+func (s *SettingsHandlers) UpdateWelcome(c *gin.Context) {
+	guildID := c.Param("guild_id")
+	var req pb.UpdateWelcomeChannelIdRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	req.GuildId = guildID
+	resp, err := s.client.UpdateWelcomeChannelId(context.Background(), &req)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, resp)
+}

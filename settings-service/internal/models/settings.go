@@ -17,8 +17,7 @@ type RoleSetting struct {
 type WelcomeSetting struct {
 	ID        uint            `gorm:"primaryKey"`
 	GuildID   string          `gorm:"not null;index"`
-	MessageID string          `json:"message_id" gorm:"not null"`
-	Messages  json.RawMessage `gorm:"type:json"`
+	ChannelId string          `json:"channel_id" gorm:"not null"`
 }
 
 type GuildSetting struct {

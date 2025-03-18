@@ -28,3 +28,4 @@ func (rs *RolesSettings) Scan(value interface{}) error {
 func (rs RolesSettings) Value() (interface{}, error) {
 	return json.Marshal(rs)
 }
+

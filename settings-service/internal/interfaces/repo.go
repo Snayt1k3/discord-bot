@@ -11,4 +11,5 @@ type GuildRepository interface {
 	PatchGuildSetting(guildID string, updates map[string]interface{}) error
 	DeleteGuildSetting(guildID string) error
 	UpdateRoleSetting(role *dto.RolesSettings) error
+	UpdateWelcomeSetting(welcome *dto.WelcomeSettings) error
 }
