@@ -14,7 +14,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-
 type CommandsDispatcher struct {
 	guildKeeper interfaces.GuildKeeperInterface
 }
@@ -25,7 +24,7 @@ func NewCommandsDispatcher() *CommandsDispatcher {
 
 func (cd *CommandsDispatcher) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMemberAdd) {
 	settings, _ := cd.guildKeeper.GetGuildSettings(u.GuildID)
-	
+
 	randSource := rand.NewSource(time.Now().UnixNano())
 	randGen := rand.New(randSource)
 

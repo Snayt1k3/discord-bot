@@ -32,11 +32,11 @@ func (s *SettingsService) GetSettingsByGuildID(id string) (*dto.GuildSettingsDTO
 		GuildID: guildSetting.GuildID,
 		Roles: dto.RolesSettings{
 			MessageId: guildSetting.Role.MessageID,
-			Matching:   roles,
+			Matching:  roles,
 		},
 		Welcome: dto.WelcomeSettings{
 			ChannelId: guildSetting.Welcome.ChannelId,
-			},
+		},
 	}, nil
 }
 

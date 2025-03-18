@@ -19,7 +19,7 @@ type SettingsServer struct {
 
 func (s *SettingsServer) GetSettingsByGuild(ctx context.Context, req *pb.GetSettingsByGuildRequest) (*pb.GetSettingsByGuildResponse, error) {
 	guildSettings, err := s.SettingsService.GetSettingsByGuildID(req.GuildId)
-	
+
 	if err != nil {
 		return nil, err
 	}
@@ -55,8 +55,8 @@ func (s *SettingsServer) CreateGuildSettings(ctx context.Context, req *pb.Create
 func (s *SettingsServer) UpdateRoles(ctx context.Context, req *pb.UpdateRolesRequest) (*pb.UpdateRolesResponse, error) {
 	settings, err := s.SettingsService.UpdateRolesSettings(&dto.RolesSettings{
 		MessageId: req.MessageId,
-		Matching:   req.Matching,
-		GuildID:    req.GuildId,
+		Matching:  req.Matching,
+		GuildID:   req.GuildId,
 	})
 
 	if err != nil {
@@ -81,7 +81,7 @@ func (s *SettingsServer) UpdateRoles(ctx context.Context, req *pb.UpdateRolesReq
 func (s *SettingsServer) UpdateWelcomeChannelId(ctx context.Context, req *pb.UpdateWelcomeChannelIdRequest) (*pb.UpdateWelcomeChannelIdResponse, error) {
 	settings := &dto.WelcomeSettings{
 		ChannelId: req.ChannelId,
-		GuildID:   req.GuildId,	
+		GuildID:   req.GuildId,
 	}
 
 	updatedSettings, err := s.SettingsService.UpdateWelcomeMessageId(settings)

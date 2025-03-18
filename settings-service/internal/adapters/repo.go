@@ -62,7 +62,9 @@ func (r *GuildRepositoryImpl) UpdateRoleSetting(role *dto.RolesSettings) error {
 }
 
 func (r *GuildRepositoryImpl) UpdateWelcomeSetting(welcome *dto.WelcomeSettings) error {
-	updates := map[string]any{};{}
+	updates := map[string]any{}
+	{
+	}
 
 	if welcome.ChannelId != "" {
 		updates["channel_id"] = welcome.ChannelId

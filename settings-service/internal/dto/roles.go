@@ -6,9 +6,9 @@ import (
 )
 
 type RolesSettings struct {
-	GuildID    string            `json:"guild_id"`
+	GuildID   string            `json:"guild_id"`
 	MessageId string            `json:"message_id"`
-	Matching   map[string]string `json:"matching"`
+	Matching  map[string]string `json:"matching"`
 }
 
 func (rs *RolesSettings) Scan(value interface{}) error {
@@ -28,4 +28,3 @@ func (rs *RolesSettings) Scan(value interface{}) error {
 func (rs RolesSettings) Value() (interface{}, error) {
 	return json.Marshal(rs)
 }
-

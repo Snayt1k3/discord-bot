@@ -15,15 +15,15 @@ type RoleSetting struct {
 }
 
 type WelcomeSetting struct {
-	ID        uint            `gorm:"primaryKey"`
-	GuildID   string          `gorm:"not null;index"`
-	ChannelId string          `json:"channel_id" gorm:"not null"`
+	ID        uint   `gorm:"primaryKey"`
+	GuildID   string `gorm:"not null;index"`
+	ChannelId string `json:"channel_id" gorm:"not null"`
 }
 
 type GuildSetting struct {
 	ID        uint           `gorm:"primaryKey"`
 	GuildID   string         `gorm:"unique;not null"`
-	Role      RoleSetting    `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"` 
+	Role      RoleSetting    `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
 	Welcome   WelcomeSetting `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
