@@ -9,7 +9,7 @@ import (
 )
 
 func SetChannelId(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate) {
-	channelId := i.ApplicationCommandData().Options[0].StringValue()
+	channelId := i.ApplicationCommandData().Options[0].ChannelValue(nil).ID
 	guildId := i.GuildID
 
 	err := guildKeeper.UpdateWelcomeSetting(guildId, dto.WelcomeSettings{ChannelId: channelId})

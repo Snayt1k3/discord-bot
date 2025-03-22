@@ -10,14 +10,14 @@ import (
 type RoleSetting struct {
 	ID        uint            `gorm:"primaryKey"`
 	GuildID   string          `gorm:"not null;index"`
-	MessageID string          `json:"message_id" gorm:"not null"`
+	MessageID string          `json:"message_id" gorm:""`
 	Role      json.RawMessage `gorm:"type:json"`
 }
 
 type WelcomeSetting struct {
 	ID        uint   `gorm:"primaryKey"`
 	GuildID   string `gorm:"not null;index"`
-	ChannelId string `json:"channel_id" gorm:"not null"`
+	ChannelId string `json:"channel_id" gorm:""`
 }
 
 type GuildSetting struct {

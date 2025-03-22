@@ -36,6 +36,9 @@ func (s *SettingsServer) GetSettingsByGuild(ctx context.Context, req *pb.GetSett
 				MessageId: guildSettings.Roles.MessageId,
 				Matching:  guildSettings.Roles.Matching,
 			},
+			Welcome: &pb.WelcomeSettings{
+				ChannelId: guildSettings.Welcome.ChannelId,
+			},
 		},
 	}
 	return response, nil

@@ -29,7 +29,7 @@ func (cd *CommandsDispatcher) OnMemberJoin(s *discordgo.Session, u *discordgo.Gu
 	randGen := rand.New(randSource)
 
 	randomIndex := randGen.Intn(len(config.HelloMessages))
-	formattedMessage := fmt.Sprintf(config.HelloMessages[randomIndex], u.Member.Nick)
+	formattedMessage := fmt.Sprintf(config.HelloMessages[randomIndex], u.Member.Mention())
 
 	discord.SendChannelMessage(settings.Settings.Welcome.ChannelId, formattedMessage)
 }
