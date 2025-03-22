@@ -1,25 +1,12 @@
 package config
 
-const (
-	MusicChannelId = "659735805232676865"
-	ReactionMessageId = "1015669836891820043"
+var (
+	HelloMessages = []string{
+		"%v... Your steps have led you here. I hope the time on this server doesn't feel too empty for you.",
+		"Hello, %v. People come and go, leaving only faint echoes. Maybe your presence will be something more meaningful.",
+		"%v, this server is like an endless journey — you meet new people and then say goodbye. But while you're here, feel like a part of this story.",
+		"Time flows differently here, %v. Perhaps your stay will be another moment I remember... or forget.",
+		"I'm curious, %v, how long will you stay here? People often rush forward, not noticing the small things.",
+		"You've arrived, %v... There's no beginning or end here, just a path we walk together — for as long as we do.",
+	}
 )
-
-var ReactionRolesMap = map[string]string{
-	"🥒": "659728499195641857",
-	"valorant_logo": "1327575308190224437",
-	"dota2": "1327575111452200981",
-	"rainbow_smash": "1327575308190224437", 
-	"sanhua_angry": "1327575060969558027", 
-	"Sucrose": "1327574914609446912", 
-	"pompomgallerythenwaketoweep4": "1319978883386441779", 
-	"🤬": "1327575308190224437", 
-	"😞": "1327575308190224437",
-	"😄": "1327575555784310825",
-	"southkorea": "1327575555784310825",
-	"🎥": "1327575555784310825",
-	"face": "1327575555784310825",
-	"📗": "1327575760134869045",
-	"🎮": "1015674081225494549",
-
-}

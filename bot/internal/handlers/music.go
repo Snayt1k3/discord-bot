@@ -1,17 +1,17 @@
 package handlers
 
 import (
+	"bot/internal/discord"
 	"context"
 	"fmt"
-	"log/slog"
-	"regexp"
-	"time"
-	"bot/internal/discord"
 	"github.com/bwmarrin/discordgo"
 	"github.com/disgoorg/disgolink/v3/disgolink"
 	"github.com/disgoorg/disgolink/v3/lavalink"
 	"github.com/disgoorg/json"
 	"github.com/disgoorg/snowflake/v2"
+	"log/slog"
+	"regexp"
+	"time"
 )
 
 var (
@@ -19,14 +19,12 @@ var (
 	searchPattern = regexp.MustCompile(`^(.{2})search:(.+)`)
 )
 
-
 func PlayCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
-    identifier := i.ApplicationCommandData().Options[0].StringValue()
+	identifier := i.ApplicationCommandData().Options[0].StringValue()
 
-    // Проверка идентификатора
-    if !urlPattern.MatchString(identifier) && !searchPattern.MatchString(identifier) {
-        identifier = lavalink.SearchTypeYouTube.Apply(identifier)
-    }
+	if !urlPattern.MatchString(identifier) && !searchPattern.MatchString(identifier) {
+		identifier = lavalink.SearchTypeYouTube.Apply(identifier)
+	}
 
     // Проверка голосового состояния пользователя
     voiceState, err := s.State.VoiceState(i.GuildID, i.Member.User.ID)
@@ -114,13 +112,12 @@ func PlayCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
         return nil // Ничего не загружено
     }
 
-    // Присоединение к голосовому каналу
-    if err := s.ChannelVoiceJoinManual(i.GuildID, voiceState.ChannelID, false, false); err != nil {
-        return err
-    }
+	if err := s.ChannelVoiceJoinManual(i.GuildID, voiceState.ChannelID, false, false); err != nil {
+		return err
+	}
 
-    // Обновление трека
-    return player.Update(context.TODO(), lavalink.WithTrack(*toPlay))
+	return player.Update(context.TODO(), lavalink.WithTrack(*toPlay))
+
 }
 
 
@@ -132,7 +129,6 @@ func StopCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	if voiceState == nil || voiceState.ChannelID == "" {
 		return
 	}
-
 
 	err := s.ChannelVoiceJoinManual(i.GuildID, "", false, false)
 

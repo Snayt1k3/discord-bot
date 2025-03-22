@@ -1,7 +1,7 @@
 package discord
 
 import (
-	"bot/config"
+	// "bot/config"
 	"fmt"
 	"log/slog"
 	"os"
@@ -32,7 +32,7 @@ func SearchVoiceChannelByUserID(userID string) (voiceChannelID string) {
 func SendChannelMessage(channelID string, message string) {
 	_, err := Bot.Session.ChannelMessageSend(channelID, message)
 	if err != nil {
-		slog.Warn("failed to send message to channel", "channelId", channelID, "message", message, "error", err)
+		slog.Error("failed to send message to channel", "channelId", channelID, "message", message, "error", err)
 	}
 }
 
@@ -59,11 +59,11 @@ func JoinVoiceChannel(guildID string, voiceChannelID string, mute bool, deafen b
 }
 
 func SendMusicEmbedMessage(title string, url string, duration string, thumbnail string) {
-	Bot.Session.ChannelMessageSendEmbed(config.MusicChannelId, &discordgo.MessageEmbed{
+	Bot.Session.ChannelMessageSendEmbed("config.MusicChannelId", &discordgo.MessageEmbed{ // todo: Поправить канал
 		Title:       "Now is playing 🎶",
 		Description: fmt.Sprintf("[%s](%s)", title, url),
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
-				URL: thumbnail,
+			URL: thumbnail,
 		},
 		Fields: []*discordgo.MessageEmbedField{
 			{
@@ -73,4 +73,58 @@ func SendMusicEmbedMessage(title string, url string, duration string, thumbnail 
 			},
 		},
 	})
+}
+
+func IsAdmin(session *discordgo.Session, guildID, userID string) (bool, error) {
+	member, err := session.GuildMember(guildID, userID)
+	if err != nil {
+		return false, err
+	}
+
+	guild, err := session.State.Guild(guildID)
+	if err != nil {
+		return false, err
+	}
+
+	// Проверяем роли пользователя
+	for _, roleID := range member.Roles {
+		for _, role := range guild.Roles {
+			if role.ID == roleID && (role.Permissions&discordgo.PermissionAdministrator) != 0 {
+				return true, nil
+			}
+		}
+	}
+
+	return false, nil
+}
+
+func SendErrorMessage(session *discordgo.Session, i *discordgo.InteractionCreate) error {
+	session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: "⚠️ Oops! Something went wrong. Please try again. ⚠️",
+			Flags:   discordgo.MessageFlagsEphemeral,
+		},
+	})
+	return nil
+}
+
+func CreateModal(title, customID string, inputs []discordgo.MessageComponent) *discordgo.ModalSubmitInteractionData {
+	return &discordgo.ModalSubmitInteractionData{
+		CustomID: customID,
+		Components: []discordgo.MessageComponent{
+			&discordgo.ActionsRow{
+				Components: inputs,
+			},
+		},
+	}
+}
+
+func CreateTextInput(label, customID, placeholder string, style discordgo.TextInputStyle) *discordgo.TextInput {
+	return &discordgo.TextInput{
+		Label:       label,
+		CustomID:    customID,
+		Placeholder: placeholder,
+		Style:       style,
+	}
 }
