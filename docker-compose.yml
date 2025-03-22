@@ -8,6 +8,7 @@ services:
       - SERVER_PORT=2333
       - LAVALINK_SERVER_PASSWORD=$LAVALINK_PASS
     volumes:
+      # mount application.yml from the same directory or use environment variables
       - ./application.yml:/opt/Lavalink/application.yml
       - ./plugins/:/opt/Lavalink/plugins/
     networks:
