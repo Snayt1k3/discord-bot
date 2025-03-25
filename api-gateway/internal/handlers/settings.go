@@ -33,6 +33,7 @@ func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 		resp, err := s.redis.Get(key)
 
 		if err != nil {
+			slog.Error("Error while get data from redis", "error", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
@@ -44,9 +45,10 @@ func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 	resp, err := s.client.GetSettingsByGuild(context.Background(), &pb.GetSettingsByGuildRequest{GuildId: guildID})
 
 	if err != nil {
-
 		st, ok := status.FromError(err)
+
 		if ok && st.Code() == codes.NotFound {
+			slog.Warn("Guild settings not found", "guild_id", guildID)
 			c.JSON(http.StatusNotFound, gin.H{"error": "Guild settings not found"})
 			return
 		}
@@ -69,6 +71,7 @@ func (s *SettingsHandlers) UpdateRoles(c *gin.Context) {
 	var req pb.UpdateRolesRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
+		slog.Error("Error while binding json", "error", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -80,6 +83,7 @@ func (s *SettingsHandlers) UpdateRoles(c *gin.Context) {
 	resp, err := s.client.UpdateRoles(context.Background(), &req)
 
 	if err != nil {
+		slog.Error("Error while updating roles", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -93,6 +97,7 @@ func (s *SettingsHandlers) CreateGuildSetting(c *gin.Context) {
 	resp, err := s.client.CreateGuildSettings(context.Background(), &pb.CreateGuildSettingsRequest{GuildId: guildID})
 
 	if err != nil {
+		slog.Error("Error while creating guild settings", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -105,6 +110,7 @@ func (s *SettingsHandlers) UpdateWelcome(c *gin.Context) {
 	var req pb.UpdateWelcomeChannelIdRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
+		slog.Error("Error while binding json", "error", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -113,6 +119,7 @@ func (s *SettingsHandlers) UpdateWelcome(c *gin.Context) {
 	resp, err := s.client.UpdateWelcomeChannelId(context.Background(), &req)
 
 	if err != nil {
+		slog.Error("Error while updating welcome channel", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
