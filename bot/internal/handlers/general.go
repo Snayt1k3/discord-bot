@@ -14,6 +14,30 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+var (
+	userHandlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error{
+		"play":   PlayCommandHandler,
+		"skip":   SkipCommandHandler,
+		"stop":   StopCommandHandler,
+		"help":   HelpHandler,
+		"resume": ResumeHandler,
+		
+	}
+	adminHandlers = map[string]func(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate){
+		"add-role-reactions":   settings.AddRole,
+		"remove-role-reactions": settings.RemoveRole,
+		"set-message-id":        settings.SetMessageId,
+		"set-welcome-channel":   settings.SetChannelId,
+		"view_reaction_roles":   settings.ShowAllRoles,
+		"settings": SettingsHandler,
+	}
+	buttons = map[string]func(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate){
+		"view_reaction_roles": settings.ShowAllRoles,
+	}
+
+	)
+
+
 type CommandsDispatcher struct {
 	guildKeeper interfaces.GuildKeeperInterface
 }
@@ -36,8 +60,9 @@ func (cd *CommandsDispatcher) OnMemberJoin(s *discordgo.Session, u *discordgo.Gu
 
 func (cd *CommandsDispatcher) OnReady(s *discordgo.Session, r *discordgo.Ready) {
 	slog.Info("Bot is ready")
+	s.UpdateGameStatus(0, "Listening Music")
 }
-
+		
 func (cd *CommandsDispatcher) OnMessageReactionAdd(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
 	settings.OnMessageReactionAdd(cd.guildKeeper, s, r)
 }
@@ -56,62 +81,22 @@ func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.Intera
 		return
 	}
 
-	switch i.Type {
-	case discordgo.InteractionApplicationCommand:
-		slog.Info("Handling command", "command", i.ApplicationCommandData().Name)
-		switch i.ApplicationCommandData().Name {
+	if i.Type == discordgo.InteractionMessageComponent {
+		if handler, ok := buttons[i.MessageComponentData().CustomID]; ok {
+			handler(cd.guildKeeper, s, i)
+		}
+		return
+	}
 
-		case "play":
-			PlayCommandHandler(s, i)
-		case "skip":
-			SkipCommandHandler(s, i)
-		case "stop":
-			StopCommandHandler(s, i)
-		case "help":
-			HelpHandler(s, i)
-		case "resume":
-			ResumeHandler(s, i)
-		case "settings":
-			SettingsHandler(cd.guildKeeper, s, i)
-		case "setup_reaction_roles", "add-role-reactions", "remove-role-reactions", "set-message-id", "set-welcome-channel":
-			if !isAdmin {
-				s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-					Type: discordgo.InteractionResponseChannelMessageWithSource,
-					Data: &discordgo.InteractionResponseData{
-						Content: "You do not have administrator rights to perform this action!",
-						Flags:   discordgo.MessageFlagsEphemeral,
-					},
-				})
-				return
-			}
-
-			switch i.ApplicationCommandData().Name {
-
-			case "add-role-reactions":
-				settings.AddRole(cd.guildKeeper, s, i)
-			case "remove-role-reactions":
-				settings.RemoveRole(cd.guildKeeper, s, i)
-			case "set-message-id":
-				settings.SetMessageId(cd.guildKeeper, s, i)
-			case "set-welcome-channel":
-				settings.SetChannelId(cd.guildKeeper, s, i)
-			default:
-				slog.Warn("Unknown command", "command", i.ApplicationCommandData().Name)
+	if isAdmin {
+		if handler, ok := adminHandlers[i.ApplicationCommandData().Name]; ok {
+			handler(cd.guildKeeper, s, i)
+		}
+	} else {
+		if handler, ok := userHandlers[i.ApplicationCommandData().Name]; ok {
+			if err := handler(s, i); err != nil {
+				slog.Error("Error handling command", "err", err)
 			}
 		}
-
-	case discordgo.InteractionMessageComponent:
-		slog.Info("Handling button", "custom_id", i.MessageComponentData().CustomID)
-
-		switch i.MessageComponentData().CustomID {
-
-		case "view_reaction_roles":
-			settings.ShowAllRoles(cd.guildKeeper, s, i)
-		default:
-			slog.Warn("Unknown button interaction", "custom_id", i.MessageComponentData().CustomID)
-		}
-
-	default:
-		slog.Warn("Unhandled interaction type", "type", i.Type)
 	}
 }

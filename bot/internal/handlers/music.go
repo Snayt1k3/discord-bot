@@ -121,13 +121,13 @@ func PlayCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) er
 }
 
 
-func StopCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
+func StopCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	queue := discord.Bot.Queues.Get(i.GuildID)
 	queue.Clear()
 
 	voiceState, _ := s.State.VoiceState(i.GuildID, s.State.User.ID)
 	if voiceState == nil || voiceState.ChannelID == "" {
-		return
+		return nil
 	}
 
 	err := s.ChannelVoiceJoinManual(i.GuildID, "", false, false)
@@ -142,6 +142,7 @@ func StopCommandHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			Content: "Music has been stopped and the queue has been cleared! 🎵",
 		},
 	})
+	return nil
 
 }
 

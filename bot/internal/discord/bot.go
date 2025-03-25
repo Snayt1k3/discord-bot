@@ -18,7 +18,13 @@ type DiscordBot struct {
 
 var Bot *DiscordBot
 
-func InitBot() {
+func InitDiscordBot() {
+	initBot()
+	initConnection()
+	initLavalink()
+}
+
+func initBot() {
 	Bot = &DiscordBot{Queues: &QueueManager{Queues: make(map[string]*Queue)}}
 
 	session, err := discordgo.New("Bot " + config.GetDiscordToken()) // Initializing discord session
@@ -31,7 +37,7 @@ func InitBot() {
 	}
 }
 
-func InitLavalink() {
+func initLavalink() {
 	Bot.Lavalink = disgolink.New(snowflake.MustParse(Bot.Session.State.User.ID),
 		disgolink.WithListenerFunc(onPlayerPause),
 		disgolink.WithListenerFunc(onPlayerResume),
@@ -54,7 +60,7 @@ func InitLavalink() {
 
 }
 
-func InitConnection() {
+func initConnection() {
 	if err := Bot.Session.Open(); err != nil {
 		slog.Error("failed to create websocket connection to discord", "error", err)
 		return

@@ -53,6 +53,7 @@ func ShowAllRoles(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sess
 func AddRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate) {
 	emojiRaw := i.ApplicationCommandData().Options[1].StringValue()
 	var emojiKey string
+	
 	if strings.HasPrefix(emojiRaw, "<:") && strings.HasSuffix(emojiRaw, ">") {
 		parts := strings.Split(emojiRaw, ":")
 		if len(parts) == 3 {

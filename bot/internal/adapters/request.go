@@ -38,10 +38,11 @@ func (d *DefaultHttpClient) doRequest(ctx context.Context, method, url string, b
 	if body != nil {
 		reqBody = bytes.NewBuffer(body)
 	}
-	slog.Info("Making request to url, ", "url", url, "method", method)
+	slog.Info("Making request to url", "url", url, "method", method)
 	req, err := http.NewRequestWithContext(ctx, method, url, reqBody)
 
 	if err != nil {
+		slog.Error("Error creating request", "err", err)
 		return nil, err
 	}
 

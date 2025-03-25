@@ -40,7 +40,7 @@ func OnVoiceServerUpdate(session *discordgo.Session, event *discordgo.VoiceServe
 	discord.Bot.Lavalink.OnVoiceServerUpdate(context.TODO(), snowflake.MustParse(event.GuildID), event.Token, event.Endpoint)
 }
 
-func HelpHandler(session *discordgo.Session, i *discordgo.InteractionCreate) {
+func HelpHandler(session *discordgo.Session, i *discordgo.InteractionCreate) error {
 	helpMessage := "**🌿 Frieren Bot - Traces of Music 🌿**\n" +
 		"Time passes, but music stays with us. If you wish to fill the silence, here’s what you can do:\n\n" +
 		"**🎼 Commands to Guide the Melody:**\n" +
@@ -67,6 +67,7 @@ func HelpHandler(session *discordgo.Session, i *discordgo.InteractionCreate) {
 			},
 		},
 	)
+	return nil
 }
 
 func SettingsHandler(guildKeeper interfaces.GuildKeeperInterface, session *discordgo.Session, i *discordgo.InteractionCreate) {

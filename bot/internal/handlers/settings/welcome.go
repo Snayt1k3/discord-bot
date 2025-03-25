@@ -4,6 +4,7 @@ import (
 	"bot/internal/discord"
 	"bot/internal/dto"
 	"bot/internal/interfaces"
+	"log/slog"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -13,7 +14,9 @@ func SetChannelId(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sess
 	guildId := i.GuildID
 
 	err := guildKeeper.UpdateWelcomeSetting(guildId, dto.WelcomeSettings{ChannelId: channelId})
+	
 	if err != nil {
+		slog.Error("Error while updating welcome settings", "err", err)
 		discord.SendErrorMessage(s, i)
 		return
 	}

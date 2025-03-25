@@ -17,6 +17,8 @@ type GuildKeeper struct {
 }
 
 func (s *GuildKeeper) CreateSettings(guild_id string) error {
+	slog.Info("Creating settings", "guild_id", guild_id)
+
 	resp, err := s.client.Post(
 		context.Background(),
 		fmt.Sprintf("%v/settings/guild/%v", config.GetApiGatewayAddr(), guild_id),
@@ -37,6 +39,9 @@ func (s *GuildKeeper) CreateSettings(guild_id string) error {
 
 func (s *GuildKeeper) UpdateRolesSetting(guildId string, roles dto.RolesSettings) (dto.GuildSettingsResponse, error) {
 	body, _ := json.Marshal(map[string]any{"roles": roles.Matching, "message_id": roles.MessageId})
+	
+	slog.Info("Updating roles settings", "body", string(body))
+
 	resp, err := s.client.Patch(
 		context.Background(),
 		fmt.Sprintf("%v/settings/guild/%v/roles", config.GetApiGatewayAddr(), guildId),
@@ -45,7 +50,7 @@ func (s *GuildKeeper) UpdateRolesSetting(guildId string, roles dto.RolesSettings
 	)
 
 	if err != nil {
-		slog.Warn("Bad response when updating settings", "err", err)
+		slog.Error("Bad response when updating settings", "err", err)
 		return dto.GuildSettingsResponse{}, err
 	}
 
@@ -62,7 +67,7 @@ func (s *GuildKeeper) UpdateRolesSetting(guildId string, roles dto.RolesSettings
 	err = json.Unmarshal(body, &settings)
 
 	if err != nil {
-		slog.Warn("Bad response when updating settings", "err", err)
+		slog.Error("Bad response when updating settings", "err", err)
 		return dto.GuildSettingsResponse{}, nil
 	}
 
@@ -70,6 +75,8 @@ func (s *GuildKeeper) UpdateRolesSetting(guildId string, roles dto.RolesSettings
 }
 
 func (s *GuildKeeper) GetGuildSettings(guildId string) (dto.GuildSettingsResponse, error) {
+	slog.Info("Getting guild settings", "guild_id", guildId)
+	
 	resp, err := s.client.Get(
 		context.Background(),
 		fmt.Sprintf("%v/settings/guild/%v", config.GetApiGatewayAddr(), guildId),
@@ -82,6 +89,7 @@ func (s *GuildKeeper) GetGuildSettings(guildId string) (dto.GuildSettingsRespons
 	}
 
 	if resp.StatusCode == 404 {
+		slog.Warn("Guild settings not found", "guild_id", guildId)
 		return dto.GuildSettingsResponse{}, errors.ErrGuildSettingsNotFound
 	}
 
@@ -107,6 +115,9 @@ func (s *GuildKeeper) GetGuildSettings(guildId string) (dto.GuildSettingsRespons
 
 func (s *GuildKeeper) UpdateWelcomeSetting(guildId string, welcome dto.WelcomeSettings) error {
 	body, _ := json.Marshal(map[string]any{"channel_id": welcome.ChannelId})
+	
+	slog.Info("Updating welcome settings", "body", string(body))
+
 	resp, err := s.client.Patch(
 		context.Background(),
 		fmt.Sprintf("%v/settings/guild/%v/welcome", config.GetApiGatewayAddr(), guildId),
@@ -115,7 +126,7 @@ func (s *GuildKeeper) UpdateWelcomeSetting(guildId string, welcome dto.WelcomeSe
 	)
 
 	if err != nil {
-		slog.Warn("Bad response when updating settings", "err", err)
+		slog.Error("Bad response when updating settings", "err", err)
 		return err
 	}
 

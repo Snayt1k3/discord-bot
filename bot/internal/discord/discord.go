@@ -1,7 +1,6 @@
 package discord
 
 import (
-	// "bot/config"
 	"fmt"
 	"log/slog"
 	"os"
@@ -9,14 +8,12 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// SearchGuildByChannelID search the guild ID.
 func SearchGuildByChannelID(textChannelID string) (guildID string) {
 	channel, _ := Bot.Session.Channel(textChannelID)
 	guildID = channel.GuildID
 	return guildID
 }
 
-// SearchVoiceChannelByUserID search the voice channel id into from guild.
 func SearchVoiceChannelByUserID(userID string) (voiceChannelID string) {
 	for _, g := range Bot.Session.State.Guilds {
 		for _, v := range g.VoiceStates {
@@ -28,7 +25,6 @@ func SearchVoiceChannelByUserID(userID string) (voiceChannelID string) {
 	return ""
 }
 
-// SendChannelMessage sends a channel message to channel with channel id equal to m.ChannelID.
 func SendChannelMessage(channelID string, message string) {
 	_, err := Bot.Session.ChannelMessageSend(channelID, message)
 	if err != nil {
