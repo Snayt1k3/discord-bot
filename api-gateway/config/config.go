@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log/slog"
 	"os"
 	"strconv"
 )
@@ -18,6 +19,7 @@ func LoadConfig() (*Config, error) {
 	redisDB, err := strconv.Atoi(os.Getenv("REDIS_DB"))
 
 	if err != nil {
+		slog.Warn("Failed to parse REDIS_DB", "error", err)
 		redisDB = 0
 	}
 
