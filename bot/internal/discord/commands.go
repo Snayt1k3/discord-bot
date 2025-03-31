@@ -74,7 +74,7 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		},
 	},
 	{
-		Name:        "set-message-id",
+		Name:        "set-roles-message-id",
 		Description: "Set the message ID for role reactions. Only for admins",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
@@ -96,6 +96,10 @@ var CommandsList = []*discordgo.ApplicationCommand{
 				Required:    true,
 			},
 		},
+	},
+	{
+		Name:        "gachas",
+		Description: "Get the list of support gachas",
 	},
 }
 

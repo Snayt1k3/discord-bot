@@ -5,6 +5,7 @@ import (
 	"bot/internal/adapters"
 	"bot/internal/discord"
 	"bot/internal/handlers/settings"
+	"bot/internal/handlers/gaming"
 	"bot/internal/interfaces"
 	"fmt"
 	"log/slog"
@@ -21,6 +22,7 @@ var (
 		"stop":   StopCommandHandler,
 		"help":   HelpHandler,
 		"resume": ResumeHandler,
+		"gachas": gaming.ShowGachas,
 		
 	}
 	adminHandlers = map[string]func(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate){
@@ -57,11 +59,6 @@ func (cd *CommandsDispatcher) OnMemberJoin(s *discordgo.Session, u *discordgo.Gu
 
 	discord.SendChannelMessage(settings.Settings.Welcome.ChannelId, formattedMessage)
 }
-
-func (cd *CommandsDispatcher) OnReady(s *discordgo.Session, r *discordgo.Ready) {
-	slog.Info("Bot is ready")
-	s.UpdateGameStatus(0, "Listening Music")
-}
 		
 func (cd *CommandsDispatcher) OnMessageReactionAdd(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
 	settings.OnMessageReactionAdd(cd.guildKeeper, s, r)
@@ -88,15 +85,13 @@ func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.Intera
 		return
 	}
 
-	if isAdmin {
-		if handler, ok := adminHandlers[i.ApplicationCommandData().Name]; ok {
-			handler(cd.guildKeeper, s, i)
+	if handler, ok := adminHandlers[i.ApplicationCommandData().Name]; isAdmin && ok {
+		handler(cd.guildKeeper, s, i)
+	} else if handler, ok := userHandlers[i.ApplicationCommandData().Name]; ok {
+		if err := handler(s, i); err != nil {
+			slog.Error("Error handling command", "err", err)
 		}
 	} else {
-		if handler, ok := userHandlers[i.ApplicationCommandData().Name]; ok {
-			if err := handler(s, i); err != nil {
-				slog.Error("Error handling command", "err", err)
-			}
-		}
+		slog.Warn("No handler found for command", "name", i.ApplicationCommandData().Name)
 	}
 }
