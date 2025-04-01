@@ -23,6 +23,7 @@ func NewCommandsDispatcher() *CommandsDispatcher {
 	return &CommandsDispatcher{guildKeeper: adapters.NewServiceSettingsClient()}
 }
 
+// todo вынести
 func (cd *CommandsDispatcher) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMemberAdd) {
 	settings, _ := cd.guildKeeper.GetGuildSettings(u.GuildID)
 
@@ -35,10 +36,12 @@ func (cd *CommandsDispatcher) OnMemberJoin(s *discordgo.Session, u *discordgo.Gu
 	discord.SendChannelMessage(settings.Settings.Welcome.ChannelId, formattedMessage)
 }
 
+// todo вынести
 func (cd *CommandsDispatcher) OnMessageReactionAdd(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
 	settings.OnMessageReactionAdd(cd.guildKeeper, s, r)
 }
 
+// todo вынести
 func (cd *CommandsDispatcher) OnMessageReactionRemove(s *discordgo.Session, r *discordgo.MessageReactionRemove) {
 	settings.OnMessageReactionRemove(cd.guildKeeper, s, r)
 }

@@ -20,7 +20,6 @@ var (
 		"remove-role-reactions": settings.RemoveRole,
 		"set-message-id":        settings.SetMessageId,
 		"set-welcome-channel":   settings.SetChannelId,
-		"view_reaction_roles":   settings.ShowAllRoles,
 		"settings":              SettingsHandler,
 	}
 	buttons = map[string]func(data discord.HandlerData){

@@ -217,7 +217,7 @@ func ResumeHandler(data dto.HandlerData) error {
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
 				Content: "Error while resuming",
-			}})
+		}})
 	}
 
 	return data.Session.InteractionRespond(data.Event.Interaction, &discordgo.InteractionResponse{
