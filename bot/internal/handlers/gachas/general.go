@@ -1,11 +1,12 @@
-package gaming
+package gachas
 
 import (
-	"log/slog"
+	dto "bot/internal/dto/discord"
 	"github.com/bwmarrin/discordgo"
+	"log/slog"
 )
 
-func ShowGachas(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func ShowGachas(data dto.HandlerData) error {
 	buttons := []*discordgo.Button{
 		{
 			Label:    "Honkai: Star Rail 🌌",
@@ -37,7 +38,7 @@ func ShowGachas(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 			Image: &discordgo.MessageEmbedImage{
 				URL: "https://wotpack.ru/wp-content/uploads/2024/08/ZZZ-potesnila-Genshin-Impact-i-HSR-po-dohodu-za-ijul.jpg", // Image URL
 			},
-			Color:       0x1F7A1F,  // Green color
+			Color: 0x1F7A1F, // Green color
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:   "**Honkai: Star Rail 🌌**",
@@ -66,21 +67,20 @@ func ShowGachas(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 		},
 	}
 
-	err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	err := data.Session.InteractionRespond(data.Event.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Embeds: embeds,
 			Components: []discordgo.MessageComponent{
 				discordgo.ActionsRow{Components: []discordgo.MessageComponent{
-					buttons[0], buttons[1], buttons[2], 
+					buttons[0], buttons[1], buttons[2],
 				}},
-	
+
 				discordgo.ActionsRow{Components: []discordgo.MessageComponent{
 					buttons[3],
 				}},
 			},
 		},
-		
 	})
 
 	if err != nil {
@@ -91,26 +91,25 @@ func ShowGachas(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	return nil
 }
 
-
-func GenshinButtonHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func GenshinButtonHandler(data dto.HandlerData) error {
 	// Handle Genshin button click
 	slog.Info("Genshin button clicked")
 	return nil
 }
 
-func HSRButtonHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func HSRButtonHandler(data dto.HandlerData) error {
 	// Handle HSR button click
 	slog.Info("HSR button clicked")
 	return nil
 }
 
-func ZenlessButtonHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func ZenlessButtonHandler(data dto.HandlerData) error {
 	// Handle Zenless button click
 	slog.Info("Zenless button clicked")
 	return nil
 }
 
-func WuwaButtonHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func WuwaButtonHandler(data dto.HandlerData) error {
 	// Handle Wuwa button click
 	slog.Info("Wuwa button clicked")
 	return nil

@@ -3,8 +3,8 @@ package handlers
 import (
 	"bot/config"
 	"bot/internal/discord"
+	dto "bot/internal/dto/discord"
 	er "bot/internal/errors"
-	"bot/internal/interfaces"
 	"context"
 	"errors"
 	"github.com/bwmarrin/discordgo"
@@ -40,7 +40,7 @@ func OnVoiceServerUpdate(session *discordgo.Session, event *discordgo.VoiceServe
 	discord.Bot.Lavalink.OnVoiceServerUpdate(context.TODO(), snowflake.MustParse(event.GuildID), event.Token, event.Endpoint)
 }
 
-func HelpHandler(session *discordgo.Session, i *discordgo.InteractionCreate) error {
+func HelpHandler(data dto.HandlerData) error {
 	helpMessage := "**🌿 Frieren Bot - Traces of Music 🌿**\n" +
 		"Time passes, but music stays with us. If you wish to fill the silence, here’s what you can do:\n\n" +
 		"**🎼 Commands to Guide the Melody:**\n" +
@@ -58,8 +58,8 @@ func HelpHandler(session *discordgo.Session, i *discordgo.InteractionCreate) err
 		"- If questions linger, seek wisdom from those who lead this place.\n\n" +
 		"Music drifts like memories in the wind. Enjoy it while it lasts. 🎧"
 
-	discord.Bot.Session.InteractionRespond(
-		i.Interaction,
+	data.Session.InteractionRespond(
+		data.Event.Interaction,
 		&discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
@@ -70,12 +70,12 @@ func HelpHandler(session *discordgo.Session, i *discordgo.InteractionCreate) err
 	return nil
 }
 
-func SettingsHandler(guildKeeper interfaces.GuildKeeperInterface, session *discordgo.Session, i *discordgo.InteractionCreate) {
+func SettingsHandler(data dto.HandlerData) {
 
-	_, err := guildKeeper.GetGuildSettings(i.GuildID)
+	_, err := data.Gk.GetGuildSettings(data.Event.GuildID)
 
 	if errors.Is(err, er.ErrGuildSettingsNotFound) {
-		guildKeeper.CreateSettings(i.GuildID)
+		data.Gk.CreateSettings(data.Event.GuildID)
 	}
 
 	buttons := []discordgo.MessageComponent{
@@ -108,7 +108,7 @@ func SettingsHandler(guildKeeper interfaces.GuildKeeperInterface, session *disco
 		},
 	}
 
-	err = session.InteractionRespond(i.Interaction, message)
+	err = data.Session.InteractionRespond(data.Event.Interaction, message)
 	if err != nil {
 		slog.Error("Error sending settings message", "err", err)
 	}

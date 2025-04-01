@@ -2,26 +2,26 @@ package settings
 
 import (
 	"bot/internal/discord"
-	"bot/internal/dto"
-	"bot/internal/interfaces"
+	dtoDiscord "bot/internal/dto/discord"
+	dtoGuild "bot/internal/dto/settings"
 	"log/slog"
 
 	"github.com/bwmarrin/discordgo"
 )
 
-func SetChannelId(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate) {
-	channelId := i.ApplicationCommandData().Options[0].ChannelValue(nil).ID
-	guildId := i.GuildID
+func SetChannelId(data dtoDiscord.HandlerData) {
+	channelId := data.Event.ApplicationCommandData().Options[0].ChannelValue(nil).ID
+	guildId := data.Event.GuildID
 
-	err := guildKeeper.UpdateWelcomeSetting(guildId, dto.WelcomeSettings{ChannelId: channelId})
-	
+	err := data.Gk.UpdateWelcomeSetting(guildId, dtoGuild.WelcomeSettings{ChannelId: channelId})
+
 	if err != nil {
 		slog.Error("Error while updating welcome settings", "err", err)
-		discord.SendErrorMessage(s, i)
+		discord.SendErrorMessage(data.Session, data.Event)
 		return
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	data.Session.InteractionRespond(data.Event.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "Channel set",

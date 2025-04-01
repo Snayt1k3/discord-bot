@@ -1,10 +1,10 @@
 package interfaces
 
-import "bot/internal/dto"
+import dtoGuild "bot/internal/dto/settings"
 
 type GuildKeeperInterface interface {
-	GetGuildSettings(guildId string) (dto.GuildSettingsResponse, error)
+	GetGuildSettings(guildId string) (dtoGuild.GuildSettingsResponse, error)
 	CreateSettings(guild_id string) error
-	UpdateRolesSetting(guildId string, roles dto.RolesSettings) (dto.GuildSettingsResponse, error)
-	UpdateWelcomeSetting(guildId string, welcome dto.WelcomeSettings) error
+	UpdateRolesSetting(guildId string, roles dtoGuild.RolesSettings) (dtoGuild.GuildSettingsResponse, error)
+	UpdateWelcomeSetting(guildId string, welcome dtoGuild.WelcomeSettings) error
 }

@@ -33,7 +33,7 @@ func main() {
 	protoClient := pb.NewSettingsServiceClient(conn)
 	redisClient := adapters.NewRedisAdapter(fmt.Sprintf("%v:%v", cfg.RedisHost, cfg.RedisPort), cfg.RedisPass, cfg.RedisDB)
 	settingsClient := handlers.NewClient(protoClient, redisClient)
-	
+
 	r := routes.SetupRouter(settingsClient)
 
 	port := ":8080"

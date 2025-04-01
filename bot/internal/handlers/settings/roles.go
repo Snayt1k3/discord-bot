@@ -2,7 +2,8 @@ package settings
 
 import (
 	"bot/internal/discord"
-	"bot/internal/dto"
+	dtoDiscord "bot/internal/dto/discord"
+	dtoGuild "bot/internal/dto/settings"
 	"bot/internal/interfaces"
 	"fmt"
 	"log/slog"
@@ -12,11 +13,12 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func ShowAllRoles(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate) {
-	settings, err := guildKeeper.GetGuildSettings(i.GuildID)
+func ShowAllRoles(data dtoDiscord.HandlerData) {
+	settings, err := data.Gk.GetGuildSettings(data.Event.GuildID)
+
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
-		discord.SendErrorMessage(s, i)
+		discord.SendErrorMessage(data.Session, data.Event)
 		return
 	}
 
@@ -37,7 +39,7 @@ func ShowAllRoles(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sess
 
 	roleListStr := roleList.String()
 
-	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	err = data.Session.InteractionRespond(data.Event.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: roleListStr,
@@ -50,10 +52,10 @@ func ShowAllRoles(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sess
 	}
 }
 
-func AddRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate) {
-	emojiRaw := i.ApplicationCommandData().Options[1].StringValue()
+func AddRole(data dtoDiscord.HandlerData) {
+	emojiRaw := data.Event.ApplicationCommandData().Options[1].StringValue()
 	var emojiKey string
-	
+
 	if strings.HasPrefix(emojiRaw, "<:") && strings.HasSuffix(emojiRaw, ">") {
 		parts := strings.Split(emojiRaw, ":")
 		if len(parts) == 3 {
@@ -63,12 +65,12 @@ func AddRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, 
 		emojiKey = emojiRaw
 	}
 
-	roleID := i.ApplicationCommandData().Options[0].RoleValue(s, i.GuildID).ID
-	guildSetting, err := guildKeeper.GetGuildSettings(i.GuildID)
+	roleID := data.Event.ApplicationCommandData().Options[0].RoleValue(data.Session, data.Event.GuildID).ID
+	guildSetting, err := data.Gk.GetGuildSettings(data.Event.GuildID)
 
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
-		discord.SendErrorMessage(s, i)
+		discord.SendErrorMessage(data.Session, data.Event)
 		return
 	}
 
@@ -78,18 +80,18 @@ func AddRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, 
 
 	guildSetting.Settings.Roles.Matching[emojiKey] = roleID
 
-	_, err = guildKeeper.UpdateRolesSetting(i.GuildID, dto.RolesSettings{
+	_, err = data.Gk.UpdateRolesSetting(data.Event.GuildID, dtoGuild.RolesSettings{
 		MessageId: guildSetting.Settings.Roles.MessageId,
 		Matching:  guildSetting.Settings.Roles.Matching,
 	})
 
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)
-		discord.SendErrorMessage(s, i)
+		discord.SendErrorMessage(data.Session, data.Event)
 		return
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	data.Session.InteractionRespond(data.Event.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "Role has been added successfully!",
@@ -98,8 +100,8 @@ func AddRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, 
 	})
 }
 
-func RemoveRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate) {
-	emojiRaw := i.ApplicationCommandData().Options[1].StringValue()
+func RemoveRole(data dtoDiscord.HandlerData) {
+	emojiRaw := data.Event.ApplicationCommandData().Options[1].StringValue()
 	var emojiKey string
 
 	if strings.HasPrefix(emojiRaw, "<:") && strings.HasSuffix(emojiRaw, ">") {
@@ -111,27 +113,27 @@ func RemoveRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sessio
 		emojiKey = emojiRaw
 	}
 
-	guildSetting, err := guildKeeper.GetGuildSettings(i.GuildID)
+	guildSetting, err := data.Gk.GetGuildSettings(data.Event.GuildID)
 
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
-		discord.SendErrorMessage(s, i)
+		discord.SendErrorMessage(data.Session, data.Event)
 		return
 	}
 	guildSetting.Settings.Roles.Matching[emojiKey] = ""
 
-	_, err = guildKeeper.UpdateRolesSetting(i.GuildID, dto.RolesSettings{
+	_, err = data.Gk.UpdateRolesSetting(data.Event.GuildID, dtoGuild.RolesSettings{
 		MessageId: guildSetting.Settings.Roles.MessageId,
 		Matching:  guildSetting.Settings.Roles.Matching,
 	})
 
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)
-		discord.SendErrorMessage(s, i)
+		discord.SendErrorMessage(data.Session, data.Event)
 		return
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	data.Session.InteractionRespond(data.Event.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "Role has been deleted successfully!",
@@ -140,21 +142,21 @@ func RemoveRole(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Sessio
 	})
 }
 
-func SetMessageId(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate) {
-	messageId := i.ApplicationCommandData().Options[0].StringValue()
+func SetMessageId(data dtoDiscord.HandlerData) {
+	messageId := data.Event.ApplicationCommandData().Options[0].StringValue()
 
-	_, err := guildKeeper.UpdateRolesSetting(i.GuildID, dto.RolesSettings{
+	_, err := data.Gk.UpdateRolesSetting(data.Event.GuildID, dtoGuild.RolesSettings{
 		MessageId: messageId,
 		Matching:  map[string]string{},
 	})
 
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)
-		discord.SendErrorMessage(s, i)
+		discord.SendErrorMessage(data.Session, data.Event)
 		return
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	data.Session.InteractionRespond(data.Event.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "Message ID has been set successfully!",

@@ -2,7 +2,7 @@ package adapters
 
 import (
 	"bot/config"
-	"bot/internal/dto"
+	dtoGuild "bot/internal/dto/settings"
 	"bot/internal/errors"
 	"bot/internal/interfaces"
 	"context"
@@ -37,9 +37,9 @@ func (s *GuildKeeper) CreateSettings(guild_id string) error {
 
 }
 
-func (s *GuildKeeper) UpdateRolesSetting(guildId string, roles dto.RolesSettings) (dto.GuildSettingsResponse, error) {
+func (s *GuildKeeper) UpdateRolesSetting(guildId string, roles dtoGuild.RolesSettings) (dtoGuild.GuildSettingsResponse, error) {
 	body, _ := json.Marshal(map[string]any{"roles": roles.Matching, "message_id": roles.MessageId})
-	
+
 	slog.Info("Updating roles settings", "body", string(body))
 
 	resp, err := s.client.Patch(
@@ -51,7 +51,7 @@ func (s *GuildKeeper) UpdateRolesSetting(guildId string, roles dto.RolesSettings
 
 	if err != nil {
 		slog.Error("Bad response when updating settings", "err", err)
-		return dto.GuildSettingsResponse{}, err
+		return dtoGuild.GuildSettingsResponse{}, err
 	}
 
 	defer resp.Body.Close()
@@ -59,24 +59,24 @@ func (s *GuildKeeper) UpdateRolesSetting(guildId string, roles dto.RolesSettings
 	body, err = io.ReadAll(resp.Body)
 
 	if err != nil {
-		return dto.GuildSettingsResponse{}, err
+		return dtoGuild.GuildSettingsResponse{}, err
 	}
 
-	var settings dto.GuildSettingsResponse
+	var settings dtoGuild.GuildSettingsResponse
 
 	err = json.Unmarshal(body, &settings)
 
 	if err != nil {
 		slog.Error("Bad response when updating settings", "err", err)
-		return dto.GuildSettingsResponse{}, nil
+		return dtoGuild.GuildSettingsResponse{}, nil
 	}
 
 	return settings, nil
 }
 
-func (s *GuildKeeper) GetGuildSettings(guildId string) (dto.GuildSettingsResponse, error) {
+func (s *GuildKeeper) GetGuildSettings(guildId string) (dtoGuild.GuildSettingsResponse, error) {
 	slog.Info("Getting guild settings", "guild_id", guildId)
-	
+
 	resp, err := s.client.Get(
 		context.Background(),
 		fmt.Sprintf("%v/settings/guild/%v", config.GetApiGatewayAddr(), guildId),
@@ -85,12 +85,12 @@ func (s *GuildKeeper) GetGuildSettings(guildId string) (dto.GuildSettingsRespons
 
 	if err != nil {
 		slog.Error("Failed to get guild settings", "error", err)
-		return dto.GuildSettingsResponse{}, err
+		return dtoGuild.GuildSettingsResponse{}, err
 	}
 
 	if resp.StatusCode == 404 {
 		slog.Warn("Guild settings not found", "guild_id", guildId)
-		return dto.GuildSettingsResponse{}, errors.ErrGuildSettingsNotFound
+		return dtoGuild.GuildSettingsResponse{}, errors.ErrGuildSettingsNotFound
 	}
 
 	defer resp.Body.Close()
@@ -98,24 +98,24 @@ func (s *GuildKeeper) GetGuildSettings(guildId string) (dto.GuildSettingsRespons
 	body, err := io.ReadAll(resp.Body)
 
 	if err != nil {
-		return dto.GuildSettingsResponse{}, err
+		return dtoGuild.GuildSettingsResponse{}, err
 	}
 
-	var settings dto.GuildSettingsResponse
+	var settings dtoGuild.GuildSettingsResponse
 
 	err = json.Unmarshal(body, &settings)
 
 	if err != nil {
 		slog.Error("Failed to unmarshal guild settings", "error", err)
-		return dto.GuildSettingsResponse{}, err
+		return dtoGuild.GuildSettingsResponse{}, err
 	}
 
 	return settings, nil
 }
 
-func (s *GuildKeeper) UpdateWelcomeSetting(guildId string, welcome dto.WelcomeSettings) error {
+func (s *GuildKeeper) UpdateWelcomeSetting(guildId string, welcome dtoGuild.WelcomeSettings) error {
 	body, _ := json.Marshal(map[string]any{"channel_id": welcome.ChannelId})
-	
+
 	slog.Info("Updating welcome settings", "body", string(body))
 
 	resp, err := s.client.Patch(

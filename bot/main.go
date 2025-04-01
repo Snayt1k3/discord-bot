@@ -17,7 +17,7 @@ func main() {
 
 	dispatcher := handlers.NewCommandsDispatcher()
 	addHandlers(dispatcher)
-	
+
 	registerCommands() // todo: Заменить на событие GuildCreate
 
 	defer discord.Bot.Session.Close()
@@ -49,18 +49,15 @@ func addHandlers(cd *handlers.CommandsDispatcher) {
 	discord.Bot.Session.AddHandler(cd.Dispatch)
 	discord.Bot.Session.AddHandler(cd.OnMessageReactionAdd)
 	discord.Bot.Session.AddHandler(cd.OnMessageReactionRemove)
+
 }
 
 func initLogging() {
-	file, err := os.OpenFile("bot.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	if err != nil {
-		panic("Failed to open log file: " + err.Error())
-	}
 	opts := &slog.HandlerOptions{
 		Level:     slog.LevelInfo,
 		AddSource: true,
 	}
-	logger := slog.New(slog.NewTextHandler(file, opts))
+	logger := slog.New(slog.NewTextHandler(os.Stdout, opts))
 	slog.SetDefault(logger)
 	slog.Info("Logger initialized")
 }
