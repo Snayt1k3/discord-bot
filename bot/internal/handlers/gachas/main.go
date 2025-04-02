@@ -1,12 +1,13 @@
 package gachas
 
 import (
-	dto "bot/internal/dto/discord"
+	dtoDiscord "bot/internal/dto/discord"
+	"bot/internal/handlers/gachas/genshin"
 	"github.com/bwmarrin/discordgo"
 	"log/slog"
 )
 
-func ShowGachas(data dto.HandlerData) error {
+func showGachas(data dtoDiscord.HandlerData) error {
 	buttons := []*discordgo.Button{
 		{
 			Label:    "Honkai: Star Rail 🌌",
@@ -91,26 +92,11 @@ func ShowGachas(data dto.HandlerData) error {
 	return nil
 }
 
-func GenshinButtonHandler(data dto.HandlerData) error {
-	// Handle Genshin button click
-	slog.Info("Genshin button clicked")
-	return nil
+func AddHandlers(handlers map[string]func(dtoDiscord.HandlerData) error) {
+	genshin.AddGenshinHandlers(handlers)
+
+	handlers["gachas"] = showGachas
 }
 
-func HSRButtonHandler(data dto.HandlerData) error {
-	// Handle HSR button click
-	slog.Info("HSR button clicked")
-	return nil
-}
 
-func ZenlessButtonHandler(data dto.HandlerData) error {
-	// Handle Zenless button click
-	slog.Info("Zenless button clicked")
-	return nil
-}
 
-func WuwaButtonHandler(data dto.HandlerData) error {
-	// Handle Wuwa button click
-	slog.Info("Wuwa button clicked")
-	return nil
-}

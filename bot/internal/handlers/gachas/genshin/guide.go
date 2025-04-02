@@ -1,1 +1,1 @@
-package gachas
+package genshin

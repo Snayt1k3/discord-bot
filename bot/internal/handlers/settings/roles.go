@@ -4,7 +4,6 @@ import (
 	"bot/internal/discord"
 	dtoDiscord "bot/internal/dto/discord"
 	dtoGuild "bot/internal/dto/settings"
-	"bot/internal/interfaces"
 	"fmt"
 	"log/slog"
 	"strconv"
@@ -13,19 +12,19 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func ShowAllRoles(data dtoDiscord.HandlerData) {
+func showAllRoles(data dtoDiscord.HandlerData) error {
 	settings, err := data.Gk.GetGuildSettings(data.Event.GuildID)
 
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
 		discord.SendErrorMessage(data.Session, data.Event)
-		return
+		return err
 	}
 
 	roles := settings.Settings.Roles
 
 	var roleList strings.Builder
-	roleList.WriteString("📜 **Roles configured for this server:**\n\n")
+	roleList.WriteString("📜 **Roles configured for this server:**\n\n") // todo: заменить на embed
 
 	for emoji, roleID := range roles.Matching {
 		emojiStr := emoji
@@ -49,10 +48,13 @@ func ShowAllRoles(data dtoDiscord.HandlerData) {
 
 	if err != nil {
 		slog.Error("Failed to respond to interaction", "err", err)
+		return err
 	}
+
+	return nil
 }
 
-func AddRole(data dtoDiscord.HandlerData) {
+func addRole(data dtoDiscord.HandlerData) error {
 	emojiRaw := data.Event.ApplicationCommandData().Options[1].StringValue()
 	var emojiKey string
 
@@ -71,7 +73,7 @@ func AddRole(data dtoDiscord.HandlerData) {
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
 		discord.SendErrorMessage(data.Session, data.Event)
-		return
+		return err
 	}
 
 	if guildSetting.Settings.Roles.Matching == nil {
@@ -88,7 +90,7 @@ func AddRole(data dtoDiscord.HandlerData) {
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)
 		discord.SendErrorMessage(data.Session, data.Event)
-		return
+		return err
 	}
 
 	data.Session.InteractionRespond(data.Event.Interaction, &discordgo.InteractionResponse{
@@ -98,9 +100,10 @@ func AddRole(data dtoDiscord.HandlerData) {
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
+	return nil
 }
 
-func RemoveRole(data dtoDiscord.HandlerData) {
+func removeRole(data dtoDiscord.HandlerData) error{
 	emojiRaw := data.Event.ApplicationCommandData().Options[1].StringValue()
 	var emojiKey string
 
@@ -118,7 +121,7 @@ func RemoveRole(data dtoDiscord.HandlerData) {
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
 		discord.SendErrorMessage(data.Session, data.Event)
-		return
+		return err
 	}
 	guildSetting.Settings.Roles.Matching[emojiKey] = ""
 
@@ -130,7 +133,7 @@ func RemoveRole(data dtoDiscord.HandlerData) {
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)
 		discord.SendErrorMessage(data.Session, data.Event)
-		return
+		return err
 	}
 
 	data.Session.InteractionRespond(data.Event.Interaction, &discordgo.InteractionResponse{
@@ -140,9 +143,11 @@ func RemoveRole(data dtoDiscord.HandlerData) {
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
+
+	return nil
 }
 
-func SetMessageId(data dtoDiscord.HandlerData) {
+func setMessageId(data dtoDiscord.HandlerData) error {
 	messageId := data.Event.ApplicationCommandData().Options[0].StringValue()
 
 	_, err := data.Gk.UpdateRolesSetting(data.Event.GuildID, dtoGuild.RolesSettings{
@@ -153,7 +158,7 @@ func SetMessageId(data dtoDiscord.HandlerData) {
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)
 		discord.SendErrorMessage(data.Session, data.Event)
-		return
+		return err
 	}
 
 	data.Session.InteractionRespond(data.Event.Interaction, &discordgo.InteractionResponse{
@@ -163,60 +168,6 @@ func SetMessageId(data dtoDiscord.HandlerData) {
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
-
+	return nil
 }
 
-func OnMessageReactionAdd(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, r *discordgo.MessageReactionAdd) {
-	slog.Info("%v reacted with %v", r.UserID, r.Emoji.Name)
-
-	guildSetting, err := guildKeeper.GetGuildSettings(r.GuildID)
-
-	if err != nil {
-		slog.Error("Error while getting guild settings", "err", err)
-		return
-	}
-
-	if r.MessageID != guildSetting.Settings.Roles.MessageId {
-		return
-	}
-
-	roleId, exists := guildSetting.Settings.Roles.Matching[r.Emoji.ID]
-
-	if !exists {
-		return
-	}
-
-	err = s.GuildMemberRoleAdd(r.GuildID, r.UserID, roleId)
-
-	if err != nil {
-		slog.Error("Error adding role", "error", err)
-	}
-
-}
-
-func OnMessageReactionRemove(guildKeeper interfaces.GuildKeeperInterface, s *discordgo.Session, r *discordgo.MessageReactionRemove) {
-	slog.Info("%v remove reaction %v", r.UserID, r.Emoji.Name)
-
-	guildSetting, err := guildKeeper.GetGuildSettings(r.GuildID)
-
-	if err != nil {
-		slog.Error("Error while getting guild settings", "err", err)
-		return
-	}
-
-	if r.MessageID != guildSetting.Settings.Roles.MessageId {
-		return
-	}
-
-	roleId, exists := guildSetting.Settings.Roles.Matching[r.Emoji.ID]
-
-	if !exists {
-		return
-	}
-
-	err = s.GuildMemberRoleRemove(r.GuildID, r.UserID, roleId)
-
-	if err != nil {
-		slog.Error("Error removing role", "error", err)
-	}
-}

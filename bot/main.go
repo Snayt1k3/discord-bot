@@ -2,6 +2,7 @@ package main
 
 import (
 	"bot/config"
+	"bot/internal/adapters"
 	"bot/internal/discord"
 	"bot/internal/handlers"
 	"log/slog"
@@ -15,10 +16,13 @@ func main() {
 	config.Load()
 	discord.InitDiscordBot()
 
-	dispatcher := handlers.NewCommandsDispatcher()
-	addHandlers(dispatcher)
+	guildKeeper := adapters.NewServiceSettingsClient()
+	dispatcher := handlers.NewCommandsDispatcher(guildKeeper)
+	dispatcher.InitHandlers()
 
-	registerCommands() // todo: Заменить на событие GuildCreate
+	eventHandlers := handlers.NewEventHandlers(guildKeeper, discord.CommandsList)
+
+	addHandlers(dispatcher, eventHandlers)
 
 	defer discord.Bot.Session.Close()
 
@@ -29,26 +33,15 @@ func main() {
 	<-sc
 }
 
-func registerCommands() { // todo: Заменить на событие GuildCreate
-	for _, command := range discord.CommandsList {
-		_, err := discord.Bot.Session.ApplicationCommandCreate(discord.Bot.Session.State.User.ID, "609869875053199366", command)
-		if err != nil {
-			slog.Error("Failed to create command", "name", command.Name, "error", err)
-			continue
-		}
-		slog.Info("Command registered successfully", "name", command.Name)
-	}
-}
-
-func addHandlers(cd *handlers.CommandsDispatcher) {
-	discord.Bot.Session.AddHandler(handlers.ReadyHandler)
-	discord.Bot.Session.AddHandler(handlers.OnVoiceServerUpdate)
-	discord.Bot.Session.AddHandler(handlers.OnVoiceStateUpdate)
-
-	discord.Bot.Session.AddHandler(cd.OnMemberJoin)
+func addHandlers(cd *handlers.CommandsDispatcher, eh *handlers.EventHandlers) {
 	discord.Bot.Session.AddHandler(cd.Dispatch)
-	discord.Bot.Session.AddHandler(cd.OnMessageReactionAdd)
-	discord.Bot.Session.AddHandler(cd.OnMessageReactionRemove)
+	
+	discord.Bot.Session.AddHandler(eh.OnVoiceServerUpdate)
+	discord.Bot.Session.AddHandler(eh.OnVoiceStateUpdate)
+	discord.Bot.Session.AddHandler(eh.OnMemberJoin)
+	discord.Bot.Session.AddHandler(eh.OnMessageReactionAdd)
+	discord.Bot.Session.AddHandler(eh.OnMessageReactionRemove)
+	discord.Bot.Session.AddHandler(eh.OnBotReady)
 
 }
 

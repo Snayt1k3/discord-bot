@@ -9,7 +9,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func SetChannelId(data dtoDiscord.HandlerData) {
+func setChannelId(data dtoDiscord.HandlerData) error {
 	channelId := data.Event.ApplicationCommandData().Options[0].ChannelValue(nil).ID
 	guildId := data.Event.GuildID
 
@@ -18,7 +18,7 @@ func SetChannelId(data dtoDiscord.HandlerData) {
 	if err != nil {
 		slog.Error("Error while updating welcome settings", "err", err)
 		discord.SendErrorMessage(data.Session, data.Event)
-		return
+		return err
 	}
 
 	data.Session.InteractionRespond(data.Event.Interaction, &discordgo.InteractionResponse{
@@ -28,4 +28,6 @@ func SetChannelId(data dtoDiscord.HandlerData) {
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
+
+	return nil
 }

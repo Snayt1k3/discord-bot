@@ -1,9 +1,7 @@
 package discord
 
 import (
-	"bot/config"
 	"github.com/bwmarrin/discordgo"
-	"log/slog"
 )
 
 var CommandsList = []*discordgo.ApplicationCommand{
@@ -101,15 +99,4 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		Name:        "gachas",
 		Description: "Get the list of support gachas",
 	},
-}
-
-func OnGuildCreate(s *discordgo.Session, g *discordgo.GuildCreate) {
-	for _, command := range CommandsList {
-		_, err := s.ApplicationCommandCreate(config.GetApplicationId(), g.Guild.ID, command)
-		if err != nil {
-			slog.Error("Error creating command for guild", "command", command.Name, "guild_id", g.Guild.ID, "error", err)
-		} else {
-			slog.Info("Command registered for new guild", "command", command.Name, "guild_id", g.Guild.ID)
-		}
-	}
 }
