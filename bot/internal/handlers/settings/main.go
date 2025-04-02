@@ -37,7 +37,8 @@ func settingsHandler(data dtoDiscord.HandlerData) error{
 				"**🔧 Admin Commands:**\n" +
 				"- `/add-role-reactions <role> <emoji>` – Add a role reaction.\n" +
 				"- `/remove-role-reactions <role>` – Remove a role reaction.\n" +
-				"- `/set-message-id <message_id>` – Set the message ID for role reactions.\n\n" +
+				"- `/set-roles-message-id <message_id>` – Set the message ID for role reactions.\n" +
+				"- `/set-welcome-channel <channel_id>` – Set the channel ID for new users.\n\n" +
 				"*(Only administrators can use these commands.)*",
 			Components: []discordgo.MessageComponent{
 				discordgo.ActionsRow{

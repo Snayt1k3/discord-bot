@@ -19,6 +19,8 @@ func NewCommandsDispatcher(gk interfaces.GuildKeeperInterface) *CommandsDispatch
 }
 
 func (cd *CommandsDispatcher) InitHandlers() {
+	cd.handlers["help"] = HelpHandler
+	
 	gachas.AddHandlers(cd.handlers)
 	settings.AddSettingsHandlers(cd.handlers)
 }

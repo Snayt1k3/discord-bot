@@ -14,7 +14,6 @@ import (
 
 func showAllRoles(data dtoDiscord.HandlerData) error {
 	settings, err := data.Gk.GetGuildSettings(data.Event.GuildID)
-
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
 		discord.SendErrorMessage(data.Session, data.Event)
@@ -24,25 +23,25 @@ func showAllRoles(data dtoDiscord.HandlerData) error {
 	roles := settings.Settings.Roles
 
 	var roleList strings.Builder
-	roleList.WriteString("📜 **Roles configured for this server:**\n\n") // todo: заменить на embed
-
 	for emoji, roleID := range roles.Matching {
 		emojiStr := emoji
-
 		if _, err := strconv.ParseInt(emoji, 10, 64); err == nil {
 			emojiStr = fmt.Sprintf("<:emoji:%s>", emoji)
 		}
-
 		roleList.WriteString(fmt.Sprintf("%s - (<@&%s>)\n", emojiStr, roleID))
 	}
 
-	roleListStr := roleList.String()
+	embed := &discordgo.MessageEmbed{
+		Title:       "📜 Roles configured for this server:",
+		Description: roleList.String(),
+		Color:       0x3498DB, // Soft blue color
+	}
 
 	err = data.Session.InteractionRespond(data.Event.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
-			Content: roleListStr,
-			Flags:   discordgo.MessageFlagsEphemeral,
+			Embeds: []*discordgo.MessageEmbed{embed},
+			Flags:  discordgo.MessageFlagsEphemeral,
 		},
 	})
 
@@ -53,6 +52,7 @@ func showAllRoles(data dtoDiscord.HandlerData) error {
 
 	return nil
 }
+
 
 func addRole(data dtoDiscord.HandlerData) error {
 	emojiRaw := data.Event.ApplicationCommandData().Options[1].StringValue()
