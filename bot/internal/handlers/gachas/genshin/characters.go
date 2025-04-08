@@ -9,52 +9,83 @@ import (
 )
 
 var (
-	characters = []string{"Varesa", "Iansan", "Diluc"}
+	characters = []string{
+		"Varesa",
+		"Iansan",
+		"Diluc",
+		"Raiden Shogun",
+		"Zhongli",
+		"Venti",
+		"Alhaitham",
+		"Yae Miko",
+		"Hu Tao",
+		"Xiao",
+		"Tartaglia",
+		"Keqing",
+		"Ganyu",
+		"Ayaka",
+		"Baizhu",
+		"Clorinde",
+		"Navia",
+		"Neuvillette",
+		"Furina",
+		"Arlecchino",
+	}
+	rowSize       = 2 
+	buttonsPerRow = 4
 )
 
 func showGenshinCharacters(data dtoDiscord.HandlerData) error {
-	var buttons []discordgo.MessageComponent
+	var components []discordgo.MessageComponent
 
-	for _, char := range characters {
-		buttons = append(buttons, &discordgo.Button{
-			Label:    char,
-			Style:    discordgo.PrimaryButton,
-			CustomID: fmt.Sprintf("GenshinCharacter_%s", char),
-		})
+	totalButtons := rowSize * buttonsPerRow
+	
+	if totalButtons > len(characters) {
+		totalButtons = len(characters)
+	}
+	
+	displayedCharacters := characters[:totalButtons]
+
+	for i := 0; i < totalButtons; i += buttonsPerRow {
+		var row []discordgo.MessageComponent
+
+		for j := i; j < i+buttonsPerRow && j < totalButtons; j++ {
+			row = append(row, discordgo.Button{
+				Label:    displayedCharacters[j],
+				Style:    discordgo.PrimaryButton,
+				CustomID: fmt.Sprintf("GenshinCharacter_%s", displayedCharacters[j]),
+			})
+		}
+
+		components = append(components, discordgo.ActionsRow{Components: row})
 	}
 
 	paginationRow := discordgo.ActionsRow{
 		Components: []discordgo.MessageComponent{
-			&discordgo.Button{
+			discordgo.Button{
 				Label:    "⬅ Previous",
 				Style:    discordgo.SecondaryButton,
-				CustomID: "genshinPaginationBack",
-
+				CustomID: "genshinPagination_0",
+				Disabled: true,
 			},
-			&discordgo.Button{
+			discordgo.Button{
 				Label:    "Main menu",
 				Style:    discordgo.SecondaryButton,
 				CustomID: "GachasMenu",
-
 			},
-			&discordgo.Button{
+			discordgo.Button{
 				Label:    "Next ➡",
 				Style:    discordgo.SecondaryButton,
-				CustomID: "genshinPaginationNext",
-
+				CustomID: "genshinPagination_1",
 			},
 		},
 	}
+	components = append(components, paginationRow)
 
 	embed := &discordgo.MessageEmbed{
 		Title:       "🎮 Genshin Impact Characters",
 		Description: "Discover all available characters in Genshin Impact, including their rarity, elements, and regions. Tap on a character to view detailed info, ascension materials, and builds.",
 		Color:       0x3498DB,
-	}
-
-	components := []discordgo.MessageComponent{
-		discordgo.ActionsRow{Components: buttons},
-		paginationRow,
 	}
 
 	data.Session.InteractionRespond(data.Event.Interaction, &discordgo.InteractionResponse{

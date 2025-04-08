@@ -10,7 +10,7 @@ import (
 func showCharacterAscension(data dtoDiscord.HandlerData) error {
 	embed := &discordgo.MessageEmbed{
 		Title:       "⬆️ Ascension Materials — Raiden Shogun",
-		Description: "Materials required to fully ascend Raiden Shogun to Lv. 90.",
+		Description: "Materials required to fully ascend Raiden Shogun to Lv. 90, including Talent Level-Up materials.",
 		Color:       0x9b59b6,
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
 			URL: "https://i.pinimg.com/736x/77/97/d7/7797d737a3a35630f6ce321b1a00fc20.jpg",
@@ -42,7 +42,7 @@ func showCharacterAscension(data dtoDiscord.HandlerData) error {
 				Inline: true,
 			},
 			{
-				Name:  "📈 Ascension Levels",
+				Name:  "� Ascension Levels",
 				Value: "20 ➜ 40 ➜ 50 ➜ 60 ➜ 70 ➜ 80 ➜ 90",
 			},
 		},
@@ -50,7 +50,7 @@ func showCharacterAscension(data dtoDiscord.HandlerData) error {
 			URL: "https://i.pinimg.com/736x/d2/96/83/d29683ce9223109447fb6a57ef9f7e3a.jpg",
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "Raiden Shogun • Full Ascension Cost",
+			Text: "Raiden Shogun • Full Ascension & Talent Materials",
 		},
 	}
 
@@ -66,7 +66,6 @@ func showCharacterAscension(data dtoDiscord.HandlerData) error {
 		Channel:    data.Event.ChannelID,
 		ID:         data.Event.Message.ID,
 	})
-	
 
 	return nil
 }
@@ -208,6 +207,65 @@ func showCharacterComps(data dtoDiscord.HandlerData) error {
 		},
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: "Raiden Shogun • Team Composition Guide",
+		},
+	}
+
+	components := genshinButtons("shogun")
+
+	data.Session.InteractionRespond(data.Event.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseDeferredMessageUpdate,
+	})
+
+	discord.EditMessage(data.Session, &discordgo.MessageEdit{
+		Embeds:     &[]*discordgo.MessageEmbed{embed},
+		Components: &components,
+		Channel:    data.Event.ChannelID,
+		ID:         data.Event.Message.ID,
+	})
+
+	return nil
+}
+
+func showCharacterTalents(data dtoDiscord.HandlerData) error {
+	embed := &discordgo.MessageEmbed{
+		Title:       "📘 Talent Materials — Raiden Shogun",
+		Description: "Resources required to level up all three of Raiden Shogun's talents to Lv. 10.",
+		Color:       0xad44d9,
+		Thumbnail: &discordgo.MessageEmbedThumbnail{
+			URL: "https://i.pinimg.com/736x/77/97/d7/7797d737a3a35630f6ce321b1a00fc20.jpg",
+		},
+		Fields: []*discordgo.MessageEmbedField{
+			{
+				Name:  "📚 Talent Books — Light Series",
+				Value: "- Teachings of Light ×9\n- Guide to Light ×63\n- Philosophies of Light ×114",
+				Inline: true,
+			},
+			{
+				Name:  "🗡️ Handguards",
+				Value: "- Old ×18\n- Kageuchi ×66\n- Famed ×93\n(Dropped by Nobushi)",
+				Inline: true,
+			},
+			{
+				Name:  "🔥 Weekly Boss Material",
+				Value: "- Molten Moment ×18\n(Dropped by **La Signora**)",
+				Inline: true,
+			},
+			{
+				Name:  "👑 Crown of Insight",
+				Value: "- Total: ×3 (for maxing all 3 talents)",
+				Inline: true,
+			},
+			{
+				Name:  "💰 Mora",
+				Value: "- Total: 4,950,000",
+				Inline: true,
+			},
+		},
+		Image: &discordgo.MessageEmbedImage{
+			URL: "https://i.pinimg.com/736x/0b/18/e8/0b18e8acbf645b7b227689f33785d5c3.jpg",
+		},
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "Raiden Shogun • Talent Level-Up Costs",
 		},
 	}
 

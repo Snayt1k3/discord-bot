@@ -26,6 +26,14 @@ func genshinButtons(name string) []discordgo.MessageComponent {
 					},
 				},
 				discordgo.Button{
+					Label:    "Talents",
+					CustomID: fmt.Sprintf("GenshinTalents_%s", name),
+					Style:    discordgo.SecondaryButton,
+					Emoji: &discordgo.ComponentEmoji{
+						Name: "📘",
+					},
+				},
+				discordgo.Button{
 					Label:    "Artifacts",
 					CustomID: fmt.Sprintf("GenshinArtifacts_%s", name),
 					Style:    discordgo.SecondaryButton,
