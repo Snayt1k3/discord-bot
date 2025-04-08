@@ -11,59 +11,59 @@ func showGachas(data dtoDiscord.HandlerData) error {
 	buttons := []*discordgo.Button{
 		{
 			Label:    "Honkai: Star Rail 🌌",
-			Style:    discordgo.PrimaryButton,
-			CustomID: "hsr",
+			Style:    discordgo.SecondaryButton,
+			CustomID: "HsrCharacters",
 		},
 		{
 			Label:    "Genshin Impact 🔥",
-			Style:    discordgo.PrimaryButton,
-			CustomID: "genshin",
+			Style:    discordgo.SecondaryButton,
+			CustomID: "GenshinCharacters",
 		},
 		{
 			Label:    "Zenless Zone Zero 🌀",
-			Style:    discordgo.PrimaryButton,
-			CustomID: "zenless",
+			Style:    discordgo.SecondaryButton,
+			CustomID: "ZenlessCharacters",
 		},
 		{
-			Label:    "Wuthering Waves 🌊",
-			Style:    discordgo.PrimaryButton,
-			CustomID: "wuwa",
+			Label:    "Wuthering Waves 🌪️",
+			Style:    discordgo.SecondaryButton,
+			CustomID: "WuwaCharacters",
 		},
 	}
 
-	// Create message with buttons and embed
+
 	embeds := []*discordgo.MessageEmbed{
 		{
-			Title:       "🎮 **Choose Your Gacha!**",
-			Description: "Don't miss the chance to learn more about the games! 🤩\n\nEach game offers unique guides, builds, and the opportunity to sign up for pulls. Choose your favorite game below:",
+			Title:       "📜 **Welcome to the Gacha Hub!**",
+			Description: "Ready to dive into the worlds of your favorite gacha games? ✨\n\nFrom builds and ascensions to full team comps — everything you need is just a click away.\n\nChoose a game below to begin exploring characters, guides, and more!",
+			Color:       0x9b59b6,
 			Image: &discordgo.MessageEmbedImage{
-				URL: "https://wotpack.ru/wp-content/uploads/2024/08/ZZZ-potesnila-Genshin-Impact-i-HSR-po-dohodu-za-ijul.jpg", // Image URL
+				URL: "https://wotpack.ru/wp-content/uploads/2024/08/ZZZ-potesnila-Genshin-Impact-i-HSR-po-dohodu-za-ijul.jpg",
 			},
-			Color: 0x1F7A1F, // Green color
 			Fields: []*discordgo.MessageEmbedField{
 				{
-					Name:   "**Honkai: Star Rail 🌌**",
-					Value:  "🚀 *Guides, Builds, Pull Recordings* - A guide to the universe of **Honkai: Star Rail**.",
+					Name: "**🌌 Honkai: Star Rail**",
+					Value: "🚀 Enter the stars and uncover top-tier builds, relics, and path strategies.",
 					Inline: false,
 				},
 				{
-					Name:   "**Genshin Impact 🔥**",
-					Value:  "🌍 *Guides, Builds, Pull Recordings* - Dive into the world of **Teyvat** with deep mechanics and characters.",
+					Name: "**🔥 Genshin Impact**",
+					Value: "🌍 Explore Teyvat through optimized builds, ascension paths, and full team guides.",
 					Inline: false,
 				},
 				{
-					Name:   "**Zenless Zone Zero 🌀**",
-					Value:  "⚙️ *Guides, Builds, Pull Recordings* - A new world with exciting gameplay and intriguing mechanics.",
+					Name: "**🌀 Zenless Zone Zero**",
+					Value: "⚙️ Discover W-Engine combos, agent synergies, and stylish squad setups.",
 					Inline: false,
 				},
 				{
-					Name:   "**Wuthering Waves 🌊**",
-					Value:  "🌌 *Guides, Builds, Pull Recordings* - A unique game with a dynamic world and combat mechanics.",
+					Name: "**🌪️ Wuthering Waves**",
+					Value: "🎼 Build your Resonators, learn Echo strategies, and master the combat rhythm of Solaris-3.",
 					Inline: false,
 				},
 			},
 			Footer: &discordgo.MessageEmbedFooter{
-				Text: "Gather your team and set off on an adventure! 🚀",
+				Text: "Select a game to start your journey 🌟",
 			},
 		},
 	}

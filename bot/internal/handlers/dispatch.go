@@ -2,10 +2,12 @@ package handlers
 
 import (
 	dtoDiscord "bot/internal/dto/discord"
-	"bot/internal/interfaces"
 	"bot/internal/handlers/gachas"
 	"bot/internal/handlers/settings"
+	"bot/internal/interfaces"
 	"log/slog"
+	"strings"
+
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -27,18 +29,20 @@ func (cd *CommandsDispatcher) InitHandlers() {
 
 func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	slog.Info("Startuing handle interaction", "type", i.Type)
-	
+
 	var name string
 	data := dtoDiscord.HandlerData{Event: i, Session: s, Gk: cd.guildKeeper}
 
 	switch i.Type {
 
 	case discordgo.InteractionMessageComponent:
-		name = i.MessageComponentData().CustomID
+		name, _, _ = strings.Cut(i.MessageComponentData().CustomID, "_")
 	
 	default:
 		name = i.ApplicationCommandData().Name
 	}
+
+	slog.Info("Cmd:", "name", name)
 
 	if handler, ok := cd.handlers[name]; ok {
 	

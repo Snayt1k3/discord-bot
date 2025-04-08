@@ -82,7 +82,6 @@ func IsAdmin(session *discordgo.Session, guildID, userID string) (bool, error) {
 		return false, err
 	}
 
-	// Проверяем роли пользователя
 	for _, roleID := range member.Roles {
 		for _, role := range guild.Roles {
 			if role.ID == roleID && (role.Permissions&discordgo.PermissionAdministrator) != 0 {
@@ -105,22 +104,9 @@ func SendErrorMessage(session *discordgo.Session, i *discordgo.InteractionCreate
 	return nil
 }
 
-func CreateModal(title, customID string, inputs []discordgo.MessageComponent) *discordgo.ModalSubmitInteractionData {
-	return &discordgo.ModalSubmitInteractionData{
-		CustomID: customID,
-		Components: []discordgo.MessageComponent{
-			&discordgo.ActionsRow{
-				Components: inputs,
-			},
-		},
-	}
-}
-
-func CreateTextInput(label, customID, placeholder string, style discordgo.TextInputStyle) *discordgo.TextInput {
-	return &discordgo.TextInput{
-		Label:       label,
-		CustomID:    customID,
-		Placeholder: placeholder,
-		Style:       style,
+func EditMessage(session *discordgo.Session, message *discordgo.MessageEdit) {
+	_, err := session.ChannelMessageEditComplex(message)
+	if err != nil {
+		slog.Error("failed to edit message", "error", err)
 	}
 }
