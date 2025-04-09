@@ -2,14 +2,13 @@ package settings
 
 import (
 	dtoDiscord "bot/internal/dto/discord"
-	"github.com/bwmarrin/discordgo"
 	er "bot/internal/errors"
 	"errors"
+	"github.com/bwmarrin/discordgo"
 	"log/slog"
 )
 
-
-func settingsHandler(data dtoDiscord.HandlerData) error{
+func settingsHandler(data dtoDiscord.HandlerData) error {
 
 	_, err := data.Gk.GetGuildSettings(data.Event.GuildID)
 
@@ -57,7 +56,6 @@ func settingsHandler(data dtoDiscord.HandlerData) error{
 	return nil
 }
 
-
 func AddSettingsHandlers(handlers map[string]func(data dtoDiscord.HandlerData) error) {
 	handlers["add-role-reactions"] = addRole
 	handlers["remove-role-reactions"] = removeRole
@@ -66,4 +64,4 @@ func AddSettingsHandlers(handlers map[string]func(data dtoDiscord.HandlerData) e
 	handlers["settings"] = settingsHandler
 	handlers["view_reaction_roles"] = showAllRoles
 	// todo добавить проверку на админа. И поменять сообщение: Улучшить оформление
-}	
+}

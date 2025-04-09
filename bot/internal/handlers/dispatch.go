@@ -13,7 +13,7 @@ import (
 
 type CommandsDispatcher struct {
 	guildKeeper interfaces.GuildKeeperInterface
-	handlers map[string]func(data dtoDiscord.HandlerData) error
+	handlers    map[string]func(data dtoDiscord.HandlerData) error
 }
 
 func NewCommandsDispatcher(gk interfaces.GuildKeeperInterface) *CommandsDispatcher {
@@ -22,7 +22,7 @@ func NewCommandsDispatcher(gk interfaces.GuildKeeperInterface) *CommandsDispatch
 
 func (cd *CommandsDispatcher) InitHandlers() {
 	cd.handlers["help"] = HelpHandler
-	
+
 	gachas.AddHandlers(cd.handlers)
 	settings.AddSettingsHandlers(cd.handlers)
 }
@@ -37,7 +37,7 @@ func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.Intera
 
 	case discordgo.InteractionMessageComponent:
 		name, _, _ = strings.Cut(i.MessageComponentData().CustomID, "_")
-	
+
 	default:
 		name = i.ApplicationCommandData().Name
 	}
@@ -45,14 +45,13 @@ func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.Intera
 	slog.Info("Cmd:", "name", name)
 
 	if handler, ok := cd.handlers[name]; ok {
-	
+
 		if err := handler(data); err != nil {
 			slog.Error("Error handling command", "err", err, "name", name)
-		} 
+		}
 
 	} else {
 		slog.Warn("No handler found for command", "name", name)
 	}
 
 }
-

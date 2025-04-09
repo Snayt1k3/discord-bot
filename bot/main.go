@@ -35,7 +35,7 @@ func main() {
 
 func addHandlers(cd *handlers.CommandsDispatcher, eh *handlers.EventHandlers) {
 	discord.Bot.Session.AddHandler(cd.Dispatch)
-	
+
 	discord.Bot.Session.AddHandler(eh.OnVoiceServerUpdate)
 	discord.Bot.Session.AddHandler(eh.OnVoiceStateUpdate)
 	discord.Bot.Session.AddHandler(eh.OnMemberJoin)

@@ -16,10 +16,10 @@ import (
 
 type EventHandlers struct {
 	guildKeeper interfaces.GuildKeeperInterface
-	cmds []*discordgo.ApplicationCommand
+	cmds        []*discordgo.ApplicationCommand
 }
 
-func NewEventHandlers(guildKeeper interfaces.GuildKeeperInterface, cmds []*discordgo.ApplicationCommand)*EventHandlers{
+func NewEventHandlers(guildKeeper interfaces.GuildKeeperInterface, cmds []*discordgo.ApplicationCommand) *EventHandlers {
 	return &EventHandlers{guildKeeper: guildKeeper, cmds: cmds}
 }
 
@@ -77,7 +77,6 @@ func (eh *EventHandlers) OnMessageReactionRemove(s *discordgo.Session, r *discor
 	}
 }
 
-
 func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMemberAdd) {
 	settings, _ := eh.guildKeeper.GetGuildSettings(u.GuildID)
 
@@ -92,7 +91,7 @@ func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMe
 
 func (eh *EventHandlers) OnBotReady(s *discordgo.Session, g *discordgo.Ready) {
 	err := s.UpdateCustomStatus(config.GetBotStatus())
-	
+
 	if err != nil {
 		slog.Warn("failed to update custom status", "error", err)
 	}

@@ -15,7 +15,7 @@ func HelpHandler(data dtoDiscord.HandlerData) error {
 		},
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name:  "🎼 Commands to Guide the Melody:",
+				Name: "🎼 Commands to Guide the Melody:",
 				Value: "`/play <song_name/link>` – Let the music flow, one song at a time.\n" +
 					"`/pause` – Even melodies need a moment of rest.\n" +
 					"`/resume` – Continue where you left off, like an old journey resumed.\n" +
@@ -27,7 +27,7 @@ func HelpHandler(data dtoDiscord.HandlerData) error {
 				Value: "`/help` – If you have forgotten, let this guide you once more.",
 			},
 			{
-				Name:  "🌾 A Few Words of Caution:",
+				Name: "🌾 A Few Words of Caution:",
 				Value: "- A melody can only be heard if you are present—join a voice channel first.\n" +
 					"- If questions linger, seek wisdom from those who lead this place.",
 			},
@@ -48,7 +48,3 @@ func HelpHandler(data dtoDiscord.HandlerData) error {
 	)
 	return nil
 }
-
-
-
-

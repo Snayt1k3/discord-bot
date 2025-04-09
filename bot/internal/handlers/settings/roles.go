@@ -53,7 +53,6 @@ func showAllRoles(data dtoDiscord.HandlerData) error {
 	return nil
 }
 
-
 func addRole(data dtoDiscord.HandlerData) error {
 	emojiRaw := data.Event.ApplicationCommandData().Options[1].StringValue()
 	var emojiKey string
@@ -103,7 +102,7 @@ func addRole(data dtoDiscord.HandlerData) error {
 	return nil
 }
 
-func removeRole(data dtoDiscord.HandlerData) error{
+func removeRole(data dtoDiscord.HandlerData) error {
 	emojiRaw := data.Event.ApplicationCommandData().Options[1].StringValue()
 	var emojiKey string
 
@@ -170,4 +169,3 @@ func setMessageId(data dtoDiscord.HandlerData) error {
 	})
 	return nil
 }
-

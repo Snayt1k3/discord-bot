@@ -1,8 +1,8 @@
 package genshin
 
 import (
-	dtoDiscord "bot/internal/dto/discord"
 	"bot/internal/discord"
+	dtoDiscord "bot/internal/dto/discord"
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
@@ -31,7 +31,7 @@ var (
 		"Furina",
 		"Arlecchino",
 	}
-	rowSize       = 2 
+	rowSize       = 2
 	buttonsPerRow = 4
 )
 
@@ -39,11 +39,11 @@ func showGenshinCharacters(data dtoDiscord.HandlerData) error {
 	var components []discordgo.MessageComponent
 
 	totalButtons := rowSize * buttonsPerRow
-	
+
 	if totalButtons > len(characters) {
 		totalButtons = len(characters)
 	}
-	
+
 	displayedCharacters := characters[:totalButtons]
 
 	for i := 0; i < totalButtons; i += buttonsPerRow {
@@ -104,7 +104,7 @@ func showGenshinCharacters(data dtoDiscord.HandlerData) error {
 
 func showCharacterInfo(data dtoDiscord.HandlerData) error {
 	embed := discordgo.MessageEmbed{
-		Title:       "🌩️ Raiden Shogun", 
+		Title:       "🌩️ Raiden Shogun",
 		Description: "“Eternity is in the eyes of the beholder.”",
 		Color:       0x9b59b6,
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
@@ -127,8 +127,8 @@ func showCharacterInfo(data dtoDiscord.HandlerData) error {
 				Inline: true,
 			},
 			{
-				Name: "🎙️ Voice Actors",
-				Value: "**EN:** Anne Yatco\n**JP:** Miyuki Sawashiro",
+				Name:   "🎙️ Voice Actors",
+				Value:  "**EN:** Anne Yatco\n**JP:** Miyuki Sawashiro",
 				Inline: true,
 			},
 			{
@@ -137,8 +137,8 @@ func showCharacterInfo(data dtoDiscord.HandlerData) error {
 				Inline: true,
 			},
 			{
-				Name: "📅 Released",
-				Value: "Version 2.1 – September 1, 2021",
+				Name:   "📅 Released",
+				Value:  "Version 2.1 – September 1, 2021",
 				Inline: true,
 			},
 		},

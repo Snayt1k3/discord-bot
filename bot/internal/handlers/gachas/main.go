@@ -31,7 +31,6 @@ func showGachas(data dtoDiscord.HandlerData) error {
 		},
 	}
 
-
 	embeds := []*discordgo.MessageEmbed{
 		{
 			Title:       "📜 **Welcome to the Gacha Hub!**",
@@ -42,23 +41,23 @@ func showGachas(data dtoDiscord.HandlerData) error {
 			},
 			Fields: []*discordgo.MessageEmbedField{
 				{
-					Name: "**🌌 Honkai: Star Rail**",
-					Value: "🚀 Enter the stars and uncover top-tier builds, relics, and path strategies.",
+					Name:   "**🌌 Honkai: Star Rail**",
+					Value:  "🚀 Enter the stars and uncover top-tier builds, relics, and path strategies.",
 					Inline: false,
 				},
 				{
-					Name: "**🔥 Genshin Impact**",
-					Value: "🌍 Explore Teyvat through optimized builds, ascension paths, and full team guides.",
+					Name:   "**🔥 Genshin Impact**",
+					Value:  "🌍 Explore Teyvat through optimized builds, ascension paths, and full team guides.",
 					Inline: false,
 				},
 				{
-					Name: "**🌀 Zenless Zone Zero**",
-					Value: "⚙️ Discover W-Engine combos, agent synergies, and stylish squad setups.",
+					Name:   "**🌀 Zenless Zone Zero**",
+					Value:  "⚙️ Discover W-Engine combos, agent synergies, and stylish squad setups.",
 					Inline: false,
 				},
 				{
-					Name: "**🌪️ Wuthering Waves**",
-					Value: "🎼 Build your Resonators, learn Echo strategies, and master the combat rhythm of Solaris-3.",
+					Name:   "**🌪️ Wuthering Waves**",
+					Value:  "🎼 Build your Resonators, learn Echo strategies, and master the combat rhythm of Solaris-3.",
 					Inline: false,
 				},
 			},
@@ -97,6 +96,3 @@ func AddHandlers(handlers map[string]func(dtoDiscord.HandlerData) error) {
 
 	handlers["gachas"] = showGachas
 }
-
-
-

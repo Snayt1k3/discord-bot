@@ -10,11 +10,10 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-
 func genshinPagination(data dtoDiscord.HandlerData) error {
 	_, pageStr, _ := strings.Cut(data.Event.MessageComponentData().CustomID, "_")
 	page, err := strconv.Atoi(pageStr)
-	
+
 	if err != nil {
 		return err
 	}

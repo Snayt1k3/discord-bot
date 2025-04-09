@@ -31,4 +31,4 @@ docker-up:
 	docker compose up --build
 
 lint: 
-	gofmt -w bot/ settings-service/ api-gateway/
+	gofmt -w bot/ settings-service/ api-gateway/ gachas-service/

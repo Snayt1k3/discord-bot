@@ -1,8 +1,8 @@
 package genshin
 
 import (
-	dtoDiscord "bot/internal/dto/discord"
 	"bot/internal/discord"
+	dtoDiscord "bot/internal/dto/discord"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -136,19 +136,19 @@ func showCharacterWeapons(data dtoDiscord.HandlerData) error {
 		},
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name: "💜 **Engulfing Lightning** (5★)",
+				Name:  "💜 **Engulfing Lightning** (5★)",
 				Value: "Signature weapon.\n- Huge Energy Recharge and ATK boost synergy.\n- Best-in-slot for Burst DPS build.",
 			},
 			{
-				Name: "🌀 **The Catch** (4★)",
+				Name:  "🌀 **The Catch** (4★)",
 				Value: "Best free-to-play option.\n- Boosts Elemental Burst DMG & CRIT Rate.\n- Pairs perfectly with Emblem set.",
 			},
 			{
-				Name: "🔱 **Staff of Homa / Skyward Spine** (5★)",
+				Name:  "🔱 **Staff of Homa / Skyward Spine** (5★)",
 				Value: "- Homa: CRIT DMG and HP boost — solid stat stick.\n- Skyward: High ER and some CRIT Rate.",
 			},
 			{
-				Name: "🔷 **Wavebreaker's Fin / Favonius Lance** (4★)",
+				Name:  "🔷 **Wavebreaker's Fin / Favonius Lance** (4★)",
 				Value: "- Wavebreaker: High Burst DMG scaling.\n- Favonius: Utility polearm with team energy gen.",
 			},
 		},
@@ -186,19 +186,19 @@ func showCharacterComps(data dtoDiscord.HandlerData) error {
 		},
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name: "⚡ **Raiden Shogun + Beidou + Xingqiu + Bennett**",
+				Name:  "⚡ **Raiden Shogun + Beidou + Xingqiu + Bennett**",
 				Value: "A powerful Electro-focused team with **Beidou** and **Xingqiu** providing additional damage reduction and elemental reaction support.\n- Raiden boosts the team's overall damage through Energy Recharge.",
 			},
 			{
-				Name: "💥 **Raiden Shogun + Yae Miko + Fischl + Kazuha**",
+				Name:  "💥 **Raiden Shogun + Yae Miko + Fischl + Kazuha**",
 				Value: "Raiden Shogun shines in this team by triggering Electro-related reactions. **Kazuha** provides grouping and elemental buffs while **Yae Miko** and **Fischl** provide continuous Electro application.",
 			},
 			{
-				Name: "💫 **Raiden Shogun + Zhongli + Ganyu + Albedo**",
+				Name:  "💫 **Raiden Shogun + Zhongli + Ganyu + Albedo**",
 				Value: "A versatile team with great synergy. **Zhongli** provides shields, while **Ganyu** and **Albedo** focus on strong Cryo and Geo DPS. This setup helps Raiden keep her Elemental Burst uptime high.",
 			},
 			{
-				Name: "🌪️ **Raiden Shogun + Kokomi + Childe + Sucrose**",
+				Name:  "🌪️ **Raiden Shogun + Kokomi + Childe + Sucrose**",
 				Value: "This team works by using **Kokomi** and **Childe** to apply Hydro, which triggers powerful Electro-Charged reactions with Raiden's attacks. **Sucrose** boosts elemental mastery for higher reaction damage.",
 			},
 		},
@@ -236,28 +236,28 @@ func showCharacterTalents(data dtoDiscord.HandlerData) error {
 		},
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name:  "📚 Talent Books — Light Series",
-				Value: "- Teachings of Light ×9\n- Guide to Light ×63\n- Philosophies of Light ×114",
+				Name:   "📚 Talent Books — Light Series",
+				Value:  "- Teachings of Light ×9\n- Guide to Light ×63\n- Philosophies of Light ×114",
 				Inline: true,
 			},
 			{
-				Name:  "🗡️ Handguards",
-				Value: "- Old ×18\n- Kageuchi ×66\n- Famed ×93\n(Dropped by Nobushi)",
+				Name:   "🗡️ Handguards",
+				Value:  "- Old ×18\n- Kageuchi ×66\n- Famed ×93\n(Dropped by Nobushi)",
 				Inline: true,
 			},
 			{
-				Name:  "🔥 Weekly Boss Material",
-				Value: "- Molten Moment ×18\n(Dropped by **La Signora**)",
+				Name:   "🔥 Weekly Boss Material",
+				Value:  "- Molten Moment ×18\n(Dropped by **La Signora**)",
 				Inline: true,
 			},
 			{
-				Name:  "👑 Crown of Insight",
-				Value: "- Total: ×3 (for maxing all 3 talents)",
+				Name:   "👑 Crown of Insight",
+				Value:  "- Total: ×3 (for maxing all 3 talents)",
 				Inline: true,
 			},
 			{
-				Name:  "💰 Mora",
-				Value: "- Total: 4,950,000",
+				Name:   "💰 Mora",
+				Value:  "- Total: 4,950,000",
 				Inline: true,
 			},
 		},
