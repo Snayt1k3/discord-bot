@@ -1,1 +1,128 @@
-// для сервиса связанного с играми
+syntax = "proto3";
+
+package gachas;
+
+option go_package = "proto/";
+
+// Сервис для работы с персонажами и их билдами
+service GenshinService {
+    // Получение списка всех персонажей
+    rpc GetAllCharacters (Empty) returns (CharacterListResponse);
+
+    // Получение расширенной информации по персонажу по его ID
+    rpc GetCharacterById (CharacterRequest) returns (CharacterDetailResponse);
+
+    // Получение билда персонажа по его ID
+    rpc GetCharacterBuild (CharacterRequest) returns (BuildResponse);
+}
+
+// Пустое сообщение для запроса без параметров
+message Empty {}
+
+// Запрос на получение персонажа по его ID
+message CharacterRequest {
+  uint64 id = 1; // ID персонажа
+}
+
+// Ответ на запрос списка всех персонажей
+message CharacterListResponse {
+  repeated CharacterShort characters = 1; // Список персонажей
+}
+
+// Краткая информация о персонаже
+message CharacterShort {
+  uint64 id = 1;       // ID персонажа
+  string name = 2;     // Имя персонажа
+  string element = 3;  // Стихия персонажа
+  string region = 4;   // Регион персонажа
+}
+
+// Ответ с расширенной информацией по персонажу
+message CharacterDetailResponse {
+  Character character = 1;  // Персонаж с расширенной информацией
+}
+
+// Полная информация о персонаже
+message Character {
+  uint64 id = 1;           // ID персонажа
+  string name = 2;         // Имя персонажа
+  string element = 3;      // Стихия персонажа
+  string weapon_type = 4;  // Тип оружия
+  string base_stat = 5;    // Базовая характеристика
+  string region = 6;       // Регион персонажа
+  int32 rarity = 7;        // Редкость персонажа
+
+  AscensionMaterials ascension = 8;  // Материалы для восхождения
+  TalentMaterials talents = 9;       // Материалы для талантов
+  CommonMaterials common_materials = 10; // Общие материалы
+}
+
+// Материалы для восхождения
+message AscensionMaterials {
+  string local_specialty = 1; // Местные материалы
+  string boss_drops = 2;      // Дропы с боссов
+}
+
+// Общие материалы для персонажа
+message CommonMaterials {
+  string common = 1;   // Обычные материалы
+  string uncommon = 2; // Редкие материалы
+  string rare = 3;     // Очень редкие материалы
+}
+
+// Материалы для талантов персонажа
+message TalentMaterials {
+  string boss_drops = 1;  // Дропы с боссов
+  Books books = 2;        // Книги
+  repeated string weekdays = 3; // Дни недели
+  string talent_priority = 4;   // Приоритет талантов
+}
+
+// Структура для книг
+message Books {
+  string common = 1;   // Книга общего уровня
+  string uncommon = 2; // Книга редкого уровня
+  string rare = 3;     // Книга очень редкого уровня
+}
+
+// Ответ на запрос с билдом персонажа
+message BuildResponse {
+  Build build = 1; // Билд персонажа
+}
+
+// Билд персонажа
+message Build {
+  string name = 1;            // Название билда
+  repeated Artifact artifacts = 2;  // Артефакты
+  repeated Weapon weapons = 3;      // Оружие
+  repeated CharacterShort teams = 4; // Команда
+  Stats stats = 5;                  // Статистика билда
+}
+
+// Артефакты персонажа
+message Artifact {
+  string name = 1;           // Имя артефакта
+  string set = 2;            // Набор артефакта
+  string two_piece_bonus = 3; // Бонус от 2-х частей набора
+  string four_piece_bonus = 4; // Бонус от 4-х частей набора
+}
+
+// Оружие персонажа
+message Weapon {
+  string name = 1;     // Имя оружия
+  string type = 2;     // Тип оружия
+  int32 rarity = 3;    // Редкость оружия
+  int32 base_atk = 4;  // Базовый Атака
+  string sub_stat = 5; // Подстатистика
+  float sub_value = 6; // Значение подстатистики
+  string passive = 7;  // Пассива оружия
+}
+
+// Статистика билда
+message Stats {
+  string sands = 1;           // Песочные часы
+  string goblet = 2;          // Кубок
+  string circlet = 3;         // Циркуль
+  repeated string best_stats = 4;  // Лучшие характеристики
+  repeated string sub_stats_priority = 5; // Приоритет подхарактеристик
+}

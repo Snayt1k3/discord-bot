@@ -16,5 +16,24 @@ type Character struct {
 	Talents           TalentMaterials    `json:"talents" gorm:"foreignKey:TalentsID"`
 	CommonMaterialsID uint               `json:"common_materials_id"`
 	CommonMaterials   CommonMaterials    `json:"common_materials" gorm:"foreignKey:CommonMaterialsID"`
-	Build             Build              `json:"build" gorm:"foreignKey:CharacterID"`
+}
+
+func Migrate(db *gorm.DB) error {
+	if err := db.AutoMigrate(
+        &Character{},
+        &Build{},
+        &Artifact{},
+        &Weapon{},
+        &Team{},
+        &BuildWeapon{},
+        &BuildArtifact{},     
+        &Stats{},
+        &CommonMaterials{},
+        &AscensionMaterials{},
+        &TalentMaterials{},
+        &Books{},
+		); err != nil {
+		return err
+	}
+	return nil
 }
