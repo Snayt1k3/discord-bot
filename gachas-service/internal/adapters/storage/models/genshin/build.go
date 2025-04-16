@@ -6,12 +6,12 @@ import (
 
 type Build struct {
 	gorm.Model
-	CharacterID uint        `json:"character_id" gorm:"not null"`
-	Name        string      `json:"name" gorm:"not null"`
-	Artifacts   []Artifact  `json:"artifacts" gorm:"many2many:build_artifacts;joinForeignKey:BuildID;joinReferences:ArtifactID"`
-	Weapons     []Weapon    `json:"weapons" gorm:"many2many:build_weapons;joinForeignKey:BuildID;joinReferences:WeaponID"`
-	Teams       []Character `json:"teams" gorm:"many2many:build_teams;"`
-	Stats       Stats       `json:"stats" gorm:"foreignKey:BuildID"`
+	CharacterID uint       `json:"character_id" gorm:"not null"`
+	Name        string     `json:"name" gorm:"not null"`
+	Artifacts   []Artifact `json:"artifacts" gorm:"many2many:build_artifacts;"`
+	Weapons     []Weapon   `json:"weapons" gorm:"many2many:build_weapons;"`
+	Teams       []Team     `json:"teams" gorm:"many2many:build_teams;"`
+	Stats       Stats      `json:"stats"`
 }
 
 type Artifact struct {
@@ -45,17 +45,17 @@ type Stats struct {
 	Circlet          string `json:"circlet" gorm:"not null"`
 	BestStats        string `json:"best_stats" gorm:"not null"`
 	SubStatsPriority string `json:"sub_stats_priority" gorm:"not null"`
-	BuildID          uint   `json:"build_id"`
+	BuildID          uint   `json:"build_id" gorm:"unique"`
 }
 
 type BuildWeapon struct {
-    BuildID  uint
-    WeaponID uint
-    Priority int 
+	BuildID  uint `gorm:"primaryKey"`
+	WeaponID uint `gorm:"primaryKey"`
+	Priority int
 }
 
 type BuildArtifact struct {
-	BuildID    uint
-	ArtifactID uint
+	BuildID    uint `gorm:"primaryKey"`
+	ArtifactID uint `gorm:"primaryKey"`
 	Priority   int
 }

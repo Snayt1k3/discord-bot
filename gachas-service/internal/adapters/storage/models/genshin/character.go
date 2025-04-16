@@ -20,19 +20,19 @@ type Character struct {
 
 func Migrate(db *gorm.DB) error {
 	if err := db.AutoMigrate(
-        &Character{},
-        &Build{},
-        &Artifact{},
-        &Weapon{},
-        &Team{},
-        &BuildWeapon{},
-        &BuildArtifact{},     
-        &Stats{},
-        &CommonMaterials{},
-        &AscensionMaterials{},
-        &TalentMaterials{},
-        &Books{},
-		); err != nil {
+		&Character{},
+		&Build{},
+		&Artifact{},
+		&Weapon{},
+		&Team{},
+		&BuildWeapon{},
+		&BuildArtifact{},
+		&Stats{},
+		&CommonMaterials{},
+		&AscensionMaterials{},
+		&TalentMaterials{},
+		&Books{},
+	); err != nil {
 		return err
 	}
 	return nil
