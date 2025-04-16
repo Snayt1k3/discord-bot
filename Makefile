@@ -1,34 +1,56 @@
-PROTO_DIR=proto
-OUT_DIR=settings-service/proto
-GATEWAY_OUT_DIR=api-gateway/proto
-PROTO_FILES=$(wildcard $(PROTO_DIR)/*.proto)
+# Путь к директории с .proto файлами
+PROTO_DIR := ./proto
 
-.PHONY: all generate copy clean
+# Путь к директории, куда будет генерироваться Go-код
+GO_OUT_DIR := ./grpc
 
-all: generate copy
+# Список .proto файлов
+PROTO_FILES := $(PROTO_DIR)/gaming.proto $(PROTO_DIR)/settings.proto
+
+# Команда генерации gRPC и Go-кода
+PROTOC_COMMAND = protoc -I=$(PROTO_DIR) \
+	--go_out=$(GO_OUT_DIR) \
+	--go-grpc_out=$(GO_OUT_DIR)
+
+.PHONY: all generate docker-up lint
+
+all: generate
 
 generate:
-	@echo "Generating gRPC code..."
-	mkdir -p $(OUT_DIR)
-	protoc --proto_path=$(PROTO_DIR) \
-		--go_out=$(OUT_DIR) --go_opt=paths=source_relative \
-		--go-grpc_out=$(OUT_DIR) --go-grpc_opt=paths=source_relative \
-		$(PROTO_FILES)
+	@echo "Generating Go code from .proto files..."
+	@mkdir -p $(GO_OUT_DIR)
+	@$(PROTOC_COMMAND) $(PROTO_FILES)
+	@echo "Go code generated in $(GO_OUT_DIR)"
 
-copy:
-	@echo "Copying generated files to api-gateway..."
-	mkdir -p $(GATEWAY_OUT_DIR)
-	cp -r $(OUT_DIR)/* $(GATEWAY_OUT_DIR)/
 
-	@echo "Files copied successfully."
-
-clean:
-	@echo "Cleaning generated files..."
-	rm -rf $(OUT_DIR) $(GATEWAY_OUT_DIR)
-	@echo "Cleanup complete."
+grpc-clean:
+	@echo "Cleaning up generated Go code..."
+	@rm -rf $(GO_OUT_DIR)/*
+	@echo "Cleaned up generated Go code in $(GO_OUT_DIR)"
 
 docker-up:
 	docker compose up --build
+
+
+grpc-init:
+	@echo "Initializing gRPC server..."
+	@$(MAKE) generate
+
+	@echo "Copying all generated files to api-gateway/grpc..."
+	@mkdir -p api-gateway/grpc
+	@cp -r grpc/* api-gateway/grpc/
+
+	@echo "Moving settings proto files to settings-service..."
+	@mkdir -p settings-service/proto
+	@find grpc -type f -name "settings*.pb.go" -exec mv {} settings-service/proto/ \;
+
+	@echo "Moving gaming proto files to gaming-service..."
+	@mkdir -p gaming-service/proto
+	@find grpc -type f -name "gaming*.pb.go" -exec mv {} gaming-service/proto/ \;
+
+	@rm -rf grpc
+
+	@echo "gRPC server initialized. Files distributed to services."
 
 lint: 
 	gofmt -w bot/ settings-service/ api-gateway/ gachas-service/
