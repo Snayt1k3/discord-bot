@@ -26,6 +26,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error connecting to the database: %v", err)
 	}
+
 	models.Migrate(db)
 	guildRepo := adapters.NewGuildRepository(db)
 
@@ -34,6 +35,7 @@ func main() {
 	}
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%v", cfg.GrpcPort))
+
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}

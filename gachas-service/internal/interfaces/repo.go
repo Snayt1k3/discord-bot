@@ -1,7 +1,7 @@
 package interfaces
 
-type RepoInterface[model, build any] interface {
-	GetCharacters() ([]model, error)
-	GetCharacterByID(id string) (model, error)
+type RepoInterface[character, build any] interface {
+	GetCharacters() ([]character, error)
+	GetCharacterByID(id string) (character, error)
 	GetCharacterBuild(id string) (build, error)
 }

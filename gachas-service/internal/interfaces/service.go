@@ -1,7 +1,7 @@
 package interfaces
 
-type ServiceInterface[model, build any] interface {
-	GetCharacters() ([]model, error)
-	GetCharacterByID(id string) (model, error)
-	GetCharacterBuild(id string) (build, error)
+type ServiceInterface[character, characterBrief, build any] interface {
+	GetCharacters() (*[]characterBrief, error)
+	GetCharacterByID(id string) (*character, error)
+	GetCharacterBuild(id string) (*build, error)
 }

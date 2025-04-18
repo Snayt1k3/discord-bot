@@ -7,6 +7,7 @@ import (
 type Build struct {
 	gorm.Model
 	CharacterID uint       `json:"character_id" gorm:"not null"`
+	Character   Character  `json:"character" gorm:"foreignKey:CharacterID"`
 	Name        string     `json:"name" gorm:"not null"`
 	Artifacts   []Artifact `json:"artifacts" gorm:"many2many:build_artifacts;"`
 	Weapons     []Weapon   `json:"weapons" gorm:"many2many:build_weapons;"`
