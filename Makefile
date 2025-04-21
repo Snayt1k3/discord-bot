@@ -36,17 +36,17 @@ grpc-init:
 	@echo "Initializing gRPC server..."
 	@$(MAKE) generate
 
-	@echo "Copying all generated files to api-gateway/grpc..."
-	@mkdir -p api-gateway/grpc
-	@cp -r grpc/* api-gateway/grpc/
+	@echo "Copying all generated files to api-gateway/proto..."
+	@mkdir -p api-gateway/proto
+	@cp -r grpc/* api-gateway/proto/
 
 	@echo "Moving settings proto files to settings-service..."
 	@mkdir -p settings-service/proto
 	@find grpc -type f -name "settings*.pb.go" -exec mv {} settings-service/proto/ \;
 
-	@echo "Moving gaming proto files to gaming-service..."
+	@echo "Moving gaming proto files to gachas-service..."
 	@mkdir -p gaming-service/proto
-	@find grpc -type f -name "gaming*.pb.go" -exec mv {} gaming-service/proto/ \;
+	@find grpc -type f -name "gaming*.pb.go" -exec mv {} gachas-service/proto/ \;
 
 	@rm -rf grpc
 
