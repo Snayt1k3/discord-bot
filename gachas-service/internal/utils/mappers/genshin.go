@@ -7,7 +7,7 @@ import (
 
 func MapBuildToDTO(build *genshin.Build) *dto.GenshinBuild {
 	return &dto.GenshinBuild{
-		ID:        string(rune(build.ID)),
+		ID:        build.ID,
 		Character: MapCharacterToDTO(&build.Character),
 		Teams:     MapTeamsToDTO(build.Teams),
 		Artifacts: MapArtifactsToDTO(build.Artifacts),
@@ -20,7 +20,7 @@ func MapWeaponsToDTO(weapons []genshin.Weapon) []dto.GenshinWeapon {
 	weaponsDto := make([]dto.GenshinWeapon, len(weapons))
 	for i, weapon := range weapons {
 		weaponsDto[i] = dto.GenshinWeapon{
-			ID:       string(rune(weapon.ID)),
+			ID:       weapon.ID,
 			Name:     weapon.Name,
 			Type:     weapon.Type,
 			Rarity:   weapon.Rarity,
@@ -34,7 +34,7 @@ func MapWeaponsToDTO(weapons []genshin.Weapon) []dto.GenshinWeapon {
 
 func MapStatsToDTO(stats *genshin.Stats) dto.GenshinStats {
 	return dto.GenshinStats{
-		ID:               string(rune(stats.ID)),
+		ID:               stats.ID,
 		Sands:            stats.Sands,
 		Goblet:           stats.Goblet,
 		Circlet:          stats.Circlet,
@@ -47,7 +47,7 @@ func MapArtifactsToDTO(artifacts []genshin.Artifact) []dto.GenshinArtifact {
 	artifactsDTO := make([]dto.GenshinArtifact, len(artifacts))
 	for i, artifact := range artifacts {
 		artifactsDTO[i] = dto.GenshinArtifact{
-			ID:             string(rune(artifact.ID)),
+			ID:             artifact.ID,
 			Name:           artifact.Name,
 			Set:            artifact.Set,
 			TwoPieceBonus:  artifact.TwoPieceBonus,
@@ -61,7 +61,7 @@ func MapTeamsToDTO(teams []genshin.Team) []dto.GenshinTeam {
 	teamsDTO := make([]dto.GenshinTeam, len(teams))
 	for i, team := range teams {
 		teamsDTO[i] = dto.GenshinTeam{
-			ID:         string(rune(team.ID)),
+			ID:         team.ID,
 			Characters: make([]dto.GenshinCharacter, len(team.Characters)),
 		}
 		for j, character := range team.Characters {
@@ -73,22 +73,22 @@ func MapTeamsToDTO(teams []genshin.Team) []dto.GenshinTeam {
 
 func MapCharacterToDTO(character *genshin.Character) dto.GenshinCharacter {
 	return dto.GenshinCharacter{
-		ID:         string(rune(character.ID)),
+		ID:         character.ID,
 		Name:       character.Name,
 		WeaponType: character.WeaponType,
 		Region:     character.Region,
 		Rarity:     character.Rarity,
 		BaseStat:   character.BaseStat,
 		Ascension: dto.GenshinAscensionMaterials{
-			ID:             string(rune(character.Ascension.ID)),
+			ID:             character.Ascension.ID,
 			LocalSpecialty: character.Ascension.LocalSpecialty,
 			BossDrops:      character.Ascension.BossDrops,
 		},
 		Talents: dto.GenshinTalentMaterials{
-			ID:        string(rune(character.Talents.ID)),
+			ID:        character.Talents.ID,
 			BossDrops: character.Talents.BossDrops,
 			Books: dto.GenshinBooks{
-				ID:       string(rune(character.Talents.Books.ID)),
+				ID:       character.Talents.Books.ID,
 				Common:   character.Talents.Books.Common,
 				Uncommon: character.Talents.Books.Uncommon,
 				Rare:     character.Talents.Books.Rare,
@@ -97,7 +97,7 @@ func MapCharacterToDTO(character *genshin.Character) dto.GenshinCharacter {
 			TalentPriority: character.Talents.TalentPriority,
 		},
 		CommonMaterials: dto.GenshinCommonMaterials{
-			ID:       string(rune(character.CommonMaterials.ID)),
+			ID:       character.CommonMaterials.ID,
 			Common:   character.CommonMaterials.Common,
 			Uncommon: character.CommonMaterials.Uncommon,
 			Rare:     character.CommonMaterials.Rare,
@@ -108,7 +108,7 @@ func MapCharacterToDTO(character *genshin.Character) dto.GenshinCharacter {
 
 func MapCharacterBriefToDTO(character *genshin.Character) dto.GenshinCharacterBrief {
 	return dto.GenshinCharacterBrief{
-		ID:         string(rune(character.ID)),
+		ID:         character.ID,
 		Name:       character.Name,
 		WeaponType: character.WeaponType,
 		Region:     character.Region,
