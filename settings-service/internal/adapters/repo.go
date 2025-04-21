@@ -2,7 +2,6 @@ package adapters
 
 import (
 	"encoding/json"
-	"fmt"
 	"settings-service/internal/dto"
 	"settings-service/internal/interfaces"
 	"settings-service/internal/models"
@@ -45,7 +44,7 @@ func (r *GuildRepositoryImpl) UpdateRoleSetting(role *dto.RolesSettings) error {
 	if role.MessageId != "" {
 		updates["message_id"] = role.MessageId
 	}
-	fmt.Println(role.Matching)
+
 	if role.Matching != nil {
 		roleBytes, err := json.Marshal(role.Matching)
 		if err != nil {
@@ -63,8 +62,6 @@ func (r *GuildRepositoryImpl) UpdateRoleSetting(role *dto.RolesSettings) error {
 
 func (r *GuildRepositoryImpl) UpdateWelcomeSetting(welcome *dto.WelcomeSettings) error {
 	updates := map[string]any{}
-	{
-	}
 
 	if welcome.ChannelId != "" {
 		updates["channel_id"] = welcome.ChannelId

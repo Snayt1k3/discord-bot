@@ -15,28 +15,38 @@ import (
 )
 
 func main() {
-	cfg, err := config.LoadConfig()
 	initLogging()
+	cfg, err := config.LoadConfig()
 
 	if err != nil {
-		slog.Error("Unable to load config", "error", err)
+		panic("Failed to load config: " + err.Error())
 	}
 
-	conn, err := grpc.NewClient(fmt.Sprintf("%v:%v", cfg.GrpcHost, cfg.GrpcPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	gachaConn, err := grpc.NewClient(fmt.Sprintf("%v:%v", cfg.GrpcGachasHost, cfg.GrpcGachasPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
-		slog.Error("Unable to connect to grpc server", "error", err)
+		panic("Failed to connect to gacha service: " + err.Error())
 	}
 
-	defer conn.Close()
+	settingsConn, err := grpc.NewClient(fmt.Sprintf("%v:%v", cfg.GrpcSettingsHost, cfg.GrpcSettingsPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 
-	protoClient := pb.NewSettingsServiceClient(conn)
+	if err != nil {
+		panic("Failed to connect to settings service: " + err.Error())
+	}
+
+	defer gachaConn.Close()
+	defer settingsConn.Close()
+
+	settingsProtoClient := pb.NewSettingsServiceClient(settingsConn)
+	gachasProtoClient := pb.NewGenshinServiceClient(gachaConn)
+
 	redisClient := adapters.NewRedisAdapter(fmt.Sprintf("%v:%v", cfg.RedisHost, cfg.RedisPort), cfg.RedisPass, cfg.RedisDB)
-	settingsClient := handlers.NewClient(protoClient, redisClient)
+	settingsHandlers := handlers.NewSettingsHandlers(settingsProtoClient, redisClient)
+	gachasHandlers := handlers.NewGachaHandlers(gachasProtoClient, redisClient)
+	r := routes.SetupRouter(settingsHandlers, gachasHandlers)
 
-	r := routes.SetupRouter(settingsClient)
+	port := ":" + cfg.Port
 
-	port := ":8080"
 	slog.Info("Starting server", "port", port)
 
 	if err := r.Run(port); err != nil {

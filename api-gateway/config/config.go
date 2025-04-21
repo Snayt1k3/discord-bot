@@ -7,12 +7,15 @@ import (
 )
 
 type Config struct {
-	GrpcHost  string
-	GrpcPort  string
-	RedisHost string
-	RedisPort string
-	RedisPass string
-	RedisDB   int
+	GrpcSettingsHost string
+	GrpcSettingsPort string
+	GrpcGachasHost   string
+	GrpcGachasPort   string
+	RedisHost        string
+	RedisPort        string
+	RedisPass        string
+	RedisDB          int
+	Port             string
 }
 
 func LoadConfig() (*Config, error) {
@@ -24,12 +27,15 @@ func LoadConfig() (*Config, error) {
 	}
 
 	config := &Config{
-		GrpcHost:  os.Getenv("SETTINGS_ADDRESS"),
-		GrpcPort:  os.Getenv("SETTINGS_PORT"),
-		RedisHost: os.Getenv("REDIS_HOST"),
-		RedisPort: os.Getenv("REDIS_PORT"),
-		RedisPass: os.Getenv("REDIS_PASS"),
-		RedisDB:   redisDB,
+		GrpcSettingsHost: os.Getenv("SETTINGS_ADDRESS"),
+		GrpcSettingsPort: os.Getenv("SETTINGS_PORT"),
+		GrpcGachasHost:   os.Getenv("GACHAS_ADDRESS"),
+		GrpcGachasPort:   os.Getenv("GACHAS_PORT"),
+		RedisHost:        os.Getenv("REDIS_HOST"),
+		RedisPort:        os.Getenv("REDIS_PORT"),
+		RedisPass:        os.Getenv("REDIS_PASS"),
+		RedisDB:          redisDB,
+		Port:             os.Getenv("API_GATEWAY_PORT"),
 	}
 
 	return config, nil

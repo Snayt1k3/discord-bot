@@ -18,7 +18,7 @@ type SettingsHandlers struct {
 	redis  interfaces.RedisInterface
 }
 
-func NewClient(client pb.SettingsServiceClient, redis interfaces.RedisInterface) *SettingsHandlers {
+func NewSettingsHandlers(client pb.SettingsServiceClient, redis interfaces.RedisInterface) *SettingsHandlers {
 	return &SettingsHandlers{client: client, redis: redis}
 }
 
