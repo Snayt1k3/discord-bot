@@ -45,7 +45,7 @@ grpc-init:
 	@find grpc -type f -name "settings*.pb.go" -exec mv {} settings-service/proto/ \;
 
 	@echo "Moving gaming proto files to gachas-service..."
-	@mkdir -p gaming-service/proto
+	@mkdir -p gachas-service/proto
 	@find grpc -type f -name "gaming*.pb.go" -exec mv {} gachas-service/proto/ \;
 
 	@rm -rf grpc
