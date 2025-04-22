@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-// todo implement the methods
+
 type GenshinServer struct {
 	pb.UnimplementedGenshinServiceServer
 	service interfaces.ServiceInterface[dto.GenshinCharacter, dto.GenshinCharacterBrief, dto.GenshinBuild]

@@ -1,6 +1,9 @@
 package genshin
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+	"github.com/lib/pq"
+)
 
 type CommonMaterials struct {
 	gorm.Model
@@ -27,6 +30,6 @@ type TalentMaterials struct {
 	BossDrops      string   `json:"boss_drops" gorm:"not null"`
 	BooksID        uint     `json:"books_id"`
 	Books          Books    `json:"books" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Weekdays       []string `json:"weekdays" gorm:"type:text[]"`
+	Weekdays       pq.StringArray `json:"weekdays" gorm:"type:text[]"`
 	TalentPriority string   `json:"talent_priority" gorm:"not null"`
 }

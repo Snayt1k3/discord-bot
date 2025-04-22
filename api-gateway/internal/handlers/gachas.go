@@ -64,6 +64,7 @@ func (g *GachaHandlers) GetGenshinCharacterBuild(c *gin.Context) {
 	}
 
 	id, err := strconv.ParseUint(characterID, 10, 64)
+
 	if err != nil {
 		c.JSON(400, gin.H{"error": "Invalid character ID"})
 		return

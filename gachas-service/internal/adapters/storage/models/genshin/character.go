@@ -10,11 +10,11 @@ type Character struct {
 	BaseStat          string             `json:"base_stat" gorm:"not null"`
 	Region            string             `json:"region" gorm:"not null"`
 	Rarity            int                `json:"rarity" gorm:"not null"`
-	AscensionID       uint               `json:"ascension_id"`
+	AscensionID       uint               `json:"ascension_id" gorm:"not null"`
 	Ascension         AscensionMaterials `json:"ascension" gorm:"foreignKey:AscensionID"`
-	TalentsID         uint               `json:"talents_id"`
+	TalentsID         uint               `json:"talents_id" gorm:"not null"`
 	Talents           TalentMaterials    `json:"talents" gorm:"foreignKey:TalentsID"`
-	CommonMaterialsID uint               `json:"common_materials_id"`
+	CommonMaterialsID uint               `json:"common_materials_id" gorm:"not null"`
 	CommonMaterials   CommonMaterials    `json:"common_materials" gorm:"foreignKey:CommonMaterialsID"`
 }
 

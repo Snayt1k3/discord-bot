@@ -18,14 +18,14 @@ type Config struct {
 
 func LoadConfig() (*Config, error) {
 	config := &Config{
-		Host:     os.Getenv("GACHA_POSTGRES_HOST"),
-		Port:     os.Getenv("GACHA_POSTGRES_PORT"),
-		User:     os.Getenv("GACHA_POSTGRES_USER"),
-		Password: os.Getenv("GACHA_POSTGRES_PASSWORD"),
-		DBName:   os.Getenv("GACHA_POSTGRES_DB"),
-		SSLMode:  os.Getenv("GACHA_POSTGRES_SSLMODE"),
-		TimeZone: os.Getenv("GACHA_POSTGRES_TIMEZONE"),
-		GrpcPort: os.Getenv("GACHA_PORT"),
+		Host:     os.Getenv("GACHAS_POSTGRES_HOST"),
+		Port:     os.Getenv("GACHAS_POSTGRES_PORT"),
+		User:     os.Getenv("GACHAS_POSTGRES_USER"),
+		Password: os.Getenv("GACHAS_POSTGRES_PASSWORD"),
+		DBName:   os.Getenv("GACHAS_POSTGRES_DB"),
+		SSLMode:  os.Getenv("GACHAS_POSTGRES_SSLMODE"),
+		TimeZone: os.Getenv("GACHAS_POSTGRES_TIMEZONE"),
+		GrpcPort: os.Getenv("GACHAS_PORT"),
 	}
 
 	if config.Host == "" || config.Port == "" || config.User == "" || config.Password == "" || config.DBName == "" || config.GrpcPort == "" {

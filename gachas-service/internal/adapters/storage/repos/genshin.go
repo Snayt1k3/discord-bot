@@ -23,7 +23,13 @@ func (r *GenshinRepository) GetCharacters() ([]genshin.Character, error) {
 
 func (r *GenshinRepository) GetCharacterByID(id string) (genshin.Character, error) {
 	var character genshin.Character
-	err := r.db.First(&character, "id = ?", id).Error
+
+	err := r.db.
+		Preload("Ascension").
+		Preload("Talents").
+		Preload("Talents.Books").
+		Preload("CommonMaterials").
+		First(&character, "id = ?", id).Error
 
 	if err != nil {
 		return character, err
@@ -34,7 +40,12 @@ func (r *GenshinRepository) GetCharacterByID(id string) (genshin.Character, erro
 
 func (r *GenshinRepository) GetCharacterBuild(id string) (genshin.Build, error) {
 	var build genshin.Build
-	err := r.db.First(&build, "character_id = ?", id).Error
+	err := r.db.Preload("Character"). 
+		Preload("Artifacts").         
+		Preload("Weapons").            
+		Preload("Teams").              
+		Preload("Stats").             
+		First(&build, "character_id = ?", id).Error
 
 	if err != nil {
 		return build, err
