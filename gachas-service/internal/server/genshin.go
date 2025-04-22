@@ -6,7 +6,6 @@ import (
 	"gachas-service/internal/dto"
 	"gachas-service/internal/interfaces"
 	pb "gachas-service/proto"
-	"strings"
 )
 
 
@@ -91,18 +90,8 @@ func (s *GenshinServer) GetCharacterBuild(ctx context.Context, req *pb.Character
 			Sands: build.Stats.Sands,
 			Goblet: build.Stats.Goblet,
 			Circlet: build.Stats.Circlet,
-			BestStats: func() []string {
-				if build.Stats.BestStats == "" {
-					return nil
-				}
-				return strings.Split(build.Stats.BestStats, ",")
-			}(),
-			SubStatsPriority: func() []string {
-				if build.Stats.SubStatsPriority == "" {
-					return nil
-				}
-				return strings.Split(build.Stats.SubStatsPriority, ",")
-			}(),
+			BestStats: build.Stats.BestStats,
+			SubStatsPriority: build.Stats.SubStatsPriority,
 		},
 	}
 

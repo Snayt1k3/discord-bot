@@ -123,6 +123,6 @@ message Stats {
   string sands = 1;           // Песочные часы
   string goblet = 2;          // Кубок
   string circlet = 3;         // Циркуль
-  repeated string best_stats = 4;  // Лучшие характеристики
-  repeated string sub_stats_priority = 5; // Приоритет подхарактеристик
+  string best_stats = 4;  // Лучшие характеристики
+  string sub_stats_priority = 5; // Приоритет подхарактеристик
 }
