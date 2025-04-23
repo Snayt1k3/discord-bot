@@ -27,13 +27,13 @@ type GenshinBooks struct {
 	Common   string `json:"common"`
 	Uncommon string `json:"uncommon"`
 	Rare     string `json:"rare"`
+	Weekdays       []string     `json:"weekdays"`
 }
 
 type GenshinTalentMaterials struct {
 	ID             uint       `json:"id"`
 	BossDrops      string       `json:"boss_drops"`
 	Books          GenshinBooks `json:"books"`
-	Weekdays       []string     `json:"weekdays"`
 	TalentPriority string       `json:"talent_priority"`
 }
 

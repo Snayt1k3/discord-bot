@@ -23,6 +23,7 @@ type Books struct {
 	Common   string `json:"common" gorm:"unique;not null"`
 	Uncommon string `json:"uncommon" gorm:"unique;not null"`
 	Rare     string `json:"rare" gorm:"unique;not null"`
+	Weekdays       pq.StringArray `json:"weekdays" gorm:"type:text[]"`
 }
 
 type TalentMaterials struct {
@@ -30,6 +31,5 @@ type TalentMaterials struct {
 	BossDrops      string   `json:"boss_drops" gorm:"not null"`
 	BooksID        uint     `json:"books_id"`
 	Books          Books    `json:"books" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Weekdays       pq.StringArray `json:"weekdays" gorm:"type:text[]"`
 	TalentPriority string   `json:"talent_priority" gorm:"not null"`
 }

@@ -125,8 +125,9 @@ func (s *GenshinServer) GetCharacterById(ctx context.Context, req *pb.CharacterR
 					Common:   character.Talents.Books.Common,
 					Uncommon: character.Talents.Books.Uncommon,
 					Rare:     character.Talents.Books.Rare,
+					Weekdays:        	character.Talents.Books.Weekdays,
 				},
-				Weekdays:        character.Talents.Weekdays,
+				
 				TalentPriority:  character.Talents.TalentPriority,
 			},
 			CommonMaterials: &pb.CommonMaterials{

@@ -74,7 +74,6 @@ message CommonMaterials {
 message TalentMaterials {
   string boss_drops = 1;  // Дропы с боссов
   Books books = 2;        // Книги
-  repeated string weekdays = 3; // Дни недели
   string talent_priority = 4;   // Приоритет талантов
 }
 
@@ -83,6 +82,7 @@ message Books {
   string common = 1;   // Книга общего уровня
   string uncommon = 2; // Книга редкого уровня
   string rare = 3;     // Книга очень редкого уровня
+  repeated string weekdays = 4; // Дни недели
 }
 
 // Ответ на запрос с билдом персонажа

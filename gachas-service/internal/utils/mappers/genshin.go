@@ -92,8 +92,9 @@ func MapCharacterToDTO(character *genshin.Character) dto.GenshinCharacter {
 				Common:   character.Talents.Books.Common,
 				Uncommon: character.Talents.Books.Uncommon,
 				Rare:     character.Talents.Books.Rare,
+				Weekdays: character.Talents.Books.Weekdays,
 			},
-			Weekdays:       character.Talents.Weekdays,
+			
 			TalentPriority: character.Talents.TalentPriority,
 		},
 		CommonMaterials: dto.GenshinCommonMaterials{
