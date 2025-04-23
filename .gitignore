@@ -27,3 +27,5 @@ plugins
 data
 *.pb.go
 .DS_Store
+docker/volumes
+docker/plugins

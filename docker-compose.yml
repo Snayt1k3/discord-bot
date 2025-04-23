@@ -8,9 +8,8 @@ services:
       - SERVER_PORT=2333
       - LAVALINK_SERVER_PASSWORD=$LAVALINK_PASS
     volumes:
-      # mount application.yml from the same directory or use environment variables
-      - ./application.yml:/opt/Lavalink/application.yml
-      - ./plugins/:/opt/Lavalink/plugins/
+      - ./docker/configs/application.yml:/opt/Lavalink/application.yml
+      - ./docker/plugins/:/opt/Lavalink/plugins/
     networks:
       - bot
     expose:
@@ -80,7 +79,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data/pgdata:/var/lib/postgresql/data
+      - ./docker/volumes/pgdata:/var/lib/postgresql/data
     networks:
       - bot
   gachas-db:
@@ -98,7 +97,7 @@ services:
     expose:
       - ${GACHAS_POSTGRES_PORT}
     volumes:
-      - ./data/pggachas:/var/lib/postgresql/data
+      - .docker/volumes/pggachas:/var/lib/postgresql/data
     networks:
       - bot
     command: -p ${GACHAS_POSTGRES_PORT}
@@ -116,7 +115,7 @@ services:
       - REDIS_PASSWORD=$REDIS_PASS
     command: [ "redis-server", "--requirepass", "$REDIS_PASS" ]
     volumes:
-      - ./data/redis_data:/data 
+      - ./docker/volumes/redis_data:/data 
 
 volumes:
   data: 
