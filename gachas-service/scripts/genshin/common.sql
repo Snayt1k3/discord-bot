@@ -47,6 +47,4 @@ VALUES
 (16, 'Juvenile Fang', 'Seasoned Fang', "Tyrant's Fang", NOW(), NOW()),
 
 -- Other
-(17, 'Firm Arrowhead', 'Sharp Arrowhead', "Weathered Arrowhead", NOW(), NOW()),
-(18, 'Whopper­flower Nectar', 'Shimmering Nectar', "Energy Nectar", NOW(), NOW()),
-(19, 'Sli­me Con­den­sate', 'Slime Secretions', "Sli­me Con­cen­trate", NOW(), NOW());
+(17, 'Firm Arrowhead', 'Sharp Arrowhead', "Weathered Arrowhead", NOW(), NOW());

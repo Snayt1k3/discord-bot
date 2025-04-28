@@ -49,7 +49,6 @@ func MapArtifactsToDTO(artifacts []genshin.Artifact) []dto.GenshinArtifact {
 		artifactsDTO[i] = dto.GenshinArtifact{
 			ID:             artifact.ID,
 			Name:           artifact.Name,
-			Set:            artifact.Set,
 			TwoPieceBonus:  artifact.TwoPieceBonus,
 			FourPieceBonus: artifact.FourPieceBonus,
 		}

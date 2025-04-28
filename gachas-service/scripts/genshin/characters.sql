@@ -23,32 +23,32 @@ VALUES
 (7, "Fischl", "Electro", "Bow", "ATK%", "Mondstadt", 4, 72, 7, 17, NOW(), NOW())
 (8, "Jean", "Anemo", "Sword", "Healing Bonus%", "Mondstadt", 5, 73, 8, 1, NOW(), NOW())
 (9, "Kaeya", "Cryo", "Sword", "Energy Recharge%", "Mondstadt", 4, 74, 9, 4, NOW(), NOW())
-(10, "Keqing", "Electro", "Sword", "CRIT DMG%", "Liyue", 5, 50, 10, 18, NOW(), NOW())
+(10, "Keqing", "Electro", "Sword", "CRIT DMG%", "Liyue", 5, 50, 10, 6, NOW(), NOW())
 (11, "Klee", "Pero", "Catalyst", "Pyro DMG Bonus%", "Mondstadt", 5, 75, 11, 2, NOW(), NOW())
-(12, "Lisa", "Electro", "Catalyst", "Elemental Mastery", "Mondstadt", 4, 76, 12, 19, NOW(), NOW())
-(13, "Mona", "Hydro", "Catalyst", "Energy Recharge%", "Mondstadt", 5, 78, 13, 18, NOW(), NOW())
+(12, "Lisa", "Electro", "Catalyst", "Elemental Mastery", "Mondstadt", 4, 76, 12, 3, NOW(), NOW())
+(13, "Mona", "Hydro", "Catalyst", "Energy Recharge%", "Mondstadt", 5, 78, 13, 6, NOW(), NOW())
 (14, "Ningguang", "Geo", "Catalyst", "Geo DMG Bonus%", "Liyue", 4, 52, 14, 5, NOW(), NOW())
 (15, "Noelle", "Geo", "Claymore", "DEF%", "Mondstadt", 4, 79, 15, 1, NOW(), NOW())
 (16, "Qiqi", "Cryo", "Sword", "Healing Bonus%", "Liyue", 5, 53, 16, 2, NOW(), NOW())
 (17, "Razor", "Electro", "Claymore", "Physical DMG Bonus%", "Mondstadt", 4, 80, 17, 1, NOW(), NOW())
-(18, "Sucrose", "Anemo", "Catalyst", "Anemo DMG Bonus%", "Mondstadt", 4, 82, 18, 18, NOW(), NOW())
-(19, "Venti", "Anemo", "Bow", "Energy Recharge%", "Mondstadt", 5, 83, 19, 19, NOW(), NOW())
-(20, "Xiangling", "Pyro", "Polearm", "Elemental Mastery", "Liyue", 4, 55, 20, 19, NOW(), NOW())
+(18, "Sucrose", "Anemo", "Catalyst", "Anemo DMG Bonus%", "Mondstadt", 4, 82, 18, 6, NOW(), NOW())
+(19, "Venti", "Anemo", "Bow", "Energy Recharge%", "Mondstadt", 5, 83, 19, 3, NOW(), NOW())
+(20, "Xiangling", "Pyro", "Polearm", "Elemental Mastery", "Liyue", 4, 55, 20, 3, NOW(), NOW())
 (21, "Xingqiu", "Hydro", "Sword", "ATK%", "Liyue", 4, 58, 21, 1, NOW(), NOW())
 
 -- Patch: 1.1
 (22, "Diona", "Cryo", "Bow", "Cryo DMG Bonus%", "Mondstadt", 4, 70, 22, 17, NOW(), NOW())
 (23, "Tartaglia", "Hydro", "Bow", "Hydro DMG Bonus%", "Snezhnaya", 5, 85, 23, 5, NOW(), NOW())
 (24, "Xinyan", "Pyro", "Claymore", "ATK%", "Liyue", 4, 59, 24, 4, NOW(), NOW())
-(25, "Zhongli", "Geo", "Polearm", "Geo DMG Bonus%", "Liyue", 5, 64, 25, 19, NOW(), NOW())
+(25, "Zhongli", "Geo", "Polearm", "Geo DMG Bonus%", "Liyue", 5, 64, 25, 3, NOW(), NOW())
 
 -- Patch: 1.2
 (26, "Albedo", "Geo", "Polearm", "Geo DMG Bonus%", "Mondstadt", 5, 65, 26, 2, NOW(), NOW())
-(27, "Ganyu", "Cryo", "Bow", "CRIT DMG%", "Liyue", 5, 48, 27, 18, NOW(), NOW())
+(27, "Ganyu", "Cryo", "Bow", "CRIT DMG%", "Liyue", 5, 48, 27, 6, NOW(), NOW())
 
 -- Patch: 1.3
-(28, "Hu Tao", "Pyro", "Polearm", "CRIT DMG%", "Liyue", 5, 49, 28, 18, NOW(), NOW())
-(29, "Xiao", "Anemo", "Polearm", "CRIT Rate%", "Liyue", 5, 57, 29, 19, NOW(), NOW())
+(28, "Hu Tao", "Pyro", "Polearm", "CRIT DMG%", "Liyue", 5, 49, 28, 6, NOW(), NOW())
+(29, "Xiao", "Anemo", "Polearm", "CRIT Rate%", "Liyue", 5, 57, 29, 3, NOW(), NOW())
 
 -- Patch: 1.4
 (30, "Rosaria", "Cryo", "Polearm", "ATK%", "Mondstadt", 4, 81, 30, 5, NOW(), NOW())
@@ -62,7 +62,7 @@ VALUES
 
 -- Patch: 2.0
 (34, "Kamisato Ayaka", "Cryo", "Sword", "CRIT DMG%", "Inazuma", 5, 17, 34, 8, NOW(), NOW())
-(35, "Sayu", "Anemo", "Claymore", "Elemental Mastery", "Inazuma", 4, 24, 35, 18, NOW(), NOW())
+(35, "Sayu", "Anemo", "Claymore", "Elemental Mastery", "Inazuma", 4, 24, 35, 6, NOW(), NOW())
 (36, "Yoimiya", "Pyro", "Bow", "CRIT Rate%", "Inazuma", 5, 28, 36, 2, NOW(), NOW())
 
 -- Patch: 2.1

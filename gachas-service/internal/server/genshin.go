@@ -50,7 +50,6 @@ func (s *GenshinServer) GetCharacterBuild(ctx context.Context, req *pb.Character
 			for _, a := range build.Artifacts {
 				arts = append(arts, &pb.Artifact{
 					Name:           a.Name,
-					Set:            a.Set,
 					TwoPieceBonus:  a.TwoPieceBonus,
 					FourPieceBonus: a.FourPieceBonus,
 				})

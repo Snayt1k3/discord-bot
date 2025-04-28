@@ -62,7 +62,6 @@ type GenshinBuild struct {
 type GenshinArtifact struct {
 	ID             uint `json:"id"`
 	Name           string `json:"name"`
-	Set            string `json:"set"`
 	TwoPieceBonus  string `json:"two_piece_bonus"`
 	FourPieceBonus string `json:"four_piece_bonus"`
 }

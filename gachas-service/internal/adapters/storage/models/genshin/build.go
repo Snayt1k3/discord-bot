@@ -12,13 +12,13 @@ type Build struct {
 	Artifacts   []Artifact `json:"artifacts" gorm:"many2many:build_artifacts;"`
 	Weapons     []Weapon   `json:"weapons" gorm:"many2many:build_weapons;"`
 	Teams       []Team     `json:"teams" gorm:"many2many:build_teams;"`
-	Stats       Stats      `json:"stats"`
+	StatsId		 uint       `json:"stats_id" gorm:"not null"`
+	Stats       Stats      `json:"stats" gorm:"foreignKey:StatsId"`
 }
 
 type Artifact struct {
 	gorm.Model
 	Name           string `json:"name" gorm:"unique;not null"`
-	Set            string `json:"set"`
 	TwoPieceBonus  string `json:"two_piece_bonus"`
 	FourPieceBonus string `json:"four_piece_bonus"`
 }
@@ -46,7 +46,6 @@ type Stats struct {
 	Circlet          string `json:"circlet" gorm:"not null"`
 	BestStats        string `json:"best_stats" gorm:"not null"`
 	SubStatsPriority string `json:"sub_stats_priority" gorm:"not null"`
-	BuildID          uint   `json:"build_id" gorm:"unique"`
 }
 
 type BuildWeapon struct {

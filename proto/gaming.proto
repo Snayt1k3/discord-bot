@@ -103,9 +103,8 @@ message Build {
 // Артефакты персонажа
 message Artifact {
   string name = 1;           // Имя артефакта
-  string set = 2;            // Набор артефакта
-  string two_piece_bonus = 3; // Бонус от 2-х частей набора
-  string four_piece_bonus = 4; // Бонус от 4-х частей набора
+  string two_piece_bonus = 2; // Бонус от 2-х частей набора
+  string four_piece_bonus = 3; // Бонус от 4-х частей набора
 }
 
 // Оружие персонажа
