@@ -4,10 +4,10 @@ import (
 	"bot/internal/discord"
 	"bot/internal/interfaces"
 	"fmt"
-	"github.com/bwmarrin/discordgo"
 	"log/slog"
 	"strconv"
 	"strings"
+	"github.com/bwmarrin/discordgo"
 )
 
 const (
@@ -229,7 +229,7 @@ func (gh *GenshinHandlers) showCharacterAscension(s *discordgo.Session, i *disco
 			URL: "https://i.pinimg.com/736x/d2/96/83/d29683ce9223109447fb6a57ef9f7e3a.jpg",
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "Raiden Shogun • Full Ascension & Talent Materials",
+			Text: character.Name + " • Full Ascension & Talent Materials",
 		},
 	}
 
@@ -302,7 +302,7 @@ func (gh *GenshinHandlers) showCharacterTalents(s *discordgo.Session, i *discord
 			URL: "https://i.pinimg.com/736x/0b/18/e8/0b18e8acbf645b7b227689f33785d5c3.jpg",
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "Raiden Shogun • Talent Level-Up Costs",
+			Text: character.Name + " • Talent Level-Up Costs",
 		},
 	}
 
@@ -325,6 +325,7 @@ func (gh *GenshinHandlers) showCharacterTalents(s *discordgo.Session, i *discord
 func (gh *GenshinHandlers) showCharacterWeapons(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	_, id, _ := strings.Cut(i.MessageComponentData().CustomID, "_")
 	parsedID, err := strconv.ParseUint(id, 10, 32)
+	
 	if err != nil {
 		slog.Error("Error parsing character ID", "err", err)
 		return discord.SendErrorMessage(s, i)
@@ -337,14 +338,25 @@ func (gh *GenshinHandlers) showCharacterWeapons(s *discordgo.Session, i *discord
 		return discord.SendErrorMessage(s, i)
 	}
 
-	var Fields []*discordgo.MessageEmbedField
+	var fields []*discordgo.MessageEmbedField
 
 	for _, weapon := range build.Weapons {
-		Fields = append(Fields, &discordgo.MessageEmbedField{
-			Name:  weapon.Name,
-			Value: fmt.Sprintf("⭐ %v\n- %v\n- %v", weapon.Rarity, weapon.SubStat, weapon.Passive),
-		})
+		fieldValue := fmt.Sprintf(
+			"⭐ **Rarity:** %d★\n" +
+			"🗡️ **Base ATK:** %d\n" +
+			"📈 **Substat:** %s (+%.1f%%)\n" +
+			"✨ **Passive:** %s",
+			weapon.Rarity,
+			weapon.BaseATK,
+			weapon.SubStat,
+			weapon.SubValue,
+			weapon.Passive,
+		)
 
+		fields = append(fields, &discordgo.MessageEmbedField{
+			Name:  weapon.Name,
+			Value: fieldValue,
+		})
 	}
 
 	embed := &discordgo.MessageEmbed{
@@ -354,7 +366,7 @@ func (gh *GenshinHandlers) showCharacterWeapons(s *discordgo.Session, i *discord
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
 			URL: "https://i.pinimg.com/736x/77/97/d7/7797d737a3a35630f6ce321b1a00fc20.jpg",
 		},
-		Fields: Fields,
+		Fields: fields,
 		Image: &discordgo.MessageEmbedImage{
 			URL: "https://i.pinimg.com/736x/d2/96/83/d29683ce9223109447fb6a57ef9f7e3a.jpg",
 		},
@@ -437,6 +449,7 @@ func (gh *GenshinHandlers) showCharacterTeams(s *discordgo.Session, i *discordgo
 func (gh *GenshinHandlers) showCharacterArtifacts(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	_, id, _ := strings.Cut(i.MessageComponentData().CustomID, "_")
 	parsedID, err := strconv.ParseUint(id, 10, 32)
+	
 	if err != nil {
 		slog.Error("Error parsing character ID", "err", err)
 		return discord.SendErrorMessage(s, i)
@@ -449,14 +462,30 @@ func (gh *GenshinHandlers) showCharacterArtifacts(s *discordgo.Session, i *disco
 		return discord.SendErrorMessage(s, i)
 	}
 
-	var Fields []*discordgo.MessageEmbedField
+	var fields []*discordgo.MessageEmbedField
 
 	for _, artifact := range build.Artifacts {
-		Fields = append(Fields, &discordgo.MessageEmbedField{
+		fields = append(fields, &discordgo.MessageEmbedField{
 			Name:  artifact.Name,
 			Value: fmt.Sprintf("2-piece: %v \n 4-piece: %v", artifact.TwoPieceBonus, artifact.FourPieceBonus),
 		})
 	}
+
+	stats := build.Stats
+	fields = append(fields, &discordgo.MessageEmbedField{
+		Name:  "Main Stats",
+		Value: fmt.Sprintf(
+			"🏺 Sands: **%s**\n🍷 Goblet: **%s**\n👑 Circlet: **%s**",
+			stats.Sands,
+			stats.Goblet,
+			stats.Circlet,
+		),
+	})
+
+	fields = append(fields, &discordgo.MessageEmbedField{
+		Name:  "Substat Priority",
+		Value: stats.SubStatsPriority,
+	})
 
 	embed := &discordgo.MessageEmbed{
 		Title:       build.Character.Name + " — Artifact Guide",
@@ -465,7 +494,7 @@ func (gh *GenshinHandlers) showCharacterArtifacts(s *discordgo.Session, i *disco
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
 			URL: "https://i.pinimg.com/736x/77/97/d7/7797d737a3a35630f6ce321b1a00fc20.jpg",
 		},
-		Fields: Fields,
+		Fields: fields,
 		Image: &discordgo.MessageEmbedImage{
 			URL: "https://i.pinimg.com/736x/d2/96/83/d29683ce9223109447fb6a57ef9f7e3a.jpg",
 		},
@@ -573,7 +602,7 @@ func (gh *GenshinHandlers) AddGenshinHandlers(handlers map[string]func(s *discor
 	handlers["GenshinCharacters"] = gh.showCharacters
 	handlers["genshinPagination"] = gh.genshinPagination
 	handlers["GenshinCharacter"] = gh.showCharacterInfo
-	handlers["GenshinAsc"] = gh.showCharacterAscension
+	handlers["GenshinAscension"] = gh.showCharacterAscension
 	handlers["GenshinArtifacts"] = gh.showCharacterArtifacts
 	handlers["GenshinTalents"] = gh.showCharacterTalents
 	handlers["GenshinWeapons"] = gh.showCharacterWeapons

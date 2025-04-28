@@ -19,7 +19,7 @@ func genshinButtons(id uint) []discordgo.MessageComponent {
 				},
 				discordgo.Button{
 					Label:    "Ascension",
-					CustomID: fmt.Sprintf("GenshinAsc_%s", id),
+					CustomID: fmt.Sprintf("GenshinAscension_%v", id),
 					Style:    discordgo.SecondaryButton,
 					Emoji: &discordgo.ComponentEmoji{
 						Name: "⬆️",
@@ -27,7 +27,7 @@ func genshinButtons(id uint) []discordgo.MessageComponent {
 				},
 				discordgo.Button{
 					Label:    "Talents",
-					CustomID: fmt.Sprintf("GenshinTalents_%s", id),
+					CustomID: fmt.Sprintf("GenshinTalents_%v", id),
 					Style:    discordgo.SecondaryButton,
 					Emoji: &discordgo.ComponentEmoji{
 						Name: "📘",
@@ -35,7 +35,7 @@ func genshinButtons(id uint) []discordgo.MessageComponent {
 				},
 				discordgo.Button{
 					Label:    "Artifacts",
-					CustomID: fmt.Sprintf("GenshinArtifacts_%s", id),
+					CustomID: fmt.Sprintf("GenshinArtifacts_%v", id),
 					Style:    discordgo.SecondaryButton,
 					Emoji: &discordgo.ComponentEmoji{
 						Name: "🛠️",
@@ -47,7 +47,7 @@ func genshinButtons(id uint) []discordgo.MessageComponent {
 			Components: []discordgo.MessageComponent{
 				discordgo.Button{
 					Label:    "Weapons",
-					CustomID: fmt.Sprintf("GenshinWeapons_%s", id),
+					CustomID: fmt.Sprintf("GenshinWeapons_%v", id),
 					Style:    discordgo.SecondaryButton,
 					Emoji: &discordgo.ComponentEmoji{
 						Name: "⚔️",
@@ -55,7 +55,7 @@ func genshinButtons(id uint) []discordgo.MessageComponent {
 				},
 				discordgo.Button{
 					Label:    "Teams",
-					CustomID: fmt.Sprintf("GenshinTeams_%s", id),
+					CustomID: fmt.Sprintf("GenshinTeams_%v", id),
 					Style:    discordgo.SecondaryButton,
 					Emoji: &discordgo.ComponentEmoji{
 						Name: "👥",
@@ -63,7 +63,7 @@ func genshinButtons(id uint) []discordgo.MessageComponent {
 				},
 				discordgo.Button{
 					Label:    "Overview",
-					CustomID: fmt.Sprintf("GenshinOverview_%s", id),
+					CustomID: fmt.Sprintf("GenshinOverview_%v", id),
 					Style:    discordgo.SecondaryButton,
 					Emoji: &discordgo.ComponentEmoji{
 						Name: "📖",

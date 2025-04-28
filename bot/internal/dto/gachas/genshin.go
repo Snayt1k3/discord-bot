@@ -3,10 +3,8 @@ package dto
 type GenshinCharacterBrief struct {
 	ID         uint   `json:"id"`
 	Name       string `json:"name"`
-	WeaponType string `json:"weapon_type"`
 	Element    string `json:"element"`
 	Region     string `json:"region"`
-	Rarity     int    `json:"rarity"`
 }
 
 type GenshinCommonMaterials struct {

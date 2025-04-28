@@ -61,6 +61,7 @@ message Character {
 message AscensionMaterials {
   string local_specialty = 1; // Местные материалы
   string boss_drops = 2;      // Дропы с боссов
+  string gem = 3;             // Камни    
 }
 
 // Общие материалы для персонажа

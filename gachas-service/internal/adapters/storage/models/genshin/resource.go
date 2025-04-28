@@ -14,6 +14,7 @@ type CommonMaterials struct {
 
 type AscensionMaterials struct {
 	gorm.Model
+	Gem 		   string `json:"gem" gorm:"not null"`
 	LocalSpecialty string `json:"local_specialty" gorm:"not null"`
 	BossDrops      string `json:"boss_drops" gorm:"not null"`
 }
