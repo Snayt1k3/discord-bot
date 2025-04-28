@@ -93,6 +93,6 @@ func showGachas(data dtoDiscord.HandlerData) error {
 
 func AddHandlers(handlers map[string]func(dtoDiscord.HandlerData) error) {
 	genshin.AddGenshinHandlers(handlers)
-
+	
 	handlers["gachas"] = showGachas
 }

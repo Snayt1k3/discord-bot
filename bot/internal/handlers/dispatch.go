@@ -2,6 +2,7 @@ package handlers
 
 import (
 	dtoDiscord "bot/internal/dto/discord"
+	"bot/internal/handlers/gachas/genshin"
 	"bot/internal/handlers/gachas"
 	"bot/internal/handlers/settings"
 	"bot/internal/interfaces"
@@ -14,6 +15,7 @@ import (
 type CommandsDispatcher struct {
 	guildKeeper interfaces.GuildKeeperInterface
 	handlers    map[string]func(data dtoDiscord.HandlerData) error
+	genshinHandlers genshin.GenshinHandlers
 }
 
 func NewCommandsDispatcher(gk interfaces.GuildKeeperInterface) *CommandsDispatcher {

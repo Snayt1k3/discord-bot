@@ -5,7 +5,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func genshinButtons(name string) []discordgo.MessageComponent {
+func genshinButtons(id uint) []discordgo.MessageComponent {
 	return []discordgo.MessageComponent{
 		discordgo.ActionsRow{
 			Components: []discordgo.MessageComponent{
@@ -19,7 +19,7 @@ func genshinButtons(name string) []discordgo.MessageComponent {
 				},
 				discordgo.Button{
 					Label:    "Ascension",
-					CustomID: fmt.Sprintf("GenshinAsc_%s", name),
+					CustomID: fmt.Sprintf("GenshinAsc_%s", id),
 					Style:    discordgo.SecondaryButton,
 					Emoji: &discordgo.ComponentEmoji{
 						Name: "⬆️",
@@ -27,7 +27,7 @@ func genshinButtons(name string) []discordgo.MessageComponent {
 				},
 				discordgo.Button{
 					Label:    "Talents",
-					CustomID: fmt.Sprintf("GenshinTalents_%s", name),
+					CustomID: fmt.Sprintf("GenshinTalents_%s", id),
 					Style:    discordgo.SecondaryButton,
 					Emoji: &discordgo.ComponentEmoji{
 						Name: "📘",
@@ -35,7 +35,7 @@ func genshinButtons(name string) []discordgo.MessageComponent {
 				},
 				discordgo.Button{
 					Label:    "Artifacts",
-					CustomID: fmt.Sprintf("GenshinArtifacts_%s", name),
+					CustomID: fmt.Sprintf("GenshinArtifacts_%s", id),
 					Style:    discordgo.SecondaryButton,
 					Emoji: &discordgo.ComponentEmoji{
 						Name: "🛠️",
@@ -47,7 +47,7 @@ func genshinButtons(name string) []discordgo.MessageComponent {
 			Components: []discordgo.MessageComponent{
 				discordgo.Button{
 					Label:    "Weapons",
-					CustomID: fmt.Sprintf("GenshinWeapons_%s", name),
+					CustomID: fmt.Sprintf("GenshinWeapons_%s", id),
 					Style:    discordgo.SecondaryButton,
 					Emoji: &discordgo.ComponentEmoji{
 						Name: "⚔️",
@@ -55,7 +55,7 @@ func genshinButtons(name string) []discordgo.MessageComponent {
 				},
 				discordgo.Button{
 					Label:    "Teams",
-					CustomID: fmt.Sprintf("GenshinTeams_%s", name),
+					CustomID: fmt.Sprintf("GenshinTeams_%s", id),
 					Style:    discordgo.SecondaryButton,
 					Emoji: &discordgo.ComponentEmoji{
 						Name: "👥",
@@ -63,7 +63,7 @@ func genshinButtons(name string) []discordgo.MessageComponent {
 				},
 				discordgo.Button{
 					Label:    "Overview",
-					CustomID: fmt.Sprintf("GenshinOverview_%s", name),
+					CustomID: fmt.Sprintf("GenshinOverview_%s", id),
 					Style:    discordgo.SecondaryButton,
 					Emoji: &discordgo.ComponentEmoji{
 						Name: "📖",
