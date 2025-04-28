@@ -6,5 +6,5 @@ var (
 	artifactsEmojis  = map[string]string{}
 	talentsEmojis    = map[string]string{}
 	ascensionEmojis  = map[string]string{}
-	images 			 = map[string]string{}
+	images           = map[string]string{}
 )

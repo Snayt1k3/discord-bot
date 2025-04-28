@@ -4,17 +4,16 @@ import (
 	"bot/internal/discord"
 	"bot/internal/interfaces"
 	"fmt"
-	"log/slog"
-	"strings"
-	"strconv"
 	"github.com/bwmarrin/discordgo"
+	"log/slog"
+	"strconv"
+	"strings"
 )
 
 const (
 	rowSize       = 2
 	buttonsPerRow = 4
 )
-
 
 type GenshinHandlers struct {
 	adapter interfaces.GachasAdapter
@@ -114,10 +113,10 @@ func (gh *GenshinHandlers) showCharacterInfo(s *discordgo.Session, i *discordgo.
 		slog.Error("Error fetching character info", "err", err)
 		return discord.SendErrorMessage(s, i)
 	}
-	
+
 	embed := discordgo.MessageEmbed{
-		Title:       character.Name,
-		Color:       0x9b59b6,
+		Title: character.Name,
+		Color: 0x9b59b6,
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
 			URL: "https://i.pinimg.com/736x/77/97/d7/7797d737a3a35630f6ce321b1a00fc20.jpg",
 		},
@@ -264,7 +263,7 @@ func (gh *GenshinHandlers) showCharacterTalents(s *discordgo.Session, i *discord
 		slog.Error("Error fetching character info", "err", err)
 		return discord.SendErrorMessage(s, i)
 	}
-	
+
 	embed := &discordgo.MessageEmbed{
 		Title:       "📘 Talent Materials — " + character.Name,
 		Description: fmt.Sprintf("Resources required to level up all three of %v talents to Lv. 10.", character.Name),
@@ -337,7 +336,7 @@ func (gh *GenshinHandlers) showCharacterWeapons(s *discordgo.Session, i *discord
 		slog.Error("Error fetching character info", "err", err)
 		return discord.SendErrorMessage(s, i)
 	}
-	
+
 	var Fields []*discordgo.MessageEmbedField
 
 	for _, weapon := range build.Weapons {
@@ -399,10 +398,10 @@ func (gh *GenshinHandlers) showCharacterTeams(s *discordgo.Session, i *discordgo
 
 	for _, team := range build.Teams {
 		Fields = append(Fields, &discordgo.MessageEmbedField{
-			Name:  team.Characters[0].Name + " + " + team.Characters[1].Name + " + " + team.Characters[2].Name + " + " + team.Characters[3].Name,
+			Name: team.Characters[0].Name + " + " + team.Characters[1].Name + " + " + team.Characters[2].Name + " + " + team.Characters[3].Name,
 		})
 	}
-	
+
 	embed := &discordgo.MessageEmbed{
 		Title:       build.Character.Name + " — Best Team Compositions",
 		Description: fmt.Sprintf("Top team compositions for %v, including elemental reactions and synergy.", build.Character.Name),
@@ -458,7 +457,7 @@ func (gh *GenshinHandlers) showCharacterArtifacts(s *discordgo.Session, i *disco
 			Value: fmt.Sprintf("2-piece: %v \n 4-piece: %v", artifact.TwoPieceBonus, artifact.FourPieceBonus),
 		})
 	}
-	
+
 	embed := &discordgo.MessageEmbed{
 		Title:       build.Character.Name + " — Artifact Guide",
 		Description: fmt.Sprintf("Top artifact sets for different %v builds.\nChoose based on your team and role preferences.", build.Character.Name),
@@ -492,7 +491,7 @@ func (gh *GenshinHandlers) showCharacterArtifacts(s *discordgo.Session, i *disco
 
 }
 
-func (gh *GenshinHandlers) genshinPagination(s *discordgo.Session, i *discordgo.InteractionCreate) error{
+func (gh *GenshinHandlers) genshinPagination(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	_, pageStr, _ := strings.Cut(i.MessageComponentData().CustomID, "_")
 	page, _ := strconv.Atoi(pageStr)
 

@@ -14,9 +14,9 @@ type GachasAdapter struct {
 	client interfaces.HttpClient
 }
 
-func NewGachasAdapter(client interfaces.HttpClient) *GachasAdapter {
+func NewGachasAdapter() *GachasAdapter {
 	return &GachasAdapter{
-		client: client,
+		client: NewDefaultHttpClient(),
 	}
 }
 
@@ -30,7 +30,7 @@ func (ga *GachasAdapter) GetGenshinCharacters() ([]dtoGachas.GenshinCharacterBri
 	if err != nil {
 		return nil, err
 	}
-	
+
 	defer resp.Body.Close()
 
 	var characters []dtoGachas.GenshinCharacterBrief

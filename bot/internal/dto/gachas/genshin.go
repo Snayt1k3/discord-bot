@@ -1,7 +1,7 @@
 package dto
 
 type GenshinCharacterBrief struct {
-	ID         uint `json:"id"`
+	ID         uint   `json:"id"`
 	Name       string `json:"name"`
 	WeaponType string `json:"weapon_type"`
 	Element    string `json:"element"`
@@ -10,36 +10,36 @@ type GenshinCharacterBrief struct {
 }
 
 type GenshinCommonMaterials struct {
-	ID       uint `json:"id"`
+	ID       uint   `json:"id"`
 	Common   string `json:"common"`
 	Uncommon string `json:"uncommon"`
 	Rare     string `json:"rare"`
 }
 
 type GenshinAscensionMaterials struct {
-	ID             uint `json:"id"`
+	ID             uint   `json:"id"`
 	LocalSpecialty string `json:"local_specialty"`
-	Gem          	 string `json:"gem"`
+	Gem            string `json:"gem"`
 	BossDrops      string `json:"boss_drops"`
 }
 
 type GenshinBooks struct {
-	ID       uint `json:"id"`
-	Common   string `json:"common"`
-	Uncommon string `json:"uncommon"`
-	Rare     string `json:"rare"`
-	Weekdays       []string     `json:"weekdays"`
+	ID       uint     `json:"id"`
+	Common   string   `json:"common"`
+	Uncommon string   `json:"uncommon"`
+	Rare     string   `json:"rare"`
+	Weekdays []string `json:"weekdays"`
 }
 
 type GenshinTalentMaterials struct {
-	ID             uint       `json:"id"`
+	ID             uint         `json:"id"`
 	BossDrops      string       `json:"boss_drops"`
 	Books          GenshinBooks `json:"books"`
 	TalentPriority string       `json:"talent_priority"`
 }
 
 type GenshinCharacter struct {
-	ID              uint                    `json:"id"`
+	ID              uint                      `json:"id"`
 	Name            string                    `json:"name"`
 	WeaponType      string                    `json:"weapon_type"`
 	Element         string                    `json:"element"`
@@ -52,7 +52,7 @@ type GenshinCharacter struct {
 }
 
 type GenshinBuild struct {
-	ID        uint            `json:"id"`
+	ID        uint              `json:"id"`
 	Character GenshinCharacter  `json:"character"`
 	Teams     []GenshinTeam     `json:"teams"`
 	Artifacts []GenshinArtifact `json:"artifacts"`
@@ -61,15 +61,14 @@ type GenshinBuild struct {
 }
 
 type GenshinArtifact struct {
-	ID             uint `json:"id"`
+	ID             uint   `json:"id"`
 	Name           string `json:"name"`
-	Set            string `json:"set"`
 	TwoPieceBonus  string `json:"two_piece_bonus"`
 	FourPieceBonus string `json:"four_piece_bonus"`
 }
 
 type GenshinWeapon struct {
-	ID       uint  `json:"id"`
+	ID       uint    `json:"id"`
 	Name     string  `json:"name"`
 	Type     string  `json:"type"`
 	Rarity   int     `json:"rarity"`
@@ -80,7 +79,7 @@ type GenshinWeapon struct {
 }
 
 type GenshinStats struct {
-	ID               uint `json:"id"`
+	ID               uint   `json:"id"`
 	Sands            string `json:"sands"`
 	Goblet           string `json:"goblet"`
 	Circlet          string `json:"circlet"`
@@ -89,6 +88,6 @@ type GenshinStats struct {
 }
 
 type GenshinTeam struct {
-	ID         uint             `json:"id"`
+	ID         uint               `json:"id"`
 	Characters []GenshinCharacter `json:"characters"`
 }

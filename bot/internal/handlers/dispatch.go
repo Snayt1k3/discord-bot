@@ -1,44 +1,50 @@
 package handlers
 
 import (
-	dtoDiscord "bot/internal/dto/discord"
 	"bot/internal/handlers/gachas/genshin"
-	"bot/internal/handlers/gachas"
-	"bot/internal/handlers/settings"
+	"bot/internal/handlers/guild"
 	"bot/internal/interfaces"
+	"github.com/bwmarrin/discordgo"
 	"log/slog"
 	"strings"
-
-	"github.com/bwmarrin/discordgo"
 )
 
 type CommandsDispatcher struct {
 	guildKeeper interfaces.GuildKeeperInterface
-	handlers    map[string]func(data dtoDiscord.HandlerData) error
+	handlers    map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error
+
+	guildHandlers   guild.GuildPreferencesHandlers
 	genshinHandlers genshin.GenshinHandlers
 }
 
-func NewCommandsDispatcher(gk interfaces.GuildKeeperInterface) *CommandsDispatcher {
-	return &CommandsDispatcher{guildKeeper: gk, handlers: map[string]func(data dtoDiscord.HandlerData) error{}}
+func NewCommandsDispatcher(guildKeeper interfaces.GuildKeeperInterface, gachaAdapter interfaces.GachasAdapter) *CommandsDispatcher {
+	return &CommandsDispatcher{
+		guildKeeper:     guildKeeper,
+		handlers:        map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error{},
+		guildHandlers:   *guild.NewSettingsHandlers(guildKeeper),
+		genshinHandlers: *genshin.NewGenshinHandlers(gachaAdapter),
+	}
 }
 
 func (cd *CommandsDispatcher) InitHandlers() {
 	cd.handlers["help"] = HelpHandler
+	cd.handlers["gachas"] = ShowSupportedGachas
 
-	gachas.AddHandlers(cd.handlers)
-	settings.AddSettingsHandlers(cd.handlers)
+	cd.guildHandlers.AddSettingsHandlers(cd.handlers)
+	cd.genshinHandlers.AddGenshinHandlers(cd.handlers)
 }
 
 func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	slog.Info("Startuing handle interaction", "type", i.Type)
+	slog.Info("Starting handle interaction", "type", i.Type)
 
 	var name string
-	data := dtoDiscord.HandlerData{Event: i, Session: s, Gk: cd.guildKeeper}
 
 	switch i.Type {
 
 	case discordgo.InteractionMessageComponent:
 		name, _, _ = strings.Cut(i.MessageComponentData().CustomID, "_")
+		// logic Name_1: after underscore it's an id or some useful info
+		// only for buttons
 
 	default:
 		name = i.ApplicationCommandData().Name
@@ -48,7 +54,7 @@ func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.Intera
 
 	if handler, ok := cd.handlers[name]; ok {
 
-		if err := handler(data); err != nil {
+		if err := handler(s, i); err != nil {
 			slog.Error("Error handling command", "err", err, "name", name)
 		}
 

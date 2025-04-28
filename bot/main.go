@@ -16,11 +16,14 @@ func main() {
 	config.Load()
 	discord.InitDiscordBot()
 
+	// init deps
 	guildKeeper := adapters.NewServiceSettingsClient()
-	dispatcher := handlers.NewCommandsDispatcher(guildKeeper)
-	dispatcher.InitHandlers()
+	gachasAdapter := adapters.NewGachasAdapter()
 
+	// init handlers/commands
+	dispatcher := handlers.NewCommandsDispatcher(guildKeeper, gachasAdapter)
 	eventHandlers := handlers.NewEventHandlers(guildKeeper, discord.CommandsList)
+	dispatcher.InitHandlers()
 
 	addHandlers(dispatcher, eventHandlers)
 
