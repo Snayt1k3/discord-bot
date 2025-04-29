@@ -4,16 +4,10 @@ package gachas;
 
 option go_package = "proto/";
 
-// Сервис для работы с персонажами и их билдами
 service GenshinService {
-    // Получение списка всех персонажей
     rpc GetAllCharacters (Empty) returns (CharacterListResponse);
-
-    // Получение расширенной информации по персонажу по его ID
     rpc GetCharacterById (CharacterRequest) returns (CharacterDetailResponse);
-
-    // Получение билда персонажа по его ID
-    rpc GetCharacterBuild (CharacterRequest) returns (BuildResponse);
+    rpc GetCharacterBuild (CharacterRequest) returns (BuildListResponse);
 }
 
 // Пустое сообщение для запроса без параметров
@@ -27,6 +21,10 @@ message CharacterRequest {
 // Ответ на запрос списка всех персонажей
 message CharacterListResponse {
   repeated CharacterShort characters = 1; // Список персонажей
+}
+
+message BuildListResponse {
+  repeated Build builds = 1; // Список персонажей
 }
 
 // Краткая информация о персонаже
@@ -86,10 +84,6 @@ message Books {
   repeated string weekdays = 4; // Дни недели
 }
 
-// Ответ на запрос с билдом персонажа
-message BuildResponse {
-  Build build = 1; // Билд персонажа
-}
 
 // Билд персонажа
 message Build {

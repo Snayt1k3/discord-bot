@@ -5,13 +5,13 @@ import (
 	"gachas-service/internal/dto"
 )
 
-func MapBuildToDTO(build *genshin.Build) *dto.GenshinBuild {
-	return &dto.GenshinBuild{
+func MapBuildToDTO(build genshin.Build) dto.GenshinBuild {
+	return dto.GenshinBuild{
 		ID:        build.ID,
-		Character: MapCharacterToDTO(&build.Character),
+		Character: MapCharacterToDTO(build.Character),
 		Teams:     MapTeamsToDTO(build.Teams),
 		Artifacts: MapArtifactsToDTO(build.Artifacts),
-		Stats:     MapStatsToDTO(&build.Stats),
+		Stats:     MapStatsToDTO(build.Stats),
 		Weapons:   MapWeaponsToDTO(build.Weapons),
 	}
 }
@@ -32,7 +32,7 @@ func MapWeaponsToDTO(weapons []genshin.Weapon) []dto.GenshinWeapon {
 	return weaponsDto
 }
 
-func MapStatsToDTO(stats *genshin.Stats) dto.GenshinStats {
+func MapStatsToDTO(stats genshin.Stats) dto.GenshinStats {
 	return dto.GenshinStats{
 		ID:               stats.ID,
 		Sands:            stats.Sands,
@@ -64,13 +64,13 @@ func MapTeamsToDTO(teams []genshin.Team) []dto.GenshinTeam {
 			Characters: make([]dto.GenshinCharacter, len(team.Characters)),
 		}
 		for j, character := range team.Characters {
-			teamsDTO[i].Characters[j] = MapCharacterToDTO(&character)
+			teamsDTO[i].Characters[j] = MapCharacterToDTO(character)
 		}
 	}
 	return teamsDTO
 }
 
-func MapCharacterToDTO(character *genshin.Character) dto.GenshinCharacter {
+func MapCharacterToDTO(character genshin.Character) dto.GenshinCharacter {
 	return dto.GenshinCharacter{
 		ID:         character.ID,
 		Name:       character.Name,
@@ -106,7 +106,7 @@ func MapCharacterToDTO(character *genshin.Character) dto.GenshinCharacter {
 	}
 }
 
-func MapCharacterBriefToDTO(character *genshin.Character) dto.GenshinCharacterBrief {
+func MapCharacterBriefToDTO(character genshin.Character) dto.GenshinCharacterBrief {
 	return dto.GenshinCharacterBrief{
 		ID:         character.ID,
 		Name:       character.Name,

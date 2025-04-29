@@ -11,6 +11,6 @@ func GachaRoutes(r *gin.Engine, hands *handlers.GachaHandlers) {
 	// Genshin Impact
 	gacha.GET("/genshin/character", hands.GetGenshinCharacters)
 	gacha.GET("/genshin/character/:character_id", hands.GetGenshinCharacterByID)
-	gacha.GET("/genshin/character/build/:character_id", hands.GetGenshinCharacterBuild)
+	gacha.GET("/genshin/character/:character_id/builds", hands.GetGenshinCharacterBuild)
 
 }

@@ -11,33 +11,36 @@ type GenshinService struct {
 	repository interfaces.RepoInterface[genshin.Character, genshin.Build]
 }
 
-func (s *GenshinService) GetCharacterByID(id string) (*dto.GenshinCharacter, error) {
+func (s *GenshinService) GetCharacterByID(id string) (dto.GenshinCharacter, error) {
 	data, err := s.repository.GetCharacterByID(id)
 
 	if err != nil {
-		return nil, err
+		return dto.GenshinCharacter{}, err
 	}
 
-	dto := mappers.MapCharacterToDTO(&data)
+	dto := mappers.MapCharacterToDTO(data)
 
-	return &dto, nil
+	return dto, nil
 
 }
 
-func (s *GenshinService) GetCharacterBuild(id string) (*dto.GenshinBuild, error) {
+func (s *GenshinService) GetCharacterBuilds(id string) ([]dto.GenshinBuild, error) {
 
-	buildData, err := s.repository.GetCharacterBuild(id)
+	buildData, err := s.repository.GetCharacterBuilds(id)
 
 	if err != nil {
 		return nil, err
 	}
+	var builds []dto.GenshinBuild
 
-	buildDto := mappers.MapBuildToDTO(&buildData)
+	for _, build := range buildData {
+		builds = append(builds, mappers.MapBuildToDTO(build))
+	}
 
-	return buildDto, nil
+	return builds, nil
 }
 
-func (s *GenshinService) GetCharacters() (*[]dto.GenshinCharacterBrief, error) {
+func (s *GenshinService) GetCharacters() ([]dto.GenshinCharacterBrief, error) {
 
 	characters, err := s.repository.GetCharacters()
 
@@ -47,9 +50,9 @@ func (s *GenshinService) GetCharacters() (*[]dto.GenshinCharacterBrief, error) {
 	var characterBriefs []dto.GenshinCharacterBrief
 
 	for _, character := range characters {
-		characterBriefs = append(characterBriefs, mappers.MapCharacterBriefToDTO(&character))
+		characterBriefs = append(characterBriefs, mappers.MapCharacterBriefToDTO(character))
 	}
-	return &characterBriefs, nil
+	return characterBriefs, nil
 }
 
 func NewGenshinService(repo interfaces.RepoInterface[genshin.Character, genshin.Build]) *GenshinService {
