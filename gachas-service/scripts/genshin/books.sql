@@ -60,9 +60,9 @@ VALUES
 -- Mona
 (13, "Ring of Boreas", 2, "", NOW(), NOW())
 -- Ningguang
-(14, "Spirit Locket of Boreas", 4, "", NOW(), NOW())
+(14, "Spirit Locket of Boreas", 4, "Q(Burst) > NA(Normal Attack) > E(Skill)", NOW(), NOW())
 -- Noelle
-(15, "Dvalin's Claw", 2, "", NOW(), NOW())
+(15, "Dvalin's Claw", 2, "NA(Normal Attack) > Q(Burst) > E(Skill)", NOW(), NOW())
 -- Qiqi
 (16, "Tail of Boreas", 4, "", NOW(), NOW())
 -- Razor
@@ -82,9 +82,9 @@ VALUES
 -- Xinyan
 (24, "Tusk of Mo­no­ceros Caeli", 6, "", NOW(), NOW())
 -- Zhongli
-(25, "Tusk of Mo­no­ceros Caeli", 6, "", NOW(), NOW())
+(25, "Tusk of Mo­no­ceros Caeli", 6, "E(Skill) > Q(Burst)> NA(Normal Attack)", NOW(), NOW())
 -- Albedo
-(26, "Tusk of Mo­no­ceros Caeli", 3, "", NOW(), NOW())
+(26, "Tusk of Mo­no­ceros Caeli", 3, "E(Skill) > Q(Burst) > NA(Normal Attack)", NOW(), NOW())
 -- Ganyu
 (27, "Shadow of the Warrior", 5, "", NOW(), NOW())
 -- Hu Tao
@@ -115,12 +115,12 @@ VALUES
 (41, "Hell­fire But­ter­fly", 7, "", NOW(), NOW()) -- Thoma
 
 -- Patch: 2.3
-(42, "Ashen Heart", 8, "", NOW(), NOW()) -- Itto
-(43, "Molten Moment", 9, "", NOW(), NOW()) -- Gorou
+(42, "Ashen Heart", 8, "NA(Normal Attack) > Q(Burst) > E(Skill)", NOW(), NOW()) -- Itto
+(43, "Molten Moment", 9, "E(Skill) > Q(Burst) > NA(Normal Attack)", NOW(), NOW()) -- Gorou
 
 -- Patch: 2.4
 (44, "Hell­fire But­ter­fly", 4, "", NOW(), NOW()) -- Shenhe
-(45, "Ashen Heart", 5, "", NOW(), NOW()) -- Yun Jin
+(45, "Ashen Heart", 5, "Q(Burst) > E(Skill) > NA(Normal Attack)", NOW(), NOW()) -- Yun Jin
 
 -- Patch: 2.5
 (46, "The Meaning of Aeons", 9, "", NOW(), NOW()) -- Yae miko
@@ -136,9 +136,9 @@ VALUES
 (50, "The Meaning of Aeons", 7, "", NOW(), NOW()) -- Heizou
 
 -- Patch: 3.0
-(51, "Tears of the Calami­tous God", 12, "", NOW(), NOW()) -- Collei
+(51, "Tears of the Calami­tous God", 12, "Q(Burst) > E(Skill) > NA(Normal Attack)", NOW(), NOW()) -- Collei
 (52, "Blood­jade Branch", 11, "", NOW(), NOW()) -- Dori
-(53, "The Meaning of Aeons", 10, "", NOW(), NOW()) -- Tighnari
+(53, "The Meaning of Aeons", 10, "NA(Normal Attack) > Q(Burst) > E(Skill)", NOW(), NOW()) -- Tighnari
 
 -- Patch: 3.1
 (54, "Tears of the Calami­tous God", 10, "", NOW(), NOW()) -- Candace
@@ -147,26 +147,26 @@ VALUES
 
 -- Patch: 3.2
 (57, "Mirror of Mushin", 11, "", NOW(), NOW()) -- Layla
-(58, "Puppet Strings", 11, "", NOW(), NOW()) -- Nahida
+(58, "Puppet Strings", 11, "E(Skill) > Q(Burst) > NA(Normal Attack)", NOW(), NOW()) -- Nahida
 
 -- Patch: 3.3
 (59, "Puppet Strings", 10, "", NOW(), NOW()) -- Faruzan
 (60, "Daka's Bell", 12, "", NOW(), NOW()) -- Wanderer
 
 -- Patch: 3.4
-(61, "Mirror of Mushin", 11, "", NOW(), NOW()) -- Alhaitham
-(62, "Daka's Bell", 5, "", NOW(), NOW()) -- Yaoyao
+(61, "Mirror of Mushin", 11, "E(Skill) > NA(Normal Attack) > Q(Burst)", NOW(), NOW()) -- Alhaitham
+(62, "Daka's Bell", 5, "Q(Burst) > E(Skill) > NA(Normal Attack)", NOW(), NOW()) -- Yaoyao
 
 -- Patch: 3.5
 (63, "Puppet Strings", 12, "", NOW(), NOW()) -- Dehya
 (64, "Mirror of Mushin", 3, "", NOW(), NOW()) -- Mika
 
 -- Patch: 3.6
-(65, "World­span Fern", 6, "", NOW(), NOW()) -- Baizhu
+(65, "World­span Fern", 6, "Q(Burst) > E(Skill) > NA(Normal Attack)", NOW(), NOW()) -- Baizhu
 (66, "Primor­dial Green­bloom", 11, "", NOW(), NOW()) -- Kaveh
 
 -- Patch: 3.7
-(67, "Ever­amber", 7, "", NOW(), NOW()) -- Kirara
+(67, "Ever­amber", 7, "E(Skill) > Q(Burst) > NA(Normal Attack)", NOW(), NOW()) -- Kirara
 
 -- Patch: 4.0
 (68, "World­span Fern", 13, "", NOW(), NOW()) -- Freminet
@@ -183,14 +183,14 @@ VALUES
 
 -- Patch: 4.3
 (75, "Light­less Eye of the Mael­strom", 15, "", NOW(), NOW()), -- Chevreuse
-(76, "Light­less Silk String", 14, "", NOW(), NOW()), -- Navia
+(76, "Light­less Silk String", 14, "E(Skill) > Q(Burst) > NA(Normal Attack)", NOW(), NOW()), -- Navia
 
 -- Patch: 4.4
 (77, "Light­less Mass", 4, "", NOW(), NOW()), -- Gaming
 (78, "Light­less Eye of the Mael­strom", 6, "", NOW(), NOW()), -- Xianyun
 
 -- Patch: 4.5
-(79, "Light­less Silk String", 9, "", NOW(), NOW()), -- Chiori
+(79, "Light­less Silk String", 9, "E(Skill) > Q(Burst) > NA(Normal Attack)", NOW(), NOW()), -- Chiori
 
 -- Patch: 4.6
 (80, "Fading Candle", 15, "", NOW(), NOW()), -- Arlecchino
@@ -201,15 +201,15 @@ VALUES
 (83, "Light­less Eye of the Mael­strom", 14, "", NOW(), NOW()), -- Sigewinne
 
 -- Patch: 4.8
-(84, "Silken Feather", 15, "", NOW(), NOW()) -- Emilie
+(84, "Silken Feather", 15, "E(Skill) > Q(Burst) > NA(Normal Attack)", NOW(), NOW()) -- Emilie
 
 -- Patch: 5.0
-(85, "Fading Candle", 18, "", NOW(), NOW()), -- Kachina
-(86, "De­nial and Judg­ment", 17, "", NOW(), NOW()), -- Kinich
+(85, "Fading Candle", 18, "E(Skill) > Q(Burst) > NA(Normal Attack)", NOW(), NOW()), -- Kachina
+(86, "De­nial and Judg­ment", 17, "E(Skill) > Q(Burst) > NA(Normal Attack)", NOW(), NOW()), -- Kinich
 (87, "Light­less Mass", 16, "", NOW(), NOW()), -- Mualani
 
 -- Patch: 5.1
-(88, "Mirror of Mushin", 17, "", NOW(), NOW()), -- Xilonen
+(88, "Mirror of Mushin", 17, "E(Skill) > Q(Burst) > NA(Normal Attack)", NOW(), NOW()), -- Xilonen
 
 -- Patch: 5.2
 (89, "Silken Feather", 18, "", NOW(), NOW()), -- Chasca

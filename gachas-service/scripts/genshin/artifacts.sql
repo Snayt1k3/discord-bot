@@ -252,6 +252,30 @@ VALUES
         'Unfinished Reverie',
         '2 Piece: ATK +18%',
         '4 Piece: After leaving combat for 3s, DMG dealt increased by 50%. In combat, if no Burning opponents are nearby for more than 6s, this DMG Bonus will decrease by 10% per second until it reaches 0%. When a Burning opponent exists, it will increase by 10% instead until it reaches 50%. This effect still triggers if the equipping character is off-field.'
+    ),
+    (
+        43,
+        "Retracing Bolide",
+        "Increases Shield Strength by 35%."
+        "While protected by a shield, gain an additional 40% Normal and Charged Attack DMG."
+    ),
+    (
+        44,
+        "Archaic Petra",
+        "Gain a 15% Geo DMG Bonus.",
+        "Upon obtaining an Elemental Shard created through a Crystallize Reaction, all party members gain a 35% DMG Bonus for that particular element for 10s. Only one form of Elemental DMG Bonus can be gained in this manner at any one time."
+    ),
+    (
+        45,
+        "Scroll of the Hero of Cinder City",
+        "When a nearby party member triggers a Nightsoul Burst, the equipping character regenerates 6 Elemental Energy.",
+        "After the equipping character triggers a reaction related to their Elemental Type, all nearby party members gain a 12% Elemental DMG Bonus for the Elemental Types involved in the elemental reaction for 15s. If the equipping character is in the Nightsoul's Blessing state when triggering this effect, all nearby party members gain an additional 28% Elemental DMG Bonus for the Elemental Types involved in the elemental reaction for 20s. The equipping character can trigger this effect while off-field, and the DMG bonus from Artifact Sets with the same name do not stack."
+    )
+    (
+        46, 
+        "Obsidian Codex",
+        "While the equipping character is in Nightsoul's Blessing and is on the field, their DMG dealt is increased by 15%.",
+        "After the equipping character consumes 1 Nightsoul point while on the field, CRIT Rate increases by 40% for 6s. This effect can trigger once every second.",
     )
 
 
@@ -260,7 +284,29 @@ INSERT INTO build_artifacts (
     artifact_id,
     priority
 ) VALUES
--- Example:
--- (1, 5, 1), -- build_id 1, artifact_id 5, priority 1
--- (1, 7, 2)  -- build_id 1, artifact_id 7, priority 2
+
+-- Geo
+(1, 27, 1), (1, 43, 2), (1, 14, 3), (1, 37, 4),  -- Noelle
+(2, 40, 1), (2, 27, 2), (2, 26, 3),  -- Ninguang
+(3, 44, 1), (3, 45, 2),-- Zhongli
+(4, 27, 1), (4, 28, 2),  -- Albedo
+(5, 16, 1),  -- Gorou
+(6, 27, 1), (6, 33, 2), (6, 43, 3),  -- Itto
+(7, 27, 1), (8, 16, 2),  -- Yun Jin
+(8, 40, 1), (8, 38, 2), (8, 37, 3),  -- Navia
+(9, 38, 1), (9, 27, 2),  -- Chiori
+(10, 45, 1),  -- Kachina
+(11, 45, 1), (11, 44, 2),  -- Xilonen
+
+-- Dendro
+(12, 15, 1), (12, 32, 2), -- Tighnari
+(13, 31, 1), (13, 16, 2), (13, 23, 3), (14, 7, 4), -- Collei
+(14, 31, 1), (14, 32, 2), (14, 38, 3), -- Nahida
+(15, 31, 1), (15, 23, 2), (15, 7, 3), -- yaoyao
+(16, 32, 1), (16, 31, 2), -- Alhaitam
+(17, 31, 1), (17, 34, 2), (17, 7, 3), -- kaveh
+(18, 31, 1), (18, 7, 2), (18, 16, 3), -- Baizhu
+(19, 7, 1), (19, 31, 2), (19, 16, 3), -- Kirara
+(20, 42, 1), (20, 31, 2), (20, 38, 3), -- Emilie
+(21, 46, 1), (21, 42, 2), (21, 38, 3), -- Kinich
 ;
