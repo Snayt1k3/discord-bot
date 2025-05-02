@@ -270,43 +270,107 @@ VALUES
         "Scroll of the Hero of Cinder City",
         "When a nearby party member triggers a Nightsoul Burst, the equipping character regenerates 6 Elemental Energy.",
         "After the equipping character triggers a reaction related to their Elemental Type, all nearby party members gain a 12% Elemental DMG Bonus for the Elemental Types involved in the elemental reaction for 15s. If the equipping character is in the Nightsoul's Blessing state when triggering this effect, all nearby party members gain an additional 28% Elemental DMG Bonus for the Elemental Types involved in the elemental reaction for 20s. The equipping character can trigger this effect while off-field, and the DMG bonus from Artifact Sets with the same name do not stack."
-    )
+    ),
     (
         46, 
         "Obsidian Codex",
         "While the equipping character is in Nightsoul's Blessing and is on the field, their DMG dealt is increased by 15%.",
         "After the equipping character consumes 1 Nightsoul point while on the field, CRIT Rate increases by 40% for 6s. This effect can trigger once every second.",
+    ),
+    (
+        47,
+        "Blizzard Strayer",
+        "Cryo DMG Bonus +15%",
+        "When a character attacks an opponent affected by Cryo, their CRIT Rate is increased by 20%. If the opponent is Frozen, CRIT Rate is increased by an additional 20%."
+    ),
+    (
+        48,
+        "Crimson Witch of Flames",
+        "Pyro DMG Bonus +15%",
+        "Increases Overloaded, Burning, and Burgeon DMG by 40%. Increases Vaporize and Melt DMG by 15%. Using Elemental Skill increases the 2-Piece Set Bonus by 50% of its starting value for 10s. Max 3 stacks."
     )
 
 
 INSERT INTO build_artifacts (
     build_id,
     artifact_id,
-    priority
+    priority,
+    set_group
 ) VALUES
 
 -- Geo
-(1, 27, 1), (1, 43, 2), (1, 14, 3), (1, 37, 4),  -- Noelle
-(2, 40, 1), (2, 27, 2), (2, 26, 3),  -- Ninguang
-(3, 44, 1), (3, 45, 2),-- Zhongli
-(4, 27, 1), (4, 28, 2),  -- Albedo
-(5, 16, 1),  -- Gorou
-(6, 27, 1), (6, 33, 2), (6, 43, 3),  -- Itto
-(7, 27, 1), (8, 16, 2),  -- Yun Jin
-(8, 40, 1), (8, 38, 2), (8, 37, 3),  -- Navia
-(9, 38, 1), (9, 27, 2),  -- Chiori
-(10, 45, 1),  -- Kachina
-(11, 45, 1), (11, 44, 2),  -- Xilonen
+(1, 27, 1, 2), (1, 43, 2, 2), (1, 14, 3, 2), (1, 37, 4, 2),  -- Noelle
+(2, 40, 1, 2), (2, 27, 2, 2), (2, 26, 3, 2),  -- Ninguang
+(3, 44, 1, 2), (3, 45, 2, 2), -- Zhongli
+(4, 27, 1, 2), (4, 28, 2, 2),  -- Albedo
+(5, 16, 1, 2),  -- Gorou
+(6, 27, 1, 2), (6, 33, 2, 2), (6, 43, 3, 2),  -- Itto
+(7, 27, 1, 2), (8, 16, 2, 2),  -- Yun Jin
+(8, 40, 1, 2), (8, 38, 2, 2), (8, 37, 3, 2),  -- Navia
+(9, 38, 1, 2), (9, 27, 2, 2),  -- Chiori
+(10, 45, 1, 2),  -- Kachina
+(11, 45, 1, 2), (11, 44, 2, 2),  -- Xilonen
 
 -- Dendro
-(12, 15, 1), (12, 32, 2), -- Tighnari
-(13, 31, 1), (13, 16, 2), (13, 23, 3), (14, 7, 4), -- Collei
-(14, 31, 1), (14, 32, 2), (14, 38, 3), -- Nahida
-(15, 31, 1), (15, 23, 2), (15, 7, 3), -- yaoyao
-(16, 32, 1), (16, 31, 2), -- Alhaitam
-(17, 31, 1), (17, 34, 2), (17, 7, 3), -- kaveh
-(18, 31, 1), (18, 7, 2), (18, 16, 3), -- Baizhu
-(19, 7, 1), (19, 31, 2), (19, 16, 3), -- Kirara
-(20, 42, 1), (20, 31, 2), (20, 38, 3), -- Emilie
-(21, 46, 1), (21, 42, 2), (21, 38, 3), -- Kinich
+(12, 15, 1, 2), (12, 32, 2, 2), -- Tighnari
+(13, 31, 1, 2), (13, 16, 2, 2), (13, 23, 3, 2), (14, 7, 4, 2), -- Collei
+(14, 31, 1, 2), (14, 32, 2, 2), (14, 38, 3, 2), -- Nahida
+(15, 31, 1, 2), (15, 23, 2, 2), (15, 7, 3, 2), -- Yaoyao
+(16, 32, 1, 2), (16, 31, 2, 2), -- Alhaitham
+(17, 31, 1, 2), (17, 34, 2, 2), (17, 7, 3, 2), -- Kaveh
+(18, 31, 1, 2), (18, 7, 2, 2), (18, 16, 3, 2), -- Baizhu
+(19, 7, 1, 2), (19, 31, 2, 2), (19, 16, 3, 2), -- Kirara
+(20, 42, 1, 2), (20, 31, 2, 2), (20, 38, 3, 2), -- Emilie
+(21, 46, 1, 2), (21, 42, 2, 2), (21, 38, 3, 2), -- Kinich
+
+-- Cryo
+(22, 23, 1, 2), (22, 45, 2, 2), -- Qiqi
+(23, 47, 1, 2), (23, 26, 2, 2), -- Kaeya
+(24, 16, 1, 2), (24, 26, 2, 2), (24, 45, 3, 2), -- Chongyun
+(25, 16, 1, 2), (25, 45, 2, 2), -- Diona
+(26, 15, 1, 2), (26, 25, 2, 2), (26, 32, 3, 2), -- Ganyu
+(27, 16, 1, 2), (27, 7, 2, 2), -- Rosaria
+(28, 24, 1, 2), (28, 14, 2, 2), -- Eula
+(29, 47, 1, 2), (29, 37, 2, 2), -- Ayaka
+(30, 47, 1, 2), (30, 26, 2, 2), (30, 16, 3, 2), -- Aloy
+(31, 16, 1, 2),  -- Shenhe
+(32, 32, 1, 2), (32, 45, 2, 2), (32, 16, 3, 2), -- Layla
+(33, 16, 1, 2), -- Mika
+(34, 24, 1, 2), (34, 38, 2, 2), (34, 14, 3, 2), (34, 37, 4, 2),  -- Freminet
+(35, 37, 1, 2), (35, 25, 2, 2), (35, 32, 3, 2), -- Wriothesley
+(36, 16, 1, 2), (36, 23, 2, 2), -- Charlotte
+(37, 45, 1, 2), (37, 23, 2, 2), (27, 7, 3, 2), -- Citlali
+
+-- Pyro
+(38, 26, 1, 2), (38, 48, 2, 2), (38, 32, 3, 2), -- Xiangling
+(39, 21, 1, 2), (39, 48, 2, 2), (39, 25, 3, 2), -- Klee
+(40, 48, 1, 2), (40, 14, 2, 2), -- Diluc
+(41, 16, 1, 2), (41, 7, 2, 2), -- Bennett
+(42, 16, 1, 2), (42, 7, 2, 2), -- Amber
+(43, 23, 1, 2), (43, 27, 2, 2), -- Xinyan
+(44, 48, 1, 2), (44, 25, 2, 2), (44, 32, 3, 2), -- Hutao 
+(45, 48, 1, 2), (45, 32, 2, 2), (45, 15, 3, 2), -- Yanfei
+(46, 25, 1, 2), (46, 48, 2, 2), (46, 32, 3, 2), -- Yoimiya
+(47, 16, 1, 2), (47, 7, 2, 2), (47, 31, 3, 2), -- Thoma
+(48, 26, 1, 2), (48, 36, 2, 2), (48, 21, 3, 2), (48, 48, 4, 2), -- Dehya
+(49, 37, 1, 2), (49, 21, 2, 2), (49, 29, 3, 2), (49, 25, 4, 2), -- Lyney
+(50, 16, 1, 2), (50, 45, 2, 2), -- Chevreuse
+(51, 48, 1, 2), (51, 37, 2, 2), (51, 32, 3, 2), -- Gaming
+(52, 41, 1, 2), (52, 14, 2, 2), -- Arlecchino
+(53, 46, 1, 2), (53, 45, 2, 2), -- Mavuika
+
+-- Hydro
+(54, 26, 1, 2), (54, 16, 2, 2), -- Xingqiu
+(55, 26, 1, 2), (55, 16, 2, 2), -- Mona
+(56, 45, 1, 2), (56, 7, 2, 2), -- Barbara
+(57, 35, 1, 2), (57, 22, 2, 2), -- Tartaglia
+(58, 23, 1, 2), -- Kokomi
+(59, 30, 1, 2), (59, 14, 2, 2), (59, 22, 3, 2), -- Ayato 
+(60, 26, 1, 2), -- Yelan
+(61, 45, 1, 2), (61, 26, 2, 2), -- Candace
+(62, 36, 1, 1), (62, 23, 2, 1), -- Nilou
+(63, 37, 1, 2), (63, 22, 2, 2), -- Neuvillette
+(64, 38, 1, 2), -- Furina
+(65, 36, 1, 1), (65, 23, 2, 1), -- Sigewinne
+(66, 46, 1, 2), (66, 22, 2, 2), -- Mualani
 ;

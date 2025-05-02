@@ -26,10 +26,61 @@ INSERT INTO builds (
 (62, 15, "HEAL SUPPORT", NOW(), NOW()), -- Yaoyao
 (61, 16, "SPREAD DPS", NOW(), NOW()), -- Alhaitam
 (66, 17, "BLOOM / BURGEON DRIVER", NOW(), NOW()) -- Kaveh
-(65, 18, "HEAL SUPPORT", NOW(), NOW()) -- Baizhu
+(65, 18, "SUPPORT", NOW(), NOW()) -- Baizhu
 (67, 19, "Support", NOW(), NOW()) -- Kirara
 (84, 20, "OFF-FIELD DPS", NOW(), NOW()) -- Emilie
 (85, 21, "DPS", NOW(), NOW()) -- Kinich
+
+-- Cryo Characters builds
+(16, 22, "SUPPORT", NOW(), NOW()) -- Qiqi
+(9, 23, "DPS", NOW(), NOW()) -- Kaeya
+(5, 24, "SUPPORT", NOW(), NOW()) -- Chongyun
+(22, 25, "SUPPORT", NOW(), NOW()) -- Diona
+(27, 26, "DPS", NOW(), NOW()), -- Ganyu
+(30, 27, "SUPPORT", NOW(), NOW()), -- Rosaria
+(31, 28, "DPS", NOW(), NOW()), -- Eula
+(34, 29, "DPS", NOW(), NOW()), -- Ayaka
+(37, 30, "BURST DPS", NOW(), NOW()), -- Aloy
+(44, 31, "BUFF SUPPORT", NOW(), NOW()), -- Shenhe
+(57, 32, "SUPPORT", NOW(), NOW()), -- Layla
+(64, 33, "SUPPORT", NOW(), NOW()), -- Mika
+(68, 34, "PHYSICAL DPS", NOW(), NOW()), -- Freminet
+(72, 35, "MELT DPS", NOW(), NOW()), -- Wriothesley
+(73, 36, "HEAL SUPPORT", NOW(), NOW()), -- Charlotte
+(91, 37, "BUFF SUPPORT", NOW(), NOW()), -- Citlali
+
+-- Pyro characters builds
+(20, 38, "OFF-FIELD VAPORIZE DPS", NOW(), NOW()), -- Xiangling
+(11, 39, "DPS", NOW(), NOW()), -- Klee
+(6, 40, "DPS", NOW(), NOW()), -- Diluc
+(4, 41, "SUPPORT", NOW(), NOW()), -- Bennett
+(1, 42, "BUFF", NOW(), NOW()), -- Amber
+(24, 43, "SHIELD SUPPORT", NOW(), NOW()) -- Xinyan
+(28, 44, "DPS", NOW(), NOW()) -- Hu tao
+(32, 45, "DPS",  NOW(), NOW()) -- Yanfei
+(36, 46, "DPS", NOW(), NOW()), -- Yoimiya
+(41, 47, "SHIELD SUPPORT", NOW(), NOW()), -- Thoma
+(63, 48, "DPS", NOW(), NOW()), -- Dehya
+(70, 49, "DPS", NOW(), NOW()), -- Lyney
+(75, 50, "BUFF", NOW(), NOW()), --Chevreuse
+(77, 51, "DPS", NOW(), NOW()), -- Gaming
+(80, 52, "DPS", NOW(), NOW()), -- Arlecchino
+(93, 53, "DPS", NOW(), NOW()), -- Mavuika
+
+-- Hydro characters
+(21, 54, "OFF-FIELD DPS", NOW(), NOW()), -- Xingqiu
+(13, 55, "SUPPORT", NOW(), NOW()), -- Mona
+(2, 56, "HEAL SUPPORT", NOW(), NOW()), -- Barbara
+(23, 57, "DPS",  NOW(), NOW()), -- Tartaglia
+(40, 58, "SUPPORT", NOW(), NOW()), -- Kokomi
+(47, 59, "DPS", NOW(), NOW()), -- Ayato
+(49, 60, "OFF-FIELD DPS", NOW(), NOW()), -- Yelan
+(54, 61, "SUPPORT", NOW(), NOW()), -- Candace
+(56, 62, "BLOOM SUPPORT", NOW(), NOW()), -- Nilou
+(71, 63, "DPS", NOW(), NOW()), -- Neuvillette
+(74, 64, "SUPPORT", NOW(), NOW()), -- Furina
+(83, 65, "HEAL", NOW(), NOW()), -- Sigewinne
+(87, 66, "DPS",  NOW(), NOW()), -- Mualani
 ;
 
 INSERT INTO stats (
@@ -63,4 +114,55 @@ INSERT INTO stats (
 (19, "HP% / Energy Recharge", "HP%", "HP% / CRIT Rate", "1.Energy Recharge 2.HP% 3.CRIT Rate") -- Kirara
 (20, "ATK%", "Dendro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Energy Recharge") -- Emilie
 (21, "ATK%", "Dendro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Energy Recharge") -- Kinich
+
+-- Cryo Characters stats
+(22, "ATK% / Energy Recharge", "ATK%", "Healing Bonus / ATK%", "1.ATK% 2.Energy Recharge 3.ATK% 4.CRIT Rate 5.DEF%"), -- Qiqi
+(23, "ATK%", "Cryo DMG Bonus", "CRIT DMG", "1.CRIT DMG 2.ATK% 3.Energy Recharge 4.CRIT Rate"), -- Kaeya
+(24, "ATK% / Energy Recharge / Elemental Mastery", "ATK% / Energy Recharge / Elemental Mastery", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Elemental Mastery 5.Energy Recharge") -- Chonguyn
+(25, "Energy Recharge / HP%", "HP%", "HP% / Healing Bonus", "1.Energy Recharge 2.HP% 3.CRIT Rate 4.HP%"), -- Diona
+(26, "Elemental Mastery / ATK%", "Cryo DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.Elemental Mastery 4.ATK%"), -- Ganyu
+(27, "ATK% / Energy Recharge", "Cryo DMG Bonus", "CRIT Rate", "1.CRIT Rate 2.Energy Recharge 3.CRIT DMG 4.ATK%"),
+(28, "ATK%", "Physical DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.Energy Recharge 4.ATK%"), -- Eula
+(29, "ATK%", "Cryo DMG Bonus", "CRIT DMG / ATK%", "1.CRIT DMG 2.ATK% 3.Energy Recharge 4.CRIT Rate") -- Ayaka
+(30, "ATK% / Elemental Mastery", "Cryo DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Elemental Mastery 5.Energy Recharge") -- Aloy
+(31, "ATK% / Energy Recharge", "ATK%", "ATK%", "1.Energy Recharge 2.ATK% 3.CRIT Rate 4.CRIT DMG") -- Shenhe
+(32, "HP% / Energy Recharge", "HP%", "HP% / CRIT Rate", "1.Energy Recharge 2.HP% 3.CRIT Rate 4.HP")
+(33, "Energy Recharge / HP%", "HP%", "Healing Bonus / CRIT Rate", "1.Energy Recharge 2.CRIT Rate 3.HP%")
+(34, "ATK%", "Physical DMG Bonus", "CRIT Rate / CRIT DMG", "1.Energy Recharge 2.CRIT Rate 3.CRIT DMG 4.ATK%"), -- Freminet
+(35, "ATK% / Elemental Mastery", "Cryo DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.Crit DMG 3.ATK% 4.Elemental Mastery") -- Wriothesley
+(36, "Energy Recharge / ATK%", "ATK%", "Healing Bonus / ATK% / CRIT Rate", "1.Energy Recharge 2.ATK% 3.CRIT Rate 4.ATK% 5.CRIT DMG") -- Charlotte
+(37, "Elemental Mastery / Energy Recharge", "Elemental Mastery", "Elemental Mastery / CRIT Rate", "1.Energy Recharge 2.Elemental Mastery 3.CRIT Rate") -- Citlali
+
+-- Pyro stats
+(38, "Energy Recharge / ATK% / Elemental Mastery", "Pyro DMG Bonus", "CRIT Rate / CRIT DMG", "1.Energy Recharge 2.CRIT Rate 3.CRIT DMG 4.ATK% 5.Elemental Mastery") -- Xiangling
+(39, "ATK%", "Pyro DMG Bonus", "CRIT Rate / CRIT DMG", "1.Energy Recharge 2.CRIT Rate 3.CRIT DMG 4.ATK% 5.Elemental Mastery") -- Klee
+(40, "Elemental Mastery / ATK%", "Pyro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Elemental Mastery 5.Energy Recharge") -- Diluc
+(41, "Energy Recharge / HP%", "HP%", "Healing Bonus / HP%", "1.Energy Recharge 2.HP%") -- Bennett
+(42, "Energy Recharge / ATK%", "Pyro DMG Bonus", "CRIT Rate / CRIT DMG", "1.Energy Recharge 2.CRIT Rate 3.CRIT DMG 4.ATK% 5.Elemental Mastery") --  Amber
+(43, "DEF% / Energy Recharge", "DEF%", "DEF%", "1.Energy Recharge 2.ATK% 3.DEF% 4.CRIT Rate 5.CRIT DMG") -- Xinyan
+(44, "HP% / Elemental Mastery", "Pyro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.Elemental Mastery 4.HP% 5.ATK%") --Hutao
+(45, "ATK% / Elemental Mastery", "Pyro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Elemental Mastery 5.Energy Recharge") -- Yanfei
+(46, "ATK% / Elemental Mastery", "Pyro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Elemental Mastery 5.Energy Recharge") -- Yoimiya
+(47, "Energy Recharge / HP%", "HP%", "HP% / CRIT Rate", "1.Energy Recharge 2.HP% 3.CRIT Rate") -- Thoma
+(48, "ATK% / Energy Recharge", "Pyro DMG Bonus", "CRIT Rate / CRIT DMG", "1.Energy Recharge 2.CRIT Rate 3.CRIT DMG 4.ATK% 5.Elemental Mastery 6.HP%") -- Dehya
+(49, "ATK%", "Pyro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Energy Recharge"), -- Lyney
+(50, "HP% / Energy Recharge", "HP%", "HP%", "1.Energy Recharge 2.HP% 3.CRIT Rate") -- Chevreuse
+(51, "Elemental Mastery / ATK% / Energy Recharge", "Pyro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.Elemental Mastery 4.ATK%") -- Gaming
+(52, "ATK% / Elemental Mastery", "Pyro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.Elemental Mastery 4.ATK%"), -- Arlecchino
+(53, "ATK% / Elemental Mastery", "Pyro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Elemental Mastery"), -- Mavuika
+
+-- Hydro
+(54, "Energy Recharge / ATK%", "Hydro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Energy Recharge"), -- Xingqiu
+(55, "ATK% / Energy Recharge / Elemental Mastery", "Hydro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.Energy Recharge 4.ATK% 5.Elemental Mastery"), -- Mona
+(56, "HP%", "HP%", "Healing Bonus", "1.HP%"), -- Barbara
+(57, "ATK%", "Hydro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Elemental Mastery 5.Energy Recharge"), -- Tartaglia
+(58, "Energy Recharge / HP%", "HP%", "Healing Bonus / HP%", "1.Energy Recharge 2.HP%"), -- Kokomi,\
+(59, "ATK%", "Hydro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK%") -- Ayato
+(60, "Energy Recharge / HP%", "Hydro DMG Bonus / HP%", "CRIT Rate / CRIT DMG / HP%", "1.Energy Recharge 2.HP% 3.CRIT Rate 4.CRIT DMG"), -- Yelan
+(61, "Energy Recharge / HP%", "HP% / Hydro DMG Bonus", "HP% / CRIT Rate / CRIT DMG", "1.Energy Recharge 2.CRIT Rate 3.HP%"), -- Candace
+(62, "HP%", "HP%", "HP%", "1.HP% 2.Elemental Mastery 3.Energy Recharge"), -- Nilou
+(63, "HP%", "Hydro DMG Bonus / HP%", "CRIT Rate / CRIT DMG / HP%", "1.CRIT Rate 2.Crit DMG 3.HP%"), -- Neuvillette    
+(64, "Energy Recharge / HP%", "HP% / Hydro DMG Bonus", "CRIT Rate / CRIT DMG", "1.Energy Recharge 2.HP% 3.CRIT Rate 4.Crit DMG"), -- Furina
+(65, "HP%", "HP%", "HP%", "1.HP% 2.Energy Recharge"), -- Sigewinne
+(66, "HP% / Elemental Mastery", "Hydro DMG Bonus", "CRIT Rate / CRIT DMG / HP%", "1.CRIT Rate 2.CRIT DMG 3.Elemental Mastery 4.HP%"), -- Mualani
 ;

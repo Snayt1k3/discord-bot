@@ -8,7 +8,7 @@ INSERT INTO weapons (
     sub_value,
     passive,
 ) VALUES
-(1, "Redhorn Stonethresher", "Claymore", 5, 542, "CRIT DMG", 88.2, "DEF is increased by 28%. Normal and Charged Attack DMG is increased by 40% of DEF." ) -- Redhorn Stonethresher (Itto signature)
+(1, "Redhorn Stonethresher", "Claymore", 5, 542, "CRIT DMG", 88.2, "DEF is increased by 28%. Normal and Charged Attack DMG is increased by 40% of DEF." )
 (2, "Serpent Spine", "Claymore", 4, 510, "CRIT Rate", 27.6, "Every 4s a character is on the field, they will deal 6% more DMG and take 3% more DMG. This effect has a maximum of 5 stacks and will not be reset if the character leaves the field, but will be reduced by 1 stack when the character takes DMG."),
 (3, "Skyward Pride", "Claymore", 5, 674, "Energy Recharge", 36.8, "Increases all DMG by 8%. After using an Elemental Burst, a vacuum blade that does 80% of ATK as DMG to opponents along its path will be created when Normal or Charged Attacks hit. Lasts for 20s or 8 vacuum blades."),
 (4, "Whiteblind", "Claymore", 4, 510, "DEF%", 51.7, "On hit, Normal or Charged Attacks increase ATK and DEF by 6% for 6s. Max 4 stacks. This effect can only occur once every 0.5s."),
@@ -56,8 +56,59 @@ INSERT INTO weapons (
 (46, "Skyward Spine", "Polearm", 5, 674, "Energy Recharge", 36.8, "Increases CRIT Rate by 8% and increases Normal ATK SPD by 12%. Additionally, Normal and Charged Attacks hits on opponents have a 50% chance to trigger a vacuum blade that deals 40% of ATK as DMG in a small AoE. This effect can occur no more than once every 2s.")
 (47, "Fang of the Mountain King", "Claymore", 5, 741, "CRIT Rate", 11, "Gain 1 stack of Canopy's Favor after hitting an opponent with an Elemental Skill. This can be triggered once every 0.5s. After a nearby party member triggers a Burning or Burgeon reaction, the equipping character will gain 3 stacks. This effect can be triggered once every 2s and can be triggered even when the triggering party member is off-field. Canopy's Favor: Elemental Skill and Burst DMG is increased by 10% for 6s. Max 6 stacks. Each stack is counted independently.")
 (48, "Earth Shaker", "Claymore", 4, 565, "ATK%", 27.6, "After a party member triggers a Pyro-related reaction, the equipping character's Elemental Skill DMG is increased by 16% for 8s. This effect can be triggered even when the triggering party member is not on the field.")
+(49, "Sacrificial Sword", "Sword", 4, 454, "Energy Recharge", 61.3, "After damaging an opponent with an Elemental Skill, the skill has a 40% chance to end its own CD. Can only occur once every 30s.")
+(50, "Haran Geppaku Futsu", "Sword", 5, 608, "CRIT Rate", 33.1, "Obtain 12% All Elemental DMG Bonus. When other nearby party members use Elemental Skills, the character equipping this weapon will gain 1 Wavespike stack. Max 2 stacks. This effect can be triggered once every 0.3s. When the character equipping this weapon uses an Elemental Skill, all stacks of Wavespike will be consumed to gain Rippling Upheaval: each stack of Wavespike consumed will increase Normal Attack DMG by 20% for 8s.")
+(51, "Summit Shaper", "Sword", 5, 608, "ATK%", 49.6, "Increases Shield Strength by 20%. Scoring hits on opponents increases ATK by 4% for 8s. Max 5 stacks. Can only occur once every 0.3s. While protected by a shield, this ATK increase effect is increased by 100%.")
+(52, "Amenoma Kageuchi", "Sword", 4, 454, "ATK%", 55.1, "After casting an Elemental Skill, gain 1 Succession Seed. This effect can be triggered once every 5s. The Succession Seed lasts for 30s. Up to 3 Succession Seeds may exist simultaneously. After using an Elemental Burst, all Succession Seeds are consumed and after 2s, the character regenerates 6 Energy for each seed consumed.")
+(53, "Wolf's Gravestone", "Claymore", 5, 608, "ATK%", 49.6, "Increases ATK by 20%. On hit, attacks against opponents with less than 30% HP increase all party members' ATK by 40% for 12s. Can only occur once every 30s.")
+(54, "Beacon of the Reed Sea", "Claymore", 5, 608, "CRIT Rate", 33.1, "After the character's Elemental Skill hits an opponent, their ATK will be increased by 20% for 8s. After the character takes DMG, their ATK will be increased by 20% for 8s. The 2 aforementioned effects can be triggered even when the character is not on the field. Additionally, when not protected by a shield, the character's Max HP will be increased by 32%.")
+(55, "The Unforged", "Claymore", 5, 608, "ATK%", 49.6, "Increases Shield Strength by 20%. Scoring hits on opponents increases ATK by 4% for 8s. Max 5 stacks. Can only occur once every 0.3s. While protected by a shield, this ATK increase effect is increased by 100%.")
+(56, "Sacrificial Greatsword", "Claymore", 4, 565, "Energy Recharge", 30.6, "After damaging an opponent with an Elemental Skill, the skill has a 40% chance to end its own CD. Can only occur once every 30s.")
+(57, "The First Great Magic", "Bow", 5, 608, "CRIT DMG", 66.2, "DMG dealt by Charged Attacks increased by 16%. For every party member with the same Elemental Type as the wielder (including the wielder themselves), gain 1 Gimmick stack. For every party member with a different Elemental Type from the wielder, gain 1 Theatrics stack. When the wielder has 1/2/3 or more Gimmick stacks, ATK will be increased by 16%/32%/48%. When the wielder has 1/2/3 or more Theatrics stacks, Movement SPD will be increased by 4%/7%/10%.")
+(58, "Amos' Bow", "Bow", 5, 608, "ATK%", 49.6, "Increases Normal and Charged Attack DMG by 12%. After a Normal or Charged Attack is fired, DMG dealt increases by a further 8% every 0.1s the arrow is in the air for up to 5 times."),
+(59, "Flower-Wreathed Feathers", "Bow", 4, 510, "ATK%", 41.3, "Decreases Gliding Stamina consumption by 15%. When using Aimed Shots, the DMG dealt by Charged Attacks increases by 6% every 0.5s. This effect can stack up to 6 times and will be removed 10s after leaving Aiming Mode."),
+(60, "Hamayumi", "Bow", 4, 454, "ATK%", 55.1, "Increases Normal Attack DMG by 16% and Charged Attack DMG by 12%. When the equipping character's Energy reaches 100%, this effect is increased by 100%.")
+(61, "Song of Broken Pines","Claymore", 5, 741, "Physical DMG Bonus", 20.7, 'A part of the "Millennial Movement" that wanders amidst the winds. Increases ATK by 16%, and when Normal or Charged Attacks hit opponents, the character gains a Sigil of Whispers. This effect can be triggered once every 0.3s. When you possess 4 Sigils of Whispers, all of them will be consumed and all nearby party members will obtain the "Millennial Movement: Banner-Hymn" effect for 12s. "Millennial Movement: Banner-Hymn" increases Normal ATK SPD by 12% and increases ATK by 20%. Once this effect is triggered, you will not gain Sigils of Whispers for 20s. Of the many effects of the "Millennial Movement," buffs of the same type will not stack.')
+(62, "Prototype Archaic", "Claymore", 4, 565, "ATK%", 27.6, "On hit, Normal or Charged Attacks have a 50% chance to deal an additional 240% ATK DMG to opponents within a small AoE. Can only occur once every 15s.")
+(63, "Thundering Pulse", "Bow", 5, 608, "CRIT DMG", 66.2, "Increases ATK by 20% and grants the might of the Thunder Emblem. At stack levels 1/2/3, the Thunder Emblem increases Normal Attack DMG by 12/24/40%. The character will obtain 1 stack of Thunder Emblem in each of the following scenarios: Normal Attack deals DMG (stack lasts 5s), casting Elemental Skill (stack lasts 10s); Energy is less than 100% (stack disappears when Energy is full). Each stack's duration is calculated independently."),
+(64, "Polar Star", "Bow", 5, 608, "CRIT Rate", 33.1, "Elemental Skill and Elemental Burst DMG increased by 12%. After a Normal Attack, Charged Attack, Elemental Skill or Elemental Burst hits an opponent, 1 stack of Ashen Nightstar will be gained for 12s. When 1/2/3/4 stacks of Ashen Nightstar are present, ATK is increased by 10/20/30/48%. The stack of Ashen Nightstar created by the Normal Attack, Charged Attack, Elemental Skill or Elemental Burst will be counted independently of the others.")
+(65, "The Stringless", "Bow", 4, 510, "Elemental Mastery", 165, "Increases Elemental Skill and Elemental Burst DMG by 24%.")
+(66, "Vortex Vanquisher", "Polearm", 5, 608, "ATK%", 49.6, "Increases Shield Strength by 20%. Scoring hits on opponents increases ATK by 4% for 8s. Max 5 stacks. Can only occur once every 0.3s. While protected by a shield, this ATK increase effect is increased by 100%.")
+(67, "Engulfing Lightning", "Polearm", 5, 608, "Energy Recharge", 55.1, "ATK increased by 28% of Energy Recharge over the base 100%. You can gain a maximum bonus of 80% ATK. Gain 30% Energy Recharge for 12s after using an Elemental Burst.")
+(68, "Key of Khaj-Nisut", "Sword", 5, 542, "HP%", 66.2, "HP increased by 20%. When an Elemental Skill hits opponents, you gain the Grand Hymn effect for 20s. This effect increases the equipping character's Elemental Mastery by 0.12% of their Max HP. This effect can trigger once every 0.3s. Max 3 stacks. When this effect gains 3 stacks, or when the third stack's duration is refreshed, the Elemental Mastery of all nearby party members will be increased by 0.2% of the equipping character's max HP for 20s.")
+(69, "The Dockhand's Assistant", "Sword", 4, 510, "HP%", 41.3, "When the wielder is healed or heals others, they will gain a Stoic's Symbol that lasts 30s, up to a maximum of 3 Symbols. When using their Elemental Skill or Burst, all Symbols will be consumed and the Roused effect will be granted for 10s. For each Symbol consumed, gain 40 Elemental Mastery, and 2s after the effect occurs, 2 Energy per Symbol consumed will be restored for said character. The Roused effect can be triggered once every 15s, and Symbols can be gained even when the character is not on the field.")
+(70, "Mappa Mere", "Catalyst", 4, 565, "Elemental Mastery", 110, "Triggering an Elemental reaction grants a 8% Elemental DMG Bonus for 10s. Max 2 stacks.")
+(71, "Thrilling Tales of Dragon Slayers", "Catalyst", 3, 401, "HP%", 35.2, "When switching characters, the new character taking the field has their ATK increased by 24% for 10s. This effect can only occur once every 20s.")
+(72, "Starcaller's Watch", "Catalyst", 5, 542, "Elemental Mastery", 265, "Increases Elemental Mastery by 100. Gain the 'Mirror of Night' effect within 15s after the equipping character creates a shield: The current active party member deals 28% increased DMG to nearby opponents. You can gain the 'Mirror of Night' effect once every 14s.")
+(73, "Staff of the Scarlet Sands ", "Polearm", 5, 542, "CRIT Rate", 44.1, "The equipping character gains 52% of their Elemental Mastery as bonus ATK. When an Elemental Skill hits opponents, the Dream of the Scarlet Sands effect will be gained for 10s: The equipping character will gain 28% of their Elemental Mastery as bonus ATK. Max 3 stacks.")
+(74, "Staff of Homa", "Polearm", 5, 608, "CRIT DMG", 66.2, "HP increased by 20%. Additionally, provides an ATK Bonus based on 0.8% of the wielder's Max HP. When the wielder's HP is less than 50%, this ATK Bonus is increased by an additional 1% of Max HP."),
+(75, "Primordial Jade Winged-Spear", "Polearm", 5, 674, "CRIT Rate", 22.1, "On hit, increases ATK by 3.2% for 6s. Max 7 stacks. This effect can only occur once every 0.3s. While in possession of the maximum possible stacks, DMG dealt is increased by 12%.")
+(76, "The Catch", "Polearm", 4, 510, "Energy Recharge", 45.9, "Increases Elemental Burst DMG by 16% and Elemental Burst CRIT Rate by 6%.")
+(77, "Aquila Favonia", "Sword", 5, 674, "Physical DMG Bonus", 41.3, "ATK is increased by 20%. Triggers on taking DMG: the soul of the Falcon of the West awakens, holding the banner of resistance aloft, regenerating HP equal to 100% of ATK and dealing 200% of ATK as DMG to surrounding opponents. This effect can only occur once every 15s.")
+(78, "Absolution", "Sword", 5, 674, "CRIT DMG", 44.1, "CRIT DMG increased by 20%. Increasing the value of a Bond of Life increases the DMG the equipping character deals by 16% for 6s. Max 3 stacks.")
+(79, "Freedom-Sworn", "Sword", 5, 608, "Elemental Mastery", 198, 'A part of the "Millennial Movement" that wanders amidst the winds. Increases DMG by 10%. When the character wielding this weapon triggers Elemental Reactions, they gain a Sigil of Rebellion. This effect can be triggered once every 0.5s and can be triggered even if said character is not on the field. When you possess 2 Sigils of Rebellion, all of them will be consumed and all nearby party members will obtain "Millennial Movement: Song of Resistance" for 12s. "Millennial Movement: Song of Resistance" increases Normal, Charged and Plunging Attack DMG by 16% and increases ATK by 20%. Once this effect is triggered, you will not gain Sigils of Rebellion for 20s. Of the many effects of the "Millennial Movement," buffs of the same type will not stack.')
+(80, "The Alley Flash", "Sword", 4, 620, "Elemental Mastery", 55, "Increases DMG dealt by the character equipping this weapon by 12%. Taking DMG disables this effect for 5s.")
+(81, "Sapwood Blade", "Sword", 4, 565, "Energy Recharge", 30.6, "After triggering Burning, Quicken, Aggravate, Spread, Bloom, Hyperbloom, or Burgeon, a Leaf of Consciousness will be created around the character for a maximum of 10s. When picked up, the Leaf will grant the character 60 Elemental Mastery for 12s. Only 1 Leaf can be generated this way every 20s. This effect can still be triggered if the character is not on the field. The Leaf of Consciousness' effect cannot stack.")
+(82, "Favonius Greatsword", "Claymore", 4, 454, "Energy Recharge", 61.3, "CRIT Hits have a 60% chance to generate a small amount of Elemental Particles, which will regenerate 6 Energy for the character. Can only occur once every 12s.")
+(83, "Ballad of the Fjords", "Polearm", 4, 510, "CRIT Rate", 27.6, "When there are at least 3 different Elemental Types in your party, Elemental Mastery will be increased by 120.")
+(84, "Dragon's Bane", "Polearm", 4, 454, "Elemental Mastery", 221, "Increases DMG against opponents affected by Hydro or Pyro by 20%.")
+(85, "Vivid Notions", "Catalyst", 5, 674, "CRIT DMG", 44.1, "ATK is increased by 28%. When you use a Plunging Attack, you will gain the Dawn's First Hue effect: Plunging Attack CRIT DMG is increased by 28%. When you use an Elemental Skill or Burst, you will gain the Twilight's Splendor effect: Plunging Attack CRIT DMG is increased by 40%. The two effects above each last for 15s, and will be canceled 0.1s after the ground impact hits a target.")
+(86, "Flowing Purity", "Catalyst", 4, 565, "ATK%", 27.6, "When using an Elemental Skill, All Elemental DMG Bonus will be increased by 8% for 15s, and a Bond of Life worth 24% of Max HP will be granted. This effect can be triggered once every 10s. When the Bond of Life is cleared, every 1,000 HP cleared in the process will provide 2% All Elemental DMG Bonus, up to a maximum of 12%. This effect lasts 15s.")
+(87, "Rust", "Bow", 4, 510, "ATK%", 41.3, "Increases Normal Attack DMG by 40% but decreases Charged Attack DMG by 10%.")
+(88, "Prototype Crescent", "Bow", 4, 510, "ATK%", 41.3, "Charged Attack hits on weak points increase Movement SPD by 10% and ATK by 36% for 10s.")
+(89, "Fruitful Hook", "Claymore", 4, 565, "ATK%", 27.6, "Increase Plunging Attack CRIT Rate by 16%; After a Plunging Attack hits an opponent, Normal, Charged, and Plunging Attack DMG increased by 16% for 10s.")
+(90, "Crimson Moon's Semblance", "Polearm", 5, 674, "CRIT Rate", 22.1, "Grants a Bond of Life equal to 25% of Max HP when a Charged Attack hits an opponent. This effect can be triggered up to once every 14s. In addition, when the equipping character has a Bond of Life, they gain a 12% DMG Bonus; if the value of the Bond of Life is greater than or equal to 30% of Max HP, then gain an additional 24% DMG Bonus.")
+(91, "Deathmatch", "Polearm", 4, 454, "CRIT Rate", 36.8, "If there are at least 2 opponents nearby, ATK is increased by 16% and DEF is increased by 16%. If there are fewer than 2 opponents nearby, ATK is increased by 24%.")
+(92, "White Tassel", "Polearm", 3, 401, "CRIT Rate", 23.4, "Increases Normal Attack DMG by 24%.")
+(93, "The Black Sword", "Sword", 4, 510, "CRIT Rate", 27.6, "Increases DMG dealt by Normal and Charged Attacks by 20%. Additionally, regenerates 60% of ATK as HP when Normal and Charged Attacks score a CRIT Hit. This effect can occur once every 5s.")
+(94, "Sacrificial Jade", "Catalyst", 4, 454, "CRIT Rate", 36.8, "When not on the field for more than 5s, Max HP will be increased by 32% and Elemental Mastery will be increased by 40. These effects will be canceled after the wielder has been on the field for 10s.")
+(95, "Splendor of Tranquil Waters", "Sword", 5, 542, "CRIT DMG", 88.2, "When the equipping character's current HP increases or decreases, Elemental Skill DMG dealt will be increased by 8% for 6s. Max 3 stacks. This effect can be triggered once every 0.2s. When other party members' current HP increases or decreases, the equipping character's Max HP will be increased by 14% for 6s. Max 2 stacks. This effect can be triggered once every 0.2s. The aforementioned effects can be triggered even if the wielder is off-field.")
+(96, "Fleuve Cendre Ferryman", "Sword", 4, 510, "Energy Recharge", 45.9, "Increases Elemental Skill CRIT Rate by 8%. Additionally, increases Energy Recharge by 16% for 5s after using an Elemental Skill.")
+(97, "Silvershower Heartstrings", "Bow", 5, 542, "HP%", 66.2, "The equipping character can gain the Remedy effect. When they possess 1/2/3 Remedy stacks, Max HP will increase by 12%/24%/40%. 1 stack may be gained when the following conditions are met: 1 stack for 25s when using an Elemental Skill; 1 stack for 25s when the value of a Bond of Life value increases; 1 stack for 20s for performing healing. Stacks can still be triggered when the equipping character is not on the field. Each stack's duration is counted independently. In addition, when 3 stacks are active, Elemental Burst CRIT Rate will be increased by 28%. This effect will be canceled 4s after falling under 3 stacks.")
+(98, "Recurve Bow", "Bow", 3, 354, "HP%", 46.9, "Defeating an opponent restores 8% HP."),
+(99, "Ring of Yaxche", "Catalyst", 4, 510, "HP%", 41.3, "Using an Elemental Skill grants the Jade-Forged Crown effect: Every 1,000 Max HP will increase the Normal Attack DMG dealt by the equipping character by 0.6% for 10s. Normal Attack DMG can be increased this way by a maximum of 16%.")
 
-
+;
 INSERT INTO build_weapons (
     build_id,
     weapon_id,
@@ -88,3 +139,54 @@ INSERT INTO build_weapons (
 (19, 25, 1), -- Kirara
 (20, 44, 1), (20, 45, 2), (20, 46, 3), (20, 16, 4),-- Emilie
 (21, 47, 1), (21, 2, 2), (21, 28, 3), -- Kinich
+
+-- Cryo
+(22, 49, 1), (22, 25, 2) -- qiqi
+(23, 38, 1), (23, 24, 2), (23, 37, 3), (23, 50, 4,) (23, 51, 5), (23, 52, 6), -- Kaeya
+(24, 53, 1), (24, 2, 2), (24, 1, 3), (24, 54, 4), (24, 55, 5), (24, 3, 6), (24, 56, 7)  -- Chongyun
+(25, 21, 1), (25, 32, 2), (25, 31, 3), -- Diona
+(26, 27, 1), (26, 26, 2), (26, 57, 3), (26, 28, 4), (26, 58, 5), (26, 59, 6), (26, 60, 7) -- Ganyu
+(27, 16, 1), -- Rosaria
+(28, 61, 1), (28, 53, 2), (28, 3, 3), (28, 2, 4), (28, 62, 5), -- Eula
+(29, 38, 1), (29, 24, 2), (29, 52, 3), -- Ayaka
+(30, 63, 1), (30, 64, 2), (30, 29, 3), (30, 65, 4), -- Aloy
+(31, 45, 1), (31, 67, 2), (31, 66, 3), (31, 46, 4), (31, 16, 5), -- Shenhe
+(32, 68, 1), (32, 69, 2), (32, 24, 3), (32, 25, 4),  -- Layla
+(33, 16, 1, 34, 36, 2), -- Mika
+(34, 3, 1), (34, 23, 2), (34, 61, 3), (34, 53, 4), (34, 2, 5), (34, 62, 6) -- Freminet
+(35, 9, 1), (35, 12, 2), (35, 33, 3), (35, 6, 4), (35, 8, 5), (35, 10, 6), (35, 70, 7)  -- Wriothesley
+(36, 42, 1), (36, 43, 2), (36, 71, 3), -- Charlotte
+(37, 72, 1), (37, 71, 2), (37, 43, 3), -- Citlali
+
+-- Pyro 
+(38, 73, 1), (38, 44, 2), (38, 74, 3), (38, 67, 4), (38, 75, 5), (38, 76, 6) -- Xiangling
+(39, 6, 1), (39, 7, 2), (39, 8, 3), (39, 9, 4), (39, 5, 5), (39, 12, 6), (39, 13, 7) --Klee
+(40, 54, 1), (40, 1, 2), (40, 23, 3), (40, 22, 4), (40, 2, 5), (40, 47, 6), (40, 53, 7), (40, 55, 8), (40, 62, 9) -- Diluc
+(41, 38, 1), (41, 77, 2), (41, 78, 3), (41, 79, 4), (41, 17, 5), (41, 80, 6), (41, 81, 7) --Bennett
+(42, 31, 1), (42, 21, 1), -- Amber 
+(43, 56, 1), (43, 4, 2), (43, 82, 3), -- Xinyan
+(44, 74, 1), (44, 73, 2), (44, 83, 3), (44, 44, 4), (44, 84, 4) -- Hutao
+(45, 7, 1), (45, 85, 2), (45, 33, 3), (45, 8, 4), (45, 9, 5), (45, 86, 6) -- Yanfei
+(46, 63, 1), (46, 28, 2), (46, 57, 3), (46, 64, 4), (46, 26, 5), (46, 29, 6), (46, 87, 7), (46, 30, 8) -- Yoimiya
+(47, 16, 1), (47, 15, 2),  -- Thoma
+(48, 54, 1), (48, 53, 2), (48, 2, 3), (48, 40, 4) -- Dehya
+(49, 57, 1), (49, 27, 2), (49, 28, 3), (49, 88, 4) -- lyney
+(50, 16, 1), (50, 36, 2), (50, 15, 3), -- Chevreuse
+(51, 23, 1), (51, 2, 2), (51, 1, 3), (51, 22, 4), (51, 54, 5), (51, 89, 6), -- Gaming
+(52, 90, 1), (52, 75, 2), (52, 73, 3), (52, 74, 4), (52, 91, 5), (52, 92, 6), -- Arlecchino
+(53, 23, 1), (52, 53, 2), (52, 2, 3), (52, 48, 4) -- Mavuika
+
+-- Hydro
+(54, 49, 1), (54, 25, 2), -- Xingqiu
+(55, 13, 1), (55, 71, 2), (55, 43, 3), -- Mona
+(56, 71, 2), (56, 42, 2), (56, 43, 3), -- Barbara
+(57, 64, 1), (57, 29, 2), (57, 87, 3), (57, 63, 4) -- Tartaglia
+(58, 71, 1), (58, 42, 2), -- Kokomi
+(59, 50, 1), (59, 93, 2), (59, 52, 3), -- Ayato
+(60, 28, 1), (60, 31, 2), (60, 21, 3), -- Yelan
+(61, 16, 1), -- Candace
+(62, 68, 1), (62, 39, 2), -- Nilou
+(63, 8, 1), (63, 94, 2), (63, 42, 3) -- Neuvillette
+(64, 95, 1), (64, 96, 2), (64, 25, 3) -- Furina
+(65, 97, 1), (65, 98, 2), (65, 32, 3), (65, 21, 4), -- Sigewinne
+(66, 7, 1), (66, 94, 2), (66, 13, 3), (66, 99, 4), -- Mualani

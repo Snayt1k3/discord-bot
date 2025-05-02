@@ -24,7 +24,7 @@ VALUES
 (8, "Jean", "Anemo", "Sword", "Healing Bonus%", "Mondstadt", 5, 73, 8, 1, NOW(), NOW())
 (9, "Kaeya", "Cryo", "Sword", "Energy Recharge%", "Mondstadt", 4, 74, 9, 4, NOW(), NOW())
 (10, "Keqing", "Electro", "Sword", "CRIT DMG%", "Liyue", 5, 50, 10, 6, NOW(), NOW())
-(11, "Klee", "Pero", "Catalyst", "Pyro DMG Bonus%", "Mondstadt", 5, 75, 11, 2, NOW(), NOW())
+(11, "Klee", "Pyro", "Catalyst", "Pyro DMG Bonus%", "Mondstadt", 5, 75, 11, 2, NOW(), NOW())
 (12, "Lisa", "Electro", "Catalyst", "Elemental Mastery", "Mondstadt", 4, 76, 12, 3, NOW(), NOW())
 (13, "Mona", "Hydro", "Catalyst", "Energy Recharge%", "Mondstadt", 5, 78, 13, 6, NOW(), NOW())
 (14, "Ningguang", "Geo", "Catalyst", "Geo DMG Bonus%", "Liyue", 4, 52, 14, 5, NOW(), NOW())
