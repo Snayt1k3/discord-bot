@@ -7,7 +7,7 @@ option go_package = "proto/";
 service GenshinService {
     rpc GetAllCharacters (Empty) returns (CharacterListResponse);
     rpc GetCharacterById (CharacterRequest) returns (CharacterDetailResponse);
-    rpc GetCharacterBuild (CharacterRequest) returns (BuildListResponse);
+    rpc GetCharacterBuild (CharacterRequest) returns (BuildResponse);
 }
 
 // Пустое сообщение для запроса без параметров
@@ -23,8 +23,8 @@ message CharacterListResponse {
   repeated CharacterShort characters = 1; // Список персонажей
 }
 
-message BuildListResponse {
-  repeated Build builds = 1; // Список персонажей
+message BuildResponse {
+  Build build = 1; // Список персонажей
 }
 
 // Краткая информация о персонаже

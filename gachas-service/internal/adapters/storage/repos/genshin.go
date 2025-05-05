@@ -38,21 +38,21 @@ func (r *GenshinRepository) GetCharacterByID(id string) (genshin.Character, erro
 	return character, nil
 }
 
-func (r *GenshinRepository) GetCharacterBuilds(id string) ([]genshin.Build, error) {
-	var builds []genshin.Build
+func (r *GenshinRepository) GetCharacterBuild(id string) (genshin.Build, error) {
+	var build genshin.Build
 	err := r.db.Preload("Character"). 
 		Preload("Artifacts").         
 		Preload("Weapons").            
 		Preload("Teams").              
 		Preload("Stats").             
 		Where("character_id = ?", id).
-		Find(&builds).Error
+		First(&build).Error
 
 	if err != nil {
-		return builds, err
+		return build, err
 	}
 
-	return builds, nil
+	return build, nil
 }
 
 func NewGenshinRepository(db *gorm.DB) interfaces.RepoInterface[genshin.Character, genshin.Build] {

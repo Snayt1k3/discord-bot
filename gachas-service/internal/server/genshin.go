@@ -37,70 +37,68 @@ func (s *GenshinServer) GetAllCharacters(ctx context.Context, req *pb.Empty) (*p
 	return response, nil
 }
 
-func (s *GenshinServer) GetCharacterBuild(ctx context.Context, req *pb.CharacterRequest) (*pb.BuildListResponse, error) {
-	builds, err := s.service.GetCharacterBuilds(fmt.Sprint(req.Id))
+func (s *GenshinServer) GetCharacterBuild(ctx context.Context, req *pb.CharacterRequest) (*pb.BuildResponse, error) {
+	build, err := s.service.GetCharacterBuild(fmt.Sprint(req.Id))
+	
 	if err != nil {
 		return nil, err
 	}
 
-	var protoBuilds []*pb.Build
 
-	for _, build := range builds {
-		protoBuild := &pb.Build{
-			Name: build.Character.Name,
-			Artifacts: func() []*pb.Artifact {
-				var arts []*pb.Artifact
-				for _, a := range build.Artifacts {
-					arts = append(arts, &pb.Artifact{
-						Name:           a.Name,
-						TwoPieceBonus:  a.TwoPieceBonus,
-						FourPieceBonus: a.FourPieceBonus,
+	protoBuild := &pb.Build{
+		Name: build.Character.Name,
+		Artifacts: func() []*pb.Artifact {
+			var arts []*pb.Artifact
+			for _, a := range build.Artifacts {
+				arts = append(arts, &pb.Artifact{
+					Name:           a.Name,
+					TwoPieceBonus:  a.TwoPieceBonus,
+					FourPieceBonus: a.FourPieceBonus,
+				})
+			}
+			return arts
+		}(),
+		Weapons: func() []*pb.Weapon {
+			var ws []*pb.Weapon
+			for _, w := range build.Weapons {
+				ws = append(ws, &pb.Weapon{
+					Name:     w.Name,
+					Type:     w.Type,
+					Rarity:   int32(w.Rarity),
+					BaseAtk:  int32(w.BaseATK),
+					SubStat:  w.SubStat,
+					SubValue: float32(w.SubValue),
+					Passive:  w.Passive,
+				})
+			}
+			return ws
+		}(),
+		Teams: func() []*pb.CharacterShort {
+			var ts []*pb.CharacterShort
+			for _, team := range build.Teams {
+				for _, c := range team.Characters {
+					ts = append(ts, &pb.CharacterShort{
+						Id:      uint64(c.ID),
+						Name:    c.Name,
+						Element: c.Element,
+						Region:  c.Region,
 					})
 				}
-				return arts
-			}(),
-			Weapons: func() []*pb.Weapon {
-				var ws []*pb.Weapon
-				for _, w := range build.Weapons {
-					ws = append(ws, &pb.Weapon{
-						Name:     w.Name,
-						Type:     w.Type,
-						Rarity:   int32(w.Rarity),
-						BaseAtk:  int32(w.BaseATK),
-						SubStat:  w.SubStat,
-						SubValue: float32(w.SubValue),
-						Passive:  w.Passive,
-					})
-				}
-				return ws
-			}(),
-			Teams: func() []*pb.CharacterShort {
-				var ts []*pb.CharacterShort
-				for _, team := range build.Teams {
-					for _, c := range team.Characters {
-						ts = append(ts, &pb.CharacterShort{
-							Id:      uint64(c.ID),
-							Name:    c.Name,
-							Element: c.Element,
-							Region:  c.Region,
-						})
-					}
-				}
-				return ts
-			}(),
-			Stats: &pb.Stats{
-				Sands:            build.Stats.Sands,
-				Goblet:           build.Stats.Goblet,
-				Circlet:          build.Stats.Circlet,
-				BestStats:        build.Stats.BestStats,
-				SubStatsPriority: build.Stats.SubStatsPriority,
-			},
-		}
-		protoBuilds = append(protoBuilds, protoBuild)
+			}
+			return ts
+		}(),
+		Stats: &pb.Stats{
+			Sands:            build.Stats.Sands,
+			Goblet:           build.Stats.Goblet,
+			Circlet:          build.Stats.Circlet,
+			BestStats:        build.Stats.BestStats,
+			SubStatsPriority: build.Stats.SubStatsPriority,
+		},
 	}
 
-	return &pb.BuildListResponse{
-		Builds: protoBuilds,
+
+	return &pb.BuildResponse{
+		Build: protoBuild,
 	}, nil
 }
 

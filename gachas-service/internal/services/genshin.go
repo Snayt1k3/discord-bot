@@ -24,20 +24,18 @@ func (s *GenshinService) GetCharacterByID(id string) (dto.GenshinCharacter, erro
 
 }
 
-func (s *GenshinService) GetCharacterBuilds(id string) ([]dto.GenshinBuild, error) {
+func (s *GenshinService) GetCharacterBuild(id string) (dto.GenshinBuild, error) {
+	var build dto.GenshinBuild
 
-	buildData, err := s.repository.GetCharacterBuilds(id)
+	buildData, err := s.repository.GetCharacterBuild(id)
 
 	if err != nil {
-		return nil, err
-	}
-	var builds []dto.GenshinBuild
-
-	for _, build := range buildData {
-		builds = append(builds, mappers.MapBuildToDTO(build))
+		return build, err
 	}
 
-	return builds, nil
+	build = mappers.MapBuildToDTO(buildData)
+
+	return build, nil
 }
 
 func (s *GenshinService) GetCharacters() ([]dto.GenshinCharacterBrief, error) {

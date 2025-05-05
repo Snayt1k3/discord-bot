@@ -44,7 +44,7 @@ type Stats struct {
 	Sands            string `json:"sands" gorm:"not null"`
 	Goblet           string `json:"goblet" gorm:"not null"`
 	Circlet          string `json:"circlet" gorm:"not null"`
-	BestStats        string `json:"best_stats" gorm:"not null"`
+	BestStats        string `json:"best_stats" gorm:"not null"` // Todo: delete this field
 	SubStatsPriority string `json:"sub_stats_priority" gorm:"not null"`
 }
 
@@ -58,4 +58,5 @@ type BuildArtifact struct {
 	BuildID    uint `gorm:"primaryKey"`
 	ArtifactID uint `gorm:"primaryKey"`
 	Priority   int
+	SetGroup   int  `gorm:"default:2"`
 }
