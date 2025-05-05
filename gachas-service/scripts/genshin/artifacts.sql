@@ -288,7 +288,13 @@ VALUES
         "Crimson Witch of Flames",
         "Pyro DMG Bonus +15%",
         "Increases Overloaded, Burning, and Burgeon DMG by 40%. Increases Vaporize and Melt DMG by 15%. Using Elemental Skill increases the 2-Piece Set Bonus by 50% of its starting value for 10s. Max 3 stacks."
-    )
+    ),
+    (
+        49, 
+        "Long Night's Oath",
+        "Plunging Attack DMG increased by 25%.",
+        "After the equipping character's Plunging Attack/Charged Attack/Elemental Skill hits an opponent, they will gain 1/2/2 stack(s) of "Radiance Everlasting." Plunging Attacks, Charged Attacks, or Elemental Skills can each trigger this effect once every 1s. Radiance Everlasting: Plunging Attacks deal 15% increased DMG for 6s. Max 5 stacks. Each stack's duration is counted independently."
+    ),
 
 
 INSERT INTO build_artifacts (
@@ -373,4 +379,25 @@ INSERT INTO build_artifacts (
 (64, 38, 1, 2), -- Furina
 (65, 36, 1, 1), (65, 23, 2, 1), -- Sigewinne
 (66, 46, 1, 2), (66, 22, 2, 2), -- Mualani
+
+-- Electro
+(67, 24, 1, 2), (67, 14, 2, 2), -- Razor
+(68, 20, 1, 2), (68, 32, 2, 2), (68, 19, 3, 2), -- Lisa
+(69, 20, 1, 2), (69, 19, 2, 2), (69, 32, 3, 2), -- Keqing
+(70, 15, 1, 2), (70, 19, 2, 2), -- Fischl
+(71, 26, 1, 2), -- Beidou
+(72, 26, 1, 2), -- Raiden
+(73, 26, 1, 2), (73, 16, 2, 2), -- Sara
+(74, 38, 1, 2), (74, 26, 2, 2), -- Yae miko
+(75, 34, 1, 2), (75, 32, 2, 2), -- Kuki Shinobu
+(76, 16, 1, 2), (76, 31, 2, 2), (76, 7, 3, 2), -- Dori
+(77, 32, 1, 2), (77, 20, 2, 2), (77, 14, 3, 2) -- Cyno
+(78, 15, 1, 2), (78, 32, 2, 2), -- Sethos
+(79, 41, 1, 2), (79, 14, 2, 2), -- Clorinde
+(80, 45, 1, 2), (80, 16, 2, 2), -- Ororon
+(81, 46, 1, 2), (81, 46, 2, 2), -- Varesa
+(82, 45, 1, 2), (82, 16, 2, 2), -- Iansan
+
+-- Anemo
+
 ;

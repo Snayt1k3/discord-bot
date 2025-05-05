@@ -107,6 +107,9 @@ INSERT INTO weapons (
 (97, "Silvershower Heartstrings", "Bow", 5, 542, "HP%", 66.2, "The equipping character can gain the Remedy effect. When they possess 1/2/3 Remedy stacks, Max HP will increase by 12%/24%/40%. 1 stack may be gained when the following conditions are met: 1 stack for 25s when using an Elemental Skill; 1 stack for 25s when the value of a Bond of Life value increases; 1 stack for 20s for performing healing. Stacks can still be triggered when the equipping character is not on the field. Each stack's duration is counted independently. In addition, when 3 stacks are active, Elemental Burst CRIT Rate will be increased by 28%. This effect will be canceled 4s after falling under 3 stacks.")
 (98, "Recurve Bow", "Bow", 3, 354, "HP%", 46.9, "Defeating an opponent restores 8% HP."),
 (99, "Ring of Yaxche", "Catalyst", 4, 510, "HP%", 41.3, "Using an Elemental Skill grants the Jade-Forged Crown effect: Every 1,000 Max HP will increase the Normal Attack DMG dealt by the equipping character by 0.6% for 10s. Normal Attack DMG can be increased this way by a maximum of 16%.")
+(100, "Lion's Roar", "Sword", 4, 510, "ATK%", 41.3, "Increases DMG against opponents affected by Pyro or Electro by 20%.")
+(101, "Xiphos' Moonlight", "Sword", 4, 510, "Elemental Mastery", 165, "The following effect will trigger every 10s: The equipping character will gain 0.036% Energy Recharge for each point of Elemental Mastery they possess for 12s, with nearby party members gaining 30% of this buff for the same duration. Multiple instances of this weapon can allow this buff to stack. This effect will still trigger even if the character is not on the field.")
+
 
 ;
 INSERT INTO build_weapons (
@@ -190,3 +193,25 @@ INSERT INTO build_weapons (
 (64, 95, 1), (64, 96, 2), (64, 25, 3) -- Furina
 (65, 97, 1), (65, 98, 2), (65, 32, 3), (65, 21, 4), -- Sigewinne
 (66, 7, 1), (66, 94, 2), (66, 13, 3), (66, 99, 4), -- Mualani
+
+-- Electro
+(67, 53, 1), (67, 54, 2), (67, 61, 3), (67, 2, 3), (67, 62, 4), -- Razor
+(68, 5, 1), (68, 6, 2), (68, 13, 3), (68, 86, 4), -- Lisa
+(69, 38, 1), (69, 24, 2), (69, 100, 3), (69, 20, 4), -- Keqing
+(70, 64, 1), (70, 28, 2), (70, 63, 3), (70, 65, 4), -- Fischl
+(71, 53, 1), (71, 2, 2), (71, 3, 3), (71, 62, 4), -- Beidou
+(72, 67, 1), (72, 76, 2), (72, 3, 3), (72, 75, 4), -- Raiden
+(73, 29, 1), (73, 32, 2), (73, 21, 3), -- Sara
+(74, 5, 1), (74, 6, 2), (74, 13, 3), -- Yae Miko
+(75, 79, 1), (75, 101, 2), (75, 39, 3), -- Kuki Shinobu,
+(76, 40, 1), (76, 56, 2), -- Dori
+(77, 73, 1), (77, 24, 2), (77, 91, 3), (77, 92, 4), -- Cyno
+(78, 26, 1), (78, 27, 2), (78, 30, 3), -- Sethos
+(79, 78, 1), (79, 38, 2), (79, 93, 3), -- Clorinde
+(80, 21, 1), (80, 65, 2), -- Ororon
+(81, 85, 1), (81, 6, 2), (81, 13, 3), -- Varesa
+(82, 16, 1), -- Iansan
+
+-- Anemo
+
+
