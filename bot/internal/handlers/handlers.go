@@ -80,35 +80,20 @@ func ShowSupportedGachas(s *discordgo.Session, i *discordgo.InteractionCreate) e
 	embeds := []*discordgo.MessageEmbed{
 		{
 			Title:       "📜 **Welcome to the Gacha Hub!**",
-			Description: "Ready to dive into the worlds of your favorite gacha games? ✨\n\nFrom builds and ascensions to full team comps — everything you need is just a click away.\n\nChoose a game below to begin exploring characters, guides, and more!",
+			Description: "Step into the world of gacha games! ✨\n\nHere you'll find:\n• Character builds\n• Ascension materials\n• Team compositions\n• Synergy suggestions and gear recommendations\n\n**All builds are suggestions — feel free to build your characters however you like!**\n\nIf you find any errors or inconsistencies, please DM **{nickname}**.",
 			Color:       0x9b59b6,
 			Image: &discordgo.MessageEmbedImage{
 				URL: "https://wotpack.ru/wp-content/uploads/2024/08/ZZZ-potesnila-Genshin-Impact-i-HSR-po-dohodu-za-ijul.jpg",
 			},
 			Fields: []*discordgo.MessageEmbedField{
 				{
-					Name:   "**🌌 Honkai: Star Rail**",
-					Value:  "🚀 Enter the stars and uncover top-tier builds, relics, and path strategies.",
-					Inline: false,
-				},
-				{
-					Name:   "**🔥 Genshin Impact**",
-					Value:  "🌍 Explore Teyvat through optimized builds, ascension paths, and full team guides.",
-					Inline: false,
-				},
-				{
-					Name:   "**🌀 Zenless Zone Zero**",
-					Value:  "⚙️ Discover W-Engine combos, agent synergies, and stylish squad setups.",
-					Inline: false,
-				},
-				{
-					Name:   "**🌪️ Wuthering Waves**",
-					Value:  "🎼 Build your Resonators, learn Echo strategies, and master the combat rhythm of Solaris-3.",
+					Name:   "🎮 **Supported Games**",
+					Value:  "• 🌌 Honkai: Star Rail\n• 🔥 Genshin Impact\n• 🌀 Zenless Zone Zero\n• 🌪️ Wuthering Waves",
 					Inline: false,
 				},
 			},
 			Footer: &discordgo.MessageEmbedFooter{
-				Text: "Select a game to start your journey 🌟",
+				Text: "Choose a game to start 🌟",
 			},
 		},
 	}
