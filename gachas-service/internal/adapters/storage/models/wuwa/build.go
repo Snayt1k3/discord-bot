@@ -8,10 +8,11 @@ type WuwaBuild struct {
 	gorm.Model
 	CharacterID uint          `gorm:"not null"`
 	Character   WuwaCharacter `gorm:"foreignKey:CharacterID;references:ID"`
-	Weapons     []WuwaWeapon  `gorm:"many2many:build_weapons;"`
-	Echoes      []WuwaEchoes  `gorm:"many2many:build_artifacts;"`
+	Weapons     []WuwaWeapon  `gorm:"many2many:build_wuwa_weapons;"`
+	Echoes      []WuwaEchoes  `gorm:"many2many:build_wuwa_echoes;"`
 	StatsID     uint          `gorm:"not null"`
 	Stats       WuwaStats     `gorm:"foreignKey:StatsID;references:ID"`
+	BestPrimaryEcho string 	  `gorm:"type:varchar(100);not null"`
 }
 
 type WuwaEchoes struct {
