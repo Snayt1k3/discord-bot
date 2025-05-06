@@ -12,7 +12,7 @@ type Build struct {
 	Artifacts   []Artifact `json:"artifacts" gorm:"many2many:build_artifacts;"`
 	Weapons     []Weapon   `json:"weapons" gorm:"many2many:build_weapons;"`
 	Teams       []Team     `json:"teams" gorm:"many2many:build_teams;"`
-	StatsId		 uint       `json:"stats_id" gorm:"not null"`
+	StatsId     uint       `json:"stats_id" gorm:"not null"`
 	Stats       Stats      `json:"stats" gorm:"foreignKey:StatsId"`
 }
 
@@ -58,5 +58,5 @@ type BuildArtifact struct {
 	BuildID    uint `gorm:"primaryKey"`
 	ArtifactID uint `gorm:"primaryKey"`
 	Priority   int
-	SetGroup   int  `gorm:"default:2"`
+	SetGroup   int `gorm:"default:2"`
 }

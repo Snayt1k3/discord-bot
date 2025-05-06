@@ -8,7 +8,6 @@ import (
 	pb "gachas-service/proto"
 )
 
-
 type GenshinServer struct {
 	pb.UnimplementedGenshinServiceServer
 	service interfaces.ServiceInterface[dto.GenshinCharacter, dto.GenshinCharacterBrief, dto.GenshinBuild]
@@ -27,23 +26,22 @@ func (s *GenshinServer) GetAllCharacters(ctx context.Context, req *pb.Empty) (*p
 
 	for i, character := range characters {
 		response.Characters[i] = &pb.CharacterShort{
-			Id:          uint64(character.ID),
-			Name:        character.Name,
-			Region:      character.Region,
-			Element:    character.Element,
+			Id:      uint64(character.ID),
+			Name:    character.Name,
+			Region:  character.Region,
+			Element: character.Element,
 		}
 	}
-	
+
 	return response, nil
 }
 
 func (s *GenshinServer) GetCharacterBuild(ctx context.Context, req *pb.CharacterRequest) (*pb.BuildResponse, error) {
 	build, err := s.service.GetCharacterBuild(fmt.Sprint(req.Id))
-	
+
 	if err != nil {
 		return nil, err
 	}
-
 
 	protoBuild := &pb.Build{
 		Name: build.Character.Name,
@@ -96,7 +94,6 @@ func (s *GenshinServer) GetCharacterBuild(ctx context.Context, req *pb.Character
 		},
 	}
 
-
 	return &pb.BuildResponse{
 		Build: protoBuild,
 	}, nil
@@ -127,10 +124,10 @@ func (s *GenshinServer) GetCharacterById(ctx context.Context, req *pb.CharacterR
 					Common:   character.Talents.Books.Common,
 					Uncommon: character.Talents.Books.Uncommon,
 					Rare:     character.Talents.Books.Rare,
-					Weekdays:        	character.Talents.Books.Weekdays,
+					Weekdays: character.Talents.Books.Weekdays,
 				},
-				
-				TalentPriority:  character.Talents.TalentPriority,
+
+				TalentPriority: character.Talents.TalentPriority,
 			},
 			CommonMaterials: &pb.CommonMaterials{
 				Common:   character.CommonMaterials.Common,

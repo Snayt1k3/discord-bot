@@ -40,11 +40,11 @@ func (r *GenshinRepository) GetCharacterByID(id string) (genshin.Character, erro
 
 func (r *GenshinRepository) GetCharacterBuild(id string) (genshin.Build, error) {
 	var build genshin.Build
-	err := r.db.Preload("Character"). 
-		Preload("Artifacts").         
-		Preload("Weapons").            
-		Preload("Teams").              
-		Preload("Stats").             
+	err := r.db.Preload("Character").
+		Preload("Artifacts").
+		Preload("Weapons").
+		Preload("Teams").
+		Preload("Stats").
 		Where("character_id = ?", id).
 		First(&build).Error
 
