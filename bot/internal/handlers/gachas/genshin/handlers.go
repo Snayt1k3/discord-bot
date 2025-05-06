@@ -226,7 +226,7 @@ func (gh *GenshinHandlers) showCharacterAscension(s *discordgo.Session, i *disco
 			},
 		},
 		Image: &discordgo.MessageEmbedImage{
-			URL: "https://i.pinimg.com/736x/d2/96/83/d29683ce9223109447fb6a57ef9f7e3a.jpg",
+			URL: "https://i.pinimg.com/736x/d2/96/83/d29683ce9223109447fb6a57ef9f7e3a.jpg", // todo: Заменить
 		},
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: character.Name + " • Full Ascension & Talent Materials",
