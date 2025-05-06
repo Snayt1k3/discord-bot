@@ -101,7 +101,20 @@ INSERT INTO builds (
 (95, 82, "BUFF", NOW(), NOW()), -- Iansan
 
 -- Anemo
-
+(19, 83, "REACTION OFF-FIELD DPS", NOW(), NOW()), -- Venti
+(18, 84, "EM SUPPORT", NOW(), NOW()), -- Sucrose
+(8, 85, "REACTION DPS", NOW(), NOW()), -- Jean
+(29, 86, "DPS", NOW(), NOW()), -- Xiao
+(33, 87, "REACTION DPS & BUFF SUPPORT",  NOW(), NOW()) -- Kazuha
+(35, 88, "HEAL SUPPORT", NOW(), NOW()), -- Sayu
+(50, 89, "ANEMO DPS",NOW(), NOW()) -- Heizou
+(60, 90, "DPS" ,NOW(), NOW()), -- Wanderer
+(59, 91, "BUFF SUPPORT", NOW(), NOW()), -- Faruzan
+(69, 92, "OFF-FIELD DPS", NOW(), NOW()), -- Lynette
+(78, 93, "BUFF & HEAL SUPPORT", NOW(), NOW()), -- Xianyun
+(89, 94, "DPS", NOW(), NOW()), -- Chasca
+(92, 95, "SUPPORT", NOW(), NOW()), -- Lan Yan
+(94, 96, "REACTION DPS", NOW(), NOW()) -- Yumemizuki Mizuki
 ;
 
 INSERT INTO stats (
@@ -203,5 +216,22 @@ INSERT INTO stats (
 (79, "ATK% / Elemental Mastery", "Electro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Elemental Mastery 5.Energy Recharge"), -- Clorinde
 (80, "Elemental Mastery / Energy Recharge", "Elemental Mastery", "Elemental Mastery", "1.Energy Recharge 2.CRIT Rate 3.CRIT DMG 4.ATK% 5.Elemental Mastery"), -- Ororon
 (81, "ATK%", "Electro DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Elemental Mastery"), -- Varesa
+(82, "ATK%", "ATK%", "ATK%", "1.Energy Recharge 2.ATK% 3.CRIT Rate"), -- Iansan
+
+-- Anemo
+(83, "Elemental Mastery", "Elemental Mastery", "Elemental Mastery", "1.Elemental Mastery 2.Energy Recharge"), -- Venti
+(84, "Elemental Mastery", "Elemental Mastery", "Elemental Mastery", "1.Elemental Mastery 2.Energy Recharge"), -- Sucrose
+(85, "Energy Recharge / Elemental Mastery", "Elemental Mastery", "Elemental Mastery", "1.Energy Recharge 2.Elemental Mastery 3.ATK%"), -- Jean
+(86, "ATK%", "Anemo DMG Bonus / ATK%", "CRIT Rate / CRIT DMG", "1.Energy Recharge 2.CRIT Rate 3.CRIT DMG 4.ATK%"), -- Xiao
+(87, "Elemental Mastery", "Elemental Mastery", "Elemental Mastery", "1.Elemental Mastery 2.Energy Recharge"), -- Kazuha
+(88, "Energy Recharge / Elemental Mastery", "Elemental Mastery / ATK%", "Healing Bonus / Elemental Mastery"), -- Sayu
+(89, "ATK%", "Anemo DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Energy Recharge 5.Elemental Mastery"), -- Heizou
+(90, "ATK%", "Anemo DMG Bonus", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK%"), -- Wanderer
+(91, "Energy Recharge", "Anemo DMG Bonus", "CRIT Rate / CRIT DMG", "1.Energy Recharge 2.CRIT Rate 3.CRIT DMG 4.ATK%"), -- Faruzan
+(92, "Energy Recharge / ATK%", "Anemo DMG Bonus", "CRIT Rate / CRIT DMG", "1.Energy Recharge 2.CRIT Rate 3.CRIT DMG 4.ATK%"), -- Lynette
+(93, "ATK% / Energy Recharge", "ATK%", "ATK%", "1.Energy Recharge 2.ATK% 3.ATK"), -- Xianyun
+(94, "ATK%", "ATK%", "CRIT Rate / CRIT DMG", "1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Elemental Mastery 5.Energy Recharge"), -- Chasca
+(95, "ATK% / Energy Recharge", "ATK%", "ATK% / CRIT Rate", "1.Energy Recharge 2.ATK% 3.Elemental Mastery 4.CRIT Rate"), -- LAN YAN
+(96, "Elemental Mastery / Energy Recharge", "Elemental Mastery", "Elemental Mastery", "1.Energy Recharge 2.Elemental Mastery 3.CRIT Rate") -- Yumemizuki Mizuki
 
 ;

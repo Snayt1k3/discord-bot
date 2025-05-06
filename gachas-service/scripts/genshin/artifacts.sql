@@ -295,7 +295,12 @@ VALUES
         "Plunging Attack DMG increased by 25%.",
         "After the equipping character's Plunging Attack/Charged Attack/Elemental Skill hits an opponent, they will gain 1/2/2 stack(s) of "Radiance Everlasting." Plunging Attacks, Charged Attacks, or Elemental Skills can each trigger this effect once every 1s. Radiance Everlasting: Plunging Attacks deal 15% increased DMG for 6s. Max 5 stacks. Each stack's duration is counted independently."
     ),
-
+    (
+        50,
+        "Viridescent Venerer",
+        "Anemo DMG Bonus +15%",
+        "Increases Swirl DMG by 60%. Decreases opponent's Elemental RES to the element infused in the Swirl by 40% for 10s."
+    )
 
 INSERT INTO build_artifacts (
     build_id,
@@ -395,9 +400,22 @@ INSERT INTO build_artifacts (
 (78, 15, 1, 2), (78, 32, 2, 2), -- Sethos
 (79, 41, 1, 2), (79, 14, 2, 2), -- Clorinde
 (80, 45, 1, 2), (80, 16, 2, 2), -- Ororon
-(81, 46, 1, 2), (81, 46, 2, 2), -- Varesa
+(81, 46, 1, 2), (81, 49, 2, 2), -- Varesa
 (82, 45, 1, 2), (82, 16, 2, 2), -- Iansan
 
 -- Anemo
-
+(83, 50, 1, 2), (83, 16, 2, 2), -- Venti
+(84, 50, 1, 2), -- Sucrose
+(85, 50, 1, 2), -- Jean
+(86, 37, 1, 2), (86, 29, 2, 2), (86, 49, 2, 2), -- Xiao
+(87, 50, 1, 2), -- Kazuha
+(88, 50, 1, 2), (88, 16, 2, 2), -- Sayu
+(89, 50, 1, 2), -- Heizou
+(90, 33, 1, 2), (90, 25, 2, 2), -- Wanderer
+(91, 50, 1, 2), (91, 16, 2, 2), (91, 26, 3, 2), -- Faruzan
+(92, 50, 1, 2), (92, 26, 2, 2), (92, 16, 3, 2), -- Lynette
+(93, 50, 1, 2), (93, 16, 2, 2), -- Xianyun
+(94, 46, 1, 2), -- Chasca
+(95, 50, 1, 2), -- Lan Yan
+(96, 50, 1, 2), -- Yumemizuki Mizuki
 ;

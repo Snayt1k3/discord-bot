@@ -109,8 +109,8 @@ INSERT INTO weapons (
 (99, "Ring of Yaxche", "Catalyst", 4, 510, "HP%", 41.3, "Using an Elemental Skill grants the Jade-Forged Crown effect: Every 1,000 Max HP will increase the Normal Attack DMG dealt by the equipping character by 0.6% for 10s. Normal Attack DMG can be increased this way by a maximum of 16%.")
 (100, "Lion's Roar", "Sword", 4, 510, "ATK%", 41.3, "Increases DMG against opponents affected by Pyro or Electro by 20%.")
 (101, "Xiphos' Moonlight", "Sword", 4, 510, "Elemental Mastery", 165, "The following effect will trigger every 10s: The equipping character will gain 0.036% Energy Recharge for each point of Elemental Mastery they possess for 12s, with nearby party members gaining 30% of this buff for the same duration. Multiple instances of this weapon can allow this buff to stack. This effect will still trigger even if the character is not on the field.")
-
-
+(102, "Crane's Echoing Call", "Caatlyst", 5, 741, "ATK%", 16.5, "After the equipping character hits an opponent with a Plunging Attack, all nearby party members' Plunging Attacks will deal 28% increased DMG for 20s. When nearby party members hit opponents with Plunging Attacks, they will restore 2.5 Energy to the equipping character. Energy can be restored this way every 0.7s. This energy regain effect can be triggered even if the equipping character is not on the field."),
+(103, "Chain Breaker", "Bow", 4, 565, "ATK%", 27.6, "For every party member from Natlan or who has a different Elemental Type from the equipping character, the equipping character gains 9.6% increased ATK. When there are no less than 3 of the aforementioned characters, the equipping character gains 48 Elemental Mastery.")
 ;
 INSERT INTO build_weapons (
     build_id,
@@ -213,5 +213,18 @@ INSERT INTO build_weapons (
 (82, 16, 1), -- Iansan
 
 -- Anemo
-
+(83, 31, 1), (83, 65, 2), (83, 21, 3), -- Venti
+(84, 33, 1), (84, 34, 2), (84, 35, 3), -- Sucrose
+(85, 79, 1), (85, 101, 1), (85, 25, 3), -- Jean
+(86, 74, 1), (86, 75, 1), (86, 91, 3), (86, 92, 4), -- Xiao
+(87, 79, 1), (87, 25, 2), (87, 39, 3), -- Kazuha
+(88, 40, 1), -- Sayu
+(89, 5, 1), (89, 6, 2), (89, 10, 3), (89, 13, 4), -- Heizou
+(90, 12, 1), (90, 6, 2), (90, 3, 3), (90, 13, 4), -- Wanderer
+(91, 31, 1), (91, 21, 2), -- Faruzan
+(92, 49, 1), (92, 25, 2), -- Lynette
+(93, 102, 1), (93, 43, 2), -- Xianyun
+(94, 27, 1), (94, 28, 2), (94, 29, 3), (94, 103, 4), -- Chasca
+(95, 72, 1), (95, 71, 2), (95, 43, 3), -- Lan Yan
+(96, 34, 1), (96, 35, 2), -- Yumemizuki Mizuki
 
