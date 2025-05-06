@@ -6,9 +6,11 @@ import (
 
 type WuwaWeapon struct {
 	gorm.Model
-	Name       string `gorm:"type:varchar(100);not null"`
-	WeaponType string `gorm:"type:varchar(50);not null"`
-	Rarity     int    `gorm:"not null"`
-	Passive    string `gorm:"type:text"`
-	BaseATK    int    `gorm:"not null"`
+	Name       string  `gorm:"type:varchar(50);not null"`
+	WeaponType string  `gorm:"type:varchar(50);not null"`
+	Rarity     int     `gorm:"not null"`
+	Passive    string  `gorm:"type:text"`
+	BaseATK    int     `gorm:"not null"`
+	SubStat    string  `gorm:"type:varchar(50);not null"`
+	SubValue   float32 `gorm:"not null"`
 }
