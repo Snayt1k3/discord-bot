@@ -4,25 +4,25 @@ import (
 	"gorm.io/gorm"
 )
 
-type WuwaBuild struct {
+type Build struct {
 	gorm.Model
 	CharacterID uint          `gorm:"not null"`
-	Character   WuwaCharacter `gorm:"foreignKey:CharacterID;references:ID"`
-	Weapons     []WuwaWeapon  `gorm:"many2many:build_wuwa_weapons;"`
-	Echoes      []WuwaEchoes  `gorm:"many2many:build_wuwa_echoes;"`
+	Character   Character `gorm:"foreignKey:CharacterID;references:ID"`
+	Weapons     []Weapon  `gorm:"many2many:build_wuwa_weapons;"`
+	Echoes      []Echoes  `gorm:"many2many:build_wuwa_echoes;"`
 	StatsID     uint          `gorm:"not null"`
-	Stats       WuwaStats     `gorm:"foreignKey:StatsID;references:ID"`
+	Stats       Stats     `gorm:"foreignKey:StatsID;references:ID"`
 	BestPrimaryEcho string 	  `gorm:"type:varchar(100);not null"`
 }
 
-type WuwaEchoes struct {
+type Echoes struct {
 	gorm.Model
 	Name          string `gorm:"type:varchar(100);not null"`
 	TwoPieceBonus string `gorm:"type:varchar(100);not null"`
 	FullSetBonus  string `gorm:"type:varchar(100);not null"`
 }
 
-type WuwaStats struct {
+type Stats struct {
 	gorm.Model
 	FourCostEchoStat  string `gorm:"type:varchar(100);not null"`
 	ThreeCostEchoStat string `gorm:"type:varchar(100);not null"`

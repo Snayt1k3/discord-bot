@@ -1,4 +1,4 @@
-package mappers
+package genshin
 
 import (
 	"gachas-service/internal/adapters/storage/models/genshin"

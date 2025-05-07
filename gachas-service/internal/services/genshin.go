@@ -4,7 +4,7 @@ import (
 	"gachas-service/internal/adapters/storage/models/genshin"
 	"gachas-service/internal/dto"
 	"gachas-service/internal/interfaces"
-	"gachas-service/internal/utils/mappers"
+	mappers "gachas-service/internal/utils/mappers/genshin"
 )
 
 type GenshinService struct {

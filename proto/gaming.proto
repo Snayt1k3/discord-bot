@@ -6,7 +6,7 @@ option go_package = "proto/";
 
 service GenshinService {
   rpc GetAllCharacters (Empty) returns (GenshinCharactersResponse);
-  rpc GetCharacterById (CharacterRequest) returns (GenshinCharactersResponse);
+  rpc GetCharacterById (CharacterRequest) returns (GenshinCharacterDetailResponse);
   rpc GetCharacterBuild (CharacterRequest) returns (GenshinBuildResponse);
 }
 
@@ -169,9 +169,8 @@ message WuwaCharacterFull {
   string name = 2;
   string element = 3;
   int32 rarity = 4;
-  WuwaWeapon weapon = 5;
-  WuwaAscension ascension = 6;
-  WuwaTalent talents = 7;
+  WuwaAscension ascension = 5;
+  WuwaTalent talents = 6;
 }
 
 message WuwaEcho {
@@ -187,7 +186,7 @@ message WuwaStats {
 }
 
 message WuwaCharacterBuild {
-  uint64 character_id = 1;
+  WuwaCharacterFull character = 1;
   repeated WuwaWeapon weapons = 2;
   repeated WuwaEcho echoes = 3;
   WuwaStats stats = 4;

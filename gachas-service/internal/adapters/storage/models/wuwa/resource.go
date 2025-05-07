@@ -4,23 +4,24 @@ import (
 	"gorm.io/gorm"
 )
 
-type WuwaAscension struct {
+type Ascension struct {
 	gorm.Model
 	LocalSpecialty string       `gorm:"type:varchar(100);not null"`
 	BossMaterial   string       `gorm:"type:varchar(100);not null"`
 	MobMaterialID  uint         `gorm:"not null"`
-	MobMaterial    WuwaResource `gorm:"foreignKey:MobMaterialID;references:ID"`
+	MobMaterial    Resource `gorm:"foreignKey:MobMaterialID;references:ID"`
 }
 
-type WuwaTalent struct {
+type Talent struct {
 	gorm.Model
-	DungeonMaterial   WuwaResource `gorm:"foreignKey:DungeonMaterialID;references:ID"`
+	DungeonMaterial   Resource `gorm:"foreignKey:DungeonMaterialID;references:ID"`
 	DungeonMaterialID uint         `gorm:"not null"`
 	MobMaterialID     uint         `gorm:"not null"`
-	MobMaterial       WuwaResource `gorm:"foreignKey:MobMaterialID;references:ID"`
+	MobMaterial       Resource `gorm:"foreignKey:MobMaterialID;references:ID"`
+	BossMaterial 	  string `gorm:"not null"`
 }
 
-type WuwaResource struct {
+type Resource struct {
 	gorm.Model
 	UncommonName  string `gorm:"type:varchar(100);not null"`
 	RareName      string `gorm:"type:varchar(100);not null"`
