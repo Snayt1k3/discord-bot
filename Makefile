@@ -16,7 +16,7 @@ PROTOC_COMMAND = protoc -I=$(PROTO_DIR) \
 
 all: generate
 
-generate:
+generate-grpc:
 	@echo "Generating Go code from .proto files..."
 	@mkdir -p $(GO_OUT_DIR)
 	@$(PROTOC_COMMAND) $(PROTO_FILES)
@@ -34,11 +34,11 @@ docker:
 
 grpc-init:
 	@echo "Initializing gRPC server..."
-	@$(MAKE) generate
+	@$(MAKE) generate-grpc
 
 	@echo "Copying all generated files to api-gateway/proto..."
 	@mkdir -p api-gateway/proto
-	@cp -r grpc/* api-gateway/proto/
+	@cp -r grpc/* api-gateway
 
 	@echo "Moving settings proto files to settings-service..."
 	@mkdir -p settings-service/proto
