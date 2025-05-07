@@ -13,4 +13,9 @@ func GachaRoutes(r *gin.Engine, hands *handlers.GachaHandlers) {
 	gacha.GET("/genshin/character/:character_id", hands.GetGenshinCharacterByID)
 	gacha.GET("/genshin/character/:character_id/builds", hands.GetGenshinCharacterBuild)
 
+	// Wuthering Waves
+	gacha.GET("/wuwa/character", hands.GetWuwaCharacters)
+	gacha.GET("/wuwa/character/:character_id", hands.GetWuwaCharacterByID)
+	gacha.GET("/wuwa/character/:character_id/builds", hands.GetWuwaCharacterBuild)
+
 }

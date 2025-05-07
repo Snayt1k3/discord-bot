@@ -144,7 +144,6 @@ func (s *WuwaServer) GetCharacterBuild(ctx context.Context, request *pb.Characte
 		},
 	}
 
-	// Возврат результата
 	return &pb.WuwaCharacterBuild{
 		Character:       character,
 		Weapons:         weapons,

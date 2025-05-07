@@ -38,11 +38,12 @@ func main() {
 	defer settingsConn.Close()
 
 	settingsProtoClient := pb.NewSettingsServiceClient(settingsConn)
-	gachasProtoClient := pb.NewGenshinServiceClient(gachaConn)
+	genshinClient := pb.NewGenshinServiceClient(gachaConn)
+	wuwaClient := pb.NewWuwaServiceClient(gachaConn)
 
 	redisClient := adapters.NewRedisAdapter(fmt.Sprintf("%v:%v", cfg.RedisHost, cfg.RedisPort), cfg.RedisPass, cfg.RedisDB)
 	settingsHandlers := handlers.NewSettingsHandlers(settingsProtoClient, redisClient)
-	gachasHandlers := handlers.NewGachaHandlers(gachasProtoClient, redisClient)
+	gachasHandlers := handlers.NewGachaHandlers(genshinClient, wuwaClient, redisClient)
 	r := routes.SetupRouter(settingsHandlers, gachasHandlers)
 
 	port := ":" + cfg.Port
