@@ -5,118 +5,194 @@ package gachas;
 option go_package = "proto/";
 
 service GenshinService {
-    rpc GetAllCharacters (Empty) returns (CharacterListResponse);
-    rpc GetCharacterById (CharacterRequest) returns (CharacterDetailResponse);
-    rpc GetCharacterBuild (CharacterRequest) returns (BuildResponse);
+  rpc GetAllCharacters (Empty) returns (GenshinCharactersResponse);
+  rpc GetCharacterById (CharacterRequest) returns (GenshinCharactersResponse);
+  rpc GetCharacterBuild (CharacterRequest) returns (GenshinBuildResponse);
 }
 
-// Пустое сообщение для запроса без параметров
+service WuwaService {
+  rpc GetAllCharacters(Empty) returns (WuwaCharacterList);
+  rpc GetCharacterByID(CharacterRequest) returns (WuwaCharacterFull);
+  rpc GetCharacterBuild(CharacterRequest) returns (WuwaCharacterBuild);
+}
+
+service ZenlessService {
+  rpc GetAllCharacters(Empty) returns (Empty);
+  rpc GetCharacterByID(CharacterRequest) returns (Empty);
+  rpc GetCharacterBuild(CharacterRequest) returns (Empty);
+}
+
+service HsrService {
+  rpc GetAllCharacters(Empty) returns (Empty);
+  rpc GetCharacterByID(CharacterRequest) returns (Empty);
+  rpc GetCharacterBuild(CharacterRequest) returns (Empty);
+}
+
 message Empty {}
 
-// Запрос на получение персонажа по его ID
 message CharacterRequest {
-  uint64 id = 1; // ID персонажа
+  uint64 id = 1;
 }
 
-// Ответ на запрос списка всех персонажей
-message CharacterListResponse {
-  repeated CharacterShort characters = 1; // Список персонажей
+// Genshin models
+message GenshinCharactersResponse {
+  repeated GenshinCharacterShort characters = 1;
 }
 
-message BuildResponse {
-  Build build = 1; // Список персонажей
+message GenshinBuildResponse {
+  GenshinBuild build = 1;
 }
 
-// Краткая информация о персонаже
-message CharacterShort {
-  uint64 id = 1;       // ID персонажа
-  string name = 2;     // Имя персонажа
-  string element = 3;  // Стихия персонажа
-  string region = 4;   // Регион персонажа
+message GenshinCharacterShort {
+  uint64 id = 1;
+  string name = 2;
+  string element = 3;
+  string region = 4;
 }
 
-// Ответ с расширенной информацией по персонажу
-message CharacterDetailResponse {
-  Character character = 1;  // Персонаж с расширенной информацией
+message GenshinCharacterDetailResponse {
+  GenshinCharacter character = 1;
 }
 
-// Полная информация о персонаже
-message Character {
-  uint64 id = 1;           // ID персонажа
-  string name = 2;         // Имя персонажа
-  string element = 3;      // Стихия персонажа
-  string weapon_type = 4;  // Тип оружия
-  string base_stat = 5;    // Базовая характеристика
-  string region = 6;       // Регион персонажа
-  int32 rarity = 7;        // Редкость персонажа
-
-  AscensionMaterials ascension = 8;  // Материалы для восхождения
-  TalentMaterials talents = 9;       // Материалы для талантов
-  CommonMaterials common_materials = 10; // Общие материалы
+message GenshinCharacter {
+  uint64 id = 1;
+  string name = 2;
+  string element = 3;
+  string weapon_type = 4;
+  string base_stat = 5;
+  string region = 6;
+  int32 rarity = 7;
+  GenshinAscensionMaterials ascension = 8;
+  GenshinTalentMaterials talents = 9;
+  GenshinCommonMaterials common_materials = 10;
 }
 
-// Материалы для восхождения
-message AscensionMaterials {
-  string local_specialty = 1; // Местные материалы
-  string boss_drops = 2;      // Дропы с боссов
-  string gem = 3;             // Камни    
+message GenshinAscensionMaterials {
+  string local_specialty = 1;
+  string boss_drops = 2;
+  string gem = 3;
 }
 
-// Общие материалы для персонажа
-message CommonMaterials {
-  string common = 1;   // Обычные материалы
-  string uncommon = 2; // Редкие материалы
-  string rare = 3;     // Очень редкие материалы
+message GenshinCommonMaterials {
+  string common = 1;
+  string uncommon = 2;
+  string rare = 3;
 }
 
-// Материалы для талантов персонажа
-message TalentMaterials {
-  string boss_drops = 1;  // Дропы с боссов
-  Books books = 2;        // Книги
-  string talent_priority = 4;   // Приоритет талантов
+message GenshinTalentMaterials {
+  string boss_drops = 1;
+  GenshinBooks books = 2;
+  string talent_priority = 4;
 }
 
-// Структура для книг
-message Books {
-  string common = 1;   // Книга общего уровня
-  string uncommon = 2; // Книга редкого уровня
-  string rare = 3;     // Книга очень редкого уровня
-  repeated string weekdays = 4; // Дни недели
+message GenshinBooks {
+  string common = 1;
+  string uncommon = 2;
+  string rare = 3;
+  repeated string weekdays = 4;
 }
 
-
-// Билд персонажа
-message Build {
-  string name = 1;            // Название билда
-  repeated Artifact artifacts = 2;  // Артефакты
-  repeated Weapon weapons = 3;      // Оружие
-  repeated CharacterShort teams = 4; // Команда
-  Stats stats = 5;                  // Статистика билда
+message GenshinBuild {
+  string name = 1;
+  repeated GenshinArtifact artifacts = 2;
+  repeated GenshinWeapon weapons = 3;
+  repeated GenshinCharacterShort teams = 4;
+  GenshinStats stats = 5;
 }
 
-// Артефакты персонажа
-message Artifact {
-  string name = 1;           // Имя артефакта
-  string two_piece_bonus = 2; // Бонус от 2-х частей набора
-  string four_piece_bonus = 3; // Бонус от 4-х частей набора
+message GenshinArtifact {
+  string name = 1;
+  string two_piece_bonus = 2;
+  string four_piece_bonus = 3;
 }
 
-// Оружие персонажа
-message Weapon {
-  string name = 1;     // Имя оружия
-  string type = 2;     // Тип оружия
-  int32 rarity = 3;    // Редкость оружия
-  int32 base_atk = 4;  // Базовый Атака
-  string sub_stat = 5; // Подстатистика
-  float sub_value = 6; // Значение подстатистики
-  string passive = 7;  // Пассива оружия
+message GenshinWeapon {
+  string name = 1;
+  string type = 2;
+  int32 rarity = 3;
+  int32 base_atk = 4;
+  string sub_stat = 5;
+  float sub_value = 6;
+  string passive = 7;
 }
 
-// Статистика билда
-message Stats {
-  string sands = 1;           // Песочные часы
-  string goblet = 2;          // Кубок
-  string circlet = 3;         // Циркуль
-  string best_stats = 4;  // Лучшие характеристики
-  string sub_stats_priority = 5; // Приоритет подхарактеристик
+message GenshinStats {
+  string sands = 1;
+  string goblet = 2;
+  string circlet = 3;
+  string best_stats = 4;
+  string sub_stats_priority = 5;
 }
+
+// Wuwa Models
+message WuwaCharacterShort {
+  uint64 id = 1;
+  string name = 2;
+  string element = 3;
+  int32 rarity = 4;
+}
+
+message WuwaCharacterList {
+  repeated WuwaCharacterShort characters = 1;
+}
+
+message WuwaResource {
+  string uncommon_name = 1;
+  string rare_name = 2;
+  string epic_name = 3;
+  string legendary_name = 4;
+}
+
+message WuwaAscension {
+  string local_specialty = 1;
+  string boss_material = 2;
+  WuwaResource mob_material = 3;
+}
+
+message WuwaTalent {
+  WuwaResource dungeon_material = 1;
+  WuwaResource mob_material = 2;
+}
+
+message WuwaWeapon {
+  string name = 1;
+  string weapon_type = 2;
+  int32 rarity = 3;
+  string passive = 4;
+  int32 base_atk = 5;
+  string sub_stat = 6;
+  float sub_value = 7;
+}
+
+message WuwaCharacterFull {
+  uint64 id = 1;
+  string name = 2;
+  string element = 3;
+  int32 rarity = 4;
+  WuwaWeapon weapon = 5;
+  WuwaAscension ascension = 6;
+  WuwaTalent talents = 7;
+}
+
+message WuwaEcho {
+  string name = 1;
+  string two_piece_bonus = 2;
+  string full_set_bonus = 3;
+}
+
+message WuwaStats {
+  string four_cost_echo_stat = 1;
+  string three_cost_echo_stat = 2;
+  string sub_stats_priority = 3;
+}
+
+message WuwaCharacterBuild {
+  uint64 character_id = 1;
+  repeated WuwaWeapon weapons = 2;
+  repeated WuwaEcho echoes = 3;
+  WuwaStats stats = 4;
+  string best_primary_echo = 5;
+}
+
+// ZZZ Models
+// Honkai StarRail Models
