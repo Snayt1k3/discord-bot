@@ -85,3 +85,69 @@ func (ga *GachasAdapter) GetGenshinBuild(id uint) (dtoGachas.GenshinBuild, error
 
 	return build, nil
 }
+
+func (ga *GachasAdapter) GetWuwaCharacters() ([]dtoGachas.WuwaCharacterShort, error) {
+	resp, err := ga.client.Get(
+		context.Background(),
+		fmt.Sprintf("%v/api/v1/gacha/wuwa/character", config.GetApiGatewayAddr()),
+		nil,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	var characters []dtoGachas.WuwaCharacterShort
+
+	if err := json.NewDecoder(resp.Body).Decode(&characters); err != nil {
+		return nil, err
+	}
+
+	return characters, nil
+}
+
+func (ga *GachasAdapter) GetWuwaCharacter(id uint) (dtoGachas.WuwaCharacterFull, error) {
+	resp, err := ga.client.Get(
+		context.Background(),
+		fmt.Sprintf("%v/api/v1/gacha/wuwa/character/%d", config.GetApiGatewayAddr(), id),
+		nil,
+	)
+
+	if err != nil {
+		return dtoGachas.WuwaCharacterFull{}, err
+	}
+
+	defer resp.Body.Close()
+
+	var character dtoGachas.WuwaCharacterFull
+
+	if err := json.NewDecoder(resp.Body).Decode(&character); err != nil {
+		return character, err
+	}
+
+	return character, nil
+}
+
+func (ga *GachasAdapter) GetWuwaBuild(id uint) (dtoGachas.WuwaCharacterBuild, error) {
+	resp, err := ga.client.Get(
+		context.Background(),
+		fmt.Sprintf("%v/api/v1/gacha/wuwa/build/%d", config.GetApiGatewayAddr(), id),
+		nil,
+	)
+
+	var build dtoGachas.WuwaCharacterBuild
+
+	if err != nil {
+		return build, err
+	}
+
+	defer resp.Body.Close()
+
+	if err := json.NewDecoder(resp.Body).Decode(&build); err != nil {
+		return dtoGachas.WuwaCharacterBuild{}, err
+	}
+
+	return build, nil
+}

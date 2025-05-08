@@ -1,10 +1,10 @@
 package dto
 
 type GenshinCharacterBrief struct {
-	ID         uint   `json:"id"`
-	Name       string `json:"name"`
-	Element    string `json:"element"`
-	Region     string `json:"region"`
+	ID      uint   `json:"id"`
+	Name    string `json:"name"`
+	Element string `json:"element"`
+	Region  string `json:"region"`
 }
 
 type GenshinCommonMaterials struct {

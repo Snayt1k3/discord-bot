@@ -1,4 +1,4 @@
-package genshin
+package wuwa
 
 var (
 	charactersEmojis = map[string]string{}

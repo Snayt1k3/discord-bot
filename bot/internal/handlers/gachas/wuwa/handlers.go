@@ -1,13 +1,14 @@
-package genshin
+package wuwa
 
 import (
 	"bot/internal/discord"
 	"bot/internal/interfaces"
 	"fmt"
-	"github.com/bwmarrin/discordgo"
 	"log/slog"
 	"strconv"
 	"strings"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 const (
@@ -15,21 +16,19 @@ const (
 	buttonsPerRow = 4
 )
 
-type GenshinHandlers struct {
+type WuwaHandlers struct {
 	adapter interfaces.GachasAdapter
 }
 
-func NewGenshinHandlers(adapter interfaces.GachasAdapter) *GenshinHandlers {
-	return &GenshinHandlers{
-		adapter: adapter,
-	}
+func NewWuwaHandlers(adapter interfaces.GachasAdapter) *WuwaHandlers {
+	return &WuwaHandlers{adapter: adapter}
 }
 
-func (gh *GenshinHandlers) showCharacters(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func (wh *WuwaHandlers) showCharacters(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	var components []discordgo.MessageComponent
 
 	totalButtons := rowSize * buttonsPerRow
-	characters, err := gh.adapter.GetGenshinCharacters()
+	characters, err := wh.adapter.GetWuwaCharacters()
 
 	if err != nil {
 		slog.Error("Error fetching Genshin characters", "err", err)
@@ -49,7 +48,7 @@ func (gh *GenshinHandlers) showCharacters(s *discordgo.Session, i *discordgo.Int
 			row = append(row, discordgo.Button{
 				Label:    displayedCharacters[j].Name,
 				Style:    discordgo.PrimaryButton,
-				CustomID: fmt.Sprintf("GenshinCharacter_%v", displayedCharacters[j].ID),
+				CustomID: fmt.Sprintf("WuwaCharacter_%v", displayedCharacters[j].ID),
 			})
 		}
 
@@ -61,7 +60,7 @@ func (gh *GenshinHandlers) showCharacters(s *discordgo.Session, i *discordgo.Int
 			discordgo.Button{
 				Label:    "⬅ Previous",
 				Style:    discordgo.SecondaryButton,
-				CustomID: "genshinPagination_0",
+				CustomID: "WuwaPagination_0",
 				Disabled: true,
 			},
 			discordgo.Button{
@@ -72,17 +71,16 @@ func (gh *GenshinHandlers) showCharacters(s *discordgo.Session, i *discordgo.Int
 			discordgo.Button{
 				Label:    "Next ➡",
 				Style:    discordgo.SecondaryButton,
-				CustomID: "genshinPagination_1",
+				CustomID: "WuwaPagination_1",
 			},
 		},
 	}
 	components = append(components, paginationRow)
 
 	embed := &discordgo.MessageEmbed{
-		Title:       "🎮 Genshin Impact Characters",
-		Description: "Discover all available characters in Genshin Impact, including their rarity, elements, and regions. Tap on a character to view detailed info, ascension materials, and builds.",
-		Color:       0x3498DB,
-		// todo: add page number
+		Title:       "🌊 Wuthering Waves Characters",
+		Description: "Explore all resonators in Wuthering Waves, including their rarity, attributes, and factions. Tap on a resonator to see detailed info, echo setups, weapon builds, and progression materials.",
+		Color:       0x6A5ACD,
 	}
 
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
@@ -99,7 +97,7 @@ func (gh *GenshinHandlers) showCharacters(s *discordgo.Session, i *discordgo.Int
 	return nil
 }
 
-func (gh *GenshinHandlers) showCharacterInfo(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func (wh *WuwaHandlers) showCharacterDetail(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	_, id, _ := strings.Cut(i.MessageComponentData().CustomID, "_")
 	parsedID, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
@@ -107,7 +105,7 @@ func (gh *GenshinHandlers) showCharacterInfo(s *discordgo.Session, i *discordgo.
 		return discord.SendErrorMessage(s, i)
 	}
 
-	character, err := gh.adapter.GetGenshinCharacter(uint(parsedID))
+	character, err := wh.adapter.GetWuwaCharacter(uint(parsedID))
 
 	if err != nil {
 		slog.Error("Error fetching character info", "err", err)
@@ -115,52 +113,33 @@ func (gh *GenshinHandlers) showCharacterInfo(s *discordgo.Session, i *discordgo.
 	}
 
 	embed := discordgo.MessageEmbed{
-		Title: character.Name,
-		Color: 0x9b59b6,
-		Thumbnail: &discordgo.MessageEmbedThumbnail{
-			URL: "https://i.pinimg.com/736x/77/97/d7/7797d737a3a35630f6ce321b1a00fc20.jpg",
-		},
+		Title: character.Name + " ⭐" + strconv.Itoa(character.Rarity),
+		Color: 0x6A5ACD, // фиолетово-синий стиль для WW
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name:   "⭐ Rarity",
-				Value:  strconv.Itoa(character.Rarity) + " Star",
+				Name:   "🌪️ Element",
+				Value:  character.Element,
 				Inline: true,
 			},
 			{
-				Name:   "⚔️ Weapon",
+				Name:   "🗡️ Weapon Type",
 				Value:  character.WeaponType,
 				Inline: true,
 			},
 			{
-				Name:   "🌩️ Element",
-				Value:  character.Element,
-				Inline: false,
+				Name:  "Region",
+				Value: character.Affiliation,
 			},
-			// {
-			// 	Name:   "🎙️ Voice Actors",
-			// 	Value:  "**EN:** Anne Yatco\n**JP:** Miyuki Sawashiro",
-			// 	Inline: true,
-			// },
-			{
-				Name:   "🗺️ Region",
-				Value:  character.Region,
-				Inline: true,
-			},
-			// {
-			// 	Name:   "📅 Released",
-			// 	Value:  "Version 2.1 – September 1, 2021",
-			// 	Inline: true,
-			// },
 		},
-		Image: &discordgo.MessageEmbedImage{
-			URL: "https://i.pinimg.com/736x/d2/96/83/d29683ce9223109447fb6a57ef9f7e3a.jpg",
+		Thumbnail: &discordgo.MessageEmbedThumbnail{
+			URL: "",
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: character.Name + " • Genshin Impact",
+			Text: character.Name + " • Wuthering Waves",
 		},
 	}
 
-	components := genshinButtons(character.ID)
+	components := WuwaButtons(int(character.ID))
 
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseDeferredMessageUpdate,
@@ -176,7 +155,7 @@ func (gh *GenshinHandlers) showCharacterInfo(s *discordgo.Session, i *discordgo.
 	return nil
 }
 
-func (gh *GenshinHandlers) showCharacterAscension(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func (wh *WuwaHandlers) showCharacterAscension(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	_, id, _ := strings.Cut(i.MessageComponentData().CustomID, "_")
 	parsedID, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
@@ -184,7 +163,7 @@ func (gh *GenshinHandlers) showCharacterAscension(s *discordgo.Session, i *disco
 		return discord.SendErrorMessage(s, i)
 	}
 
-	character, err := gh.adapter.GetGenshinCharacter(uint(parsedID))
+	character, err := wh.adapter.GetWuwaCharacter(uint(parsedID))
 
 	if err != nil {
 		slog.Error("Error fetching character info", "err", err)
@@ -193,47 +172,48 @@ func (gh *GenshinHandlers) showCharacterAscension(s *discordgo.Session, i *disco
 
 	embed := &discordgo.MessageEmbed{
 		Title:       "⬆️ Ascension Materials — " + character.Name,
-		Description: fmt.Sprintf("Materials required to fully ascend %v to Lv. 90, including Talent Level-Up materials.", character.Name),
-		Color:       0x9b59b6,
+		Description: fmt.Sprintf("All required materials to fully ascend **%s**.", character.Name),
+		Color:       0x6A5ACD,
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
-			URL: "https://i.pinimg.com/736x/77/97/d7/7797d737a3a35630f6ce321b1a00fc20.jpg",
+			URL: fmt.Sprintf("https://your.repo/wuwa/thumbs/%s.png", strings.ToLower(character.Name)),
 		},
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name:   character.Ascension.Gem,
-				Value:  "- Sliver ×1\n- Fragment ×9\n- Chunk ×9\n- Gemstone ×6",
+				Name: "🔹 Mob Drops",
+				Value: fmt.Sprintf(
+					"- %s ×4\n- %s ×12\n- %s ×12\n- %s ×4",
+					character.Ascension.MobMaterial.UncommonName,
+					character.Ascension.MobMaterial.RareName,
+					character.Ascension.MobMaterial.EpicName,
+					character.Ascension.MobMaterial.LegendaryName,
+				),
+				Inline: false,
+			},
+			{
+				Name:   "🧠 Boss Drop",
+				Value:  fmt.Sprintf("%s ×46", character.Ascension.BossMaterial),
 				Inline: true,
 			},
 			{
-				Name:   character.Ascension.BossDrops,
-				Value:  "- Total: ×46",
+				Name:   "🌿 Local Specialty",
+				Value:  fmt.Sprintf("%s ×60", character.Ascension.LocalSpecialty),
 				Inline: true,
 			},
 			{
-				Name:   character.Ascension.LocalSpecialty,
-				Value:  "- Total: ×168",
-				Inline: true,
-			},
-			{
-				Name:   "Ascension Materials",
-				Value:  fmt.Sprintf("- %v ×18\n- %v ×30\n- %v ×36", character.CommonMaterials.Common, character.CommonMaterials.Uncommon, character.CommonMaterials.Rare),
-				Inline: true,
-			},
-			{
-				Name:   "💰 Mora",
-				Value:  "- Total: 420,000",
+				Name:   "💰 Shell Credits",
+				Value:  "170,000",
 				Inline: true,
 			},
 		},
 		Image: &discordgo.MessageEmbedImage{
-			URL: "https://i.pinimg.com/736x/d2/96/83/d29683ce9223109447fb6a57ef9f7e3a.jpg", // todo: Заменить
+			URL: "",
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: character.Name + " • Full Ascension & Talent Materials",
+			Text: character.Name + " • Wuthering Waves",
 		},
 	}
 
-	components := genshinButtons(character.ID)
+	components := WuwaButtons(int(character.ID))
 
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseDeferredMessageUpdate,
@@ -249,80 +229,7 @@ func (gh *GenshinHandlers) showCharacterAscension(s *discordgo.Session, i *disco
 	return nil
 }
 
-func (gh *GenshinHandlers) showCharacterTalents(s *discordgo.Session, i *discordgo.InteractionCreate) error {
-	_, id, _ := strings.Cut(i.MessageComponentData().CustomID, "_")
-	parsedID, err := strconv.ParseUint(id, 10, 32)
-	if err != nil {
-		slog.Error("Error parsing character ID", "err", err)
-		return discord.SendErrorMessage(s, i)
-	}
-
-	character, err := gh.adapter.GetGenshinCharacter(uint(parsedID))
-
-	if err != nil {
-		slog.Error("Error fetching character info", "err", err)
-		return discord.SendErrorMessage(s, i)
-	}
-
-	embed := &discordgo.MessageEmbed{
-		Title:       "📘 Talent Materials — " + character.Name,
-		Description: fmt.Sprintf("Resources required to level up all three of %v talents to Lv. 10.", character.Name),
-		Color:       0xad44d9,
-		Thumbnail: &discordgo.MessageEmbedThumbnail{
-			URL: "https://i.pinimg.com/736x/77/97/d7/7797d737a3a35630f6ce321b1a00fc20.jpg",
-		},
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:   "📚 Talent Books",
-				Value:  fmt.Sprintf("- %v ×9\n- %v ×63\n- %v ×114", character.Talents.Books.Common, character.Talents.Books.Uncommon, character.Talents.Books.Rare),
-				Inline: true,
-			},
-			{
-				Name:   "Materials",
-				Value:  fmt.Sprintf("- %v ×18\n- %v ×66\n- %v ×93", character.CommonMaterials.Common, character.CommonMaterials.Uncommon, character.CommonMaterials.Rare),
-				Inline: true,
-			},
-			{
-				Name:   "🔥 Weekly Boss Material",
-				Value:  fmt.Sprintf("- %v ×18", character.Talents.BossDrops),
-				Inline: true,
-			},
-			{
-				Name:   "👑 Crown of Insight",
-				Value:  "- Total: ×3 (for maxing all 3 talents)",
-				Inline: true,
-			},
-			{
-				Name:   "💰 Mora",
-				Value:  "- Total: 4,950,000",
-				Inline: true,
-			},
-		},
-		Image: &discordgo.MessageEmbedImage{
-			URL: "https://i.pinimg.com/736x/0b/18/e8/0b18e8acbf645b7b227689f33785d5c3.jpg",
-		},
-		Footer: &discordgo.MessageEmbedFooter{
-			Text: character.Name + " • Talent Level-Up Costs",
-		},
-	}
-
-	components := genshinButtons(character.ID)
-
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseDeferredMessageUpdate,
-	})
-
-	discord.EditMessage(s, &discordgo.MessageEdit{
-		Embeds:     &[]*discordgo.MessageEmbed{embed},
-		Components: &components,
-		Channel:    i.ChannelID,
-		ID:         i.Message.ID,
-	})
-
-	return nil
-}
-
-func (gh *GenshinHandlers) showCharacterWeapons(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func (wh *WuwaHandlers) showCharacterWeapons(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	_, id, _ := strings.Cut(i.MessageComponentData().CustomID, "_")
 	parsedID, err := strconv.ParseUint(id, 10, 32)
 
@@ -331,7 +238,7 @@ func (gh *GenshinHandlers) showCharacterWeapons(s *discordgo.Session, i *discord
 		return discord.SendErrorMessage(s, i)
 	}
 
-	build, err := gh.adapter.GetGenshinBuild(uint(parsedID))
+	build, err := wh.adapter.GetWuwaBuild(uint(parsedID))
 
 	if err != nil {
 		slog.Error("Error fetching character info", "err", err)
@@ -375,7 +282,7 @@ func (gh *GenshinHandlers) showCharacterWeapons(s *discordgo.Session, i *discord
 		},
 	}
 
-	components := genshinButtons(build.Character.ID)
+	components := WuwaButtons(int(build.Character.ID))
 
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseDeferredMessageUpdate,
@@ -391,7 +298,7 @@ func (gh *GenshinHandlers) showCharacterWeapons(s *discordgo.Session, i *discord
 	return nil
 }
 
-func (gh *GenshinHandlers) showCharacterTeams(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func (wh *WuwaHandlers) showCharacterTalents(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	_, id, _ := strings.Cut(i.MessageComponentData().CustomID, "_")
 	parsedID, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
@@ -399,38 +306,63 @@ func (gh *GenshinHandlers) showCharacterTeams(s *discordgo.Session, i *discordgo
 		return discord.SendErrorMessage(s, i)
 	}
 
-	build, err := gh.adapter.GetGenshinBuild(uint(parsedID))
+	character, err := wh.adapter.GetWuwaCharacter(uint(parsedID))
 
 	if err != nil {
 		slog.Error("Error fetching character info", "err", err)
 		return discord.SendErrorMessage(s, i)
-	}
-
-	var Fields []*discordgo.MessageEmbedField
-
-	for _, team := range build.Teams {
-		Fields = append(Fields, &discordgo.MessageEmbedField{
-			Name: team.Characters[0].Name + " + " + team.Characters[1].Name + " + " + team.Characters[2].Name + " + " + team.Characters[3].Name,
-		})
 	}
 
 	embed := &discordgo.MessageEmbed{
-		Title:       build.Character.Name + " — Best Team Compositions",
-		Description: fmt.Sprintf("Top team compositions for %v, including elemental reactions and synergy.", build.Character.Name),
-		Color:       0x9b59b6,
+		Title:       "📘 Talent Materials — " + character.Name,
+		Description: fmt.Sprintf("Resources required to max all five talents of **%s**.", character.Name),
+		Color:       0xad44d9,
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
-			URL: "https://i.pinimg.com/736x/77/97/d7/7797d737a3a35630f6ce321b1a00fc20.jpg",
+			URL: fmt.Sprintf("https://your.repo/wuwa/thumbs/%s.png", strings.ToLower(character.Name)),
 		},
-		Fields: Fields,
+		Fields: []*discordgo.MessageEmbedField{
+			{
+				Name: "👤 Mob Drops — Howler Cores",
+				Value: fmt.Sprintf(
+					"- %s ×25\n- %s ×28\n- %s ×40\n- %s ×57",
+					character.Talents.MobMaterial.UncommonName,
+					character.Talents.MobMaterial.RareName,
+					character.Talents.MobMaterial.EpicName,
+					character.Talents.MobMaterial.LegendaryName,
+				),
+				Inline: false,
+			},
+			{
+				Name: "📘 Dungeon Materials",
+				Value: fmt.Sprintf(
+					"- %s ×25\n- %s ×28\n- %s ×55\n- %s ×67",
+					character.Talents.DungeonMaterial.UncommonName,
+					character.Talents.DungeonMaterial.RareName,
+					character.Talents.DungeonMaterial.EpicName,
+					character.Talents.DungeonMaterial.LegendaryName,
+				),
+				Inline: false,
+			},
+			{
+				Name:   "🔥 Weekly Boss Material",
+				Value:  fmt.Sprintf("- %s ×26", character.Talents.BossMaterial),
+				Inline: true,
+			},
+			{
+				Name:   "💰 Shell Credits",
+				Value:  "2,030,000",
+				Inline: true,
+			},
+		},
 		Image: &discordgo.MessageEmbedImage{
-			URL: "https://i.pinimg.com/736x/d2/96/83/d29683ce9223109447fb6a57ef9f7e3a.jpg",
+			URL: fmt.Sprintf("https://your.repo/wuwa/full/%s_talents.png", strings.ToLower(character.Name)),
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: build.Character.Name + " • Team Composition Guide",
+			Text: character.Name + " • Talent Level-Up Materials",
 		},
 	}
 
-	components := genshinButtons(build.Character.ID)
+	components := WuwaButtons(int(character.ID))
 
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseDeferredMessageUpdate,
@@ -446,7 +378,11 @@ func (gh *GenshinHandlers) showCharacterTeams(s *discordgo.Session, i *discordgo
 	return nil
 }
 
-func (gh *GenshinHandlers) showCharacterArtifacts(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func (wh *WuwaHandlers) showCharacterTeams(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return nil
+}
+
+func (wh *WuwaHandlers) showCharacterEchoes(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	_, id, _ := strings.Cut(i.MessageComponentData().CustomID, "_")
 	parsedID, err := strconv.ParseUint(id, 10, 32)
 
@@ -455,55 +391,56 @@ func (gh *GenshinHandlers) showCharacterArtifacts(s *discordgo.Session, i *disco
 		return discord.SendErrorMessage(s, i)
 	}
 
-	build, err := gh.adapter.GetGenshinBuild(uint(parsedID))
-
+	build, err := wh.adapter.GetWuwaBuild(uint(parsedID))
 	if err != nil {
-		slog.Error("Error fetching character info", "err", err)
+		slog.Error("Error fetching character build", "err", err)
 		return discord.SendErrorMessage(s, i)
 	}
 
 	var fields []*discordgo.MessageEmbedField
 
-	for _, artifact := range build.Artifacts {
+	for _, echo := range build.Echoes {
 		fields = append(fields, &discordgo.MessageEmbedField{
-			Name:  artifact.Name,
-			Value: fmt.Sprintf("2-piece: %v \n 4-piece: %v", artifact.TwoPieceBonus, artifact.FourPieceBonus),
+			Name:   echo.Name,
+			Value:  fmt.Sprintf("2-piece bonus: %s\n5-piece bonus: %s", echo.TwoPieceBonus, echo.FullSetBonus),
+			Inline: false,
 		})
 	}
 
 	stats := build.Stats
 	fields = append(fields, &discordgo.MessageEmbedField{
-		Name: "Main Stats",
+		Name: "📊 Main Stat Suggestions",
 		Value: fmt.Sprintf(
-			"🏺 Sands: **%s**\n🍷 Goblet: **%s**\n👑 Circlet: **%s**",
-			stats.Sands,
-			stats.Goblet,
-			stats.Circlet,
+			"4-Cost Echo: **%s**\n3-Cost Echo: **%s**",
+			stats.FourCostEchoStat,
+			stats.ThreeCostEchoStat,
 		),
+		Inline: false,
 	})
 
 	fields = append(fields, &discordgo.MessageEmbedField{
-		Name:  "Substat Priority",
-		Value: stats.SubStatsPriority,
+		Name:   "🔻 Substat Priority",
+		Value:  stats.SubStatsPriority,
+		Inline: false,
 	})
 
 	embed := &discordgo.MessageEmbed{
-		Title:       build.Character.Name + " — Artifact Guide",
-		Description: fmt.Sprintf("Top artifact sets for different %v builds.\nChoose based on your team and role preferences.", build.Character.Name),
-		Color:       0x9b59b6,
+		Title:       build.Character.Name + " — Echo & Stat Guide",
+		Description: fmt.Sprintf("Recommended Echo sets and stat priorities for **%s**.", build.Character.Name),
+		Color:       0x3498DB,
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
-			URL: "https://i.pinimg.com/736x/77/97/d7/7797d737a3a35630f6ce321b1a00fc20.jpg",
+			URL: "",
 		},
 		Fields: fields,
 		Image: &discordgo.MessageEmbedImage{
-			URL: "https://i.pinimg.com/736x/d2/96/83/d29683ce9223109447fb6a57ef9f7e3a.jpg",
+			URL: "",
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: build.Character.Name + " • Artifact Sets Overview",
+			Text: build.Character.Name + " • Echo Build",
 		},
 	}
 
-	components := genshinButtons(build.Character.ID)
+	components := WuwaButtons(int(build.Character.ID))
 
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseDeferredMessageUpdate,
@@ -517,14 +454,13 @@ func (gh *GenshinHandlers) showCharacterArtifacts(s *discordgo.Session, i *disco
 	})
 
 	return nil
-
 }
 
-func (gh *GenshinHandlers) genshinPagination(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func (wh *WuwaHandlers) pagination(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	_, pageStr, _ := strings.Cut(i.MessageComponentData().CustomID, "_")
 	page, _ := strconv.Atoi(pageStr)
 
-	characters, err := gh.adapter.GetGenshinCharacters()
+	characters, err := wh.adapter.GetWuwaCharacters()
 
 	if err != nil {
 		slog.Error("Error fetching Genshin characters", "err", err)
@@ -548,19 +484,18 @@ func (gh *GenshinHandlers) genshinPagination(s *discordgo.Session, i *discordgo.
 			row = append(row, discordgo.Button{
 				Label:    pageCharacters[j].Name,
 				Style:    discordgo.PrimaryButton,
-				CustomID: fmt.Sprintf("GenshinCharacter_%v", pageCharacters[j].ID),
+				CustomID: fmt.Sprintf("WuwaCharacter_%v", pageCharacters[j].ID),
 			})
 		}
 		components = append(components, discordgo.ActionsRow{Components: row})
 	}
 
-	// Добавляем пагинацию
 	paginationRow := discordgo.ActionsRow{
 		Components: []discordgo.MessageComponent{
 			discordgo.Button{
 				Label:    "⬅ Previous",
 				Style:    discordgo.SecondaryButton,
-				CustomID: fmt.Sprintf("genshinPagination_%v", page-1),
+				CustomID: fmt.Sprintf("WuwaPagination_%v", page-1),
 				Disabled: page == 0,
 			},
 			discordgo.Button{
@@ -571,7 +506,7 @@ func (gh *GenshinHandlers) genshinPagination(s *discordgo.Session, i *discordgo.
 			discordgo.Button{
 				Label:    "Next ➡",
 				Style:    discordgo.SecondaryButton,
-				CustomID: fmt.Sprintf("genshinPagination_%v", page+1),
+				CustomID: fmt.Sprintf("WuwaPagination_%v", page+1),
 				Disabled: end >= len(characters),
 			},
 		},
@@ -579,9 +514,9 @@ func (gh *GenshinHandlers) genshinPagination(s *discordgo.Session, i *discordgo.
 	components = append(components, paginationRow)
 
 	embed := &discordgo.MessageEmbed{
-		Title:       "🎮 Genshin Impact Characters",
-		Description: "Discover all available characters in Genshin Impact, including their rarity, elements, and regions. Tap on a character to view detailed info, ascension materials, and builds.",
-		Color:       0x3498DB,
+		Title:       "🌊 Wuthering Waves Characters",
+		Description: "Explore all resonators in Wuthering Waves, including their rarity, attributes, and factions. Tap on a resonator to see detailed info, echo setups, weapon builds, and progression materials.",
+		Color:       0x6A5ACD,
 	}
 
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
@@ -598,13 +533,7 @@ func (gh *GenshinHandlers) genshinPagination(s *discordgo.Session, i *discordgo.
 	return nil
 }
 
-func (gh *GenshinHandlers) AddGenshinHandlers(handlers map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error) {
-	handlers["GenshinCharacters"] = gh.showCharacters
-	handlers["genshinPagination"] = gh.genshinPagination
-	handlers["GenshinCharacter"] = gh.showCharacterInfo
-	handlers["GenshinAscension"] = gh.showCharacterAscension
-	handlers["GenshinArtifacts"] = gh.showCharacterArtifacts
-	handlers["GenshinTalents"] = gh.showCharacterTalents
-	handlers["GenshinWeapons"] = gh.showCharacterWeapons
-	handlers["GenshinTeams"] = gh.showCharacterTeams
+func (wh *WuwaHandlers) AddWuwaHandlers(handlers map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error) {
+	handlers["WuwaCharacters"] = wh.showCharacters
+	handlers["WuwaPagination"] = wh.pagination
 }
