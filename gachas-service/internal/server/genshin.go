@@ -56,7 +56,7 @@ func (s *GenshinServer) GetCharacterBuild(ctx context.Context, req *pb.Character
 			Ascension: &pb.GenshinAscensionMaterials{
 				LocalSpecialty: build.Character.Ascension.LocalSpecialty,
 				BossDrops:      build.Character.Ascension.BossDrops,
-				Gem: build.Character.Ascension.Gem,	
+				Gem:            build.Character.Ascension.Gem,
 			},
 			Talents: &pb.GenshinTalentMaterials{
 				BossDrops: build.Character.Talents.BossDrops,
@@ -146,7 +146,7 @@ func (s *GenshinServer) GetCharacterById(ctx context.Context, req *pb.CharacterR
 			Ascension: &pb.GenshinAscensionMaterials{
 				LocalSpecialty: character.Ascension.LocalSpecialty,
 				BossDrops:      character.Ascension.BossDrops,
-				Gem: character.Ascension.Gem,	
+				Gem:            character.Ascension.Gem,
 			},
 			Talents: &pb.GenshinTalentMaterials{
 				BossDrops: character.Talents.BossDrops,

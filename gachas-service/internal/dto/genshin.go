@@ -19,7 +19,7 @@ type GenshinCommonMaterials struct {
 type GenshinAscensionMaterials struct {
 	ID             uint   `json:"id"`
 	LocalSpecialty string `json:"local_specialty"`
-	Gem 			string `json:"gem"`
+	Gem            string `json:"gem"`
 	BossDrops      string `json:"boss_drops"`
 }
 

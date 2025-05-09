@@ -17,10 +17,10 @@ type Build struct {
 }
 
 type Artifact struct {
-    gorm.Model
-    Name           string `json:"name" gorm:"unique;not null"`
-    TwoPieceBonus  string `json:"two_piece_bonus" gorm:"type:text"`
-    FourPieceBonus string `json:"four_piece_bonus" gorm:"type:text"`
+	gorm.Model
+	Name           string `json:"name" gorm:"unique;not null"`
+	TwoPieceBonus  string `json:"two_piece_bonus" gorm:"type:text"`
+	FourPieceBonus string `json:"four_piece_bonus" gorm:"type:text"`
 }
 
 type Weapon struct {

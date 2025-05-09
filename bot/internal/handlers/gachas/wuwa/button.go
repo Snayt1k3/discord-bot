@@ -1,8 +1,8 @@
 package wuwa
 
 import (
-	"github.com/bwmarrin/discordgo"
 	"fmt"
+	"github.com/bwmarrin/discordgo"
 )
 
 func WuwaButtons(id int) []discordgo.MessageComponent {

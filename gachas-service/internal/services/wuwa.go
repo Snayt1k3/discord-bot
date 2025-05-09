@@ -53,7 +53,7 @@ func (s *WuwaService) GetCharacters() ([]dto.WuwaCharacterShort, error) {
 	return characterBriefs, nil
 }
 
-func NewWuwaService(repo interfaces.RepoInterface[wuwa.Character, wuwa.Build]) *WuwaService{
+func NewWuwaService(repo interfaces.RepoInterface[wuwa.Character, wuwa.Build]) *WuwaService {
 	return &WuwaService{
 		repository: repo,
 	}

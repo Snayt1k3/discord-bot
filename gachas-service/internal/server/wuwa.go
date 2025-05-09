@@ -2,10 +2,10 @@ package server
 
 import (
 	"context"
-	"strconv"
 	"gachas-service/internal/dto"
 	"gachas-service/internal/interfaces"
 	pb "gachas-service/proto"
+	"strconv"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -13,7 +13,7 @@ import (
 
 type WuwaServer struct {
 	pb.UnimplementedWuwaServiceServer
-			service interfaces.ServiceInterface[dto.WuwaCharacterFull, dto.WuwaCharacterShort, dto.WuwaCharacterBuild]
+	service interfaces.ServiceInterface[dto.WuwaCharacterFull, dto.WuwaCharacterShort, dto.WuwaCharacterBuild]
 }
 
 func (s *WuwaServer) GetAllCharacters(ctx context.Context, request *pb.Empty) (*pb.WuwaCharacterList, error) {
@@ -26,7 +26,6 @@ func (s *WuwaServer) GetAllCharacters(ctx context.Context, request *pb.Empty) (*
 	response := &pb.WuwaCharacterList{
 		Characters: make([]*pb.WuwaCharacterShort, len(characters)),
 	}
-
 
 	for i, character := range characters {
 		response.Characters[i] = &pb.WuwaCharacterShort{
@@ -48,34 +47,33 @@ func (s *WuwaServer) GetCharacterByID(ctx context.Context, request *pb.Character
 	}
 
 	return &pb.WuwaCharacterFull{
-		Id: uint64(character.ID),
+		Id:      uint64(character.ID),
 		Element: character.Element,
-		Rarity: int32(character.Rarity),
+		Rarity:  int32(character.Rarity),
 		Ascension: &pb.WuwaAscension{
 			LocalSpecialty: character.Ascension.LocalSpecialty,
-			BossMaterial: character.Ascension.BossMaterial,
+			BossMaterial:   character.Ascension.BossMaterial,
 			MobMaterial: &pb.WuwaResource{
-				UncommonName: character.Ascension.MobMaterial.UncommonName,
-				RareName: character.Ascension.MobMaterial.RareName,
-				EpicName: character.Ascension.MobMaterial.EpicName,
+				UncommonName:  character.Ascension.MobMaterial.UncommonName,
+				RareName:      character.Ascension.MobMaterial.RareName,
+				EpicName:      character.Ascension.MobMaterial.EpicName,
 				LegendaryName: character.Ascension.MobMaterial.LegendaryName,
 			},
 		},
 		Talents: &pb.WuwaTalent{
 			DungeonMaterial: &pb.WuwaResource{
-				UncommonName: character.Talents.DungeonMaterial.UncommonName,
-				RareName: character.Talents.DungeonMaterial.RareName,
-				EpicName: character.Talents.DungeonMaterial.EpicName,
+				UncommonName:  character.Talents.DungeonMaterial.UncommonName,
+				RareName:      character.Talents.DungeonMaterial.RareName,
+				EpicName:      character.Talents.DungeonMaterial.EpicName,
 				LegendaryName: character.Talents.DungeonMaterial.LegendaryName,
 			},
 			MobMaterial: &pb.WuwaResource{
-				UncommonName: character.Talents.MobMaterial.UncommonName,
-				RareName: character.Talents.MobMaterial.RareName,
-				EpicName: character.Talents.MobMaterial.EpicName,
+				UncommonName:  character.Talents.MobMaterial.UncommonName,
+				RareName:      character.Talents.MobMaterial.RareName,
+				EpicName:      character.Talents.MobMaterial.EpicName,
 				LegendaryName: character.Talents.MobMaterial.LegendaryName,
 			},
 		},
-
 	}, nil
 
 }

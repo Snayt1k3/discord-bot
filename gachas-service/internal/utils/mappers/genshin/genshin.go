@@ -80,7 +80,7 @@ func MapCharacterToDTO(character genshin.Character) dto.GenshinCharacter {
 		BaseStat:   character.BaseStat,
 		Ascension: dto.GenshinAscensionMaterials{
 			ID:             character.Ascension.ID,
-			Gem: 			character.Ascension.Gem,
+			Gem:            character.Ascension.Gem,
 			LocalSpecialty: character.Ascension.LocalSpecialty,
 			BossDrops:      character.Ascension.BossDrops,
 		},

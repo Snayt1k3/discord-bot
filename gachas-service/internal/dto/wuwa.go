@@ -1,11 +1,10 @@
 package dto
 
-
 type WuwaCharacterShort struct {
-	ID     uint   `json:"id"`
-	Name   string `json:"name"`
+	ID      uint   `json:"id"`
+	Name    string `json:"name"`
 	Element string `json:"element"`
-	Rarity int    `json:"rarity"`
+	Rarity  int    `json:"rarity"`
 }
 
 type WuwaResource struct {
@@ -38,11 +37,11 @@ type WuwaWeapon struct {
 }
 
 type WuwaCharacterFull struct {
-	ID        uint         `json:"id"`
-	Name      string       `json:"name"`
-	Element   string       `json:"element"`
-	Rarity    int          `json:"rarity"`
-	Weapon    WuwaWeapon   `json:"weapon"`
+	ID        uint          `json:"id"`
+	Name      string        `json:"name"`
+	Element   string        `json:"element"`
+	Rarity    int           `json:"rarity"`
+	Weapon    WuwaWeapon    `json:"weapon"`
 	Ascension WuwaAscension `json:"ascension"`
 	Talents   WuwaTalent    `json:"talents"`
 }
@@ -60,9 +59,9 @@ type WuwaStats struct {
 }
 
 type WuwaCharacterBuild struct {
-	Character      	 WuwaCharacterFull         `json:"character"`
-	Weapons          []WuwaWeapon `json:"weapons"`
-	Echoes           []WuwaEcho   `json:"echoes"`
-	Stats            WuwaStats    `json:"stats"`
-	BestPrimaryEcho  string       `json:"best_primary_echo"`
+	Character       WuwaCharacterFull `json:"character"`
+	Weapons         []WuwaWeapon      `json:"weapons"`
+	Echoes          []WuwaEcho        `json:"echoes"`
+	Stats           WuwaStats         `json:"stats"`
+	BestPrimaryEcho string            `json:"best_primary_echo"`
 }
