@@ -98,6 +98,7 @@ message GenshinBuild {
   repeated GenshinWeapon weapons = 3;
   repeated GenshinCharacterShort teams = 4;
   GenshinStats stats = 5;
+  GenshinCharacter character = 6;
 }
 
 message GenshinArtifact {

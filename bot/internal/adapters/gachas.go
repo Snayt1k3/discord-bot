@@ -4,7 +4,6 @@ import (
 	"bot/config"
 	dtoGachas "bot/internal/dto/gachas"
 	"bot/internal/interfaces"
-
 	"context"
 	"encoding/json"
 	"fmt"
@@ -26,16 +25,20 @@ func (ga *GachasAdapter) GetGenshinCharacters() ([]dtoGachas.GenshinCharacterBri
 		fmt.Sprintf("%v/api/v1/gacha/genshin/character", config.GetApiGatewayAddr()),
 		nil,
 	)
-
 	if err != nil {
 		return nil, err
 	}
-
 	defer resp.Body.Close()
 
-	var characters []dtoGachas.GenshinCharacterBrief
 
-	if err := json.NewDecoder(resp.Body).Decode(&characters); err != nil {
+	var raw map[string]json.RawMessage
+	if err := json.NewDecoder(resp.Body).Decode(&raw); err != nil {
+		return nil, err
+	}
+
+
+	var characters []dtoGachas.GenshinCharacterBrief
+	if err := json.Unmarshal(raw["characters"], &characters); err != nil {
 		return nil, err
 	}
 
@@ -52,12 +55,15 @@ func (ga *GachasAdapter) GetGenshinCharacter(id uint) (dtoGachas.GenshinCharacte
 	if err != nil {
 		return dtoGachas.GenshinCharacter{}, err
 	}
-
 	defer resp.Body.Close()
 
-	var character dtoGachas.GenshinCharacter
+	var wrapper map[string]json.RawMessage
+	if err := json.NewDecoder(resp.Body).Decode(&wrapper); err != nil {
+		return dtoGachas.GenshinCharacter{}, err
+	}
 
-	if err := json.NewDecoder(resp.Body).Decode(&character); err != nil {
+	var character dtoGachas.GenshinCharacter
+	if err := json.Unmarshal(wrapper["character"], &character); err != nil {
 		return dtoGachas.GenshinCharacter{}, err
 	}
 
@@ -65,25 +71,28 @@ func (ga *GachasAdapter) GetGenshinCharacter(id uint) (dtoGachas.GenshinCharacte
 }
 
 func (ga *GachasAdapter) GetGenshinBuild(id uint) (dtoGachas.GenshinBuild, error) {
-	resp, err := ga.client.Get(
-		context.Background(),
-		fmt.Sprintf("%v/api/v1/gacha/genshin/build/%d", config.GetApiGatewayAddr(), id),
-		nil,
-	)
+    resp, err := ga.client.Get(
+        context.Background(),
+        fmt.Sprintf("%v/api/v1/gacha/genshin/character/%d/builds", config.GetApiGatewayAddr(), id),
+        nil,
+    )
+    if err != nil {
+        return dtoGachas.GenshinBuild{}, err
+    }
+    defer resp.Body.Close()
 
-	if err != nil {
+
+    var wrapper map[string]json.RawMessage
+	if err := json.NewDecoder(resp.Body).Decode(&wrapper); err != nil {
 		return dtoGachas.GenshinBuild{}, err
 	}
 
-	defer resp.Body.Close()
+    var build dtoGachas.GenshinBuild
+    if err := json.Unmarshal(wrapper["build"], &build); err != nil {
+        return dtoGachas.GenshinBuild{}, fmt.Errorf("unmarshal build error: %w", err)
+    }
 
-	var build dtoGachas.GenshinBuild
-
-	if err := json.NewDecoder(resp.Body).Decode(&build); err != nil {
-		return dtoGachas.GenshinBuild{}, err
-	}
-
-	return build, nil
+    return build, nil
 }
 
 func (ga *GachasAdapter) GetWuwaCharacters() ([]dtoGachas.WuwaCharacterShort, error) {

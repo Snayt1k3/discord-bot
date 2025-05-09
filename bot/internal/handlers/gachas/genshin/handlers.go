@@ -144,7 +144,7 @@ func (gh *GenshinHandlers) showCharacterInfo(s *discordgo.Session, i *discordgo.
 			{
 				Name:   "🗺️ Region",
 				Value:  character.Region,
-				Inline: true,
+				Inline: false,
 			},
 			// {
 			// 	Name:   "📅 Released",

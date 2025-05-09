@@ -17,10 +17,10 @@ type Build struct {
 }
 
 type Artifact struct {
-	gorm.Model
-	Name           string `json:"name" gorm:"unique;not null"`
-	TwoPieceBonus  string `json:"two_piece_bonus"`
-	FourPieceBonus string `json:"four_piece_bonus"`
+    gorm.Model
+    Name           string `json:"name" gorm:"unique;not null"`
+    TwoPieceBonus  string `json:"two_piece_bonus" gorm:"type:text"`
+    FourPieceBonus string `json:"four_piece_bonus" gorm:"type:text"`
 }
 
 type Weapon struct {
@@ -44,7 +44,6 @@ type Stats struct {
 	Sands            string `json:"sands" gorm:"not null"`
 	Goblet           string `json:"goblet" gorm:"not null"`
 	Circlet          string `json:"circlet" gorm:"not null"`
-	BestStats        string `json:"best_stats" gorm:"not null"` // Todo: delete this field
 	SubStatsPriority string `json:"sub_stats_priority" gorm:"not null"`
 }
 

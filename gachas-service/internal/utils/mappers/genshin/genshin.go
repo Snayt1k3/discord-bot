@@ -25,6 +25,7 @@ func MapWeaponsToDTO(weapons []genshin.Weapon) []dto.GenshinWeapon {
 			Type:     weapon.Type,
 			Rarity:   weapon.Rarity,
 			SubStat:  weapon.SubStat,
+			BaseATK:  weapon.BaseATK,
 			SubValue: weapon.SubValue,
 			Passive:  weapon.Passive,
 		}
@@ -38,7 +39,6 @@ func MapStatsToDTO(stats genshin.Stats) dto.GenshinStats {
 		Sands:            stats.Sands,
 		Goblet:           stats.Goblet,
 		Circlet:          stats.Circlet,
-		BestStats:        stats.BestStats,
 		SubStatsPriority: stats.SubStatsPriority,
 	}
 }
@@ -80,6 +80,7 @@ func MapCharacterToDTO(character genshin.Character) dto.GenshinCharacter {
 		BaseStat:   character.BaseStat,
 		Ascension: dto.GenshinAscensionMaterials{
 			ID:             character.Ascension.ID,
+			Gem: 			character.Ascension.Gem,
 			LocalSpecialty: character.Ascension.LocalSpecialty,
 			BossDrops:      character.Ascension.BossDrops,
 		},

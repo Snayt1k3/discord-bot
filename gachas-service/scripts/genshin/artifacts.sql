@@ -1,5 +1,5 @@
 INSERT INTO
-    artifacts (ID, Name, TwoPieceBonus, FourPieceBonus)
+    artifacts (ID, name, two_piece_bonus, four_piece_bonus)
 VALUES
     (
         1,
@@ -41,7 +41,7 @@ VALUES
         7,
         'Instructor',
         '2 Piece: Increases Elemental Mastery by 80.',
-        "4 Piece: Upon triggering an Elemental Reaction, increases all party members Elemental Mastery by 120 for 8s."
+        '4 Piece: Upon triggering an Elemental Reaction, increases all party members'' Elemental Mastery by 120 for 8s.'
     ),
     (
         8,
@@ -51,9 +51,9 @@ VALUES
     ),
     (
         9,
-        "Defender's Will",
+        'Defender''s Will',
         '2 Piece: DEF +30%',
-        "4 Piece: For each different element present in your own party, the wearer's Elemental RES to that corresponding element is increased by 30%."
+        '4 Piece: For each different element present in your own party, the wearer''s Elemental RES to that corresponding element is increased by 30%.'
     ),
     (
         10,
@@ -81,13 +81,13 @@ VALUES
     ),
     (
         14,
-        "Gladiator's Finale",
+        'Gladiator''s Finale',
         '2 Piece: ATK +18%.',
         '4 Piece: If the wielder of this artifact set uses a Sword, Claymore or Polearm, increases their Normal Attack DMG by 35%.'
     ),
     (
         15,
-        "Wanderer's Troupe",
+        'Wanderer''s Troupe',
         '2 Piece: Increases Elemental Mastery by 80.',
         '4 Piece: Increases Charged Attack DMG by 35% if the character uses a Catalyst or Bow.'
     ),
@@ -95,7 +95,7 @@ VALUES
         16,
         'Noblesse Oblige',
         '2 Piece: Elemental Burst DMG +20%',
-        "4 Piece: Using an Elemental Burst increases all party members' ATK by 20% for 12s. This effect cannot stack."
+        '4 Piece: Using an Elemental Burst increases all party members'' ATK by 20% for 12s. This effect cannot stack.'
     ),
     (
         17,
@@ -147,7 +147,7 @@ VALUES
     ),
     (
         25,
-        "Shimenawa's Reminiscence",
+        'Shimenawa''s Reminiscence',
         '2 Piece: ATK +18%',
         '4 Piece: When casting an Elemental Skill, if the character has 15 or more Energy, they lose 15 Energy and Normal/Charged/Plunging Attack DMG is increased by 50% for 10s. This effect will not trigger again during that duration'
     ),
@@ -173,7 +173,7 @@ VALUES
         29,
         'Vermillion Hereafter',
         '2 Piece: ATK +18%.',
-        "4 Piece: After using an Elemental Burst, this character will gain the Nascent Light effect, increasing their ATK by 8% for 16s. When the character's HP decreases, their ATK will further increase by 10%. This increase can occur this way a maximum of 4 times. This effect can be triggered once every 0.8s. Nascent Light will be dispelled when the character leaves the field. If an Elemental Burst is used again during the duration of Nascent Light, the original Nascent Light will be dispelled."
+        '4 Piece: After using an Elemental Burst, this character will gain the Nascent Light effect, increasing their ATK by 8% for 16s. When the character''s HP decreases, their ATK will further increase by 10%. This increase can occur this way a maximum of 4 times. This effect can be triggered once every 0.8s. Nascent Light will be dispelled when the character leaves the field. If an Elemental Burst is used again during the duration of Nascent Light, the original Nascent Light will be dispelled.'
     ),
     (
         30,
@@ -197,23 +197,23 @@ VALUES
         33,
         'Desert Pavilion Chronicle',
         '2 Piece: Anemo DMG Bonus +15%.',
-        "4 Piece: When Charged Attacks hit opponents, the equipping character's Normal Attack SPD will increase by 10% while Normal, Charged, and Plunging Attack DMG will increase by 40% for 15s."
+        '4 Piece: When Charged Attacks hit opponents, the equipping character''s Normal Attack SPD will increase by 10% while Normal, Charged, and Plunging Attack DMG will increase by 40% for 15s.'
     ),
     (
         34,
         'Flower of Paradise Lost',
         '2 Piece: Increases Elemental Mastery by 80.',
-        "4 Piece: The equipping character's Bloom, Hyperbloom, and Burgeon reaction DMG are increased by 40%. Additionally, after the equipping character triggers Bloom, Hyperbloom, or Burgeon, they will gain another 25% bonus to the effect mentioned prior. Each stack of this lasts 10s. Max 4 stacks simultaneously. This effect can only be triggered once per second. The character who equips this can still trigger its effects when not on the field."
+        '4 Piece: The equipping character''s Bloom, Hyperbloom, and Burgeon reaction DMG are increased by 40%. Additionally, after the equipping character triggers Bloom, Hyperbloom, or Burgeon, they will gain another 25% bonus to the effect mentioned prior. Each stack of this lasts 10s. Max 4 stacks simultaneously. This effect can only be triggered once per second. The character who equips this can still trigger its effects when not on the field.'
     ),
     (
         35,
-        "Nymph's Dream",
+        'Nymph''s Dream',
         '2 Piece: Hydro DMG Bonus +15%',
         '4 Piece: After Normal, Charged, and Plunging Attacks, Elemental Skills, and Elemental Bursts hit opponents, 1 stack of Mirrored Nymph will be triggered, lasting 8s. When under the effect of 1, 2, or 3 or more Mirrored Nymph stacks, ATK will be increased by 7%/16%/25%, and Hydro DMG will be increased by 4%/9%/15%. Mirrored Nymph created by Normal, Charged, and Plunging Attacks, Elemental Skills, and Elemental Bursts exist independently.'
     ),
     (
         36,
-        "Vourukasha's Glow",
+        'Vourukasha''s Glow',
         '2 Piece: HP +20%',
         '4 Piece: Elemental Skill and Elemental Burst DMG will be increased by 10%. After the equipping character takes DMG, the aforementioned DMG Bonus is increased by 80% for 5s. This effect increase can have 5 stacks. The duration of each stack is counted independently. These effects can be triggered even when the equipping character is not on the field.'
     ),
@@ -255,52 +255,52 @@ VALUES
     ),
     (
         43,
-        "Retracing Bolide",
-        "Increases Shield Strength by 35%."
-        "While protected by a shield, gain an additional 40% Normal and Charged Attack DMG."
+        'Retracing Bolide',
+        'Increases Shield Strength by 35%.',
+        'While protected by a shield, gain an additional 40% Normal and Charged Attack DMG.'
     ),
     (
         44,
-        "Archaic Petra",
-        "Gain a 15% Geo DMG Bonus.",
-        "Upon obtaining an Elemental Shard created through a Crystallize Reaction, all party members gain a 35% DMG Bonus for that particular element for 10s. Only one form of Elemental DMG Bonus can be gained in this manner at any one time."
+        'Archaic Petra',
+        'Gain a 15% Geo DMG Bonus.',
+        'Upon obtaining an Elemental Shard created through a Crystallize Reaction, all party members gain a 35% DMG Bonus for that particular element for 10s. Only one form of Elemental DMG Bonus can be gained in this manner at any one time.'
     ),
     (
         45,
-        "Scroll of the Hero of Cinder City",
-        "When a nearby party member triggers a Nightsoul Burst, the equipping character regenerates 6 Elemental Energy.",
-        "After the equipping character triggers a reaction related to their Elemental Type, all nearby party members gain a 12% Elemental DMG Bonus for the Elemental Types involved in the elemental reaction for 15s. If the equipping character is in the Nightsoul's Blessing state when triggering this effect, all nearby party members gain an additional 28% Elemental DMG Bonus for the Elemental Types involved in the elemental reaction for 20s. The equipping character can trigger this effect while off-field, and the DMG bonus from Artifact Sets with the same name do not stack."
+        'Scroll of the Hero of Cinder City',
+        'When a nearby party member triggers a Nightsoul Burst, the equipping character regenerates 6 Elemental Energy.',
+        'After the equipping character triggers a reaction related to their Elemental Type, all nearby party members gain a 12% Elemental DMG Bonus for the Elemental Types involved in the elemental reaction for 15s. If the equipping character is in the Nightsoul''s Blessing state when triggering this effect, all nearby party members gain an additional 28% Elemental DMG Bonus for the Elemental Types involved in the elemental reaction for 20s. The equipping character can trigger this effect while off-field, and the DMG bonus from Artifact Sets with the same name do not stack.'
     ),
     (
-        46, 
-        "Obsidian Codex",
-        "While the equipping character is in Nightsoul's Blessing and is on the field, their DMG dealt is increased by 15%.",
-        "After the equipping character consumes 1 Nightsoul point while on the field, CRIT Rate increases by 40% for 6s. This effect can trigger once every second.",
+        46,
+        'Obsidian Codex',
+        'While the equipping character is in Nightsoul''s Blessing and is on the field, their DMG dealt is increased by 15%.',
+        'After the equipping character consumes 1 Nightsoul point while on the field, CRIT Rate increases by 40% for 6s. This effect can trigger once every second.'
     ),
     (
         47,
-        "Blizzard Strayer",
-        "Cryo DMG Bonus +15%",
-        "When a character attacks an opponent affected by Cryo, their CRIT Rate is increased by 20%. If the opponent is Frozen, CRIT Rate is increased by an additional 20%."
+        'Blizzard Strayer',
+        'Cryo DMG Bonus +15%',
+        'When a character attacks an opponent affected by Cryo, their CRIT Rate is increased by 20%. If the opponent is Frozen, CRIT Rate is increased by an additional 20%.'
     ),
     (
         48,
-        "Crimson Witch of Flames",
-        "Pyro DMG Bonus +15%",
-        "Increases Overloaded, Burning, and Burgeon DMG by 40%. Increases Vaporize and Melt DMG by 15%. Using Elemental Skill increases the 2-Piece Set Bonus by 50% of its starting value for 10s. Max 3 stacks."
+        'Crimson Witch of Flames',
+        'Pyro DMG Bonus +15%',
+        'Increases Overloaded, Burning, and Burgeon DMG by 40%. Increases Vaporize and Melt DMG by 15%. Using Elemental Skill increases the 2-Piece Set Bonus by 50% of its starting value for 10s. Max 3 stacks.'
     ),
     (
-        49, 
-        "Long Night's Oath",
-        "Plunging Attack DMG increased by 25%.",
-        "After the equipping character's Plunging Attack/Charged Attack/Elemental Skill hits an opponent, they will gain 1/2/2 stack(s) of "Radiance Everlasting." Plunging Attacks, Charged Attacks, or Elemental Skills can each trigger this effect once every 1s. Radiance Everlasting: Plunging Attacks deal 15% increased DMG for 6s. Max 5 stacks. Each stack's duration is counted independently."
+        49,
+        'Long Night''s Oath',
+        'Plunging Attack DMG increased by 25%.',
+        'After the equipping character''s Plunging Attack/Charged Attack/Elemental Skill hits an opponent, they will gain 1/2/2 stack(s) of ''Radiance Everlasting.'' Plunging Attacks, Charged Attacks, or Elemental Skills can each trigger this effect once every 1s. Radiance Everlasting: Plunging Attacks deal 15% increased DMG for 6s. Max 5 stacks. Each stack''s duration is counted independently.'
     ),
     (
         50,
-        "Viridescent Venerer",
-        "Anemo DMG Bonus +15%",
-        "Increases Swirl DMG by 60%. Decreases opponent's Elemental RES to the element infused in the Swirl by 40% for 10s."
-    )
+        'Viridescent Venerer',
+        'Anemo DMG Bonus +15%',
+        'Increases Swirl DMG by 60%. Decreases opponent''s Elemental RES to the element infused in the Swirl by 40% for 10s.'
+    );
 
 INSERT INTO build_artifacts (
     build_id,
@@ -308,7 +308,6 @@ INSERT INTO build_artifacts (
     priority,
     set_group
 ) VALUES
-
 -- Geo
 (1, 27, 1, 2), (1, 43, 2, 2), (1, 14, 3, 2), (1, 37, 4, 2),  -- Noelle
 (2, 40, 1, 2), (2, 27, 2, 2), (2, 26, 3, 2),  -- Ninguang
@@ -350,7 +349,7 @@ INSERT INTO build_artifacts (
 (34, 24, 1, 2), (34, 38, 2, 2), (34, 14, 3, 2), (34, 37, 4, 2),  -- Freminet
 (35, 37, 1, 2), (35, 25, 2, 2), (35, 32, 3, 2), -- Wriothesley
 (36, 16, 1, 2), (36, 23, 2, 2), -- Charlotte
-(37, 45, 1, 2), (37, 23, 2, 2), (27, 7, 3, 2), -- Citlali
+(37, 45, 1, 2), (37, 23, 2, 2), (37, 7, 3, 2), -- Citlali
 
 -- Pyro
 (38, 26, 1, 2), (38, 48, 2, 2), (38, 32, 3, 2), -- Xiangling
@@ -396,7 +395,7 @@ INSERT INTO build_artifacts (
 (74, 38, 1, 2), (74, 26, 2, 2), -- Yae miko
 (75, 34, 1, 2), (75, 32, 2, 2), -- Kuki Shinobu
 (76, 16, 1, 2), (76, 31, 2, 2), (76, 7, 3, 2), -- Dori
-(77, 32, 1, 2), (77, 20, 2, 2), (77, 14, 3, 2) -- Cyno
+(77, 32, 1, 2), (77, 20, 2, 2), (77, 14, 3, 2), -- Cyno
 (78, 15, 1, 2), (78, 32, 2, 2), -- Sethos
 (79, 41, 1, 2), (79, 14, 2, 2), -- Clorinde
 (80, 45, 1, 2), (80, 16, 2, 2), -- Ororon
@@ -417,5 +416,4 @@ INSERT INTO build_artifacts (
 (93, 50, 1, 2), (93, 16, 2, 2), -- Xianyun
 (94, 46, 1, 2), -- Chasca
 (95, 50, 1, 2), -- Lan Yan
-(96, 50, 1, 2), -- Yumemizuki Mizuki
-;
+(96, 50, 1, 2); -- Yumemizuki Mizuki

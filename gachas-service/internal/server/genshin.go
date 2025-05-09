@@ -45,6 +45,36 @@ func (s *GenshinServer) GetCharacterBuild(ctx context.Context, req *pb.Character
 
 	protoBuild := &pb.GenshinBuild{
 		Name: build.Character.Name,
+		Character: &pb.GenshinCharacter{
+			Id:         uint64(build.Character.ID),
+			Name:       build.Character.Name,
+			Element:    build.Character.Element,
+			WeaponType: build.Character.WeaponType,
+			BaseStat:   build.Character.BaseStat,
+			Region:     build.Character.Region,
+			Rarity:     int32(build.Character.Rarity),
+			Ascension: &pb.GenshinAscensionMaterials{
+				LocalSpecialty: build.Character.Ascension.LocalSpecialty,
+				BossDrops:      build.Character.Ascension.BossDrops,
+				Gem: build.Character.Ascension.Gem,	
+			},
+			Talents: &pb.GenshinTalentMaterials{
+				BossDrops: build.Character.Talents.BossDrops,
+				Books: &pb.GenshinBooks{
+					Common:   build.Character.Talents.Books.Common,
+					Uncommon: build.Character.Talents.Books.Uncommon,
+					Rare:     build.Character.Talents.Books.Rare,
+					Weekdays: build.Character.Talents.Books.Weekdays,
+				},
+
+				TalentPriority: build.Character.Talents.TalentPriority,
+			},
+			CommonMaterials: &pb.GenshinCommonMaterials{
+				Common:   build.Character.CommonMaterials.Common,
+				Uncommon: build.Character.CommonMaterials.Uncommon,
+				Rare:     build.Character.CommonMaterials.Rare,
+			},
+		},
 		Artifacts: func() []*pb.GenshinArtifact {
 			var arts []*pb.GenshinArtifact
 			for _, a := range build.Artifacts {
@@ -89,7 +119,6 @@ func (s *GenshinServer) GetCharacterBuild(ctx context.Context, req *pb.Character
 			Sands:            build.Stats.Sands,
 			Goblet:           build.Stats.Goblet,
 			Circlet:          build.Stats.Circlet,
-			BestStats:        build.Stats.BestStats,
 			SubStatsPriority: build.Stats.SubStatsPriority,
 		},
 	}
@@ -117,6 +146,7 @@ func (s *GenshinServer) GetCharacterById(ctx context.Context, req *pb.CharacterR
 			Ascension: &pb.GenshinAscensionMaterials{
 				LocalSpecialty: character.Ascension.LocalSpecialty,
 				BossDrops:      character.Ascension.BossDrops,
+				Gem: character.Ascension.Gem,	
 			},
 			Talents: &pb.GenshinTalentMaterials{
 				BossDrops: character.Talents.BossDrops,

@@ -19,6 +19,7 @@ type GenshinCommonMaterials struct {
 type GenshinAscensionMaterials struct {
 	ID             uint   `json:"id"`
 	LocalSpecialty string `json:"local_specialty"`
+	Gem 			string `json:"gem"`
 	BossDrops      string `json:"boss_drops"`
 }
 
@@ -82,7 +83,6 @@ type GenshinStats struct {
 	Sands            string `json:"sands"`
 	Goblet           string `json:"goblet"`
 	Circlet          string `json:"circlet"`
-	BestStats        string `json:"best_stats"`
 	SubStatsPriority string `json:"sub_stats_priority"`
 }
 

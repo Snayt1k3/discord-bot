@@ -97,7 +97,7 @@ services:
     expose:
       - ${GACHAS_POSTGRES_PORT}
     volumes:
-      - .docker/volumes/pggachas:/var/lib/postgresql/data
+      - ./docker/volumes/pggachas:/var/lib/postgresql/data
     networks:
       - bot
     command: -p ${GACHAS_POSTGRES_PORT}
