@@ -7,7 +7,7 @@ import (
 
 // --- Основные мапперы ---
 
-func MapCharacterToDTO(c models.Character) dto.WuwaCharacterFull {
+func MapCharacterToDTO(c models.WuwaCharacter) dto.WuwaCharacterFull {
 	return dto.WuwaCharacterFull{
 		ID:      c.ID,
 		Name:    c.Name,
@@ -25,7 +25,7 @@ func MapCharacterToDTO(c models.Character) dto.WuwaCharacterFull {
 	}
 }
 
-func MapCharacterToShortDTO(c models.Character) dto.WuwaCharacterShort {
+func MapCharacterToShortDTO(c models.WuwaCharacter) dto.WuwaCharacterShort {
 	return dto.WuwaCharacterShort{
 		ID:      c.ID,
 		Name:    c.Name,
@@ -34,7 +34,7 @@ func MapCharacterToShortDTO(c models.Character) dto.WuwaCharacterShort {
 	}
 }
 
-func MapBuildToDTO(b models.Build) dto.WuwaCharacterBuild {
+func MapBuildToDTO(b models.WuwaBuild) dto.WuwaCharacterBuild {
 	return dto.WuwaCharacterBuild{
 		Character:       MapCharacterToDTO(b.Character),
 		Weapons:         mapWeapons(b.Weapons),
@@ -46,7 +46,7 @@ func MapBuildToDTO(b models.Build) dto.WuwaCharacterBuild {
 
 // --- Вспомогательные функции ---
 
-func mapWeapon(w models.Weapon) dto.WuwaWeapon {
+func mapWeapon(w models.WuwaWeapon) dto.WuwaWeapon {
 	return dto.WuwaWeapon{
 		Name:       w.Name,
 		WeaponType: w.WeaponType,
@@ -58,7 +58,7 @@ func mapWeapon(w models.Weapon) dto.WuwaWeapon {
 	}
 }
 
-func mapWeapons(ws []models.Weapon) []dto.WuwaWeapon {
+func mapWeapons(ws []models.WuwaWeapon) []dto.WuwaWeapon {
 	result := make([]dto.WuwaWeapon, len(ws))
 	for i, w := range ws {
 		result[i] = mapWeapon(w)
@@ -66,7 +66,7 @@ func mapWeapons(ws []models.Weapon) []dto.WuwaWeapon {
 	return result
 }
 
-func mapResource(r models.Resource) dto.WuwaResource {
+func mapResource(r models.WuwaResource) dto.WuwaResource {
 	return dto.WuwaResource{
 		UncommonName:  r.UncommonName,
 		RareName:      r.RareName,
@@ -75,7 +75,7 @@ func mapResource(r models.Resource) dto.WuwaResource {
 	}
 }
 
-func mapEchoes(es []models.Echoes) []dto.WuwaEcho {
+func mapEchoes(es []models.WuwaEchoes) []dto.WuwaEcho {
 	result := make([]dto.WuwaEcho, len(es))
 	for i, e := range es {
 		result[i] = dto.WuwaEcho{
@@ -87,7 +87,7 @@ func mapEchoes(es []models.Echoes) []dto.WuwaEcho {
 	return result
 }
 
-func mapStats(s models.Stats) dto.WuwaStats {
+func mapStats(s models.WuwaStats) dto.WuwaStats {
 	return dto.WuwaStats{
 		FourCostEchoStat:  s.FourCostEchoStat,
 		ThreeCostEchoStat: s.ThreeCostEchoStat,

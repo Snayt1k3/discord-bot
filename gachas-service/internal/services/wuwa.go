@@ -8,7 +8,7 @@ import (
 )
 
 type WuwaService struct {
-	repository interfaces.RepoInterface[wuwa.Character, wuwa.Build]
+	repository interfaces.RepoInterface[wuwa.WuwaCharacter, wuwa.WuwaBuild]
 }
 
 func (s *WuwaService) GetCharacterByID(id string) (dto.WuwaCharacterFull, error) {
@@ -53,7 +53,7 @@ func (s *WuwaService) GetCharacters() ([]dto.WuwaCharacterShort, error) {
 	return characterBriefs, nil
 }
 
-func NewWuwaService(repo interfaces.RepoInterface[wuwa.Character, wuwa.Build]) *WuwaService {
+func NewWuwaService(repo interfaces.RepoInterface[wuwa.WuwaCharacter, wuwa.WuwaBuild]) *WuwaService {
 	return &WuwaService{
 		repository: repo,
 	}
