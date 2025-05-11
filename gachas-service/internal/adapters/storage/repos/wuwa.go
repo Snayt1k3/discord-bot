@@ -11,14 +11,13 @@ type WuwaRepository struct {
 	db *gorm.DB
 }
 
-// Получение списка персонажей (короткая версия, но вернём всю сущность — снаружи можно преобразовать в short DTO)
 func (r *WuwaRepository) GetCharacters() ([]wuwa.WuwaCharacter, error) {
 	var characters []wuwa.WuwaCharacter
 	err := r.db.Find(&characters).Error
 	return characters, err
 }
 
-// Получение персонажа по ID с зависимостями
+
 func (r *WuwaRepository) GetCharacterByID(id string) (wuwa.WuwaCharacter, error) {
 	var character wuwa.WuwaCharacter
 
@@ -32,7 +31,7 @@ func (r *WuwaRepository) GetCharacterByID(id string) (wuwa.WuwaCharacter, error)
 	return character, err
 }
 
-// Получение билда по ID персонажа
+
 func (r *WuwaRepository) GetCharacterBuild(id string) (wuwa.WuwaBuild, error) {
 	var build wuwa.WuwaBuild
 	err := r.db.

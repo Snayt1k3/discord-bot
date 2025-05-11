@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gachas-service/config"
 	"gachas-service/internal/adapters/storage/models/genshin"
+	"gachas-service/internal/adapters/storage/models/wuwa"
 	"gachas-service/internal/adapters/storage/repos"
 	"gachas-service/internal/server"
 	"gachas-service/internal/services"
@@ -30,15 +31,19 @@ func main() {
 	}
 	// Perform database migrations
 	genshin.Migrate(db)
+	wuwa.Migrate(db)
 
 	// Initialize the repositories
 	genshinRepo := repos.NewGenshinRepository(db)
+	wuwaRepo := repos.NewWuwaRepository(db)
 
 	// Initialize the Services
 	genshinService := services.NewGenshinService(genshinRepo)
+	wuwaService := services.NewWuwaService(wuwaRepo)
 
 	// Initialize the gRPC server
 	genshinServer := server.NewGenshinServer(genshinService)
+	wuwaServer := server.NewWuwaServer(wuwaService)
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%v", cfg.GrpcPort))
 
@@ -49,6 +54,7 @@ func main() {
 	grpcServer := grpc.NewServer()
 
 	pb.RegisterGenshinServiceServer(grpcServer, genshinServer)
+	pb.RegisterWuwaServiceServer(grpcServer, wuwaServer)
 
 	log.Printf("gRPC server is running on port :%v \n", cfg.GrpcPort)
 

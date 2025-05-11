@@ -16,6 +16,11 @@ type WuwaServer struct {
 	service interfaces.ServiceInterface[dto.WuwaCharacterFull, dto.WuwaCharacterShort, dto.WuwaCharacterBuild]
 }
 
+func NewWuwaServer(service interfaces.ServiceInterface[dto.WuwaCharacterFull, dto.WuwaCharacterShort, dto.WuwaCharacterBuild]) *WuwaServer {
+	return &WuwaServer{service: service}
+}
+
+
 func (s *WuwaServer) GetAllCharacters(ctx context.Context, request *pb.Empty) (*pb.WuwaCharacterList, error) {
 	characters, err := s.service.GetCharacters()
 
