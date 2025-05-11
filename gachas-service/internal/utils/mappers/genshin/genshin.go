@@ -5,7 +5,7 @@ import (
 	"gachas-service/internal/dto"
 )
 
-func MapBuildToDTO(build genshin.Build) dto.GenshinBuild {
+func MapBuildToDTO(build genshin.GenshinBuild) dto.GenshinBuild {
 	return dto.GenshinBuild{
 		ID:        build.ID,
 		Character: MapCharacterToDTO(build.Character),
@@ -16,7 +16,7 @@ func MapBuildToDTO(build genshin.Build) dto.GenshinBuild {
 	}
 }
 
-func MapWeaponsToDTO(weapons []genshin.Weapon) []dto.GenshinWeapon {
+func MapWeaponsToDTO(weapons []genshin.GenshinWeapon) []dto.GenshinWeapon {
 	weaponsDto := make([]dto.GenshinWeapon, len(weapons))
 	for i, weapon := range weapons {
 		weaponsDto[i] = dto.GenshinWeapon{
@@ -33,7 +33,7 @@ func MapWeaponsToDTO(weapons []genshin.Weapon) []dto.GenshinWeapon {
 	return weaponsDto
 }
 
-func MapStatsToDTO(stats genshin.Stats) dto.GenshinStats {
+func MapStatsToDTO(stats genshin.GenshinStats) dto.GenshinStats {
 	return dto.GenshinStats{
 		ID:               stats.ID,
 		Sands:            stats.Sands,
@@ -43,7 +43,7 @@ func MapStatsToDTO(stats genshin.Stats) dto.GenshinStats {
 	}
 }
 
-func MapArtifactsToDTO(artifacts []genshin.Artifact) []dto.GenshinArtifact {
+func MapArtifactsToDTO(artifacts []genshin.GenshinArtifact) []dto.GenshinArtifact {
 	artifactsDTO := make([]dto.GenshinArtifact, len(artifacts))
 	for i, artifact := range artifacts {
 		artifactsDTO[i] = dto.GenshinArtifact{
@@ -56,7 +56,7 @@ func MapArtifactsToDTO(artifacts []genshin.Artifact) []dto.GenshinArtifact {
 	return artifactsDTO
 }
 
-func MapTeamsToDTO(teams []genshin.Team) []dto.GenshinTeam {
+func MapTeamsToDTO(teams []genshin.GenshinTeam) []dto.GenshinTeam {
 	teamsDTO := make([]dto.GenshinTeam, len(teams))
 	for i, team := range teams {
 		teamsDTO[i] = dto.GenshinTeam{
@@ -70,7 +70,7 @@ func MapTeamsToDTO(teams []genshin.Team) []dto.GenshinTeam {
 	return teamsDTO
 }
 
-func MapCharacterToDTO(character genshin.Character) dto.GenshinCharacter {
+func MapCharacterToDTO(character genshin.GenshinCharacter) dto.GenshinCharacter {
 	return dto.GenshinCharacter{
 		ID:         character.ID,
 		Name:       character.Name,
@@ -107,7 +107,7 @@ func MapCharacterToDTO(character genshin.Character) dto.GenshinCharacter {
 	}
 }
 
-func MapCharacterBriefToDTO(character genshin.Character) dto.GenshinCharacterBrief {
+func MapCharacterBriefToDTO(character genshin.GenshinCharacter) dto.GenshinCharacterBrief {
 	return dto.GenshinCharacterBrief{
 		ID:         character.ID,
 		Name:       character.Name,

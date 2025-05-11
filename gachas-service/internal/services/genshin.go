@@ -8,7 +8,7 @@ import (
 )
 
 type GenshinService struct {
-	repository interfaces.RepoInterface[genshin.Character, genshin.Build]
+	repository interfaces.RepoInterface[genshin.GenshinCharacter, genshin.GenshinBuild]
 }
 
 func (s *GenshinService) GetCharacterByID(id string) (dto.GenshinCharacter, error) {
@@ -53,7 +53,7 @@ func (s *GenshinService) GetCharacters() ([]dto.GenshinCharacterBrief, error) {
 	return characterBriefs, nil
 }
 
-func NewGenshinService(repo interfaces.RepoInterface[genshin.Character, genshin.Build]) *GenshinService {
+func NewGenshinService(repo interfaces.RepoInterface[genshin.GenshinCharacter, genshin.GenshinBuild]) *GenshinService {
 	return &GenshinService{
 		repository: repo,
 	}

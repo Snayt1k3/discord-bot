@@ -3,6 +3,7 @@ package repos
 import (
 	"gachas-service/internal/adapters/storage/models/genshin"
 	"gachas-service/internal/interfaces"
+
 	"gorm.io/gorm"
 )
 
@@ -10,8 +11,8 @@ type GenshinRepository struct {
 	db *gorm.DB
 }
 
-func (r *GenshinRepository) GetCharacters() ([]genshin.Character, error) {
-	var characters []genshin.Character
+func (r *GenshinRepository) GetCharacters() ([]genshin.GenshinCharacter, error) {
+	var characters []genshin.GenshinCharacter
 	err := r.db.Find(&characters).Error
 
 	if err != nil {
@@ -21,8 +22,8 @@ func (r *GenshinRepository) GetCharacters() ([]genshin.Character, error) {
 	return characters, nil
 }
 
-func (r *GenshinRepository) GetCharacterByID(id string) (genshin.Character, error) {
-	var character genshin.Character
+func (r *GenshinRepository) GetCharacterByID(id string) (genshin.GenshinCharacter, error) {
+	var character genshin.GenshinCharacter
 
 	err := r.db.
 		Preload("Ascension").
@@ -38,8 +39,8 @@ func (r *GenshinRepository) GetCharacterByID(id string) (genshin.Character, erro
 	return character, nil
 }
 
-func (r *GenshinRepository) GetCharacterBuild(id string) (genshin.Build, error) {
-	var build genshin.Build
+func (r *GenshinRepository) GetCharacterBuild(id string) (genshin.GenshinBuild, error) {
+	var build genshin.GenshinBuild
 	err := r.db.Preload("Character").
 		Preload("Artifacts").
 		Preload("Weapons").
@@ -55,7 +56,7 @@ func (r *GenshinRepository) GetCharacterBuild(id string) (genshin.Build, error) 
 	return build, nil
 }
 
-func NewGenshinRepository(db *gorm.DB) interfaces.RepoInterface[genshin.Character, genshin.Build] {
+func NewGenshinRepository(db *gorm.DB) interfaces.RepoInterface[genshin.GenshinCharacter, genshin.GenshinBuild] {
 	return &GenshinRepository{
 		db: db,
 	}
