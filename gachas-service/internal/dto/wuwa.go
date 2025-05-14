@@ -55,6 +55,7 @@ type WuwaEcho struct {
 type WuwaStats struct {
 	FourCostEchoStat  string `json:"four_cost_echo_stat"`
 	ThreeCostEchoStat string `json:"three_cost_echo_stat"`
+	OneCostEchoStat string `json:"one_cost_echo_stat"`
 	SubStatsPriority  string `json:"sub_stats_priority"`
 }
 

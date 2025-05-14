@@ -92,18 +92,35 @@ VALUES
 
 INSERT INTO wuwa_echoes (id, name, two_piece_bonus, full_set_bonus, created_at, updated_at)
 VALUES 
-    (1, 'Freezing Frost', 'Glacio DMG increases by 10%.', 'Upon using Basic Attack or Heavy Attack, Glacio DMG increases by 10%, stacking up to three times, lasting for 15s.'),
-    (2, 'Molten Rift', 'Fusion DMG% increases by 10%.', 'Upon using Resonance Skill, Fusion DMG increases by 30% for 15s.'),
-    (3, 'Void Thunder', 'Electro DMG increases by 10%.', 'Upon using Heavy Attack or Resonance Skill, Electro DMG increases by 15%, stacking up to 2 times, each stack lasting for 15s.'),
-    (4, 'Sierra Gale', 'Aero DMG increase by 10%.', 'Upon using Intro Skill, Aero DMG increases by 30% for 15s.'),
-    (5, 'Celestial Light', 'Spectro DMG increases by 10%.', 'Upon using Intro Skill, Spectro DMG increases by 30% for 15s.'),
-    (6, 'Havoc Eclipsee', 'Havoc DMG increases by 10%.', 'Upon using Basic Attack or Heavy Attack, Havoc DMG increases by 7.5%, stacking up to four times for 15s.'),
-    (7, 'Rejuvenating Glow', 'Healing increases by 10%.', 'Upon healing allies, increase ATK of the entire team by 15%, lasting 30s.'),
-    (8, 'Moonlit Clouds', 'Energy Regen increases by 10%.', 'Upon using Outro Skill, ATK of the next Resonator increases by 22.5% for 15s.'),
-    (9, 'Lingering Tunes', 'ATK increases by 10%.', 'While on the field, ATK increases by 5% every 1.5s, stacking up to 4 times. Outro Skill DMG increases by 60%.'),
-    (10, 'Frosty Resolve', 'Resonance Skill DMG +12%.', 'Casting Resonance Skill grants 22.5% Glacio DMG Bonus for 15s and casting Resonance Liberation increases Resonance Skill DMG by 18%, lasting for 5s. This effect stacks up to 2 times.'),
-    (11, 'Eternal Radiance', 'Spectro DMG +10%.', 'Inflicting enemies with Spectro Frazzle increases Crit. Rate by 20% for 15s. Attacking enemies with 10 stacks of Spectro Frazzle grants 15% Spectro DMG Bonus for 15s.'),
-    (12, 'Midnight Veil', 'Havoc DMG +10%.', 'When Outro Skill is triggered, deal additional 480% Havoc DMG to surrounding enemies, considered Outro Skill DMG, and grant the incoming Resonator 15% Havoc DMG Bonus for 15s.'),
-    (13, 'Empyrean Anthem', 'Energy Regen +10%.', 'Increase the Resonator''s Coordinated Attack DMG by 80%. Upon a critical hit of Coordinated Attack, increase the active Resonator''s ATK by 20% for 4s.'),
-    (14, 'Tidebreaking Courage', 'Energy Regen +10%.', 'Increase the Resonator''s ATK by 15%. Reaching 250% Energy Regen increases all Attribute DMG by 30% for the Resonator.'),
-    (15, 'Gusts of Welkin', 'Aero DMG +10%.', 'Inflicting Aero Erosion upon enemies increases Aero DMG for all Resonators in the team by 15%, and for the Resonator triggering this effect by an additional 15%, lasting for 20s.');
+    (1, 'Freezing Frost', 'Glacio DMG increases by 10%.', 'Upon using Basic Attack or Heavy Attack, Glacio DMG increases by 10%, stacking up to three times, lasting for 15s.', NOW(), NOW()),
+    (2, 'Molten Rift', 'Fusion DMG% increases by 10%.', 'Upon using Resonance Skill, Fusion DMG increases by 30% for 15s.', NOW(), NOW()),
+    (3, 'Void Thunder', 'Electro DMG increases by 10%.', 'Upon using Heavy Attack or Resonance Skill, Electro DMG increases by 15%, stacking up to 2 times, each stack lasting for 15s.', NOW(), NOW()),
+    (4, 'Sierra Gale', 'Aero DMG increase by 10%.', 'Upon using Intro Skill, Aero DMG increases by 30% for 15s.', NOW(), NOW()),
+    (5, 'Celestial Light', 'Spectro DMG increases by 10%.', 'Upon using Intro Skill, Spectro DMG increases by 30% for 15s.', NOW(), NOW()),
+    (6, 'Havoc Eclipsee', 'Havoc DMG increases by 10%.', 'Upon using Basic Attack or Heavy Attack, Havoc DMG increases by 7.5%, stacking up to four times for 15s.', NOW(), NOW()),
+    (7, 'Rejuvenating Glow', 'Healing increases by 10%.', 'Upon healing allies, increase ATK of the entire team by 15%, lasting 30s.', NOW(), NOW()),
+    (8, 'Moonlit Clouds', 'Energy Regen increases by 10%.', 'Upon using Outro Skill, ATK of the next Resonator increases by 22.5% for 15s.', NOW(), NOW()),
+    (9, 'Lingering Tunes', 'ATK increases by 10%.', 'While on the field, ATK increases by 5% every 1.5s, stacking up to 4 times. Outro Skill DMG increases by 60%.', NOW(), NOW()),
+    (10, 'Frosty Resolve', 'Resonance Skill DMG +12%.', 'Casting Resonance Skill grants 22.5% Glacio DMG Bonus for 15s and casting Resonance Liberation increases Resonance Skill DMG by 18%, lasting for 5s. This effect stacks up to 2 times.', NOW(), NOW()),
+    (11, 'Eternal Radiance', 'Spectro DMG +10%.', 'Inflicting enemies with Spectro Frazzle increases Crit. Rate by 20% for 15s. Attacking enemies with 10 stacks of Spectro Frazzle grants 15% Spectro DMG Bonus for 15s.', NOW(), NOW()),
+    (12, 'Midnight Veil', 'Havoc DMG +10%.', 'When Outro Skill is triggered, deal additional 480% Havoc DMG to surrounding enemies, considered Outro Skill DMG, and grant the incoming Resonator 15% Havoc DMG Bonus for 15s.', NOW(), NOW()),
+    (13, 'Empyrean Anthem', 'Energy Regen +10%.', 'Increase the Resonator''s Coordinated Attack DMG by 80%. Upon a critical hit of Coordinated Attack, increase the active Resonator''s ATK by 20% for 4s.', NOW(), NOW()),
+    (14, 'Tidebreaking Courage', 'Energy Regen +10%.', 'Increase the Resonator''s ATK by 15%. Reaching 250% Energy Regen increases all Attribute DMG by 30% for the Resonator.', NOW(), NOW()),
+    (15, 'Gusts of Welkin', 'Aero DMG +10%.', 'Inflicting Aero Erosion upon enemies increases Aero DMG for all Resonators in the team by 15%, and for the Resonator triggering this effect by an additional 15%, lasting for 20s.', NOW(), NOW());
+
+INSERT INTO wuwa_stats(id, four_cost_echo_stat, three_cost_echo_stat, one_cost_echo_stat, sub_stats_priority)
+VALUES 
+    (1, 'CRIT DMG / CRIT Rate', 'Aero DMG / Energy Regen', 'ATK%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK'); -- Aalto
+
+
+INSERT INTO wuwa_builds(id, character_id, stats_id, best_primary_echo) 
+VALUES
+    (1, 25, 1, 'Nightmare: Feilian Beringal'); -- Aalto
+
+INSERT INTO build_wuwa_weapons (wuwa_build_id, wuwa_weapon_id)
+VALUES 
+    (1, 12), (1, 44), (1, 49), (1, 47), (1, 54), (1, 55); -- Aalto
+
+INSERT INTO build_wuwa_echoes (wuwa_build_id, wuwa_echoes_id)
+VALUES 
+    (1, 4); -- Aalto

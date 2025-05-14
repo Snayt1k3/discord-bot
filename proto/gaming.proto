@@ -183,7 +183,8 @@ message WuwaEcho {
 message WuwaStats {
   string four_cost_echo_stat = 1;
   string three_cost_echo_stat = 2;
-  string sub_stats_priority = 3;
+  string one_cost_echo_stat = 3;
+  string sub_stats_priority = 4;
 }
 
 message WuwaCharacterBuild {

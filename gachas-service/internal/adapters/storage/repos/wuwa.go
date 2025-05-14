@@ -22,7 +22,6 @@ func (r *WuwaRepository) GetCharacterByID(id string) (wuwa.WuwaCharacter, error)
 	var character wuwa.WuwaCharacter
 
 	err := r.db.
-		Preload("Weapon").
 		Preload("Ascension.MobMaterial").
 		Preload("Talents.DungeonMaterial").
 		Preload("Talents.MobMaterial").
@@ -36,6 +35,9 @@ func (r *WuwaRepository) GetCharacterBuild(id string) (wuwa.WuwaBuild, error) {
 	var build wuwa.WuwaBuild
 	err := r.db.
 		Preload("Character").
+		Preload("Character.Ascension.MobMaterial").
+		Preload("Character.Talents.DungeonMaterial").
+		Preload("Character.Talents.MobMaterial").
 		Preload("Weapons").
 		Preload("Echoes").
 		Preload("Stats").

@@ -114,6 +114,7 @@ func (s *WuwaServer) GetCharacterBuild(ctx context.Context, request *pb.Characte
 		FourCostEchoStat:  build.Stats.FourCostEchoStat,
 		ThreeCostEchoStat: build.Stats.ThreeCostEchoStat,
 		SubStatsPriority:  build.Stats.SubStatsPriority,
+		OneCostEchoStat: build.Stats.OneCostEchoStat,
 	}
 
 	character := &pb.WuwaCharacterFull{
