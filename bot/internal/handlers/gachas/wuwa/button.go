@@ -60,14 +60,7 @@ func WuwaButtons(id int) []discordgo.MessageComponent {
 					Emoji: &discordgo.ComponentEmoji{
 						Name: "👥",
 					},
-				},
-				discordgo.Button{
-					Label:    "Overview",
-					CustomID: fmt.Sprintf("WuwaOverview_%v", id),
-					Style:    discordgo.SecondaryButton,
-					Emoji: &discordgo.ComponentEmoji{
-						Name: "📖",
-					},
+					Disabled: true,
 				},
 			},
 		},

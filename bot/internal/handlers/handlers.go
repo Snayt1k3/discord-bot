@@ -73,7 +73,6 @@ func ShowSupportedGachas(s *discordgo.Session, i *discordgo.InteractionCreate) e
 			Label:    "Wuthering Waves 🌪️",
 			Style:    discordgo.SecondaryButton,
 			CustomID: "WuwaCharacters",
-			Disabled: true,
 		},
 	}
 

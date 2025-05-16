@@ -41,7 +41,6 @@ type WuwaCharacterFull struct {
 	Name      string        `json:"name"`
 	Element   string        `json:"element"`
 	Rarity    int           `json:"rarity"`
-	Weapon    WuwaWeapon    `json:"weapon"`
 	Ascension WuwaAscension `json:"ascension"`
 	Talents   WuwaTalent    `json:"talents"`
 }

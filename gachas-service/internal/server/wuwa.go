@@ -54,6 +54,7 @@ func (s *WuwaServer) GetCharacterByID(ctx context.Context, request *pb.Character
 	return &pb.WuwaCharacterFull{
 		Id:      uint64(character.ID),
 		Element: character.Element,
+		Name: character.Name,
 		Rarity:  int32(character.Rarity),
 		Ascension: &pb.WuwaAscension{
 			LocalSpecialty: character.Ascension.LocalSpecialty,

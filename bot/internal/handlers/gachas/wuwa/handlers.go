@@ -113,31 +113,36 @@ func (wh *WuwaHandlers) showCharacterDetail(s *discordgo.Session, i *discordgo.I
 	}
 
 	embed := discordgo.MessageEmbed{
-		Title: character.Name + " ⭐" + strconv.Itoa(character.Rarity),
-		Color: 0x6A5ACD, // фиолетово-синий стиль для WW
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:   "🌪️ Element",
-				Value:  character.Element,
-				Inline: true,
-			},
-			{
-				Name:   "🗡️ Weapon Type",
-				Value:  character.WeaponType,
-				Inline: true,
-			},
-			{
-				Name:  "Region",
-				Value: character.Affiliation,
-			},
+	Title: character.Name + " ⭐" + strconv.Itoa(character.Rarity),
+	Color: 0x6A5ACD, 
+	Thumbnail: &discordgo.MessageEmbedThumbnail{
+		URL: "https://wutheringwaves.gg/wp-content/uploads/sites/8/2024/05/Wuthering-Waves-Aalto-Build-Guide.png", // сюда можно подставить URL изображения персонажа
+	},
+	Fields: []*discordgo.MessageEmbedField{
+		{
+			Name:   "🌪️ Element",
+			Value:  character.Element,
+			Inline: true,
 		},
-		Thumbnail: &discordgo.MessageEmbedThumbnail{
-			URL: "",
+		{
+			Name:   "🗡️ Weapon Type",
+			Value:  "Pistols" , // todo: Add more information about chars
+			Inline: true,
 		},
-		Footer: &discordgo.MessageEmbedFooter{
-			Text: character.Name + " • Wuthering Waves",
+		{
+			Name:   "📈 Rarity",
+			Value:  strconv.Itoa(character.Rarity) + "-Star",
+			Inline: true,
 		},
-	}
+	},
+	Description: "A mysterious Resonator from the world of **Wuthering Waves**.\nPrepare to unlock their true potential!",
+	Footer: &discordgo.MessageEmbedFooter{
+		Text: character.Name + " • Wuthering Waves",
+	},
+	Image: &discordgo.MessageEmbedImage{
+		URL: "https://wuwamerch.com/wp-content/uploads/wuthering-waves-merch-aalto-badge-1.webp",
+	},
+}
 
 	components := WuwaButtons(int(character.ID))
 
@@ -249,11 +254,9 @@ func (wh *WuwaHandlers) showCharacterWeapons(s *discordgo.Session, i *discordgo.
 
 	for _, weapon := range build.Weapons {
 		fieldValue := fmt.Sprintf(
-			"⭐ **Rarity:** %d★\n"+
-				"🗡️ **Base ATK:** %d\n"+
-				"📈 **Substat:** %s (+%.1f%%)\n"+
-				"✨ **Passive:** %s",
-			weapon.Rarity,
+			"🗡️ **Base ATK:** %d\n"+
+			"📈 **Substat:** %s (+%.1f%%)\n"+
+			"✨ **Passive:** %s",
 			weapon.BaseATK,
 			weapon.SubStat,
 			weapon.SubValue,
@@ -261,7 +264,7 @@ func (wh *WuwaHandlers) showCharacterWeapons(s *discordgo.Session, i *discordgo.
 		)
 
 		fields = append(fields, &discordgo.MessageEmbedField{
-			Name:  weapon.Name,
+			Name:  weapon.Name + fmt.Sprintf(" %v⭐", weapon.Rarity),
 			Value: fieldValue,
 		})
 	}
@@ -411,9 +414,10 @@ func (wh *WuwaHandlers) showCharacterEchoes(s *discordgo.Session, i *discordgo.I
 	fields = append(fields, &discordgo.MessageEmbedField{
 		Name: "📊 Main Stat Suggestions",
 		Value: fmt.Sprintf(
-			"4-Cost Echo: **%s**\n3-Cost Echo: **%s**",
+			"4-Cost Echo: **%s**\n3-Cost Echo: **%s**\n1-Cost Echo: **%s**",
 			stats.FourCostEchoStat,
 			stats.ThreeCostEchoStat,
+			stats.OneCostEchoStat,
 		),
 		Inline: false,
 	})
@@ -536,4 +540,10 @@ func (wh *WuwaHandlers) pagination(s *discordgo.Session, i *discordgo.Interactio
 func (wh *WuwaHandlers) AddWuwaHandlers(handlers map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error) {
 	handlers["WuwaCharacters"] = wh.showCharacters
 	handlers["WuwaPagination"] = wh.pagination
+	handlers["WuwaCharacter"] = wh.showCharacterDetail
+	handlers["WuwaAscension"] = wh.showCharacterAscension
+	handlers["WuwaEchoes"] = wh.showCharacterEchoes
+	handlers["WuwaTalents"] = wh.showCharacterTalents
+	handlers["WuwaWeapons"] = wh.showCharacterWeapons
+	handlers["WuwaTeams"] = wh.showCharacterTeams
 }
