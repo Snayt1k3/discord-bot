@@ -3,7 +3,6 @@ package repos
 import (
 	"gachas-service/internal/adapters/storage/models/wuwa"
 	"gachas-service/internal/interfaces"
-
 	"gorm.io/gorm"
 )
 
@@ -47,7 +46,6 @@ func (r *WuwaRepository) GetCharacterBuild(id string) (wuwa.WuwaBuild, error) {
 	return build, err
 }
 
-// Создание нового репозитория
 func NewWuwaRepository(db *gorm.DB) interfaces.RepoInterface[wuwa.WuwaCharacter, wuwa.WuwaBuild] {
 	return &WuwaRepository{
 		db: db,
