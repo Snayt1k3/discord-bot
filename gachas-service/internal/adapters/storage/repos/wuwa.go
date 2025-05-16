@@ -16,7 +16,6 @@ func (r *WuwaRepository) GetCharacters() ([]wuwa.WuwaCharacter, error) {
 	return characters, err
 }
 
-
 func (r *WuwaRepository) GetCharacterByID(id string) (wuwa.WuwaCharacter, error) {
 	var character wuwa.WuwaCharacter
 
@@ -28,7 +27,6 @@ func (r *WuwaRepository) GetCharacterByID(id string) (wuwa.WuwaCharacter, error)
 
 	return character, err
 }
-
 
 func (r *WuwaRepository) GetCharacterBuild(id string) (wuwa.WuwaBuild, error) {
 	var build wuwa.WuwaBuild

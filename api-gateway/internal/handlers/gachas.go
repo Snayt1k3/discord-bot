@@ -9,8 +9,8 @@ import (
 
 type GachaHandlers struct {
 	genshinClient pb.GenshinServiceClient
-	wuwaClient pb.WuwaServiceClient
-	redis  interfaces.RedisInterface
+	wuwaClient    pb.WuwaServiceClient
+	redis         interfaces.RedisInterface
 }
 
 func (g *GachaHandlers) GetGenshinCharacters(c *gin.Context) {
@@ -26,7 +26,7 @@ func (g *GachaHandlers) GetGenshinCharacters(c *gin.Context) {
 		return
 	}
 
-	_ = g.redis.Set(cacheKey, resp.String(), 3600) 
+	_ = g.redis.Set(cacheKey, resp.String(), 3600)
 	c.JSON(200, resp)
 }
 
@@ -51,7 +51,7 @@ func (g *GachaHandlers) GetGenshinCharacterByID(c *gin.Context) {
 		return
 	}
 
-	_ = g.redis.Set(cacheKey, resp.String(), 3600) 
+	_ = g.redis.Set(cacheKey, resp.String(), 3600)
 	c.JSON(200, resp)
 }
 
@@ -95,7 +95,7 @@ func (g *GachaHandlers) GetWuwaCharacters(c *gin.Context) {
 		return
 	}
 
-	_ = g.redis.Set(cacheKey, resp.String(), 3600) 
+	_ = g.redis.Set(cacheKey, resp.String(), 3600)
 	c.JSON(200, resp)
 }
 
@@ -120,7 +120,7 @@ func (g *GachaHandlers) GetWuwaCharacterByID(c *gin.Context) {
 		return
 	}
 
-	_ = g.redis.Set(cacheKey, resp.String(), 3600) 
+	_ = g.redis.Set(cacheKey, resp.String(), 3600)
 	c.JSON(200, resp)
 
 }
@@ -142,7 +142,7 @@ func (g *GachaHandlers) GetWuwaCharacterBuild(c *gin.Context) {
 	}
 
 	resp, err := g.wuwaClient.GetCharacterBuild(c, &pb.CharacterRequest{Id: id})
-	
+
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
@@ -156,10 +156,10 @@ func NewGachaHandlers(
 	genshinClient pb.GenshinServiceClient,
 	wuwaClient pb.WuwaServiceClient,
 	redis interfaces.RedisInterface,
-	) *GachaHandlers {
+) *GachaHandlers {
 	return &GachaHandlers{
 		genshinClient: genshinClient,
-		wuwaClient: wuwaClient,
-		redis:  redis,
+		wuwaClient:    wuwaClient,
+		redis:         redis,
 	}
 }

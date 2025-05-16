@@ -20,7 +20,6 @@ func NewWuwaServer(service interfaces.ServiceInterface[dto.WuwaCharacterFull, dt
 	return &WuwaServer{service: service}
 }
 
-
 func (s *WuwaServer) GetAllCharacters(ctx context.Context, request *pb.Empty) (*pb.WuwaCharacterList, error) {
 	characters, err := s.service.GetCharacters()
 
@@ -54,7 +53,7 @@ func (s *WuwaServer) GetCharacterByID(ctx context.Context, request *pb.Character
 	return &pb.WuwaCharacterFull{
 		Id:      uint64(character.ID),
 		Element: character.Element,
-		Name: character.Name,
+		Name:    character.Name,
 		Rarity:  int32(character.Rarity),
 		Ascension: &pb.WuwaAscension{
 			LocalSpecialty: character.Ascension.LocalSpecialty,
@@ -115,7 +114,7 @@ func (s *WuwaServer) GetCharacterBuild(ctx context.Context, request *pb.Characte
 		FourCostEchoStat:  build.Stats.FourCostEchoStat,
 		ThreeCostEchoStat: build.Stats.ThreeCostEchoStat,
 		SubStatsPriority:  build.Stats.SubStatsPriority,
-		OneCostEchoStat: build.Stats.OneCostEchoStat,
+		OneCostEchoStat:   build.Stats.OneCostEchoStat,
 	}
 
 	character := &pb.WuwaCharacterFull{

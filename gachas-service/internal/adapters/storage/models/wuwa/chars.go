@@ -40,7 +40,6 @@ type WuwaResource struct {
 	LegendaryName string `gorm:"type:varchar(100);not null"`
 }
 
-
 func Migrate(db *gorm.DB) error {
 	return db.AutoMigrate(
 		&WuwaCharacter{},

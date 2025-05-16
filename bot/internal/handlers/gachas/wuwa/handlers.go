@@ -113,36 +113,36 @@ func (wh *WuwaHandlers) showCharacterDetail(s *discordgo.Session, i *discordgo.I
 	}
 
 	embed := discordgo.MessageEmbed{
-	Title: character.Name + " ⭐" + strconv.Itoa(character.Rarity),
-	Color: 0x6A5ACD, 
-	Thumbnail: &discordgo.MessageEmbedThumbnail{
-		URL: "https://wutheringwaves.gg/wp-content/uploads/sites/8/2024/05/Wuthering-Waves-Aalto-Build-Guide.png", // сюда можно подставить URL изображения персонажа
-	},
-	Fields: []*discordgo.MessageEmbedField{
-		{
-			Name:   "🌪️ Element",
-			Value:  character.Element,
-			Inline: true,
+		Title: character.Name + " ⭐" + strconv.Itoa(character.Rarity),
+		Color: 0x6A5ACD,
+		Thumbnail: &discordgo.MessageEmbedThumbnail{
+			URL: "https://wutheringwaves.gg/wp-content/uploads/sites/8/2024/05/Wuthering-Waves-Aalto-Build-Guide.png", // сюда можно подставить URL изображения персонажа
 		},
-		{
-			Name:   "🗡️ Weapon Type",
-			Value:  "Pistols" , // todo: Add more information about chars
-			Inline: true,
+		Fields: []*discordgo.MessageEmbedField{
+			{
+				Name:   "🌪️ Element",
+				Value:  character.Element,
+				Inline: true,
+			},
+			{
+				Name:   "🗡️ Weapon Type",
+				Value:  "Pistols", // todo: Add more information about chars
+				Inline: true,
+			},
+			{
+				Name:   "📈 Rarity",
+				Value:  strconv.Itoa(character.Rarity) + "-Star",
+				Inline: true,
+			},
 		},
-		{
-			Name:   "📈 Rarity",
-			Value:  strconv.Itoa(character.Rarity) + "-Star",
-			Inline: true,
+		Description: "A mysterious Resonator from the world of **Wuthering Waves**.\nPrepare to unlock their true potential!",
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: character.Name + " • Wuthering Waves",
 		},
-	},
-	Description: "A mysterious Resonator from the world of **Wuthering Waves**.\nPrepare to unlock their true potential!",
-	Footer: &discordgo.MessageEmbedFooter{
-		Text: character.Name + " • Wuthering Waves",
-	},
-	Image: &discordgo.MessageEmbedImage{
-		URL: "https://wuwamerch.com/wp-content/uploads/wuthering-waves-merch-aalto-badge-1.webp",
-	},
-}
+		Image: &discordgo.MessageEmbedImage{
+			URL: "https://wuwamerch.com/wp-content/uploads/wuthering-waves-merch-aalto-badge-1.webp",
+		},
+	}
 
 	components := WuwaButtons(int(character.ID))
 
@@ -255,8 +255,8 @@ func (wh *WuwaHandlers) showCharacterWeapons(s *discordgo.Session, i *discordgo.
 	for _, weapon := range build.Weapons {
 		fieldValue := fmt.Sprintf(
 			"🗡️ **Base ATK:** %d\n"+
-			"📈 **Substat:** %s (+%.1f%%)\n"+
-			"✨ **Passive:** %s",
+				"📈 **Substat:** %s (+%.1f%%)\n"+
+				"✨ **Passive:** %s",
 			weapon.BaseATK,
 			weapon.SubStat,
 			weapon.SubValue,

@@ -26,7 +26,7 @@ type WuwaStats struct {
 	gorm.Model
 	FourCostEchoStat  string `gorm:"type:varchar(100);not null"`
 	ThreeCostEchoStat string `gorm:"type:varchar(100);not null"`
-	OneCostEchoStat string `gorm:"type:varchar(100);not null"`
+	OneCostEchoStat   string `gorm:"type:varchar(100);not null"`
 	SubStatsPriority  string `gorm:"type:varchar(200);not null"`
 }
 

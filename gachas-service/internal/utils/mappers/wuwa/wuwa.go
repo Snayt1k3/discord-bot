@@ -92,6 +92,6 @@ func mapStats(s models.WuwaStats) dto.WuwaStats {
 		FourCostEchoStat:  s.FourCostEchoStat,
 		ThreeCostEchoStat: s.ThreeCostEchoStat,
 		SubStatsPriority:  s.SubStatsPriority,
-		OneCostEchoStat: s.OneCostEchoStat,
+		OneCostEchoStat:   s.OneCostEchoStat,
 	}
 }

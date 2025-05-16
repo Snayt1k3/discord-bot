@@ -14,7 +14,7 @@ func SetupRouter(SettingsHandlers *handlers.SettingsHandlers, gachasHandlers *ha
 
 	// Setup routes
 	v1.SettingsRoutes(r, SettingsHandlers)
-	v1.GachaRoutes(r, gachasHandlers) 
+	v1.GachaRoutes(r, gachasHandlers)
 
 	return r
 }

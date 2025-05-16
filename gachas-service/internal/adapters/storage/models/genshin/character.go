@@ -1,6 +1,6 @@
 package genshin
 
-import (	
+import (
 	"github.com/lib/pq"
 	"gorm.io/gorm"
 )
@@ -50,7 +50,6 @@ type GenshinTalent struct {
 	Books          GenshinBooks `json:"books" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	TalentPriority string       `json:"talent_priority" gorm:"not null"`
 }
-
 
 func Migrate(db *gorm.DB) error {
 	if err := db.AutoMigrate(
