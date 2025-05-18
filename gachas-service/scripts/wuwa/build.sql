@@ -110,17 +110,146 @@ VALUES
 
 INSERT INTO wuwa_stats(id, four_cost_echo_stat, three_cost_echo_stat, one_cost_echo_stat, sub_stats_priority)
 VALUES 
-    (1, 'CRIT DMG / CRIT Rate', 'Aero DMG / Energy Regen', 'ATK%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK'); -- Aalto
-
+    (1, 'CRIT DMG / CRIT Rate', 'Aero DMG / Energy Regen', 'ATK%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK'), -- Aalto
+    (2, 'Healing Bonus / HP%', 'Energy Regen', 'HP%', 'Energy Regeneration (Until Breakpoint) > HP% > Flat HP'), -- Baizhi
+    (3, 'CRIT DMG / CRIT Rate', 'Energy Regen / Fusion DMG', 'ATK%', 'Energy Regeneration (No more than 280% in menu or 180% from Echoes/Weapons) > CRIT RATE = CRIT DMG > Basic ATK DMG% > ATK% > Flat ATK'), -- Brant
+    (4, 'CRIT DMG / CRIT Rate', 'Electro DMG', 'ATK%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK = Liberation DMG%'), -- Calcharo
+    (5, 'CRIT DMG / CRIT Rate', 'Havoc DMG / ATK%', 'ATK%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Basic DMG% > Flat ATK'), -- Camellya
+    (6, 'CRIT DMG / CRIT Rate', 'Havoc DMG / ATK%', 'ATK%', 'Energy Regeneration (Until Satisfied) > CRIT RATE = CRIT DMG > ATK% > Flat ATK = Basic ATK DMG%'), -- Cantarella
+    (7, 'CRIT DMG / CRIT Rate', 'Glacio DMG / ATK%', 'ATK%', 'Energy Regeneration (Until Satisfied) >= CRIT RATE = CRIT DMG > ATK% > Resonance Skill DMG > Flat ATK'), -- Carlotta
+    (8, 'CRIT DMG / CRIT Rate', 'Fusion DMG / ATK%', 'ATK%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK = Resonance Skill DMG%'),  -- Changli
+    (9, 'CRIT DMG / CRIT Rate', 'Fusion DMG', 'ATK%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK'), -- Chixia
+    (10, 'CRIT DMG / CRIT Rate', 'Havoc DMG', 'ATK%', 'CRIT RATE = CRIT DMG > ATK% > Flat ATK > Heavy DMG% > Resonance Skill DMG%'), -- Danjin
+    (11, 'CRIT DMG / CRIT Rate', 'Fusion DMG / ATK%', 'ATK%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK > Basic DMG%'), -- Encore 
+    (12, 'CRIT DMG / CRIT Rate', 'Aero DMG / Energy Regen', 'ATK%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK > Heavy DMG% > Liberation DMG%'), -- Jianxin 
+    (13, 'CRIT DMG / CRIT Rate', 'Spectro DMG / ATK', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Resonance Skill DMG% > Flat ATK'), -- Jinhsi
+    (14, 'CRIT DMG / CRIT Rate', 'Aero DMG', 'ATK%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK = Heavy DMG%'), -- Jiyan
+    (15, 'CRIT DMG / CRIT Rate', 'Glacio DMG / ATK%', 'ATK%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK'), -- Lingyang
+    (16, 'CRIT DMG / CRIT Rate', 'Electro DMG / Energy Regen', 'ATK%', 'Energy Regeneration (Until Satisfied) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK'), -- Lumi
+    (17, 'CRIT DMG / CRIT Rate', 'Fusion DMG', 'ATK%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK'), -- Mortefi
+    (18, 'CRIT DMG / CRIT Rate', 'Spectro DMG', 'ATK%', 'Energy Regeneration (Until Satisfied) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK > Heavy ATK DMG%'), -- Phoebe
+    (19, 'CRIT DMG / CRIT Rate', 'Havoc DMG', 'ATK%', 'Energy Regeneration (Until Satisfied) >= CRIT RATE > CRIT DMG > ATK% > Heavy ATK DMG% > Flat ATK'), -- Roccia
+    (20, 'CRIT DMG / CRIT Rate', 'Aero DMG', 'ATK%', 'Energy Regeneration (Until Satisfied) > CRIT RATE = CRIT DMG > ATK% > Skill DMG% > Flat ATK'), -- Rover (Aero)
+    (21, 'CRIT DMG / CRIT Rate', 'Havoc DMG', 'ATK%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK'), -- Rover (Havoc)
+    (22, 'CRIT DMG / CRIT Rate', 'Spectro DMG', 'ATK%', ' CRIT RATE = CRIT DMG > ATK% > Flat ATK > Liberation DMG%'), -- Rover (Spectro)
+    (23, 'CRIT DMG / CRIT Rate', 'Glacio DMG', 'ATK%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK'), -- Sanhua
+    (24, 'DEF%', 'Energy Regen / DEF%', 'DEF%', 'ENERGY Regen% (until breakpoint) > Crit rate / Crit dmg > DEF% > DEF'), -- Taoqi
+    (25, 'CRIT DMG / Healing Bonus / HP%', 'Energy Regen / Spectro DMG / HP%', 'HP%', 'Energy Regeneration (Until Breakpoint) CRIT DMG% >= ULT DMG% > HP% > FLAT HP'), -- Sk
+    (26, 'Healing Bonus / ATK', 'Energy Regen', 'ATK%', 'Energy Regeneration (Until Breakpoint) > ATK% > Flat ATK'), -- Verina
+    (27, 'CRIT DMG / CRIT Rate', 'Electro DMG / ATK', 'ATK%', 'CRIT RATE = CRIT DMG > ATK% > Flat ATK = Liberation DMG%'), -- Xiangli Yao
+    (28, 'CRIT DMG / CRIT Rate', 'Aero DMG / Energy Regen', 'ATK%', ' Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK > Liberation DMG% > Basic DMG%'), -- Yangyang
+    (29, 'CRIT DMG / CRIT Rate', 'Electro DMG / ATK', 'ATK%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > ATK% > Flat ATK = Resonance Skill DMG%'), -- Yinlin
+    (30, 'Healing Bonus', 'Energy Regen / ATK%', 'ATK%', 'Energy Regeneration (Until satisfied) = ATK% > FLAT ATK'), -- Youhu
+    (31, 'CRIT DMG / CRIT Rate', 'Electro DMG / DEF', 'DEF%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > DEF% > Flat DEF'), -- Yuanwu
+    (32, 'CRIT DMG / CRIT Rate', 'Spectro DMG', 'ATK%', 'Energy Regeneration (Until Satisfied) >= CRIT RATE = CRIT DMG > ATK% > Heavy ATK DMG% > Flat ATK'), -- Zani
+    (33, 'CRIT DMG / CRIT Rate', 'Glacio DMG', 'ATK%', 'Energy Regeneration (Until Comfortable) > CRIT RATE = CRIT DMG > Basic DMG% = ATK% > Flat ATK'); -- Zhezhi
 
 INSERT INTO wuwa_builds(id, character_id, stats_id, best_primary_echo) 
 VALUES
-    (1, 25, 1, 'Nightmare: Feilian Beringal'); -- Aalto
+    (1, 25, 1, 'Nightmare: Feilian Beringal'), -- Aalto
+    (2, 26, 2, 'Fallacy of No Return'), -- Baizhi
+    (3, 3, 3, 'Nightmare: Inferno Rider / Dragon of Dirge'), -- Brant
+    (4, 4, 4, 'Nightmare: Thundering Mephis / Nightmare: Tempest Mephis') -- Calcharo
+    (5, 5, 5, 'Nightmare: Crownless'), -- Camellya
+    (6, 6, 6, 'Lorelei'), -- Cantarella
+    (7, 7, 7, 'Sentry Construct'), -- Carlotta
+    (8, 8, 8, 'Nightmare: Inferno Rider'), -- Changli
+    (9, 2, 9, 'Nightmare: Inferno Rider'), -- Chixia
+    (10, 27, 10, 'Dreamless / Impermanence Heron'), -- Danjin
+    (11, 9, 11, 'Nightmare: Inferno Rider'), -- Encore
+    (12, 10, 12, 'Nightmare: Feilian Beringal'), -- Jianxin
+    (13, 11, 13, 'Jué'), -- Jinhsi
+    (14, 12, 14, 'Nightmare: Feilian Beringal'), -- Jiyan
+    (15, 13, 15, 'Mech Abomination / Sentry Construct'), -- Lingyang
+    (16, 28, 16, 'Impermanence Heron / Nightmare: Thundering Mephis') -- Lumi
+    (17, 29, 17, 'Impermanence Heron / Hecate'), -- Mortefi
+    (18, 14, 18, 'Nightmare: Mourning Aix'), -- Phoebe
+    (19, 15, 19, 'Nightmare: Impermanence Heron / Impermanence Heron'), -- Roccia
+    (20, 16, 20, 'Fallacy of No Return'), -- Rover (Aero) 
+    (21, 17, 21, 'Dreamless'), -- Rover (Havoc)
+    (22, 18, 22, 'Impermanence Heron / Nightmare: Mourning Aix'), -- Rover (Spectro)
+    (23, 30, 23, 'Impermanence Heron'), -- Sanhua
+    (24, 31, 24, 'Fallacy of No Return'), -- Taoqi
+    (25, 19, 25, 'Fallacy of No Return'), -- Sk
+    (26, 20, 26, 'Fallacy of No Return'), -- Verina
+    (27, 21, 27, 'Nightmare: Thundering Mephis'), -- Xiangli Yao
+    (28, 1, 28, 'Impermanence Heron / Nightmare: Feilian Beringal'), -- Yangyang
+    (29, 22, 29, 'Impermanence Heron / Nightmare: Tempest Mephis'), -- Yinlin
+    (30, 32, 30, 'Fallacy of No Return / Impermanence Heron'), -- Youhu
+    (31, 33, 31, 'Fallacy of No Return / Impermanence Heron / Nightmare: Tempest Mephis'), -- Yuanwu
+    (32, 23, 32, 'Capitaneus'), -- Zani
+    (33, 24, 33, 'Impermanence Heron / Hecate'); -- Zhezhi
 
 INSERT INTO build_wuwa_weapons (wuwa_build_id, wuwa_weapon_id)
 VALUES 
-    (1, 12), (1, 44), (1, 49), (1, 47), (1, 54), (1, 55); -- Aalto
+    (1, 12), (1, 44), (1, 49), (1, 47), (1, 54), (1, 55), -- Aalto
+    (2, 13), (2, 56), (2, 26), (2, 77), (2, 48), -- Baizhi
+    (3, 17), (3, 46), (3, 79), -- Brant
+    (4, 9), (4, 2), (4, 18), (4, 23), (4, 58), (4, 36), (4, 24), -- Calcharo
+    (5, 10), (5, 7), (5, 51), (5, 40), (5, 29), (5, 32), (5, 41), -- Camellya
+    (6, 20), (6, 11), (6, 14), (6, 6), (6, 22), (6, 38), -- Cantarella
+    (7, 15), (7, 12), (7, 54), (7, 55), (7, 44), (7, 47), -- Carlotta
+    (8, 3), (8, 7), (8, 10), (8, 29), (8, 41), -- Changli
+    (9, 15), (9, 12), (9, 54), (9, 49), (9, 44), (9, 55), -- Chixia
+    (10, 3), (10, 10), (10, 7), (10, 29), (10, 32), (10, 51), -- Danjin
+    (11, 14), (11, 11), (11, 6), (11, 22), (11, 34), (11, 38) -- Encore
+    (12, 19), (12, 1), (12, 52), (12, 27), (12, 37), -- Jianxin
+    (13, 2), (13, 18), (13, 9), (13, 24), (13, 58),  -- Jinhsi
+    (14, 18), (14, 2), (14, 9), (14, 23), (14, 58), -- Jiyan
+    (15, 19), (15, 1), (15, 27), (15, 37), -- Lingyang
+    (16, 2), (16, 18), (16, 9), (16, 23), (16, 58), -- Lumi
+    (17, 12), (17, 15), (17, 49), (17, 44), (17, 54), -- Mortefi
+    (18, 8), (18, 14), (18, 22), (18, 6), (18, 57), -- Phoebe
+    (19, 16), (19, 19), (19, 1), (19, 27), (19, 37), -- Roccia
+    (20, 5), (20, 46), (20, 79), -- Rover (Aero)
+    (21, 10), (21, 3), (21, 7), (21, 51), (21, 29), (21, 40), -- Rover (Havoc)
+    (22, 3), (22, 7), (22, 41), (22, 32), (22, 29), -- Rover (Spectro)
+    (23, 3), (23, 10), (23, 7), (23, 29), (23, 32), (23, 41), -- Sanhua
+    (24, 31), (24, 30), -- Taoqi
+    (25, 13), (25, 56), (25, 48), (25, 77), -- Sk
+    (26, 56), (26, 13), (26, 26), (25, 48), (25, 77), -- Verina
+    (27, 19), (27, 1), (27, 52), (27, 27), (27, 37), -- Xiangli Yao
+    (28, 3), (28, 7), (28, 40), (28, 32), (28, 41), -- Yangyang
+    (29, 14), (29, 11), (29, 6), (29, 22), (29, 38), -- Yinlin
+    (30, 42), (30, 35), (30, 1), (30, 27), -- Youhu
+    (31, 19), (31, 21), (31, 52), (31, 65), (31, 72), -- Yuanwu
+    (32, 4), (32, 16), (32, 19), (32, 1), (32, 39), -- Zani
+    (33, 11), (33, 14), (33, 6), (33, 22), (33, 38); -- Zhezhi
 
 INSERT INTO build_wuwa_echoes (wuwa_build_id, wuwa_echoes_id)
 VALUES 
-    (1, 4); -- Aalto
+    (1, 4), -- Aalto
+    (2, 7), -- baizhi
+    (3, 2), (3, 14), -- Brant
+    (4, 3), (4, 9), -- Calcharo
+    (5, 6), (5, 9), -- Camellya
+    (6, 12), (6, 8), -- Cantarella
+    (7, 10), (7, 9), -- Carlotta
+    (8, 2), -- Changli
+    (9, 2),  -- Chixia
+    (10, 6), (10, 8), -- Danjin
+    (11, 2), -- Encore
+    (12, 8), (12, 7), (12, 4) -- Jianxin
+    (13, 5), -- Jinhsi
+    (14, 4), -- Jiyan
+    (15, 9), (15, 10), -- Lingyang
+    (16, 8), (16, 3), -- Lumi
+    (17, 8), (17, 13), -- Mortefi
+    (18, 11),  -- Phoebe
+    (19, 12), (19, 8), -- Roccia
+    (20, 7), -- Rover (Aero)
+    (21, 6), -- Rover (Havoc)
+    (22, 8), (22, 11), -- Rover (Spectro)
+    (23, 8), -- Sanhua
+    (24, 7), -- Taoqi
+    (25, 7), -- Sk
+    (26, 7), -- Verina
+    (27, 3), -- Xiangli Yao
+    (28, 8), (28, 4) -- Yangyang
+    (29, 8), (29, 3), (29, 13), -- Yinlin
+    (30, 7), (30, 8), -- Youhu
+    (31, 7), (31, 8), (31, 13), -- Yuanwu
+    (32, 11), -- Zani
+    (33, 8), (33, 13); -- Zhezhi   
+
+
