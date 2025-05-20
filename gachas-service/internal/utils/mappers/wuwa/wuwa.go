@@ -12,6 +12,7 @@ func MapCharacterToDTO(c models.WuwaCharacter) dto.WuwaCharacterFull {
 		ID:      c.ID,
 		Name:    c.Name,
 		Element: c.Element,
+		WeaponType: c.WeaponType,
 		Rarity:  c.Rarity,
 		Ascension: dto.WuwaAscension{
 			LocalSpecialty: c.Ascension.LocalSpecialty,

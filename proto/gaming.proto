@@ -170,8 +170,9 @@ message WuwaCharacterFull {
   string name = 2;
   string element = 3;
   int32 rarity = 4;
-  WuwaAscension ascension = 5;
-  WuwaTalent talents = 6;
+  string weaponType = 5;
+  WuwaAscension ascension = 6;
+  WuwaTalent talents = 7;
 }
 
 message WuwaEcho {
