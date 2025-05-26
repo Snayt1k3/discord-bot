@@ -88,8 +88,8 @@ VALUES
     (86, 'Training Gauntlets', 'Gauntlets', 1, 'Increases ATK by 4%.', 250, 'ATK', 11.4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     (87, 'Training Pistols', 'Pistols', 1, 'Increases ATK by 4%.', 250, 'ATK', 11.4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     (88, 'Training Rectifier', 'Rectifier', 1, 'Increases ATK by 4%.', 250, 'ATK', 11.4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    (89, 'Training Sword', 'Sword', 1, 'Increases ATK by 4%.', 250, 'ATK', 11.4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
-
+    (89, 'Training Sword', 'Sword', 1, 'Increases ATK by 4%.', 250, 'ATK', 11.4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (90, 'Woodland Aria', 'Pistols', 5, 'ATK is increased by 12%. Inflicting Aero Erosion on the target gives 24% Aero DMG Bonus for 10s. Hitting targets with Aero Erosion reduces their Aero RES by 10% for 20s. Effects of the same name cannot be stacked.', 500, 'CRIT Rate', 36, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
 INSERT INTO wuwa_echoes (id, name, two_piece_bonus, full_set_bonus, created_at, updated_at)
 VALUES 
     (1, 'Freezing Frost', 'Glacio DMG increases by 10%.', 'Upon using Basic Attack or Heavy Attack, Glacio DMG increases by 10%, stacking up to three times, lasting for 15s.', NOW(), NOW()),
@@ -142,8 +142,9 @@ VALUES
     (30, 'Healing Bonus', 'Energy Regen / ATK%', 'ATK%', 'Energy Regeneration (Until satisfied) = ATK% > FLAT ATK'), -- Youhu
     (31, 'CRIT DMG / CRIT Rate', 'Electro DMG / DEF', 'DEF%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > DEF% > Flat DEF'), -- Yuanwu
     (32, 'CRIT DMG / CRIT Rate', 'Spectro DMG', 'ATK%', 'Energy Regeneration (Until Satisfied) >= CRIT RATE = CRIT DMG > ATK% > Heavy ATK DMG% > Flat ATK'), -- Zani
-    (33, 'CRIT DMG / CRIT Rate', 'Glacio DMG', 'ATK%', 'Energy Regeneration (Until Comfortable) > CRIT RATE = CRIT DMG > Basic DMG% = ATK% > Flat ATK'); -- Zhezhi
-
+    (33, 'CRIT DMG / CRIT Rate', 'Glacio DMG', 'ATK%', 'Energy Regeneration (Until Comfortable) > CRIT RATE = CRIT DMG > Basic DMG% = ATK% > Flat ATK'), -- Zhezhi
+    (34, 'CRIT DMG / CRIT Rate', 'Aero DMG / ATK%', 'ATK%', 'CRIT RATE = CRIT DMG > ATK% > Flat ATK'); -- Ciaccona
+    
 INSERT INTO wuwa_builds(id, character_id, stats_id, best_primary_echo) 
 VALUES
     (1, 25, 1, 'Nightmare: Feilian Beringal'), -- Aalto
@@ -178,8 +179,8 @@ VALUES
     (30, 32, 30, 'Fallacy of No Return / Impermanence Heron'), -- Youhu
     (31, 33, 31, 'Fallacy of No Return / Impermanence Heron / Nightmare: Tempest Mephis'), -- Yuanwu
     (32, 23, 32, 'Capitaneus'), -- Zani
-    (33, 24, 33, 'Impermanence Heron / Hecate'); -- Zhezhi
-
+    (33, 24, 33, 'Impermanence Heron / Hecate'), -- Zhezhi
+    (34, 34, 34, 'Reminiscence: Fleurdelys'); -- Ciaccona
 INSERT INTO build_wuwa_weapons (wuwa_build_id, wuwa_weapon_id)
 VALUES 
     (1, 12), (1, 44), (1, 49), (1, 47), (1, 54), (1, 55), -- Aalto
@@ -214,7 +215,8 @@ VALUES
     (30, 42), (30, 35), (30, 1), (30, 27), -- Youhu
     (31, 19), (31, 21), (31, 52), (31, 65), (31, 72), -- Yuanwu
     (32, 4), (32, 16), (32, 19), (32, 1), (32, 39), -- Zani
-    (33, 11), (33, 14), (33, 6), (33, 22), (33, 38); -- Zhezhi
+    (33, 11), (33, 14), (33, 6), (33, 22), (33, 38), -- Zhezhi
+    (34, 90), (34, 15), (34, 12), (34, 50), (34, 49); -- Ciaccona
 
 INSERT INTO build_wuwa_echoes (wuwa_build_id, wuwa_echoes_id)
 VALUES 
@@ -250,6 +252,7 @@ VALUES
     (30, 7), (30, 8), -- Youhu
     (31, 7), (31, 8), (31, 13), -- Yuanwu
     (32, 11), -- Zani
-    (33, 8), (33, 13); -- Zhezhi   
+    (33, 8), (33, 13), -- Zhezhi 
+    (34, 15); -- Ciaccona  
 
 
