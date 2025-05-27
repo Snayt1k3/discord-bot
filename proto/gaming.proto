@@ -17,9 +17,9 @@ service WuwaService {
 }
 
 service ZenlessService {
-  rpc GetAllCharacters(Empty) returns (Empty);
-  rpc GetCharacterByID(CharacterRequest) returns (Empty);
-  rpc GetCharacterBuild(CharacterRequest) returns (Empty);
+  rpc GetAllCharacters(Empty) returns (ZenlessCharacterList);
+  rpc GetCharacterByID(CharacterRequest) returns (ZenlessCharacterFull);
+  rpc GetCharacterBuild(CharacterRequest) returns (ZenlessBuildResponse);
 }
 
 service HsrService {
@@ -198,4 +198,80 @@ message WuwaCharacterBuild {
 }
 
 // ZZZ Models
+message ZenlessCharacterList {
+  repeated ZenlessCharacterShort characters = 1;
+}
+
+message ZenlessCharacterShort {
+  uint64 id = 1;
+  string name = 2;
+  string specialty = 3;
+  string rank = 4;
+  string attribute = 5;
+}
+
+message ZenlessCharacterFull {
+  uint64 id = 1;
+  string name = 2;
+  string specialty = 3;
+  string rank = 4;
+  string attribute = 5;
+  string faction = 6;
+  ZenlessMaterial ascension = 7;
+  ZenlessNode nodes = 8;
+}
+
+message ZenlessNode {
+  string hunt_boss_material = 1;
+  string expert_boss_material = 2;
+  ZenlessMaterial resource = 3;
+  int32 hamster_cage_pass = 5;
+}
+
+message ZenlessMaterial {
+  string common = 1;
+  string rare = 2;
+  string epic = 3;
+}
+
+message ZenlessBuildResponse {
+  ZenlessBuild build = 1;
+}
+
+message ZenlessBuild {
+  ZenlessCharacterShort character = 1;
+  repeated ZenlessWeapon weapons = 2;
+  repeated ZenlessDisc discs = 3;
+  ZenlessStats stats = 4;
+}
+
+message ZenlessWeapon {
+  uint64 id = 1;
+  string name = 2;
+  int32 base_atk = 3;
+  string rarity = 4;
+  string type = 5;
+  string passive = 6;
+  string sub_stat = 7;
+  int32 sub_value = 8;
+  int32 priority = 9;
+}
+
+message ZenlessDisc {
+  uint64 id = 1;
+  string name = 2;
+  string two_piece_bonus = 3;
+  string four_piece_bonus = 4;
+  int32 priority = 5;
+}
+
+message ZenlessStats {
+  string fourth_disc = 1;
+  string fifth_disc = 2;
+  string sixth_disc = 3;
+  string sub_stats_priority = 4;
+}
+
+
+
 // Honkai StarRail Models

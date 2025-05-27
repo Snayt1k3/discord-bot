@@ -8,8 +8,8 @@ type ZenlessBuild struct {
 	gorm.Model
 	CharacterID uint
 	Character   ZenlessCharacter     `gorm:"foreignKey:CharacterID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
-	Weapons     []ZenlessWeapons     `gorm:"foreignKey:BuildID"`
-	Discs       []ZenlessDiscsPreset `gorm:"foreignKey:BuildID"`
+	Weapons     []ZenlessWeapons     `gorm:"many2many:zenless_build_weapon;"`
+	Discs       []ZenlessDiscsPreset `gorm:"many2many:zenless_build_disc;"`
 	StatsID     uint                 `gorm:"not null"`
 	Stats       ZenlessStats         `gorm:"foreignKey:StatsID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 }
@@ -46,6 +46,18 @@ type ZenlessWeapons struct {
 	Rarity   string `gorm:"not null"`
 	Type     string `gorm:"not null"`
 	Passive  string `gorm:"not null"`
-	SubStat  string `gorm:"type:varchar(50);not null"`
+	SubStat  string `gorm:"not null"`
 	SubValue int32  `gorm:"not null"`
+}
+
+type ZenlessBuildWeapon struct {
+	BuildID  uint `gorm:"primaryKey"`
+	WeaponID uint `gorm:"primaryKey"`
+	Priority int
+}
+
+type ZenlessBuildDisc struct {
+	BuildID uint `gorm:"primaryKey"`
+	DiscID  uint `gorm:"primaryKey"`
+	Priority int
 }
