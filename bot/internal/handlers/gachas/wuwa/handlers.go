@@ -45,10 +45,15 @@ func (wh *WuwaHandlers) showCharacters(s *discordgo.Session, i *discordgo.Intera
 		var row []discordgo.MessageComponent
 
 		for j := i; j < i+buttonsPerRow && j < totalButtons; j++ {
+
+			emojiStr := GetCharacterEmoji(displayedCharacters[j].Name)
+			parsedEmoji := ParseCustomEmoji(emojiStr)
+
 			row = append(row, discordgo.Button{
 				Label:    displayedCharacters[j].Name,
 				Style:    discordgo.PrimaryButton,
 				CustomID: fmt.Sprintf("WuwaCharacter_%v", displayedCharacters[j].ID),
+				Emoji: parsedEmoji,
 			})
 		}
 
@@ -112,26 +117,31 @@ func (wh *WuwaHandlers) showCharacterDetail(s *discordgo.Session, i *discordgo.I
 		return discord.SendErrorMessage(s, i)
 	}
 
+	attributeEmoji := GetAttributeEmoji(character.Element)
+	weaponType := GetWeaponTypeEmoji(character.WeaponType)
+	thumbnail, footer := GetImage(character.Name)
+
+
 	embed := discordgo.MessageEmbed{
-		Title: character.Name + " ⭐" + strconv.Itoa(character.Rarity),
+		Title: character.Name,
 		Color: 0x6A5ACD,
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
-			URL: "https://wutheringwaves.gg/wp-content/uploads/sites/8/2024/05/Wuthering-Waves-Aalto-Build-Guide.png", // сюда можно подставить URL изображения персонажа
+			URL: thumbnail,
 		},
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name:   "🌪️ Element",
-				Value:  character.Element,
+				Name:   "Element",
+				Value:  fmt.Sprintf("%v %v", attributeEmoji, character.Element),
 				Inline: true,
 			},
 			{
-				Name:   "🗡️ Weapon Type",
-				Value:  "Pistols", // todo: Add more information about chars
+				Name:   "Weapon Type",
+				Value:  fmt.Sprintf("%v %v", weaponType, character.WeaponType), 
 				Inline: true,
 			},
 			{
-				Name:   "📈 Rarity",
-				Value:  strconv.Itoa(character.Rarity) + "-Star",
+				Name:   "Rarity",
+				Value:  fmt.Sprintf("%v⭐", character.Rarity),
 				Inline: true,
 			},
 		},
@@ -140,10 +150,10 @@ func (wh *WuwaHandlers) showCharacterDetail(s *discordgo.Session, i *discordgo.I
 			Text: character.Name + " • Wuthering Waves",
 		},
 		Image: &discordgo.MessageEmbedImage{
-			URL: "https://wuwamerch.com/wp-content/uploads/wuthering-waves-merch-aalto-badge-1.webp",
+			URL: footer,
 		},
 	}
-
+	
 	components := WuwaButtons(int(character.ID))
 
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
@@ -325,7 +335,7 @@ func (wh *WuwaHandlers) showCharacterTalents(s *discordgo.Session, i *discordgo.
 		},
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name: "👤 Mob Drops — Howler Cores",
+				Name: "👤 Mob Drops",
 				Value: fmt.Sprintf(
 					"- %s ×25\n- %s ×28\n- %s ×40\n- %s ×57",
 					character.Talents.MobMaterial.UncommonName,
@@ -403,8 +413,9 @@ func (wh *WuwaHandlers) showCharacterEchoes(s *discordgo.Session, i *discordgo.I
 	var fields []*discordgo.MessageEmbedField
 
 	for _, echo := range build.Echoes {
+		echoEmoji := GetEchoEmoji(echo.Name)
 		fields = append(fields, &discordgo.MessageEmbedField{
-			Name:   echo.Name,
+			Name:   fmt.Sprintf("%v %v", echoEmoji, echo.Name),
 			Value:  fmt.Sprintf("2-piece bonus: %s\n5-piece bonus: %s", echo.TwoPieceBonus, echo.FullSetBonus),
 			Inline: false,
 		})
@@ -485,10 +496,14 @@ func (wh *WuwaHandlers) pagination(s *discordgo.Session, i *discordgo.Interactio
 	for i := 0; i < len(pageCharacters); i += buttonsPerRow {
 		var row []discordgo.MessageComponent
 		for j := i; j < i+buttonsPerRow && j < len(pageCharacters); j++ {
+			emojiStr := GetCharacterEmoji(pageCharacters[j].Name)
+			parsedEmoji := ParseCustomEmoji(emojiStr)
+
 			row = append(row, discordgo.Button{
 				Label:    pageCharacters[j].Name,
 				Style:    discordgo.PrimaryButton,
 				CustomID: fmt.Sprintf("WuwaCharacter_%v", pageCharacters[j].ID),
+				Emoji: parsedEmoji,
 			})
 		}
 		components = append(components, discordgo.ActionsRow{Components: row})

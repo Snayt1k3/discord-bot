@@ -70,9 +70,13 @@ func ShowSupportedGachas(s *discordgo.Session, i *discordgo.InteractionCreate) e
 			Disabled: true,
 		},
 		{
-			Label:    "Wuthering Waves 🌪️",
+			Label:    "Wuthering Waves",
 			Style:    discordgo.SecondaryButton,
 			CustomID: "WuwaCharacters",
+			Emoji: &discordgo.ComponentEmoji{
+				Name: "Wuwa_logo_icon",
+				ID: "1376855438557052968",
+			},
 		},
 	}
 
@@ -87,7 +91,7 @@ func ShowSupportedGachas(s *discordgo.Session, i *discordgo.InteractionCreate) e
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:   "🎮 **Supported Games**",
-					Value:  "• 🌌 Honkai: Star Rail\n• 🔥 Genshin Impact\n• 🌀 Zenless Zone Zero\n• 🌪️ Wuthering Waves",
+					Value:  "• 🌌 Honkai: Star Rail\n• 🔥 Genshin Impact\n• 🌀 Zenless Zone Zero\n• <:Wuwa_logo_icon:1376855438557052968> Wuthering Waves",
 					Inline: false,
 				},
 			},

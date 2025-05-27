@@ -147,6 +147,7 @@ func (s *WuwaServer) GetCharacterBuild(ctx context.Context, request *pb.Characte
 				EpicName:      build.Character.Talents.MobMaterial.EpicName,
 				LegendaryName: build.Character.Talents.MobMaterial.LegendaryName,
 			},
+			BossMaterial: build.Character.Talents.BossMaterial,
 		},
 	}
 

@@ -153,6 +153,7 @@ message WuwaAscension {
 message WuwaTalent {
   WuwaResource dungeon_material = 1;
   WuwaResource mob_material = 2;
+  string BossMaterial = 3;
 }
 
 message WuwaWeapon {

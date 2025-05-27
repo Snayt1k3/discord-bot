@@ -22,6 +22,7 @@ func MapCharacterToDTO(c models.WuwaCharacter) dto.WuwaCharacterFull {
 		Talents: dto.WuwaTalent{
 			DungeonMaterial: mapResource(c.Talents.DungeonMaterial),
 			MobMaterial:     mapResource(c.Talents.MobMaterial),
+			BossMaterial: c.Talents.BossMaterial,
 		},
 	}
 }
