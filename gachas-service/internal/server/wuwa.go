@@ -51,10 +51,10 @@ func (s *WuwaServer) GetCharacterByID(ctx context.Context, request *pb.Character
 	}
 
 	return &pb.WuwaCharacterFull{
-		Id:      uint64(character.ID),
-		Element: character.Element,
-		Name:    character.Name,
-		Rarity:  int32(character.Rarity),
+		Id:         uint64(character.ID),
+		Element:    character.Element,
+		Name:       character.Name,
+		Rarity:     int32(character.Rarity),
 		WeaponType: character.WeaponType,
 		Ascension: &pb.WuwaAscension{
 			LocalSpecialty: character.Ascension.LocalSpecialty,
@@ -119,11 +119,11 @@ func (s *WuwaServer) GetCharacterBuild(ctx context.Context, request *pb.Characte
 	}
 
 	character := &pb.WuwaCharacterFull{
-		Id:      uint64(build.Character.ID),
-		Name:    build.Character.Name,
-		Element: build.Character.Element,
+		Id:         uint64(build.Character.ID),
+		Name:       build.Character.Name,
+		Element:    build.Character.Element,
 		WeaponType: build.Character.WeaponType,
-		Rarity:  int32(build.Character.Rarity),
+		Rarity:     int32(build.Character.Rarity),
 		Ascension: &pb.WuwaAscension{
 			LocalSpecialty: build.Character.Ascension.LocalSpecialty,
 			BossMaterial:   build.Character.Ascension.BossMaterial,

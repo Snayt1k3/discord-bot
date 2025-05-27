@@ -9,11 +9,11 @@ import (
 
 func MapCharacterToDTO(c models.WuwaCharacter) dto.WuwaCharacterFull {
 	return dto.WuwaCharacterFull{
-		ID:      c.ID,
-		Name:    c.Name,
-		Element: c.Element,
+		ID:         c.ID,
+		Name:       c.Name,
+		Element:    c.Element,
 		WeaponType: c.WeaponType,
-		Rarity:  c.Rarity,
+		Rarity:     c.Rarity,
 		Ascension: dto.WuwaAscension{
 			LocalSpecialty: c.Ascension.LocalSpecialty,
 			BossMaterial:   c.Ascension.BossMaterial,
@@ -22,7 +22,7 @@ func MapCharacterToDTO(c models.WuwaCharacter) dto.WuwaCharacterFull {
 		Talents: dto.WuwaTalent{
 			DungeonMaterial: mapResource(c.Talents.DungeonMaterial),
 			MobMaterial:     mapResource(c.Talents.MobMaterial),
-			BossMaterial: c.Talents.BossMaterial,
+			BossMaterial:    c.Talents.BossMaterial,
 		},
 	}
 }

@@ -37,13 +37,13 @@ type WuwaWeapon struct {
 }
 
 type WuwaCharacterFull struct {
-	ID        uint          `json:"id"`
-	Name      string        `json:"name"`
+	ID         uint          `json:"id"`
+	Name       string        `json:"name"`
 	WeaponType string        `json:"weapon_type"`
-	Element   string        `json:"element"`
-	Rarity    int           `json:"rarity"`
-	Ascension WuwaAscension `json:"ascension"`
-	Talents   WuwaTalent    `json:"talents"`
+	Element    string        `json:"element"`
+	Rarity     int           `json:"rarity"`
+	Ascension  WuwaAscension `json:"ascension"`
+	Talents    WuwaTalent    `json:"talents"`
 }
 
 type WuwaEcho struct {

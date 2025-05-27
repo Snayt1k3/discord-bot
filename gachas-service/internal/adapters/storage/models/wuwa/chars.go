@@ -8,7 +8,7 @@ type WuwaCharacter struct {
 	gorm.Model
 	Name        string        `gorm:"type:varchar(100);not null"`
 	Element     string        `gorm:"type:varchar(50);not null"`
-	WeaponType  string 		  `gorm:"type:varchar(50);not null"`
+	WeaponType  string        `gorm:"type:varchar(50);not null"`
 	Rarity      int           `gorm:"not null"`
 	AscensionID uint          `gorm:"not null"`
 	Ascension   WuwaAscension `gorm:"foreignKey:AscensionID;references:ID"`
