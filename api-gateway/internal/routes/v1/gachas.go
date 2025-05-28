@@ -18,4 +18,9 @@ func GachaRoutes(r *gin.Engine, hands *handlers.GachaHandlers) {
 	gacha.GET("/wuwa/character/:character_id", hands.GetWuwaCharacterByID)
 	gacha.GET("/wuwa/character/:character_id/builds", hands.GetWuwaCharacterBuild)
 
+	// ZenlessZoneZero
+	gacha.GET("/zenless/character", hands.GetZenlessCharacters)
+	gacha.GET("/zenless/character/:character_id", hands.GetZenlessCharacterByID)
+	gacha.GET("/zenless/character/:character_id/builds", hands.GetZenlessCharacterBuild)
+
 }
