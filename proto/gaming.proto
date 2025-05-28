@@ -221,28 +221,17 @@ message ZenlessCharacterFull {
   ZenlessNode nodes = 8;
 }
 
-message ZenlessNode {
-  string hunt_boss_material = 1;
-  string expert_boss_material = 2;
-  ZenlessMaterial resource = 3;
-  int32 hamster_cage_pass = 5;
-}
-
 message ZenlessMaterial {
   string common = 1;
   string rare = 2;
   string epic = 3;
 }
 
-message ZenlessBuildResponse {
-  ZenlessBuild build = 1;
-}
-
-message ZenlessBuild {
-  ZenlessCharacterShort character = 1;
-  repeated ZenlessWeapon weapons = 2;
-  repeated ZenlessDisc discs = 3;
-  ZenlessStats stats = 4;
+message ZenlessNode {
+  string hunt_boss_material = 1;
+  string expert_boss_material = 2;
+  ZenlessMaterial resource = 3;
+  int32 hamster_cage_pass = 4;
 }
 
 message ZenlessWeapon {
@@ -257,12 +246,16 @@ message ZenlessWeapon {
   int32 priority = 9;
 }
 
-message ZenlessDisc {
-  uint64 id = 1;
+message ZenlessDiscSet {
   string name = 2;
   string two_piece_bonus = 3;
   string four_piece_bonus = 4;
-  int32 priority = 5;
+}
+
+message ZenlessDiscPreset {
+  ZenlessDiscSet two_piece_set = 2;
+  ZenlessDiscSet four_piece_set = 3;
+  int32 priority = 4;
 }
 
 message ZenlessStats {
@@ -270,6 +263,17 @@ message ZenlessStats {
   string fifth_disc = 2;
   string sixth_disc = 3;
   string sub_stats_priority = 4;
+}
+
+message ZenlessBuild {
+  ZenlessCharacterFull character = 1;
+  repeated ZenlessWeapon weapons = 2;
+  repeated ZenlessDiscPreset discs = 3;
+  ZenlessStats stats = 4;
+}
+
+message ZenlessBuildResponse {
+  ZenlessBuild build = 1;
 }
 
 
