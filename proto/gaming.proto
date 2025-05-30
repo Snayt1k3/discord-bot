@@ -7,7 +7,7 @@ option go_package = "proto/";
 service GenshinService {
   rpc GetAllCharacters (Empty) returns (GenshinCharactersResponse);
   rpc GetCharacterById (CharacterRequest) returns (GenshinCharacterDetailResponse);
-  rpc GetCharacterBuild (CharacterRequest) returns (GenshinBuildResponse);
+  rpc GetCharacterBuild (CharacterRequest) returns (GenshinBuildResponse); // todo: Заменить на обычные модели
 }
 
 service WuwaService {
@@ -23,9 +23,9 @@ service ZenlessService {
 }
 
 service HsrService {
-  rpc GetAllCharacters(Empty) returns (Empty);
-  rpc GetCharacterByID(CharacterRequest) returns (Empty);
-  rpc GetCharacterBuild(CharacterRequest) returns (Empty);
+  rpc GetAllCharacters(Empty) returns (HonkaiCharacterList);
+  rpc GetCharacterByID(CharacterRequest) returns (HonkaiCharacter);
+  rpc GetCharacterBuild(CharacterRequest) returns (HonkaiBuild);
 }
 
 message Empty {}
@@ -279,3 +279,88 @@ message ZenlessBuildResponse {
 
 
 // Honkai StarRail Models
+message HonkaiCharacterList {
+  repeated HonkaiCharacterShort characters = 1;
+}
+
+message HonkaiCharacterShort {
+  uint64 id = 1;
+  string name = 2;
+  string path = 3;
+  int32 rarity = 4;
+  string attribute = 5;
+}
+
+message HonkaiCharacter {
+  uint64 id = 1;
+  string name = 2;
+  int32 rarity = 3;
+  string path = 4;
+  string attribute = 5;
+  HonkaiAscension ascension = 6;
+  HonkaiTraces traces = 7;
+}
+
+// HonkaiAscension.proto
+message HonkaiAscension {
+  uint64 id = 1;
+  string boss_material = 2;
+  HonkaiResource resource = 3;
+}
+
+message HonkaiResource {
+  string uncommon = 1;
+  string rare = 2;
+  string epic = 3;
+}
+
+message HonkaiTraces {
+  HonkaiResource dungeon_resource = 1;
+  HonkaiResource mob_resource = 2;
+  string boss_material = 3;
+}
+
+message HonkaiBuild {
+  uint64 id = 1;
+  HonkaiCharacter character = 2;
+  repeated HonkaiLightCone cones = 3;
+  repeated HonkaiArtifactsPreset artifacts = 4;
+  HonkaiStats stats = 5;
+}
+
+message HonkaiLightCone {
+  uint64 id = 1;
+  string name = 2;
+  int32 rarity = 3;
+  string path = 4;
+  int32 base_def = 5;
+  int32 base_hp = 6;
+  int32 base_atk = 7;
+  string passive = 8;
+}
+
+message HonkaiStats {
+  string body = 1;
+  string feet = 2;
+  string planar_sphere = 3;
+  string link_rope = 4;
+  string sub_stats = 5;
+}
+
+message HonkaiArtifactsPreset {
+  HonkaiRelics relics = 1;
+  HonkaiPlanar planar = 2;
+}
+
+message HonkaiRelics {
+  uint64 id = 1;
+  string name = 2;
+  string two_piece_bonus = 3;
+  string four_piece_bonus = 4;
+}
+
+message HonkaiPlanar {
+  uint64 id = 1;
+  string name = 2;
+  string set_bonus = 3;
+}

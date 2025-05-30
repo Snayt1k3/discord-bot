@@ -8,8 +8,8 @@ type HonkaiBuild struct {
 	gorm.Model
 	CharacterID uint
 	Character   HonkaiCharacter `gorm:"foreignKey:CharacterID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
-	Cones       []HonkaiLightCones `gorm:"many2many:honkai_build_cones;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
-	Artifacts   []HonkaiArtifactsPreset `gorm:"many2many:honkai_build_artifacts;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+	Cones     []HonkaiLightCones       `gorm:"many2many:honkai_build_cones;joinForeignKey:BuildID;joinReferences:ConeID"`
+	Artifacts []HonkaiArtifactsPreset  `gorm:"many2many:honkai_build_artifacts;joinForeignKey:BuildID;joinReferences:ArtifactID"`
 	StatsID     uint
 	Stats       HonkaiStats `gorm:"foreignKey:StatsID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 }
@@ -19,9 +19,9 @@ type HonkaiLightCones struct {
 	Name     string
 	Rarity   int
 	Path     string
-	BaseDEF  string
-	BaseHP   string
-	BaseATK  int
+	BaseDEF  int32
+	BaseHP   int32
+	BaseATK  int32
 	Passive  string
 }
 
@@ -53,4 +53,16 @@ type HonkaiPlanar struct {
 	gorm.Model
 	Name     string
 	SetBonus string
+}
+
+type HonkaiBuildCone struct {
+	BuildID  uint
+	ConeID   uint
+	Priority int
+}
+
+type HonkaiBuildArtifact struct {
+	BuildID    uint
+	ArtifactID uint
+	Priority   int
 }

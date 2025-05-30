@@ -51,5 +51,7 @@ func Migrate(db *gorm.DB) error {
 		&HonkaiArtifactsPreset{},
 		&HonkaiRelics{},
 		&HonkaiPlanar{},
+		&HonkaiBuildCone{},
+		&HonkaiBuildArtifact{},
 	)
 }
