@@ -47,7 +47,7 @@ func (r *ZenlessRepository) GetCharacterBuild(id string) (zenless.ZenlessBuild, 
 		Where("character_id = ?", id).
 		First(&build).Error
 	return build, err
-}	
+}
 
 func NewZenlessRepository(db *gorm.DB) interfaces.RepoInterface[zenless.ZenlessCharacter, zenless.ZenlessBuild] {
 	return &ZenlessRepository{

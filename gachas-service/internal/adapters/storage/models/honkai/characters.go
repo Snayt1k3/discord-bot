@@ -13,7 +13,7 @@ type HonkaiCharacter struct {
 	AscensionID uint
 	Ascension   HonkaiAscension `gorm:"foreignKey:AscensionID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 	TracesID    uint
-	Traces      HonkaiTraces    `gorm:"foreignKey:TracesID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+	Traces      HonkaiTraces `gorm:"foreignKey:TracesID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 }
 
 type HonkaiAscension struct {

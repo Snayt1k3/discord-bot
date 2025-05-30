@@ -72,7 +72,7 @@ func (s *HonkaiServer) GetCharacterById(ctx context.Context, req *pb.CharacterRe
 
 func (s *HonkaiServer) GetCharacterBuild(ctx context.Context, req *pb.CharacterRequest) (*pb.HonkaiBuild, error) {
 	build, err := s.service.GetCharacterBuild(fmt.Sprint(req.Id))
-	
+
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +106,6 @@ func (s *HonkaiServer) GetCharacterBuild(ctx context.Context, req *pb.CharacterR
 		},
 	}
 
-
 	var cones []*pb.HonkaiLightCone
 	for _, cone := range build.Cones {
 		cones = append(cones, &pb.HonkaiLightCone{
@@ -136,7 +135,6 @@ func (s *HonkaiServer) GetCharacterBuild(ctx context.Context, req *pb.CharacterR
 			SetBonus: art.Planar.SetBonus,
 		}
 
-
 		artifacts = append(artifacts, artifact)
 	}
 
@@ -155,7 +153,6 @@ func (s *HonkaiServer) GetCharacterBuild(ctx context.Context, req *pb.CharacterR
 		Stats:     stats,
 	}, nil
 
-	
 }
 
 func NewHonkaiServer(service interfaces.ServiceInterface[dto.HonkaiCharacterDTO, dto.HonkaiCharacterBriefDTO, dto.HonkaiBuildDTO]) *HonkaiServer {

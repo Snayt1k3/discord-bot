@@ -16,20 +16,20 @@ type ZenlessAscensionDTO struct {
 }
 
 type ZenlessNodesDTO struct {
-	HuntBossMaterial   string            `json:"hunt_boss_material"`
-	ExpertBossMaterial string            `json:"expert_boss_material"`
-	Denny              int32             `json:"denny"`
-	HamsterCagePass    int               `json:"hamster_cage_pass"`
+	HuntBossMaterial   string              `json:"hunt_boss_material"`
+	ExpertBossMaterial string              `json:"expert_boss_material"`
+	Denny              int32               `json:"denny"`
+	HamsterCagePass    int                 `json:"hamster_cage_pass"`
 	Resource           ZenlessAscensionDTO `json:"resource"`
 }
 
 type ZenlessCharacterFull struct {
-	ID        uint               `json:"id"`
-	Name      string             `json:"name"`
-	Specialty string             `json:"specialty"`
-	Rank      string             `json:"rank"`
-	Attribute string             `json:"attribute"`
-	Faction   string             `json:"faction"`
+	ID        uint                `json:"id"`
+	Name      string              `json:"name"`
+	Specialty string              `json:"specialty"`
+	Rank      string              `json:"rank"`
+	Attribute string              `json:"attribute"`
+	Faction   string              `json:"faction"`
 	Ascension ZenlessAscensionDTO `json:"ascension"`
 	Nodes     ZenlessNodesDTO     `json:"nodes"`
 }
@@ -53,9 +53,9 @@ type ZenlessDiscSetDTO struct {
 }
 
 type ZenlessDiscDTO struct {
-	TwoPiece ZenlessDiscSetDTO `json:"two_piece"`
+	TwoPiece  ZenlessDiscSetDTO `json:"two_piece"`
 	FourPiece ZenlessDiscSetDTO `json:"four_piece"`
-	Priority int                `json:"priority"`
+	Priority  int               `json:"priority"`
 }
 
 type ZenlessStatsDTO struct {
@@ -66,9 +66,9 @@ type ZenlessStatsDTO struct {
 }
 
 type ZenlessBuildDTO struct {
-	ID        uint                `json:"id"`
+	ID        uint                 `json:"id"`
 	Character ZenlessCharacterFull `json:"character"`
-	Weapons   []ZenlessWeaponDTO `json:"weapons"`
-	Discs     []ZenlessDiscDTO   `json:"discs"`
-	Stats     ZenlessStatsDTO    `json:"stats"`
+	Weapons   []ZenlessWeaponDTO   `json:"weapons"`
+	Discs     []ZenlessDiscDTO     `json:"discs"`
+	Stats     ZenlessStatsDTO      `json:"stats"`
 }

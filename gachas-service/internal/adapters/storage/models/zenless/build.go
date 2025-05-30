@@ -57,7 +57,7 @@ type ZenlessBuildWeapon struct {
 }
 
 type ZenlessBuildDisc struct {
-	BuildID uint `gorm:"primaryKey"`
-	DiscID  uint `gorm:"primaryKey"`
+	BuildID  uint `gorm:"primaryKey"`
+	DiscID   uint `gorm:"primaryKey"`
 	Priority int
 }

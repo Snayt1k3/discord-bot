@@ -7,22 +7,22 @@ import (
 type HonkaiBuild struct {
 	gorm.Model
 	CharacterID uint
-	Character   HonkaiCharacter `gorm:"foreignKey:CharacterID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
-	Cones     []HonkaiLightCones       `gorm:"many2many:honkai_build_cones;joinForeignKey:BuildID;joinReferences:ConeID"`
-	Artifacts []HonkaiArtifactsPreset  `gorm:"many2many:honkai_build_artifacts;joinForeignKey:BuildID;joinReferences:ArtifactID"`
+	Character   HonkaiCharacter         `gorm:"foreignKey:CharacterID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+	Cones       []HonkaiLightCones      `gorm:"many2many:honkai_build_cones;joinForeignKey:BuildID;joinReferences:ConeID"`
+	Artifacts   []HonkaiArtifactsPreset `gorm:"many2many:honkai_build_artifacts;joinForeignKey:BuildID;joinReferences:ArtifactID"`
 	StatsID     uint
 	Stats       HonkaiStats `gorm:"foreignKey:StatsID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 }
 
 type HonkaiLightCones struct {
 	gorm.Model
-	Name     string
-	Rarity   int
-	Path     string
-	BaseDEF  int32
-	BaseHP   int32
-	BaseATK  int32
-	Passive  string
+	Name    string
+	Rarity  int
+	Path    string
+	BaseDEF int32
+	BaseHP  int32
+	BaseATK int32
+	Passive string
 }
 
 type HonkaiStats struct {
@@ -44,8 +44,8 @@ type HonkaiArtifactsPreset struct {
 
 type HonkaiRelics struct {
 	gorm.Model
-	Name          string
-	TwoPieceBonus string
+	Name           string
+	TwoPieceBonus  string
 	FourPieceBonus string
 }
 

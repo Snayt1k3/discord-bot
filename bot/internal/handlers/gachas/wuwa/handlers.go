@@ -53,7 +53,7 @@ func (wh *WuwaHandlers) showCharacters(s *discordgo.Session, i *discordgo.Intera
 				Label:    displayedCharacters[j].Name,
 				Style:    discordgo.PrimaryButton,
 				CustomID: fmt.Sprintf("WuwaCharacter_%v", displayedCharacters[j].ID),
-				Emoji: parsedEmoji,
+				Emoji:    parsedEmoji,
 			})
 		}
 
@@ -121,7 +121,6 @@ func (wh *WuwaHandlers) showCharacterDetail(s *discordgo.Session, i *discordgo.I
 	weaponType := GetWeaponTypeEmoji(character.WeaponType)
 	thumbnail, footer := GetImage(character.Name)
 
-
 	embed := discordgo.MessageEmbed{
 		Title: character.Name,
 		Color: 0x6A5ACD,
@@ -136,7 +135,7 @@ func (wh *WuwaHandlers) showCharacterDetail(s *discordgo.Session, i *discordgo.I
 			},
 			{
 				Name:   "Weapon Type",
-				Value:  fmt.Sprintf("%v %v", weaponType, character.WeaponType), 
+				Value:  fmt.Sprintf("%v %v", weaponType, character.WeaponType),
 				Inline: true,
 			},
 			{
@@ -153,7 +152,7 @@ func (wh *WuwaHandlers) showCharacterDetail(s *discordgo.Session, i *discordgo.I
 			URL: footer,
 		},
 	}
-	
+
 	components := WuwaButtons(int(character.ID))
 
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
@@ -503,7 +502,7 @@ func (wh *WuwaHandlers) pagination(s *discordgo.Session, i *discordgo.Interactio
 				Label:    pageCharacters[j].Name,
 				Style:    discordgo.PrimaryButton,
 				CustomID: fmt.Sprintf("WuwaCharacter_%v", pageCharacters[j].ID),
-				Emoji: parsedEmoji,
+				Emoji:    parsedEmoji,
 			})
 		}
 		components = append(components, discordgo.ActionsRow{Components: row})

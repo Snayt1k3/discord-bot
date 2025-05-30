@@ -75,7 +75,7 @@ func ShowSupportedGachas(s *discordgo.Session, i *discordgo.InteractionCreate) e
 			CustomID: "WuwaCharacters",
 			Emoji: &discordgo.ComponentEmoji{
 				Name: "Wuwa_logo_icon",
-				ID: "1376855438557052968",
+				ID:   "1376855438557052968",
 			},
 		},
 	}

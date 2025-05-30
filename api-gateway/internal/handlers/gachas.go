@@ -307,7 +307,7 @@ func NewGachaHandlers(
 		genshinClient: genshinClient,
 		wuwaClient:    wuwaClient,
 		zenlessClient: zenlessClient,
-		honkaiClient: 	honkaiClient,
+		honkaiClient:  honkaiClient,
 		redis:         redis,
 	}
 }

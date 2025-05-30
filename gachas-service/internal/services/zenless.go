@@ -23,7 +23,7 @@ func (s *ZenlessService) GetCharacterByID(id string) (dto.ZenlessCharacterFull, 
 
 func (s *ZenlessService) GetCharacterBuild(id string) (dto.ZenlessBuildDTO, error) {
 	buildData, err := s.repository.GetCharacterBuild(id)
-	
+
 	if err != nil {
 		return dto.ZenlessBuildDTO{}, err
 	}
@@ -34,7 +34,7 @@ func (s *ZenlessService) GetCharacterBuild(id string) (dto.ZenlessBuildDTO, erro
 
 func (s *ZenlessService) GetCharacters() ([]dto.ZenlessCharacterDTO, error) {
 	characters, err := s.repository.GetCharacters()
-	
+
 	if err != nil {
 		return nil, err
 	}

@@ -1,11 +1,11 @@
 package dto
 
 type HonkaiCharacterDTO struct {
-	ID        uint   `json:"id"`
-	Name      string `json:"name"`
-	Rarity    int    `json:"rarity"`
-	Path      string `json:"path"`
-	Attribute string `json:"attribute"`
+	ID        uint               `json:"id"`
+	Name      string             `json:"name"`
+	Rarity    int                `json:"rarity"`
+	Path      string             `json:"path"`
+	Attribute string             `json:"attribute"`
 	Ascension HonkaiAscensionDTO `json:"ascension"`
 	Traces    HonkaiTracesDTO    `json:"traces"`
 }
@@ -19,9 +19,9 @@ type HonkaiCharacterBriefDTO struct {
 }
 
 type HonkaiAscensionDTO struct {
-	ID            uint               `json:"id"`
-	BossMaterial  string             `json:"boss_material"`
-	Resource      HonkaiResourceDTO  `json:"resource"`
+	ID           uint              `json:"id"`
+	BossMaterial string            `json:"boss_material"`
+	Resource     HonkaiResourceDTO `json:"resource"`
 }
 
 type HonkaiResourceDTO struct {
@@ -39,22 +39,22 @@ type HonkaiTracesDTO struct {
 }
 
 type HonkaiBuildDTO struct {
-	ID         uint                        `json:"id"`
-	Character  HonkaiCharacterDTO          `json:"character"`
-	Cones      []HonkaiLightConeDTO        `json:"cones"`
-	Artifacts  []HonkaiArtifactsPresetDTO  `json:"artifacts"`
-	Stats      HonkaiStatsDTO              `json:"stats"`
+	ID        uint                       `json:"id"`
+	Character HonkaiCharacterDTO         `json:"character"`
+	Cones     []HonkaiLightConeDTO       `json:"cones"`
+	Artifacts []HonkaiArtifactsPresetDTO `json:"artifacts"`
+	Stats     HonkaiStatsDTO             `json:"stats"`
 }
 
 type HonkaiLightConeDTO struct {
-	ID       uint   `json:"id"`
-	Name     string `json:"name"`
-	Rarity   int    `json:"rarity"`
-	Path     string `json:"path"`
-	BaseDEF  int32 `json:"base_def"`
-	BaseHP   int32 `json:"base_hp"`
-	BaseATK  int32   `json:"base_atk"`
-	Passive  string `json:"passive"`
+	ID      uint   `json:"id"`
+	Name    string `json:"name"`
+	Rarity  int    `json:"rarity"`
+	Path    string `json:"path"`
+	BaseDEF int32  `json:"base_def"`
+	BaseHP  int32  `json:"base_hp"`
+	BaseATK int32  `json:"base_atk"`
+	Passive string `json:"passive"`
 }
 
 type HonkaiStatsDTO struct {
@@ -67,9 +67,9 @@ type HonkaiStatsDTO struct {
 }
 
 type HonkaiArtifactsPresetDTO struct {
-	ID     uint              `json:"id"`
-	Relics HonkaiRelicsDTO   `json:"relics"`
-	Planar HonkaiPlanarDTO   `json:"planar"`
+	ID     uint            `json:"id"`
+	Relics HonkaiRelicsDTO `json:"relics"`
+	Planar HonkaiPlanarDTO `json:"planar"`
 }
 
 type HonkaiRelicsDTO struct {
@@ -80,7 +80,7 @@ type HonkaiRelicsDTO struct {
 }
 
 type HonkaiPlanarDTO struct {
-	ID        uint   `json:"id"`
-	Name      string `json:"name"`
-	SetBonus  string `json:"set_bonus"`
+	ID       uint   `json:"id"`
+	Name     string `json:"name"`
+	SetBonus string `json:"set_bonus"`
 }

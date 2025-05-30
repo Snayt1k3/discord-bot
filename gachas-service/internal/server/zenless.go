@@ -61,7 +61,7 @@ func (s *ZenlessServer) GetCharacterByID(ctx context.Context, req *pb.CharacterR
 
 func (s *ZenlessServer) GetCharacterBuild(ctx context.Context, req *pb.CharacterRequest) (*pb.ZenlessBuildResponse, error) {
 	build, err := s.service.GetCharacterBuild(strconv.FormatUint(req.Id, 10))
-	
+
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, err.Error())
 	}
@@ -85,14 +85,14 @@ func (s *ZenlessServer) GetCharacterBuild(ctx context.Context, req *pb.Character
 	for _, d := range build.Discs {
 		discs = append(discs, &pb.ZenlessDiscPreset{
 			TwoPieceSet: &pb.ZenlessDiscSet{
-				Name:            d.TwoPiece.Name,
-				TwoPieceBonus:   d.TwoPiece.TwoPieceBonus,
-				FourPieceBonus:  d.TwoPiece.FourPieceBonus,
+				Name:           d.TwoPiece.Name,
+				TwoPieceBonus:  d.TwoPiece.TwoPieceBonus,
+				FourPieceBonus: d.TwoPiece.FourPieceBonus,
 			},
 			FourPieceSet: &pb.ZenlessDiscSet{
-				Name:            d.FourPiece.Name,
-				TwoPieceBonus:   d.FourPiece.TwoPieceBonus,
-				FourPieceBonus:  d.FourPiece.FourPieceBonus,
+				Name:           d.FourPiece.Name,
+				TwoPieceBonus:  d.FourPiece.TwoPieceBonus,
+				FourPieceBonus: d.FourPiece.FourPieceBonus,
 			},
 			Priority: int32(d.Priority),
 		})

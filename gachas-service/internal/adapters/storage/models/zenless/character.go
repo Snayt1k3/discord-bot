@@ -34,8 +34,8 @@ type ZenlessMaterial struct {
 
 func Migrate(db *gorm.DB) error {
 	return db.AutoMigrate(
-		&ZenlessMaterial{}, 
-		&ZenlessNodes{}, 
+		&ZenlessMaterial{},
+		&ZenlessNodes{},
 		&ZenlessCharacter{},
 		&ZenlessBuild{},
 		&ZenlessDiscsPreset{},
