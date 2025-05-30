@@ -23,4 +23,9 @@ func GachaRoutes(r *gin.Engine, hands *handlers.GachaHandlers) {
 	gacha.GET("/zenless/character/:character_id", hands.GetZenlessCharacterByID)
 	gacha.GET("/zenless/character/:character_id/builds", hands.GetZenlessCharacterBuild)
 
+	// HonkaiStarRail
+	gacha.GET("/hsr/character", hands.GetHsrCharacters)
+	gacha.GET("/hsr/character/:character_id", hands.GetHsrCharacterByID)
+	gacha.GET("/hsr/character/:character_id/builds", hands.GetHsrCharacterBuild)
+
 }

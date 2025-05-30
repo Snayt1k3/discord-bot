@@ -10,6 +10,7 @@ import (
 type GachaHandlers struct {
 	genshinClient pb.GenshinServiceClient
 	wuwaClient    pb.WuwaServiceClient
+	honkaiClient  pb.HsrServiceClient
 	zenlessClient pb.ZenlessServiceClient
 	redis         interfaces.RedisInterface
 }
@@ -224,16 +225,89 @@ func (g *GachaHandlers) GetZenlessCharacterBuild(c *gin.Context) {
 	c.JSON(200, resp)
 }
 
+func (g *GachaHandlers) GetHsrCharacters(c *gin.Context) {
+	cacheKey := "hsr_characters"
+	if cachedData, err := g.redis.Get(cacheKey); err == nil {
+		c.JSON(200, gin.H{"data": cachedData})
+		return
+	}
+
+	resp, err := g.honkaiClient.GetAllCharacters(c, &pb.Empty{})
+
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	_ = g.redis.Set(cacheKey, resp.String(), 3600)
+	c.JSON(200, resp)
+}
+
+func (g *GachaHandlers) GetHsrCharacterByID(c *gin.Context) {
+	characterID := c.Param("character_id")
+	cacheKey := "hsr_character_" + characterID
+
+	if cachedData, err := g.redis.Get(cacheKey); err == nil {
+		c.JSON(200, gin.H{"data": cachedData})
+		return
+	}
+
+	id, err := strconv.ParseUint(characterID, 10, 64)
+	if err != nil {
+		c.JSON(400, gin.H{"error": "Invalid character ID"})
+		return
+	}
+
+	resp, err := g.honkaiClient.GetCharacterByID(c, &pb.CharacterRequest{Id: id})
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	_ = g.redis.Set(cacheKey, resp.String(), 3600)
+	c.JSON(200, resp)
+
+}
+
+func (g *GachaHandlers) GetHsrCharacterBuild(c *gin.Context) {
+	characterID := c.Param("character_id")
+	cacheKey := "hsr_character_build_" + characterID
+
+	if cachedData, err := g.redis.Get(cacheKey); err == nil {
+		c.JSON(200, gin.H{"data": cachedData})
+		return
+	}
+
+	id, err := strconv.ParseUint(characterID, 10, 64)
+
+	if err != nil {
+		c.JSON(400, gin.H{"error": "Invalid character ID"})
+		return
+	}
+
+	resp, err := g.honkaiClient.GetCharacterBuild(c, &pb.CharacterRequest{Id: id})
+
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	_ = g.redis.Set(cacheKey, resp.String(), 3600)
+	c.JSON(200, resp)
+}
+
 func NewGachaHandlers(
 	genshinClient pb.GenshinServiceClient,
 	wuwaClient pb.WuwaServiceClient,
 	zenlessClient pb.ZenlessServiceClient,
+	honkaiClient pb.HsrServiceClient,
 	redis interfaces.RedisInterface,
 ) *GachaHandlers {
 	return &GachaHandlers{
 		genshinClient: genshinClient,
 		wuwaClient:    wuwaClient,
 		zenlessClient: zenlessClient,
+		honkaiClient: 	honkaiClient,
 		redis:         redis,
 	}
 }
