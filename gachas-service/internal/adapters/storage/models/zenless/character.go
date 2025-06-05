@@ -21,8 +21,6 @@ type ZenlessNodes struct {
 	ExpertBossMaterial string
 	ResourceID         uint
 	Resource           ZenlessMaterial `gorm:"foreignKey:ResourceID;references:ID"`
-	Denny              int32
-	HamsterCagePass    int
 }
 
 type ZenlessMaterial struct {

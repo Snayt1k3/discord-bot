@@ -33,8 +33,6 @@ func MapCharacterToDTO(c zenless.ZenlessCharacter) dto.ZenlessCharacterFull {
 		Nodes: dto.ZenlessNodesDTO{
 			HuntBossMaterial:   c.Nodes.HuntBossMaterial,
 			ExpertBossMaterial: c.Nodes.ExpertBossMaterial,
-			Denny:              c.Nodes.Denny,
-			HamsterCagePass:    c.Nodes.HamsterCagePass,
 			Resource: dto.ZenlessAscensionDTO{
 				Common: c.Nodes.Resource.Common,
 				Rare:   c.Nodes.Resource.Rare,

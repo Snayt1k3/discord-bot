@@ -18,7 +18,6 @@ type ZenlessAscensionDTO struct {
 type ZenlessNodesDTO struct {
 	HuntBossMaterial   string              `json:"hunt_boss_material"`
 	ExpertBossMaterial string              `json:"expert_boss_material"`
-	Denny              int32               `json:"denny"`
 	HamsterCagePass    int                 `json:"hamster_cage_pass"`
 	Resource           ZenlessAscensionDTO `json:"resource"`
 }
