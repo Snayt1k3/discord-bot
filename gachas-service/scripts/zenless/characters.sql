@@ -6,15 +6,15 @@ VALUES
   (3, 'Basic Freeze Chip', 'Advanced Freeze Chip', 'Specialized Freeze Chip', NOW(), NOW()),
   (4, 'Basic Shock Chip', 'Advanced Shock Chip', 'Specialized Shock Chip', NOW(), NOW()),
   (5, 'Basic Ether Chip', 'Advanced Ether Chip', 'Specialized Ether Chip', NOW(), NOW()),
-  
+
   -- Agent Promotion Material
   (6, 'Basic Attack Certification Seal', 'Advanced Attack Certification Seal', 'Pioneer''s Certification Seal', NOW(), NOW()),
   (7, 'Basic Stun Certification Seal', 'Advanced Stun Certification Seal', 'Buster Certification Seal', NOW(), NOW()),
   (8, 'Basic Anomaly Certification Seal', 'Advanced Anomaly Certification Seal', 'Controller Certification Seal', NOW(), NOW()),
   (9, 'Basic Defense Certification Seal', 'Advanced Defense Certification Seal', 'Defender Certification Seal', NOW(), NOW()),
   (10, 'Basic Support Certification Seal', '	Advanced Support Certification Seal', 'Ruler Certification Seal', NOW(), NOW()),
-  (11, 'Basic Rupture Certification Seal', 'Advanced Rupture Certification Seal', 'Arbiter Certification Seal', NOW(), NOW());
-  
+  (11, 'Basic Rupture Certification Seal', 'Advanced Rupture Certification Seal', 'Arbiter Certification Seal', NOW(), NOW()),
+  (12, 'Basic Rupture Certification Seal', 'Advanced Rupture Certification Seal', 'Arbiter Certification Seal', NOW(), NOW());
 
 INSERT INTO zenless_nodes (id, hunt_boss_material, expert_boss_material, resource_id, created_at, updated_at)
 VALUES 
@@ -50,10 +50,11 @@ VALUES
   (30, 'Living Drive', 'Higher Dimensional Data: Destructive Advance', 4, NOW(), NOW()), -- Tsukishiro Yanagi
   (31, 'Sycophant''s Refinement', 'Higher Dimensional Data: Thunderous Dragon', 5, NOW(), NOW()), -- Vivian Banshee
   (32, 'Finale Dance Shoes', 'Higher Dimensional Data: Ethereal Pursuit', 3, NOW(), NOW()), -- Von Lycaon
-  (33, 'Living Drive', 'Higher Dimensional Data: Ethereal Pursuit', 5, NOW(), NOW()); -- Zhu Yuan
+  (33, 'Living Drive', 'Higher Dimensional Data: Ethereal Pursuit', 5, NOW(), NOW()), -- Zhu Yuan
+  (34, 'Exuvia of Refinement', 'Higher Dimensional Data: Miasmic Elytron', 5, NOW(), NOW()), -- Yixuan
+  (35, 'Exuvia of Refinement', 'Higher Dimensional Data: Miasmic Elytron', 1, NOW(), NOW()), -- Pan Yinhu
+  (36, 'Exuvia of Refinement', 'Higher Dimensional Data: Miasmic Elytron', 2, NOW(), NOW()), -- Ju Fufu
   -- (2, '', '', 2, NOW(), NOW()),
-
-
 
 
 INSERT INTO zenless_characters (id, name, specialty, rank, attribute, faction, ascension_id, nodes_id, created_at, updated_at)
@@ -91,6 +92,9 @@ VALUES
   (31, 'Vivian Banshee', 'Anomaly', 'S', 'Ether', 'Mockingbird', 8, 31, NOW(), NOW()),
   (32, 'Von Lycaon', 'Stun', 'S', 'Ice', 'Victoria Housekeeping Co.', 7, 32, NOW(), NOW()), 
   (33, 'Zhu Yuan', 'Attack', 'S', 'Ether', 'Criminal Investigation Special Response Team', 6, 33, NOW(), NOW());
+  (34, 'Yixuan', 'Rupture', 'S', 'Auric Ink', 'Yunkui Summit', 12, 34, NOW(), NOW()),
+  (35, 'Pan Yinhu', 'Defence', 'A', 'Physical', 'Yunkui Summit', 9, 35, NOW(), NOW()),
+  (36, 'Ju Fufu', 'Stun', 'S', 'Fire', 'Yunkui Summit', 7, 36, NOW(), NOW()),
   -- (1, '', '', '', '', '', 1, 1, NOW(), NOW()),
 
 
