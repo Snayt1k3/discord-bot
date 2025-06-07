@@ -16,7 +16,6 @@ type ZenlessBuild struct {
 
 type ZenlessDiscsPreset struct {
 	gorm.Model
-	BuildID        uint         `gorm:"not null"`
 	FourPieceSetID uint         `gorm:"not null"`
 	FourPieceSet   ZenlessDiscs `gorm:"foreignKey:FourPieceSetID;references:ID"`
 	TwoPieceSetID  uint         `gorm:"not null"`
@@ -40,7 +39,6 @@ type ZenlessStats struct {
 
 type ZenlessWeapons struct {
 	gorm.Model
-	BuildID  uint   `gorm:"not null"`
 	Name     string `gorm:"not null"`
 	BaseATK  int32  `gorm:"not null"`
 	Rarity   string `gorm:"not null"`
