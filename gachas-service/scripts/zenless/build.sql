@@ -68,6 +68,7 @@ VALUES
     (67, '[Vortex] Arrow', 'B', 'Stun', 475, 'Impact', 12, 'Attacks inflict 8–12% more Daze on main target.', NOW(), NOW(), NULL),
     (68, '[Vortex] Hatchet', 'B', 'Stun', 475, 'Energy Regen', 16, 'On entering combat or switch-in, Impact +9–13% for 10s. 20s cooldown.', NOW(), NOW(), NULL),
     (69, '[Vortex] Revolver', 'B', 'Stun', 475, 'Attack', 20, 'EX Special Attacks inflict 10–16% more Daze.', NOW(), NOW(), NULL);
+
 INSERT INTO zenless_discs (id, name, two_piece_bonus, four_piece_bonus, created_at, updated_at, deleted_at)
 VALUES 
     (1, 'Astral Voice', 'ATK +10%.', 'Whenever any squad member enters the field using a Quick Assist, all squad members gain 1 stack of Astral, up to a maximum of 3 stacks, and lasting 15s. Repeated triggers reset the duration. Each stack of Astral increases the DMG dealt by the character entering the field using a Quick Assist by 8%. Only one of this effect can be active at a time in the same squad.', NOW(), NOW(), NULL),
@@ -91,18 +92,203 @@ VALUES
     (19, 'Woodpecker Electro', 'CRIT Rate +8%.', 'Triggering a critical hit with a Basic Attack, Dodge Counter or EX Special Attack increases the equipper''s ATK by 9% for 6s. The buff duration for different skills are calculated separately.', NOW(), NOW(), NULL),
     (20, 'Yunkui Tales', 'HP +10%.', 'When using [EX Special Attack], [Chain Attack], or [Ultimate], CRIT Rate increases by 4%, stacking up to 3 times and lasting 15s. Repeated triggers reset the duration. When having 3 stacks of this effect, Sheer DMG increases by 10%.', NOW(), NOW(), NULL);
 
-INSERT INTO zenless_stats (id, fourth_disc, fifth_disc, sixth_disc, sub_stats_priority, created_at, updated_at, deleted_at)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO zenless_stats (id, fourth_disc, fifth_disc, sixth_disc, sub_stats_priority, created_at)
+VALUES 
+(1, 'ATK% = Anomaly Proficiency', 'PEN Ratio%', 'Energy Regen >= ATK%', 'Anomaly Proficiency > ATK% > PEN = FLAT ATK', NOW()), -- Alexandrina Sebastiane
+(2, 'CRIT Rate% >= CRIT DMG', ' Electric DMG% > ATK%', 'Impact', 'CRIT RATE = CRIT DMG > ATK% > PEN = ATK'), -- Anby Demara
+(3, 'CRIT Rate% >= CRIT DMG', 'Electric DMG%', 'ATK%', 'CRIT RATE = CRIT DMG > ATK% > PEN = ATK'), -- Anton Ivanov
+(4, 'CRIT Rate% >= CRIT DMG', 'Electric DMG%', 'ATK%', 'CRIT DMG = CRIT Rate = ATK% > PEN = ATK'), -- Asaba Harumasa
+(5, 'ATK%', 'ATK%', 'Energy Regen = ATK%', 'CRIT [ATK% > Flat ATK (Top Priorities Until Ability Cap) > CRIT RATE = CRIT DMG > PEN] or ANOMALY [ATK% > Flat ATK (Top Priorities Until Ability Cap) > Anomaly Proficiency > PEN]'), -- Astra Yao
+(6, 'DEF% > CRIT DMG%', 'DEF% = Fire DMG%', 'DEF% = Energy Regen', 'DEF% > CRIT RATE% (Optional) = CRIT DMG% (Optional) > DEF > PEN (Optional)'), -- Ben Bigger
+(7, 'CRIT Rate% = CRIT DMG%', 'Physical DMG% >= ATK%', 'ATK%', 'CRIT RATE = CRIT DMG > ATK% > PEN = ATK'), -- Billy Kid
+(8, 'Anomaly Proficiency', 'Fire DMG% >= PEN Ratio%', 'ATK% = Anomaly Mastery', 'Anomaly Proficiency > ATK% > PEN = ATK'), -- Burnice White
+(9, 'CRIT Rate% = Anomaly Proficiency', 'Physical DMG% > ATK% = PEN Ratio%', 'Impact%'), -- Caesar King
+(10, 'CRIT Rate% = CRIT DMG%', 'ATK% >= Physical DMG%', 'ATK%', 'CRIT RATE = CRIT DMG > ATK% > PEN = ATK'), -- Corin Wickes
+(11, 'CRIT Rate% = CRIT DMG%', 'Ice DMG% > PEN Ratio%', 'ATK%', 'CRIT RATE = CRIT DMG > ATK% > PEN = ATK'), -- Ellen Joe
+(12, 'CRIT Rate% = CRIT DMG%', 'Fire DMG% = PEN Ratio%', 'ATK%', 'CRIT RATE = CRIT DMG > ATK% > PEN = ATK'), -- Evelyn Chevalier
+(13, 'Anomaly Proficiency > ATK%', 'Electric DMG% > PEN Ratio% = ATK%', 'Anomaly Mastery = ATK%', 'Anomaly Proficiency > ATK% > PEN = ATK'), -- Grace Howard
+(14, 'CRIT Rate% = CRIT DMG%', 'Ice DMG% = ATK%', 'ATK%', 'CRIT RATE (Until 80%) >= CRIT DMG = ATK% > Anomaly Proficiency = ATK = PEN'), -- Hoshimi Miyabi
+(15, 'CRIT DMG% = CRIT Rate%', 'Ice DMG% > ATK% = PEN Ratio%', 'ATK%', 'CRIT Rate = CRIT DMG > ATK% > Flat ATK > PEN'), -- Hugo Vlad
+(16, 'Anomaly Proficiency', 'Physical DMG% > PEN Ratio% >= ATK%', 'Anomaly Mastery >= ATK%', 'Anomaly Proficiency > ATK% > PEN = ATK'), -- Jane Doe
+(17, 'CRIT DMG% = CRIT Rate%', 'Fire DMG% > ATK%', 'Impact', 'CRIT RATE > CRIT DMG > ATK% > PEN = ATK'), -- Koleda Belobog
+(18, 'CRIT Rate% >= CRIT DMG%', 'ATK% = Fire DMG% = PEN Ratio%', 'Impact', 'CRIT RATE > CRIT DMG > ATK% > PEN = ATK'), -- Lighter
+(19, 'ATK% > CRIT Rate%', 'ATK%', 'Energy Regen = ATK%', 'ATK% (top priority until ability cap) = CRIT RATE = CRIT DMG > PEN = ATK'), -- Luciana de Montefio
+(20, 'CRIT Rate% = CRIT DMG%', 'ATK% >= Physical DMG%', 'ATK%', 'CRIT RATE = CRIT DMG > ATK% > PEN = ATK'), -- Nekomiya Mana
+(21, 'ATK% = Anomaly Proficiency', 'Ether DMG% > ATK%', 'Energy Regen = ATK%', 'Anomaly Proficiency = ATK% > PEN = FLAT ATK'), -- Nicole Demara
+(22, 'Anomaly Proficiency > ATK%', 'Physical DMG% > ATK% = PEN Ratio%', 'Anomaly Mastery = ATK%', 'Anomaly Proficiency > ATK% > PEN = ATK'), -- Piper Wheel
+(23, 'CRIT Rate% >= CRIT DMG% = Anomaly Proficiency', 'ATK% = Physical DMG%', 'Impact', '[CRIT RATE = CRIT DMG > ATK% > PEN = ATK] or [Anomaly Profiency > ATK% > PEN > ATK]'), -- Pulchra Fellini
+(24, 'CRIT Rate% >= CRIT DMG%', 'Electric DMG% > ATK%', 'Impact', 'CRIT RATE > CRIT DMG > ATK% > PEN = ATK'), -- Qingyi
+(25, 'ATK% >= Anomaly Proficiency', 'ATK% >= Electric DMG%', 'Energy Regen = Anomaly Mastery', 'ATK% > Anomaly Proficiency > ATK > PEN'), -- Seth Lowell
+(26, 'CRIT Rate% >= CRIT DMG%', 'Electric DMG%', 'ATK%', 'CRIT RATE = CRIT DMG > ATK% > PEN = ATK'), -- Soldier 0 - Anby
+(27, 'CRIT Rate% = CRIT DMG%', 'Fire DMG% > ATK%', 'ATK%', 'CRIT RATE = CRIT DMG > ATK% > PEN = ATK'), -- Soldier 11
+(28, 'ATK% > CRIT Rate%', 'ATK% > Ice DMG%', 'Energy Regen = ATK%', 'ATK% (top priority until ability cap) = CRIT RATE = CRIT DMG > PEN = ATK'), -- Soukaku
+(29, 'CRIT Rate%', 'Electric DMG% > ATK%', 'Impact', 'CRIT RATE >= CRIT DMG > ATK% > PEN = ATK'), -- Trigger
+(30, 'Anomaly Proficiency', 'Electric DMG% >= PEN Ratio%', 'ATK% = Anomaly Mastery', 'Anomaly Proficiency > ATK% > PEN = ATK'), -- Tsukishiro Yanagi
+(31, 'Anomaly Proficiency', 'Ether DMG% > PEN Ratio% = ATK%', 'Anomaly Mastery >= ATK%', 'Anomaly Proficiency > ATK% > ATK = PEN'), -- Vivian Banshee
+(32, 'CRIT Rate% >= CRIT DMG%', 'Ice DMG% > ATK%', 'Impact', 'CRIT RATE = CRIT DMG > ATK% > PEN = ATK'), -- Von Lycaon
+(33, 'CRIT DMG% = CRIT Rate%', 'Ether DMG% > ATK% = PEN Ratio%', 'ATK%', 'CRIT RATE = CRIT DMG > ATK% > PEN = ATK'), -- Zhu Yuan
+(34, 'CRIT DMG% = CRIT Rate%', 'Ether DMG% > HP%', 'HP%', 'CRIT Rate = CRIT DMG > HP% > ATK% > Flat HP'), -- Yixuan
+(35, 'CRIT Rate% = CRIT DMG% > ATK%', 'Physical DMG% > ATK%', 'ATK%', 'ATK%/Flat ATK (until 3000 ATK) > CRIT Rate = CRIT DMG > PEN'), -- Pan Yinhu
+(36, '', 'Fire DMG% > ATK%', 'Impact', ''), -- Ju Fufu
+;
 
-INSERT INTO zenless_discs_presets (id, four_piece_set_id, two_piece_set_id, created_at, updated_at, deleted_at)
-VALUES (?, ?, ?, ?, ?, ?, ?);
+INSERT INTO zenless_discs_presets (id, four_piece_set_id, two_piece_set_id)
+VALUES 
+(1, 1, 17), (2, 17, 13), (3, 6, 13), -- Alexandrina Sebastiane
+(4, 9, 15), (5, 1, 9), (6, 12, 9), -- Anby Demara
+(7, 18, 19), (8, 13, 19), (9, 19, 13), -- Anton Ivanov
+(10, 18, 19), (11, 19, 18), -- Asaba Harumasa
+(12, 1, 17), -- Astra Yao
+(13, 17, 16), (14, 12, 17), -- Ben Bigger
+(15, 19, 13), (16, 13, 19), (17, 5, 19), -- Billy Kid
+(18, 3, 8), -- Burnice White
+(19, 12, 17), (20, 6, 17), (21, 17, 12), -- Caesar King
+(22, 5, 19), (23, 13, 19), (24, 19, 13), -- Corin Wickes
+(25, 19, 13), (26, 11, 19), (27, 13, 19), -- Ellen Joe
+(28, 19, 8), (29, 13, 8), (30, 7, 8), -- Evelyn Chevalier
+(31, 18, 6), (32, 3, 6), (33, 13, 6) -- Grace Howard
+(34, 2, 11), -- Hoshimi Miyabi
+(35, 7, 19), (36, 19, 11), -- Hugo Vlad
+(37, 5, 6), -- Jane Doe
+(38, 9, 15), (39, 1, 9), -- Koleda Belobog
+(40, 9, 15), (41, 1, 9), -- Lighter
+(42, 1, 17), (43, 17, 7), -- Luciana de Montefio
+(44, 5, 19), (45, 19, 13), (46, 13, 19), -- Nekomiya Mana
+(47, 1, 17), (48, 17, 6), -- Nicole Demara
+(49, 5, 6), -- Piper Wheel
+(50, 9, 15), (51, 1, 15), -- Pulchra Fellini
+(52, 9, 15), (53, 1, 9), -- Qingyi
+(54, 1, 17), (55, 17, 7), -- Seth Lowell
+(56, 14, 19), (57, 18, 19), (58, 19, 1), -- Soldier 0 - Anby
+(59, 8, 19), (60, 13, 19), (61, 19, 13), -- Soldier 11
+(62, 1, 17), (63, 17, 7), -- Soukaku
+(64, 9, 15), (65, 1, 9), (66, 12, 9), -- Trigger
+(67, 3, 6), (68, 18, 3), -- Tsukishiro Yanagi
+(69, 10, 6), -- Vivian Banshee
+(70, 9, 15), (71, 1, 9), (72, 12, 9), -- Von Lycaon
+(73, 4, 19), (74, 19, 4), (75, 13, 4), -- Zhu Yuan
+(76, 20, 19), -- Yixuan
+(77, 1, 17), (78, 12, 7), (79, 17, 7) -- Pan Yinhu
+(80, 9, 15), -- Ju Fufu
+;
 
+INSERT INTO zenless_builds (id, character_id, stats_id)
+VALUES 
+(1, 1, 1), -- Alexandrina Sebastiane
+(2, 2, 2), -- Anby Demara
+(3, 3, 3), -- Anton Ivanov
+(4, 4, 4), -- Asaba Harumasa
+(5, 5, 5), -- Astra Yao
+(6, 6, 6), -- Ben Bigger
+(7, 7, 7), -- Billy Kid
+(8, 8, 8), -- Burnice White
+(9, 9, 9), -- Caesar King
+(10, 10, 10), -- Corin Wickes
+(11, 11, 11), -- Ellen Joe
+(12, 12, 12), -- Evelyn Chevalier
+(13, 13, 13), -- Grace Howard
+(14, 14, 14), -- Hoshimi Miyabi
+(15, 15, 15), -- Hugo Vlad
+(16, 16, 16), -- Jane Doe
+(17, 17, 17), -- Koleda Belobog
+(18, 18, 18), -- Lighter
+(19, 19, 19), -- Luciana de Montefio
+(20, 20, 20), -- Nekomiya Mana
+(21, 21, 21), -- Nicole Demara
+(22, 22, 22), -- Piper Wheel
+(23, 23, 23), -- Pulchra Fellini
+(24, 24, 24), -- Qingyi
+(25, 25, 25), -- Seth Lowell
+(26, 26, 26), -- Soldier 0 - Anby
+(27, 27, 27), -- Soldier 11
+(28, 28, 28), -- Soukaku
+(29, 29, 29), -- Trigger
+(30, 30, 30), -- Tsukishiro Yanagi
+(31, 31, 31), -- Vivian Banshee
+(32, 32, 32), -- Von Lycaon
+(33, 33, 33), -- Zhu Yuan
+(34, 34, 34), -- Yixuan
+(35, 35, 35), -- Pan Yinhu
+(36, 36, 36), -- Ju Fufu
+;
 
-INSERT INTO zenless_builds (id, character_id, stats_id, created_at, updated_at, deleted_at)
-VALUES (?, ?, ?, ?, ?, ?);
 
 INSERT INTO zenless_build_weapon (build_id, weapon_id, priority)
-VALUES (?, ?, ?);
+VALUES 
+(1, 22, 1), (1, 34, 2), (1, 45, 3), (1, 65, 4), -- Alexandrina Sebastiane
+(2, 9, 1), (2, 38, 2), (2, 19, 3), (2, 29, 4), -- Anby Demara
+(3, 8, 1), (3, 23, 2), (3, 18, 3), (3, 50, 4), (3, 47, 5), (3, 35, 6), -- Anton Ivanov
+(4, 23, 1), (4, 8, 2), (4, 18, 3), (4, 35, 4), (4, 47, 5), -- Asaba Harumasa
+(5, 3, 1), (5, 24, 2), (5, 34, 3), (5, 51, 4),  -- Astra Yao
+(6, 46, 1), (6, 36, 2), (6, 25, 3), (6, 27, 4), -- Ben Bigger
+(7, 48, 1), (7, 8, 2), (7, 23, 3), (7, 18, 4), (7, 35, 5), (7, 47, 6) -- Billy Kid
+(8, 4, 1), (8, 31, 2), (8, 6, 3), (8, 54, 4), -- Burnice White
+(9, 21, 1), (9, 36, 2), (9, 46, 3), (9, 37, 4), -- Caesar King
+(10, 17, 1), (10, 35, 2), (10, 33, 3), (10, 47, 4), -- Corin Wickes
+(11, 2, 1), (11, 11, 2), (11, 8, 3), (11, 18, 4), (11, 47, 5), -- Ellen Joe
+(12, 8, 1), (12, 23, 2), (12, 18, 3), (12, 35, 4), (12, 47, 5), -- Evelyn Chevalier
+(13, 6, 1), (13, 54, 2), (13, 41, 3), -- Grace Howard
+(14, 7, 1), (14, 6, 2), (14, 31, 3), (14, 41, 4), -- Hoshimi Miyabi
+(15, 11, 1), (15, 2, 2), (15, 8, 3), (15, 23, 4), (15, 35, 5), -- Hugo Vlad
+(16, 15, 1), (16, 31, 2), (16, 54, 3), (16, 41, 4), -- Jane Doe
+(17, 9, 1), (17, 38, 2), (17, 19, 3), -- Koleda Belobog
+(18, 1, 1), (18, 10, 2), (18, 9, 3), (18, 38, 4), -- Lighter
+(19, 34, 1), (19, 22, 2), (19, 45, 3), -- Luciana de Montefio
+(20, 17, 1), (20, 8, 2), (20, 23, 3), (20, 18, 4), (20, 35, 5), (20, 47, 6), -- Nekomiya Mana
+(21, 51, 1), (21, 22, 2), (21, 34, 3), -- Nicole Demara
+(22, 42, 1), (22, 31, 2), (22, 6, 3), (22, 54, 4), -- Piper Wheel
+(23, 1, 1), (23, 26, 2), (23, 49, 3), (23, 9, 4), (23, 38, 5), -- Pulchra Fellini
+(24, 10, 1), (24, 19, 2), (24, 49, 3), (24, 38, 4), -- Qingyi
+(25, 37, 1), (25, 46, 2), (25, 27, 3), (25, 36, 4), -- Seth Lowell
+(26, 14, 1), (26, 8, 2), (26, 23, 3), (26, 13, 4), (26, 35, 5), (26, 47, 6), -- Soldier 0 - Anby
+(27, 8, 1), (27, 18, 1), (27, 23, 3), (27, 35, 4), (27, 47, 5) , -- Soldier 11
+(28, 24, 1), (28, 22, 2), (28, 34, 3), (28, 45, 4), -- Soukaku
+(29, 16, 1), (29, 1, 2), (29, 10, 3), (29, 19, 4), (29, 38, 5), -- Trigger
+(30, 20, 1), (30, 31, 2), (30, 6, 3), (30, 22, 4), -- Tsukishiro Yanagi
+(31, 5, 1), (31, 54, 2), (31, 31, 3), (31, 41, 4), -- Vivian Banshee
+(32, 19, 1), (32, 9, 2), (32, 38, 3), -- Von Lycaon
+(33, 13, 1), (33, 18, 2), (33, 23, 3), (33, 47, 4), (33, 35, 5), -- Zhu Yuan
+(34, 12, 1), (34, 23, 2), (34, 17, 3), (34, 40, 4), -- Yixuan
+(35, 21, 1), (35, 52, 2), (35, 46, 3), -- Pan Yinhu
+(), -- Ju Fufu
+;
 
 INSERT INTO zenless_build_disc (build_id, disc_id, priority)
-VALUES (?, ?, ?);
+VALUES 
+(1, 1, 1), (1, 2, 2), (1, 3, 3), -- Alexandrina Sebastiane
+(2, 4, 1), (2, 5, 2), (2, 6, 3), -- Anby Demara
+(3, 7, 1), (3, 8, 2), (3, 9, 3), -- Anton Ivanov
+(4, 10, 1), (4, 11, 2), -- Asaba Harumasa
+(5, 12, 1), -- Astra Yao
+(6, 13, 1), (6, 14, 2), -- Ben Bigger
+(7, 15, 1), (7, 16, 2), (7, 17, 3), -- Billy Kid
+(8, 18, 1), -- Burnice White
+(9, 19, 1), (9, 20, 2), (9, 21, 3), -- Caesar King
+(10, 22, 1), (10, 23, 2), (10, 24, 3), -- Corin Wickes
+(11, 25, 1), (11, 26, 2), (11, 27, 3), -- Ellen Joe
+(12, 28, 1), (12, 29, 2), (12, 30, 3), -- Evelyn Chevalier
+(13, 31, 1), (13, 32, 2), (13, 33, 3), -- Grace Howard
+(14, 34, 1), -- Hoshimi Miyabi
+(15, 35, 1), (15, 36, 2), -- Hugo Vlad
+(16, 37, 1), -- Jane Doe
+(17, 38, 1), (17, 39, 2), -- Koleda Belobog
+(18, 40, 1), (18, 41, 2), -- Lighter
+(19, 42, 1), (19, 43, 2), -- Luciana de Montefio
+(20, 44, 1), (20, 45, 2), (20, 46, 3), -- Nekomiya Mana
+(21, 47, 1), (21, 48, 2), -- Nicole Demara
+(22, 49, 1), -- Piper Wheel
+(23, 50, 1), (23, 51, 2), -- Pulchra Fellini
+(24, 52, 1), (24, 53, 2), -- Qingyi
+(25, 54, 1), (25, 55, 2), -- Seth Lowell
+(26, 56, 1), (26, 57, 2), (26, 58, 3), -- Soldier 0 - Anby
+(27, 59, 1), (27, 60, 2), (27, 61, 3), -- Soldier 11
+(28, 62, 1), (28, 63, 2), -- Soukaku
+(29, 64, 1), (29, 65, 2), (29, 66, 3), -- Trigger
+(30, 67, 1), (30, 68, 2), -- Tsukishiro Yanagi
+(31, 69, 1), -- Vivian Banshee
+(32, 70, 1), (32, 71, 2), (32, 72, 3), -- Von Lycaon
+(33, 73, 1), (33, 74, 2), (33, 75, 3), -- Zhu Yuan
+(34, 76, 1), -- Yixuan
+(35, 77, 1), (35, 78, 2), (35, 79, 3) -- Pan Yinhu
+(36, 80, 1) -- Ju Fufu
+;
