@@ -48,7 +48,9 @@ VALUES
 (29, 'Terraspawn Fungus', 'Hidden Thunder Tacet Core', 6, NOW(), NOW()),
 (30, 'Sword Acorus', 'Platinum Core', 9, NOW(), NOW()),
 (31, 'Lanternberry', 'Sound-Keeping Tacet Core', 1, NOW(), NOW()),
-(32, 'Golden Fleece', 'Blazing Bone', 4,  NOW(), NOW());
+(32, 'Golden Fleece', 'Blazing Bone', 4,  NOW(), NOW()),
+(33, 'Bamboo Iris', 'Unfading Glory', 4, NOW(), NOW())
+;
 
 INSERT INTO wuwa_talents (id, dungeon_material_id, mob_material_id, boss_material, created_at, updated_at)
 VALUES
@@ -83,7 +85,9 @@ VALUES
 (29, 10, 6, 'Unending Destruction', NOW(), NOW()),
 (30, 10, 9, 'The Netherworld''s Stare', NOW(), NOW()),
 (31, 3, 1, 'Monument Bell', NOW(), NOW()),
-(32, 2, 4, 'When Irises Bloom', NOW(), NOW());
+(32, 2, 4, 'When Irises Bloom', NOW(), NOW()),
+(33, 5, 4, 'When Irises Bloom', NOW(), NOW())
+;
 
 INSERT INTO wuwa_characters (id, name, element, weapon_type, rarity, ascension_id, talents_id, created_at, updated_at)
 VALUES
@@ -120,5 +124,6 @@ VALUES
     (31, 'Taoqi', 'Havoc', 'Broadblade', 4, 22, 22, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (32, 'Youhu', 'Glacio', 'Gauntlets', 4, 28, 28, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (33, 'Yuanwu', 'Electro', 'Gauntlets', 4, 29, 29, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (34, 'Ciaccona', 'Aero', 'Pistols', 5, 29, 29, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    (34, 'Ciaccona', 'Aero', 'Pistols', 5, 32, 32, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (35, 'Cartethyia', 'Aero', 'Cartethyia', 5, 33, 33, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     

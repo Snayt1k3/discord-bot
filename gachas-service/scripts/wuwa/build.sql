@@ -89,7 +89,8 @@ VALUES
     (87, 'Training Pistols', 'Pistols', 1, 'Increases ATK by 4%.', 250, 'ATK', 11.4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     (88, 'Training Rectifier', 'Rectifier', 1, 'Increases ATK by 4%.', 250, 'ATK', 11.4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
     (89, 'Training Sword', 'Sword', 1, 'Increases ATK by 4%.', 250, 'ATK', 11.4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-    (90, 'Woodland Aria', 'Pistols', 5, 'ATK is increased by 12%. Inflicting Aero Erosion on the target gives 24% Aero DMG Bonus for 10s. Hitting targets with Aero Erosion reduces their Aero RES by 10% for 20s. Effects of the same name cannot be stacked.', 500, 'CRIT Rate', 36, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
+    (90, 'Woodland Aria', 'Pistols', 5, 'ATK is increased by 12%. Inflicting Aero Erosion on the target gives 24% Aero DMG Bonus for 10s. Hitting targets with Aero Erosion reduces their Aero RES by 10% for 20s. Effects of the same name cannot be stacked.', 500, 'CRIT Rate', 36, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+    (91, 'Defier''s Thorn', 'Sword', 5, 'Max HP is increased by 12%. 15s after casting Intro Skill or Basic Attacks, ignores 8% of the target''s DEF when dealing damage. If the target has at least 1 stack of Aero Erosion, the DMG taken by the target is Amplified by 20%.');
 INSERT INTO wuwa_echoes (id, name, two_piece_bonus, full_set_bonus, created_at, updated_at)
 VALUES 
     (1, 'Freezing Frost', 'Glacio DMG increases by 10%.', 'Upon using Basic Attack or Heavy Attack, Glacio DMG increases by 10%, stacking up to three times, lasting for 15s.', NOW(), NOW()),
@@ -106,7 +107,9 @@ VALUES
     (12, 'Midnight Veil', 'Havoc DMG +10%.', 'When Outro Skill is triggered, deal additional 480% Havoc DMG to surrounding enemies, considered Outro Skill DMG, and grant the incoming Resonator 15% Havoc DMG Bonus for 15s.', NOW(), NOW()),
     (13, 'Empyrean Anthem', 'Energy Regen +10%.', 'Increase the Resonator''s Coordinated Attack DMG by 80%. Upon a critical hit of Coordinated Attack, increase the active Resonator''s ATK by 20% for 4s.', NOW(), NOW()),
     (14, 'Tidebreaking Courage', 'Energy Regen +10%.', 'Increase the Resonator''s ATK by 15%. Reaching 250% Energy Regen increases all Attribute DMG by 30% for the Resonator.', NOW(), NOW()),
-    (15, 'Gusts of Welkin', 'Aero DMG +10%.', 'Inflicting Aero Erosion upon enemies increases Aero DMG for all Resonators in the team by 15%, and for the Resonator triggering this effect by an additional 15%, lasting for 20s.', NOW(), NOW());
+    (15, 'Gusts of Welkin', 'Aero DMG +10%.', 'Inflicting Aero Erosion upon enemies increases Aero DMG for all Resonators in the team by 15%, and for the Resonator triggering this effect by an additional 15%, lasting for 20s.', NOW(), NOW()),
+    (16, 'Flaming Clawprint', 'Fusion DMG +10%.', 'Casting Resonance Liberation grants all Resonators in the team 15% Fusion DMG Bonus and the caster 20% Resonance Liberation DMG Bonus, lasting for 35s.', NOW(), NOW()),
+    (17, 'Windward Pilgrimage', 'Aero DMG +10%.', 'Hitting a target with Aero Erosion increases Crit. Rate by 10% and grants 30% Aero DMG Bonus, lasting for 10s.', NOW(), NOW());
 
 INSERT INTO wuwa_stats(id, four_cost_echo_stat, three_cost_echo_stat, one_cost_echo_stat, sub_stats_priority)
 VALUES 
@@ -143,8 +146,8 @@ VALUES
     (31, 'CRIT DMG / CRIT Rate', 'Electro DMG / DEF', 'DEF%', 'Energy Regeneration (Until Breakpoint) >= CRIT RATE = CRIT DMG > DEF% > Flat DEF'), -- Yuanwu
     (32, 'CRIT DMG / CRIT Rate', 'Spectro DMG', 'ATK%', 'Energy Regeneration (Until Satisfied) >= CRIT RATE = CRIT DMG > ATK% > Heavy ATK DMG% > Flat ATK'), -- Zani
     (33, 'CRIT DMG / CRIT Rate', 'Glacio DMG', 'ATK%', 'Energy Regeneration (Until Comfortable) > CRIT RATE = CRIT DMG > Basic DMG% = ATK% > Flat ATK'), -- Zhezhi
-    (34, 'CRIT DMG / CRIT Rate', 'Aero DMG / ATK%', 'ATK%', 'CRIT RATE = CRIT DMG > ATK% > Flat ATK'); -- Ciaccona
-    
+    (34, 'CRIT DMG / CRIT Rate', 'Aero DMG / ATK%', 'ATK%', 'CRIT RATE = CRIT DMG > ATK% > Flat ATK'), -- Ciaccona
+    (35, 'CRIT DMG / CRIT Rate', 'Aero DMG / HP%', 'HP%', 'Energy Regen (Until Satisfied) > CRIT RATE = CRIT DMG > HP% = Basic ATK DMG% > Liberation DMG% > Flat HP'); -- Cartethiya
 INSERT INTO wuwa_builds(id, character_id, stats_id, best_primary_echo) 
 VALUES
     (1, 25, 1, 'Nightmare: Feilian Beringal'), -- Aalto
@@ -180,7 +183,9 @@ VALUES
     (31, 33, 31, 'Fallacy of No Return / Impermanence Heron / Nightmare: Tempest Mephis'), -- Yuanwu
     (32, 23, 32, 'Capitaneus'), -- Zani
     (33, 24, 33, 'Impermanence Heron / Hecate'), -- Zhezhi
-    (34, 34, 34, 'Reminiscence: Fleurdelys'); -- Ciaccona
+    (34, 34, 34, 'Reminiscence: Fleurdelys'), -- Ciaccona
+    (35, 35, 35, 'Reminiscence: Fleurdelys'); -- Cartethiya
+
 INSERT INTO build_wuwa_weapons (wuwa_build_id, wuwa_weapon_id)
 VALUES 
     (1, 12), (1, 44), (1, 49), (1, 47), (1, 54), (1, 55), -- Aalto
@@ -216,7 +221,8 @@ VALUES
     (31, 19), (31, 21), (31, 52), (31, 65), (31, 72), -- Yuanwu
     (32, 4), (32, 16), (32, 19), (32, 1), (32, 39), -- Zani
     (33, 11), (33, 14), (33, 6), (33, 22), (33, 38), -- Zhezhi
-    (34, 90), (34, 15), (34, 12), (34, 50), (34, 49); -- Ciaccona
+    (34, 90), (34, 15), (34, 12), (34, 50), (34, 49), -- Ciaccona
+    (35, 91), (35, 10), (35, 7), (35, 68); -- Cartethiya
 
 INSERT INTO build_wuwa_echoes (wuwa_build_id, wuwa_echoes_id)
 VALUES 
@@ -253,6 +259,7 @@ VALUES
     (31, 7), (31, 8), (31, 13), -- Yuanwu
     (32, 11), -- Zani
     (33, 8), (33, 13), -- Zhezhi 
-    (34, 15); -- Ciaccona  
+    (34, 15), -- Ciaccona  
+    (35, 17); -- Cartethiya
 
 
