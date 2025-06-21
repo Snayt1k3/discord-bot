@@ -300,6 +300,12 @@ VALUES
         'Viridescent Venerer',
         'Anemo DMG Bonus +15%',
         'Increases Swirl DMG by 60%. Decreases opponent''s Elemental RES to the element infused in the Swirl by 40% for 10s.'
+    )
+    (
+        51,
+        'Finale of the Deep Galleries',
+        'Cryo DMG Bonus +15%',
+        'When the equipping character has 0 Elemental Energy, Normal Attack DMG is increased by 60% and Elemental Burst DMG is increased by 60%. After the equipping character deals Normal Attack DMG, the aforementioned Elemental Burst effect will stop applying for 6s. After the equipping character deals Elemental Burst DMG, the aforementioned Normal Attack effect will stop applying for 6s. This effect can trigger even if the equipping character is off the field.'
     );
 
 INSERT INTO weapons (
@@ -413,8 +419,11 @@ INSERT INTO weapons (
     (99, 'Ring of Yaxche', 'Catalyst', 4, 510, 'HP%', 41.3, 'Using an Elemental Skill grants the Jade-Forged Crown effect: Every 1,000 Max HP will increase the Normal Attack DMG dealt by the equipping character by 0.6% for 10s. Normal Attack DMG can be increased this way by a maximum of 16%.'),
     (100, 'Lion''s Roar', 'Sword', 4, 510, 'ATK%', 41.3, 'Increases DMG against opponents affected by Pyro or Electro by 20%.'),
     (101, 'Xiphos'' Moonlight', 'Sword', 4, 510, 'Elemental Mastery', 165, 'The following effect will trigger every 10s: The equipping character will gain 0.036% Energy Recharge for each point of Elemental Mastery they possess for 12s, with nearby party members gaining 30% of this buff for the same duration. Multiple instances of this weapon can allow this buff to stack. This effect will still trigger even if the character is not on the field.'),
-    (102, 'Crane''s Echoing Call', 'Caatlyst', 5, 741, 'ATK%', 16.5, 'After the equipping character hits an opponent with a Plunging Attack, all nearby party members'' Plunging Attacks will deal 28% increased DMG for 20s. When nearby party members hit opponents with Plunging Attacks, they will restore 2.5 Energy to the equipping character. Energy can be restored this way every 0.7s. This energy regain effect can be triggered even if the equipping character is not on the field.'),
-    (103, 'Chain Breaker', 'Bow', 4, 565, 'ATK%', 27.6, 'For every party member from Natlan or who has a different Elemental Type from the equipping character, the equipping character gains 9.6% increased ATK. When there are no less than 3 of the aforementioned characters, the equipping character gains 48 Elemental Mastery.');
+    (102, 'Crane''s Echoing Call', 'Catalyst', 5, 741, 'ATK%', 16.5, 'After the equipping character hits an opponent with a Plunging Attack, all nearby party members'' Plunging Attacks will deal 28% increased DMG for 20s. When nearby party members hit opponents with Plunging Attacks, they will restore 2.5 Energy to the equipping character. Energy can be restored this way every 0.7s. This energy regain effect can be triggered even if the equipping character is not on the field.'),
+    (103, 'Chain Breaker', 'Bow', 4, 565, 'ATK%', 27.6, 'For every party member from Natlan or who has a different Elemental Type from the equipping character, the equipping character gains 9.6% increased ATK. When there are no less than 3 of the aforementioned characters, the equipping character gains 48 Elemental Mastery.'),
+    (104, 'Wandering Evenstar', 'Catalyst', 4, 510, "Elemental Mastery", 165, 'The following effect will trigger every 10s: The equipping character will gain 24% of their Elemental Mastery as bonus ATK for 12s, with nearby party members gaining 30% of this buff for the same duration. Multiple instances of this weapon can allow this buff to stack. This effect will still trigger even if the character is not on the field.'),
+    (105, 'Symphonist of Scents', 'Polearm', 5, 608, 'CRIT DMG', 66.2, 'ATK is increased by 12%. When the equipping character is off-field, ATK is increased by an additional 12%. After initiating healing, the equipping character and the character(s) they have healed will obtain the "Sweet Echoes" effect, increasing their ATK by 32% for 3s. This effect can be triggered even if the equipping character is off-field.'),
+    (106, 'Azurelight', 'Sword', 5, 674, 'CRIT Rate', 22.1, 'Within 12s after an Elemental Skill is used, ATK is increased by 24%. During this time, when the equipping character has 0 Energy, ATK will be further increased by 24%, and CRIT DMG will be increased by 40%.'),
 
 INSERT INTO builds (
     character_id,
@@ -466,6 +475,8 @@ INSERT INTO builds (
     (72, 35, 'MELT DPS', NOW(), NOW()), -- Wriothesley
     (73, 36, 'HEAL SUPPORT', NOW(), NOW()), -- Charlotte
     (91, 37, 'BUFF SUPPORT', NOW(), NOW()), -- Citlali
+    (98, 98, 'OFF-FIELD DPS', NOW(), NOW()), -- Escoffier
+    (100, 100, 'DPS', NOW(), NOW()), -- Skirk
 
     -- Pyro characters builds
     (20, 38, 'OFF-FIELD VAPORIZE DPS', NOW(), NOW()), -- Xiangling
@@ -499,6 +510,7 @@ INSERT INTO builds (
     (74, 64, 'SUPPORT', NOW(), NOW()), -- Furina
     (83, 65, 'HEAL', NOW(), NOW()), -- Sigewinne
     (87, 66, 'DPS', NOW(), NOW()), -- Mualani
+    (99, 99, 'SHIELD SUPPORT', NOW(), NOW()), -- Dahlia
 
     -- Electro Characters
     (17, 67, 'DPS', NOW(), NOW()), -- Razor
@@ -532,6 +544,7 @@ INSERT INTO builds (
     (78, 93, 'BUFF & HEAL SUPPORT', NOW(), NOW()), -- Xianyun
     (89, 94, 'DPS', NOW(), NOW()), -- Chasca
     (92, 95, 'SUPPORT', NOW(), NOW()), -- Lan Yan
+    (97, 97, 'REACTION DPS', NOW(), NOW()), -- Ifa
     (94, 96, 'REACTION DPS', NOW(), NOW()); -- Yumemizuki Mizuki
 
 INSERT INTO stats (
@@ -584,6 +597,7 @@ INSERT INTO stats (
     (35, 'ATK% / Elemental Mastery', 'Cryo DMG Bonus', 'CRIT Rate / CRIT DMG', '1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Elemental Mastery'), -- Wriothesley
     (36, 'Energy Recharge / ATK%', 'ATK%', 'Healing Bonus / ATK% / CRIT Rate', '1.Energy Recharge 2.ATK% 3.CRIT Rate 4.ATK% 5.CRIT DMG'), -- Charlotte
     (37, 'Elemental Mastery / Energy Recharge', 'Elemental Mastery', 'Elemental Mastery / CRIT Rate', '1.Energy Recharge 2.Elemental Mastery 3.CRIT Rate'), -- Citlali
+    (100, 'ATK%', 'Cryo DMG Bonus / ATK%', 'CRIT Rate / CRIT DMG', '1.CRIT Rate 2.CRIT DMG 3.ATK%'), -- Skirk
 
     -- Pyro stats
     (38, 'Energy Recharge / ATK% / Elemental Mastery', 'Pyro DMG Bonus', 'CRIT Rate / CRIT DMG', '1.Energy Recharge 2.CRIT Rate 3.CRIT DMG 4.ATK% 5.Elemental Mastery'), -- Xiangling
@@ -602,7 +616,8 @@ INSERT INTO stats (
     (51, 'Elemental Mastery / ATK% / Energy Recharge', 'Pyro DMG Bonus', 'CRIT Rate / CRIT DMG', '1.CRIT Rate 2.CRIT DMG 3.Elemental Mastery 4.ATK%'), -- Gaming
     (52, 'ATK% / Elemental Mastery', 'Pyro DMG Bonus', 'CRIT Rate / CRIT DMG', '1.CRIT Rate 2.CRIT DMG 3.Elemental Mastery 4.ATK%'), -- Arlecchino
     (53, 'ATK% / Elemental Mastery', 'Pyro DMG Bonus', 'CRIT Rate / CRIT DMG', '1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Elemental Mastery'), -- Mavuika
-
+    (98, 'ATK% / Energy Recharge', 'Cryo DMG Bonus / ATK%', 'CRIT Rate / CRIT DMG', '1.Energy Recharge 2.CRIT Rate 3.CRIT DMG 4.ATK%'), -- Escoffier
+    
     -- Hydro
     (54, 'Energy Recharge / ATK%', 'Hydro DMG Bonus', 'CRIT Rate / CRIT DMG', '1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Energy Recharge'), -- Xingqiu
     (55, 'ATK% / Energy Recharge / Elemental Mastery', 'Hydro DMG Bonus', 'CRIT Rate / CRIT DMG', '1.CRIT Rate 2.CRIT DMG 3.Energy Recharge 4.ATK% 5.Elemental Mastery'), -- Mona
@@ -617,6 +632,7 @@ INSERT INTO stats (
     (64, 'Energy Recharge / HP%', 'HP% / Hydro DMG Bonus', 'CRIT Rate / CRIT DMG', '1.Energy Recharge 2.HP% 3.CRIT Rate 4.Crit DMG'), -- Furina
     (65, 'HP%', 'HP%', 'HP%', '1.HP% 2.Energy Recharge'), -- Sigewinne
     (66, 'HP% / Elemental Mastery', 'Hydro DMG Bonus', 'CRIT Rate / CRIT DMG / HP%', '1.CRIT Rate 2.CRIT DMG 3.Elemental Mastery 4.HP%'), -- Mualani
+    (99, 'Energy Recharge / HP%', 'HP%', 'HP%', '1.Energy Recharge 2.HP% 3.CRIT Rate 4.HP%'), -- Dahlia
 
     -- Electro
     (67, 'ATK%', 'Physical DMG Bonus', 'CRIT Rate / CRIT DMG', '1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Energy Recharge'), -- Razor
@@ -649,7 +665,8 @@ INSERT INTO stats (
     (92, 'Energy Recharge / ATK%', 'Anemo DMG Bonus', 'CRIT Rate / CRIT DMG', '1.Energy Recharge 2.CRIT Rate 3.CRIT DMG 4.ATK%'), -- Lynette
     (93, 'ATK% / Energy Recharge', 'ATK%', 'ATK%', '1.Energy Recharge 2.ATK% 3.ATK'), -- Xianyun
     (94, 'ATK%', 'ATK%', 'CRIT Rate / CRIT DMG', '1.CRIT Rate 2.CRIT DMG 3.ATK% 4.Elemental Mastery 5.Energy Recharge'), -- Chasca
-    (95, 'ATK% / Energy Recharge', 'ATK%', 'ATK% / CRIT Rate', '1.Energy Recharge 2.ATK% 3.Elemental Mastery 4.CRIT Rate'), -- LAN YAN
+    (95, 'ATK% / Energy Recharge', 'ATK%', 'ATK% / CRIT Rate', '1.Energy Recharge 2.ATK% 3.Elemental Mastery 4.CRIT Rate'), -- Lan yan
+    (97, 'Elemental Mastery / Energy Recharge', 'Elemental Mastery', 'Elemental Mastery', '1.Energy Recharge 2.Elemental Mastery 3.ATK% 4.CRIT Rate 5.CRIT DMG'), -- Ifa
     (96, 'Elemental Mastery / Energy Recharge', 'Elemental Mastery', 'Elemental Mastery', '1.Energy Recharge 2.Elemental Mastery 3.CRIT Rate'); -- Yumemizuki Mizuki
 
 INSERT INTO build_weapons (
@@ -699,6 +716,8 @@ INSERT INTO build_weapons (
     (35, 9, 1), (35, 12, 2), (35, 33, 3), (35, 6, 4), (35, 8, 5), (35, 10, 6), (35, 70, 7),  -- Wriothesley
     (36, 42, 1), (36, 43, 2), (36, 71, 3), -- Charlotte
     (37, 72, 1), (37, 71, 2), (37, 43, 3), -- Citlali
+    (98, 105, 1), (98, 45, 2), (98, 91, 3), (98, 16, 4), -- Escoffier
+    (100, 51, 1), (100, 33, 2), (100, 14, 3), -- Skirk
 
     -- Pyro 
     (38, 73, 1), (38, 44, 2), (38, 74, 3), (38, 67, 4), (38, 75, 5), (38, 76, 6), -- Xiangling
@@ -732,6 +751,7 @@ INSERT INTO build_weapons (
     (64, 95, 1), (64, 96, 2), (64, 25, 3), -- Furina
     (65, 97, 1), (65, 98, 2), (65, 32, 3), (65, 21, 4), -- Sigewinne
     (66, 7, 1), (66, 94, 2), (66, 13, 3), (66, 99, 4), -- Mualani
+    (99, 25, 1), -- Dahlia
 
     -- Electro
     (67, 53, 1), (67, 54, 2), (67, 61, 3), (67, 2, 3), (67, 62, 4), -- Razor
@@ -765,7 +785,9 @@ INSERT INTO build_weapons (
     (93, 102, 1), (93, 43, 2), -- Xianyun
     (94, 27, 1), (94, 28, 2), (94, 29, 3), (94, 103, 4), -- Chasca
     (95, 72, 1), (95, 71, 2), (95, 43, 3), -- Lan Yan
-    (96, 34, 1), (96, 35, 2); -- Yumemizuki Mizuki
+    (96, 34, 1), (96, 35, 2), -- Yumemizuki Mizuki
+    (97, 34, 1), (97, 72, 2), (97, 33, 3), (97, 104, 4), (97, 35, 5); -- Ifa
+
 
 INSERT INTO build_artifacts (
     build_id,
@@ -815,6 +837,8 @@ INSERT INTO build_artifacts (
     (35, 37, 1, 2), (35, 25, 2, 2), (35, 32, 3, 2), -- Wriothesley
     (36, 16, 1, 2), (36, 23, 2, 2), -- Charlotte
     (37, 45, 1, 2), (37, 23, 2, 2), (37, 7, 3, 2), -- Citlali
+    (98, 38, 1, 2), -- Escoffier
+    (100, 106, 1, 2), (100, 50, 2, 2), (100, 38, 3, 2), (100, 24, 4, 2), (100, 93, 5, 2), -- Skirk
 
     -- Pyro
     (38, 26, 1, 2), (38, 48, 2, 2), (38, 32, 3, 2), -- Xiangling
@@ -848,6 +872,7 @@ INSERT INTO build_artifacts (
     (64, 38, 1, 2), -- Furina
     (65, 36, 1, 1), (65, 23, 2, 1), -- Sigewinne
     (66, 46, 1, 2), (66, 22, 2, 2), -- Mualani
+    (99, 16, 1, 2), -- Dahlia
 
     -- Electro
     (67, 24, 1, 2), (67, 14, 2, 2), -- Razor
@@ -881,4 +906,5 @@ INSERT INTO build_artifacts (
     (93, 50, 1, 2), (93, 16, 2, 2), -- Xianyun
     (94, 46, 1, 2), -- Chasca
     (95, 50, 1, 2), -- Lan Yan
-    (96, 50, 1, 2); -- Yumemizuki Mizuki
+    (96, 50, 1, 2), -- Yumemizuki Mizuki
+    (97, 50, 1, 2), (97, 46, 2, 2), (97, 45, 2, 2); -- Ifa

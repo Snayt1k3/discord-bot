@@ -222,7 +222,17 @@ VALUES
 
     -- Patch: 5.5
     (95, 'De­nial and Judg­ment', 16, 'Q(Burst) > E(Skill) > NA(Normal Attack)', NOW(), NOW()), -- Iansan
-    (96, 'Eroded Scale-Feather', 18, 'NA(Normal Attack) > Q(Burst) > E(Skill)', NOW(), NOW()); -- Varesa
+    (96, 'Eroded Scale-Feather', 18, 'NA(Normal Attack) > Q(Burst) > E(Skill)', NOW(), NOW()), -- Varesa
+
+    -- Patch: 5.6
+    (97, 'Ascended Sample: Rook', 18, 'E(Skill) > Q(Burst) > NA(Normal Attack)', NOW(), NOW()), -- Ifa
+    (98, 'Eroded Horn', 13, 'E(Skill) > Q(Burst) > NA(Normal Attack)', NOW(), NOW()), -- Escoffier
+
+    -- Patch: 5.7
+    (99, 'Eroded Scale-Feather', 3, 'Q(Burst) > E(Skill) > NA(Normal Attack)', NOW(), NOW()), -- Dahlia
+    (100, 'Ascended Sample: Knight', 16, 'E(Skill) > Q(Burst) > NA(Normal Attack)', NOW(), NOW()); -- Skirk
+
+
 
 INSERT INTO ascension_materials (id, local_specialty, boss_drops, gem, created_at, updated_at)
 VALUES
@@ -321,7 +331,11 @@ VALUES
     (93, 'Glowing Hornshroom', 'Mark of the Binding Blessing', 'Vajrada Amethyst', NOW(), NOW()), -- 93 — Ororon
     (94, 'Skysplit Gembloom', 'Sparkless Statue Core', 'Vajrada Amethyst', NOW(), NOW()), -- 94 — Varesa
     (95, 'Brilliant Chrysanthemum', 'Gold-Inscribed Secret Source Core', 'Prithiva Topaz', NOW(), NOW()), -- 95 — Xilonen
-    (96, 'Crystal Marrow', 'Crystalline Bloom', 'Shivada Jade', NOW(), NOW()); -- 96 — Aloy
+    (96, 'Crystal Marrow', 'Crystalline Bloom', 'Shivada Jade', NOW(), NOW()), -- 96 — Aloy
+    (97, 'Saurian Claw Succulent', 'Sparkless Statue Core', 'Vayuda Turquoise', NOW(), NOW()), -- 97 — Ifa
+    (98, 'Beryl Conch', 'Secret Source Airflow Accumulator', 'Shivada Jade', NOW(), NOW()), -- 98 — Escoffier
+    (99, 'Calla Lily', 'Secret Source Airflow Accumulator', 'Varunada Lazurite', NOW(), NOW()), -- 99 — Dahlia
+    (100, 'Skysplit Gembloom', 'Ensnaring Gaze', 'Shivada Jade', NOW(), NOW()), -- 100 — Skirk
 
 
 INSERT INTO characters (
@@ -511,4 +525,12 @@ VALUES
 
     -- Patch: 5.5
     (95, 'Iansan', 'Electro', 'Polearm', 'ATK%', 'Natlan', 4, 88, 95, 15, NOW(), NOW()),
-    (96, 'Varesa', 'Electro', 'Catalyst', 'CRIT Rate%', 'Natlan', 5, 94, 96, 16, NOW(), NOW());
+    (96, 'Varesa', 'Electro', 'Catalyst', 'CRIT Rate%', 'Natlan', 5, 94, 96, 16, NOW(), NOW()),
+
+    -- Patch: 5.6
+    (97, 'Ifa', 'Anemo', 'Catalyst', 'Elemental Mastery', 'Natlan', 4, 97, 97, 16, NOW(), NOW()),
+    (98, 'Escoffier', 'Cryo', 'Polearm', 'CRIT Rate%', 'Fontaine', 5, 98, 98, 12, NOW(), NOW()),
+
+    -- Patch: 5.7
+    (99, 'Dahlia', 'Hydro', 'Sword', 'ATK%', 'Mondstadt', 4, 99, 99, 17, NOW(), NOW()),
+    (100, 'Skirk', 'Cryo', 'Sword', 'ATK%', '?', 5, 100, 100, 12, NOW(), NOW()),
