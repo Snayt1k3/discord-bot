@@ -18,10 +18,10 @@ func main() {
 
 	// init deps
 	guildKeeper := adapters.NewServiceSettingsClient()
-	gachasAdapter := adapters.NewGachasAdapter()
+
 
 	// init handlers/commands
-	dispatcher := handlers.NewCommandsDispatcher(guildKeeper, gachasAdapter)
+	dispatcher := handlers.NewCommandsDispatcher(guildKeeper)
 	eventHandlers := handlers.NewEventHandlers(guildKeeper, discord.CommandsList)
 	dispatcher.InitHandlers()
 

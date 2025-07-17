@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"bot/internal/handlers/gachas/genshin"
-	"bot/internal/handlers/gachas/wuwa"
 	"bot/internal/handlers/guild"
 	"bot/internal/interfaces"
 	"github.com/bwmarrin/discordgo"
@@ -15,17 +13,13 @@ type CommandsDispatcher struct {
 	handlers    map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error
 
 	guildHandlers   guild.GuildPreferencesHandlers
-	genshinHandlers genshin.GenshinHandlers
-	wuwaHandlers    wuwa.WuwaHandlers
 }
 
-func NewCommandsDispatcher(guildKeeper interfaces.GuildKeeperInterface, gachaAdapter interfaces.GachasAdapter) *CommandsDispatcher {
+func NewCommandsDispatcher(guildKeeper interfaces.GuildKeeperInterface) *CommandsDispatcher {
 	return &CommandsDispatcher{
 		guildKeeper:     guildKeeper,
 		handlers:        map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error{},
 		guildHandlers:   *guild.NewSettingsHandlers(guildKeeper),
-		genshinHandlers: *genshin.NewGenshinHandlers(gachaAdapter),
-		wuwaHandlers:    *wuwa.NewWuwaHandlers(gachaAdapter),
 	}
 }
 
@@ -34,8 +28,6 @@ func (cd *CommandsDispatcher) InitHandlers() {
 	cd.handlers["gachas"] = ShowSupportedGachas
 
 	cd.guildHandlers.AddSettingsHandlers(cd.handlers)
-	cd.genshinHandlers.AddGenshinHandlers(cd.handlers)
-	cd.wuwaHandlers.AddWuwaHandlers(cd.handlers)
 }
 
 func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.InteractionCreate) {
