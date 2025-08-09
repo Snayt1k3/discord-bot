@@ -14,11 +14,11 @@ import (
 )
 
 type SettingsHandlers struct {
-	client pb.SettingsServiceClient
+	client pb.GuildServiceClient
 	redis  interfaces.RedisInterface
 }
 
-func NewSettingsHandlers(client pb.SettingsServiceClient, redis interfaces.RedisInterface) *SettingsHandlers {
+func NewSettingsHandlers(client pb.GuildServiceClient, redis interfaces.RedisInterface) *SettingsHandlers {
 	return &SettingsHandlers{client: client, redis: redis}
 }
 
@@ -42,7 +42,7 @@ func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 		return
 	}
 
-	resp, err := s.client.GetSettingsByGuild(context.Background(), &pb.GetSettingsByGuildRequest{GuildId: guildID})
+	resp, err := s.client.GetSettings(context.Background(), &pb.GetSettingsByGuildRequest{GuildId: guildID})
 
 	if err != nil {
 		st, ok := status.FromError(err)
@@ -66,9 +66,9 @@ func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-func (s *SettingsHandlers) UpdateRoles(c *gin.Context) {
+func (s *SettingsHandlers) SetRoleMessageId(c *gin.Context) {
 	guildID := c.Param("guild_id")
-	var req pb.UpdateRolesRequest
+	var req pb.RoleMessage
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		slog.Error("Error while binding json", "error", err)
@@ -76,14 +76,11 @@ func (s *SettingsHandlers) UpdateRoles(c *gin.Context) {
 		return
 	}
 
-	key := fmt.Sprintf("guild-settings-%v", guildID)
-	s.redis.Delete(key)
-
 	req.GuildId = guildID
-	resp, err := s.client.UpdateRoles(context.Background(), &req)
+	resp, err := s.client.SetRoleMessageId(context.Background(), &req)
 
 	if err != nil {
-		slog.Error("Error while updating roles", "error", err)
+		slog.Error("Error while deleting role", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -91,10 +88,54 @@ func (s *SettingsHandlers) UpdateRoles(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-func (s *SettingsHandlers) CreateGuildSetting(c *gin.Context) {
+func (s *SettingsHandlers) AddRole(c *gin.Context) {
+	guildID := c.Param("guild_id")
+	var req pb.Role
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		slog.Error("Error while binding json", "error", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	req.GuildId = guildID
+	resp, err := s.client.AddRole(context.Background(), &req)
+
+	if err != nil {
+		slog.Error("Error while adding role", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, resp)
+}
+
+func (s *SettingsHandlers) DeleteRole(c *gin.Context) {
+	guildID := c.Param("guild_id")
+	var req pb.Role
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		slog.Error("Error while binding json", "error", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	req.GuildId = guildID
+	resp, err := s.client.DeleteRole(context.Background(), &req)
+
+	if err != nil {
+		slog.Error("Error while deleting role", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, resp)
+}
+
+func (s *SettingsHandlers) CreateSettings(c *gin.Context) {
 	guildID := c.Param("guild_id")
 
-	resp, err := s.client.CreateGuildSettings(context.Background(), &pb.CreateGuildSettingsRequest{GuildId: guildID})
+	resp, err := s.client.CreateSettings(context.Background(), &pb.CreateGuildSettingsRequest{GuildId: guildID})
 
 	if err != nil {
 		slog.Error("Error while creating guild settings", "error", err)
@@ -105,9 +146,9 @@ func (s *SettingsHandlers) CreateGuildSetting(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-func (s *SettingsHandlers) UpdateWelcome(c *gin.Context) {
+func (s *SettingsHandlers) SetWelcomeChannel(c *gin.Context) {
 	guildID := c.Param("guild_id")
-	var req pb.UpdateWelcomeChannelIdRequest
+	var req pb.SetWelcomeChannelRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		slog.Error("Error while binding json", "error", err)
@@ -116,7 +157,50 @@ func (s *SettingsHandlers) UpdateWelcome(c *gin.Context) {
 	}
 
 	req.GuildId = guildID
-	resp, err := s.client.UpdateWelcomeChannelId(context.Background(), &req)
+	resp, err := s.client.SetWelcomeChannel(context.Background(), &req)
+
+	if err != nil {
+		slog.Error("Error while updating welcome channel", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, resp)
+}
+
+func (s *SettingsHandlers) AddWelcomeMessage(c *gin.Context) {
+	guildID := c.Param("guild_id")
+	var req pb.WelcomeMessageRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		slog.Error("Error while binding json", "error", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	req.GuildId = guildID
+	resp, err := s.client.AddWelcomeMessage(context.Background(), &req)
+
+	if err != nil {
+		slog.Error("Error while updating welcome channel", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, resp)
+}
+func (s *SettingsHandlers) DeleteWelcomeMessage(c *gin.Context) {
+	guildID := c.Param("guild_id")
+	var req pb.WelcomeMessageRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		slog.Error("Error while binding json", "error", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	req.GuildId = guildID
+	resp, err := s.client.DeleteWelcomeMessage(context.Background(), &req)
 
 	if err != nil {
 		slog.Error("Error while updating welcome channel", "error", err)

@@ -22,22 +22,16 @@ func main() {
 		panic("Failed to load config: " + err.Error())
 	}
 
-	gachaConn, err := grpc.NewClient(fmt.Sprintf("%v:%v", cfg.GrpcGachasHost, cfg.GrpcGachasPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
-
-	if err != nil {
-		panic("Failed to connect to gacha service: " + err.Error())
-	}
-
 	settingsConn, err := grpc.NewClient(fmt.Sprintf("%v:%v", cfg.GrpcSettingsHost, cfg.GrpcSettingsPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
 		panic("Failed to connect to settings service: " + err.Error())
 	}
 
-	defer gachaConn.Close()
+
 	defer settingsConn.Close()
 
-	settingsProtoClient := pb.NewSettingsServiceClient(settingsConn)
+	settingsProtoClient := pb.NewGuildServiceClient(settingsConn)
 
 	redisClient := adapters.NewRedisAdapter(fmt.Sprintf("%v:%v", cfg.RedisHost, cfg.RedisPort), cfg.RedisPass, cfg.RedisDB)
 	settingsHandlers := handlers.NewSettingsHandlers(settingsProtoClient, redisClient)

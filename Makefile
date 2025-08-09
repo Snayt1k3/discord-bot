@@ -38,7 +38,7 @@ grpc-init:
 
 	@echo "Copying all generated files to api-gateway/proto..."
 	@mkdir -p api-gateway/proto
-	@cp -r grpc/* api-gateway
+	@cp -r grpc/* api-gateway/
 
 	@echo "Moving settings proto files to settings-service..."
 	@mkdir -p settings-service/proto
