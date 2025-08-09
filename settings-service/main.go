@@ -30,10 +30,6 @@ func main() {
 	models.Migrate(db)
 	guildRepo := adapters.NewGuildRepository(db)
 
-	settingsService := &adapters.SettingsService{
-		GuildRepo: guildRepo,
-	}
-
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%v", cfg.GrpcPort))
 
 	if err != nil {
@@ -42,8 +38,8 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	pb.RegisterSettingsServiceServer(grpcServer, &server.SettingsServer{
-		SettingsService: settingsService,
+	pb.RegisterGuildServiceServer(grpcServer, &server.SettingsServer{
+		GuildRepo: guildRepo,
 	})
 
 	log.Printf("gRPC server is running on port :%v \n", cfg.GrpcPort)

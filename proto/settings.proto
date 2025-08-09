@@ -4,11 +4,63 @@ package settings;
 
 option go_package = "proto/";
 
-service SettingsService {
-  rpc GetSettingsByGuild(GetSettingsByGuildRequest) returns (GetSettingsByGuildResponse);
-  rpc CreateGuildSettings(CreateGuildSettingsRequest) returns (CreateGuildSettingsResponse);
-  rpc UpdateRoles(UpdateRolesRequest) returns (UpdateRolesResponse);
-  rpc UpdateWelcomeChannelId(UpdateWelcomeChannelIdRequest) returns (UpdateWelcomeChannelIdResponse);
+service GuildService {
+  rpc GetSettings(GetSettingsByGuildRequest) returns (GetSettingsByGuildResponse);
+  rpc CreateSettings(CreateGuildSettingsRequest) returns (CreateGuildSettingsResponse);
+
+  rpc AddRole(Role) returns (Role);
+  rpc DeleteRole(Role) returns (Role);
+  rpc SetRoleMessageId(RoleMessage) returns (RoleMessage);
+
+  rpc SetWelcomeChannel(SetWelcomeChannelRequest) returns (SetWelcomeChannelResponse);
+  rpc AddWelcomeMessage(WelcomeMessageRequest) returns (WelcomeMessageResponse);
+  rpc DeleteWelcomeMessage(WelcomeMessageRequest) returns (WelcomeMessageResponse);
+}
+
+message CreateGuildSettingsRequest {
+  string guild_id = 1;
+}
+message CreateGuildSettingsResponse {
+  string guild_id = 1;
+}
+
+message SetWelcomeChannelRequest {
+  string guild_id = 1;
+  string channel_id = 2;
+}
+
+message SetWelcomeChannelResponse {
+  string guild_id = 1;
+  string channel_id = 2;
+}
+
+message WelcomeMessageRequest {
+  string guild_id = 1;
+  string message = 2;
+}
+
+message WelcomeMessageResponse {
+  string guild_id = 1;
+  string message = 2;
+}
+
+message GetSettingsByGuildRequest {
+  string guild_id = 1;
+}
+
+message GetSettingsByGuildResponse {
+  GuildSettings settings = 1;
+}
+
+message RoleMessage {
+  string guild_id = 1;
+  string message_id = 2;          
+}
+
+message Role {
+  string guild_id = 1;
+  string role_id = 2; 
+  string emoji = 3;         
 }
 
 message RolesSettings {
@@ -25,39 +77,4 @@ message GuildSettings {
   string guild_id = 2;
   RolesSettings roles = 3;
   WelcomeSettings welcome = 4;
-}
-
-message UpdateRolesRequest {
-  string guild_id = 1;
-  string message_id = 2;          
-  map<string, string> matching = 3;
-}
-
-message UpdateRolesResponse {
-  GuildSettings guild_settings = 1;
-}
-
-message GetSettingsByGuildRequest {
-  string guild_id = 1;
-}
-
-message GetSettingsByGuildResponse {
-  GuildSettings settings = 1;
-}
-
-message CreateGuildSettingsRequest {
-  string guild_id = 1;
-}
-
-message CreateGuildSettingsResponse {
-  string guild_id = 1;
-}
-
-message UpdateWelcomeChannelIdRequest {
-  string guild_id = 1;
-  string channel_id = 2;
-}
-
-message UpdateWelcomeChannelIdResponse {
-  GuildSettings guild_settings = 1;
 }

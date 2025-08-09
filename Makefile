@@ -5,7 +5,7 @@ PROTO_DIR := ./proto
 GO_OUT_DIR := ./grpc
 
 # Список .proto файлов
-PROTO_FILES := $(PROTO_DIR)/gaming.proto $(PROTO_DIR)/settings.proto
+PROTO_FILES := $(PROTO_DIR)/settings.proto
 
 # Команда генерации gRPC и Go-кода
 PROTOC_COMMAND = protoc -I=$(PROTO_DIR) \
@@ -43,11 +43,7 @@ grpc-init:
 	@echo "Moving settings proto files to settings-service..."
 	@mkdir -p settings-service/proto
 	@find grpc -type f -name "settings*.pb.go" -exec mv {} settings-service/proto/ \;
-
-	@echo "Moving gaming proto files to gachas-service..."
-	@mkdir -p gachas-service/proto
-	@find grpc -type f -name "gaming*.pb.go" -exec mv {} gachas-service/proto/ \;
-
+	
 	@rm -rf grpc
 
 	@echo "gRPC server initialized. Files distributed to services."

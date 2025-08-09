@@ -3,22 +3,20 @@ package server
 import (
 	"context"
 
-	"settings-service/internal/dto"
 	"settings-service/internal/interfaces"
 	pb "settings-service/proto"
-	"strconv"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 type SettingsServer struct {
-	SettingsService interfaces.SettingsService
-	pb.UnimplementedSettingsServiceServer
+	GuildRepo interfaces.GuildRepository
+	pb.UnimplementedGuildServiceServer
 }
 
-func (s *SettingsServer) GetSettingsByGuild(ctx context.Context, req *pb.GetSettingsByGuildRequest) (*pb.GetSettingsByGuildResponse, error) {
-	guildSettings, err := s.SettingsService.GetSettingsByGuildID(req.GuildId)
+func (s *SettingsServer) GetSettings(ctx context.Context, req *pb.GetSettingsByGuildRequest) (*pb.GetSettingsByGuildResponse, error) {
+	guildSettings, err := s.GuildRepo.GetGuildSettings(req.GuildId)
 
 	if err != nil {
 		return nil, err
@@ -28,25 +26,13 @@ func (s *SettingsServer) GetSettingsByGuild(ctx context.Context, req *pb.GetSett
 		return nil, status.Error(codes.NotFound, "Data not found")
 	}
 
-	response := &pb.GetSettingsByGuildResponse{
-		Settings: &pb.GuildSettings{
-			Id:      strconv.Itoa(int((guildSettings.ID))),
-			GuildId: guildSettings.GuildID,
-			Roles: &pb.RolesSettings{
-				MessageId: guildSettings.Roles.MessageId,
-				Matching:  guildSettings.Roles.Matching,
-			},
-			Welcome: &pb.WelcomeSettings{
-				ChannelId: guildSettings.Welcome.ChannelId,
-			},
-		},
-	}
+	response := &pb.GetSettingsByGuildResponse{}
 	return response, nil
 }
 
-func (s *SettingsServer) CreateGuildSettings(ctx context.Context, req *pb.CreateGuildSettingsRequest) (*pb.CreateGuildSettingsResponse, error) {
+func (s *SettingsServer) CreateSettings(ctx context.Context, req *pb.CreateGuildSettingsRequest) (*pb.CreateGuildSettingsResponse, error) {
 
-	err := s.SettingsService.CreateGuildSettings(req.GuildId)
+	err := s.GuildRepo.CreateGuildSetting(req.GuildId)
 
 	if err != nil {
 		return nil, err
@@ -55,55 +41,88 @@ func (s *SettingsServer) CreateGuildSettings(ctx context.Context, req *pb.Create
 	return &pb.CreateGuildSettingsResponse{GuildId: req.GuildId}, nil
 }
 
-func (s *SettingsServer) UpdateRoles(ctx context.Context, req *pb.UpdateRolesRequest) (*pb.UpdateRolesResponse, error) {
-	settings, err := s.SettingsService.UpdateRolesSettings(&dto.RolesSettings{
-		MessageId: req.MessageId,
-		Matching:  req.Matching,
-		GuildID:   req.GuildId,
-	})
+func (s *SettingsServer) AddRole(ctx context.Context, req *pb.Role) (*pb.Role, error) {
+	err := s.GuildRepo.AddRole(req.GuildId, req.RoleId, req.Emoji)
 
 	if err != nil {
 		return nil, err
 	}
 
-	response := &pb.UpdateRolesResponse{
-		GuildSettings: &pb.GuildSettings{
-			Id:      strconv.Itoa(int((settings.ID))),
-			GuildId: settings.GuildID,
-			Roles: &pb.RolesSettings{
-				MessageId: settings.Roles.MessageId,
-				Matching:  settings.Roles.Matching,
-			},
-		},
+	response := &pb.Role{
+		GuildId: req.GuildId,
+		RoleId:  req.RoleId,
+		Emoji:   req.Emoji,
 	}
-
 	return response, nil
-
 }
 
-func (s *SettingsServer) UpdateWelcomeChannelId(ctx context.Context, req *pb.UpdateWelcomeChannelIdRequest) (*pb.UpdateWelcomeChannelIdResponse, error) {
-	settings := &dto.WelcomeSettings{
-		ChannelId: req.ChannelId,
-		GuildID:   req.GuildId,
-	}
-
-	updatedSettings, err := s.SettingsService.UpdateWelcomeMessageId(settings)
+func (s *SettingsServer) DeleteRole(ctx context.Context, req *pb.Role) (*pb.Role, error) {
+	err := s.GuildRepo.DeleteRole(req.GuildId, req.RoleId, req.Emoji)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &pb.UpdateWelcomeChannelIdResponse{
-		GuildSettings: &pb.GuildSettings{
-			Id:      strconv.Itoa(int((updatedSettings.ID))),
-			GuildId: updatedSettings.GuildID,
-			Roles: &pb.RolesSettings{
-				MessageId: updatedSettings.Roles.MessageId,
-				Matching:  updatedSettings.Roles.Matching,
-			},
-			Welcome: &pb.WelcomeSettings{
-				ChannelId: updatedSettings.Welcome.ChannelId,
-			},
-		},
-	}, nil
+	response := &pb.Role{
+		GuildId: req.GuildId,
+		RoleId:  req.RoleId,
+		Emoji:   req.Emoji,
+	}
+	return response, nil
+}
+
+func (s *SettingsServer) SetRoleMessageId(ctx context.Context, req *pb.RoleMessage) (*pb.RoleMessage, error) {
+	err := s.GuildRepo.SetRoleMessageId(req.GuildId, req.MessageId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.RoleMessage{
+		GuildId:   req.GuildId,
+		MessageId: req.MessageId,
+	}
+	return response, nil
+}
+
+func (s *SettingsServer) SetWelcomeChannel(ctx context.Context, req *pb.SetWelcomeChannelRequest) (*pb.SetWelcomeChannelResponse, error) {
+	err := s.GuildRepo.SetWelcomeChannel(req.GuildId, req.ChannelId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.SetWelcomeChannelResponse{
+		GuildId:   req.GuildId,
+		ChannelId: req.ChannelId,
+	}
+	return response, nil
+}
+
+func (s *SettingsServer) AddWelcomeMessage(ctx context.Context, req *pb.WelcomeMessageRequest) (*pb.WelcomeMessageResponse, error) {
+	err := s.GuildRepo.AddWelcomeMessage(req.GuildId, req.Message)
+
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.WelcomeMessageResponse{
+		GuildId: req.GuildId,
+		Message: req.Message,
+	}
+	return response, nil
+}
+
+func (s *SettingsServer) DeleteWelcomeMessage(ctx context.Context, req *pb.WelcomeMessageRequest) (*pb.WelcomeMessageResponse, error) {
+	err := s.GuildRepo.DeleteWelcomeMessage(req.GuildId, req.Message)
+
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.WelcomeMessageResponse{
+		GuildId: req.GuildId,
+		Message: req.Message,
+	}
+	return response, nil
 }
