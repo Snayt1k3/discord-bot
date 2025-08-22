@@ -96,7 +96,28 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		},
 	},
 	{
-		Name:        "gachas",
-		Description: "Get the list of support gachas",
+		Name:        "add-welcome-msg",
+		Description: "Add a welcome message. Only for admins",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionChannel,
+				Name:        "msg",
+				Description: "The welcome message to add",
+				Required:    true,
+			},
+		},
 	},
+	{
+		Name:        "del-welcome-msg",
+		Description: "Remove a welcome message. Only for admins",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionChannel,
+				Name:        "msg",
+				Description: "The welcome message to remove",
+				Required:    true,
+			},
+		},
+	},
+	
 }

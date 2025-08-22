@@ -9,23 +9,26 @@ import (
 )
 
 type CommandsDispatcher struct {
-	guildKeeper interfaces.GuildKeeperInterface
+	guildService interfaces.GuildServiceInterface
 	handlers    map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error
 
 	guildHandlers   guild.GuildPreferencesHandlers
 }
 
-func NewCommandsDispatcher(guildKeeper interfaces.GuildKeeperInterface) *CommandsDispatcher {
+func NewCommandsDispatcher(guildService interfaces.GuildServiceInterface) *CommandsDispatcher {
 	return &CommandsDispatcher{
-		guildKeeper:     guildKeeper,
+		guildService:     guildService,
 		handlers:        map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error{},
-		guildHandlers:   *guild.NewSettingsHandlers(guildKeeper),
+		guildHandlers:   *guild.NewSettingsHandlers(guildService),
 	}
 }
 
+func (cd *CommandsDispatcher) AddHandler(name string, handler func(s *discordgo.Session, i *discordgo.InteractionCreate) error) {
+	cd.handlers[name] = handler
+}
+
 func (cd *CommandsDispatcher) InitHandlers() {
-	cd.handlers["help"] = HelpHandler
-	cd.handlers["gachas"] = ShowSupportedGachas
+	cd.AddHandler("help", HelpHandler)
 
 	cd.guildHandlers.AddSettingsHandlers(cd.handlers)
 }

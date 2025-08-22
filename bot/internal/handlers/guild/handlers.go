@@ -10,20 +10,20 @@ import (
 )
 
 type GuildPreferencesHandlers struct {
-	Gk interfaces.GuildKeeperInterface
+	guildService interfaces.GuildServiceInterface
 }
 
-func NewSettingsHandlers(gk interfaces.GuildKeeperInterface) *GuildPreferencesHandlers {
+func NewSettingsHandlers(guildService interfaces.GuildServiceInterface) *GuildPreferencesHandlers {
 	return &GuildPreferencesHandlers{
-		Gk: gk,
+		guildService: guildService,
 	}
 }
-func (gp *GuildPreferencesHandlers) showGuildPreferences(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func (g *GuildPreferencesHandlers) showGuildPreferences(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 
-	_, err := gp.Gk.GetGuildSettings(i.GuildID)
+	_, err := g.guildService.GetGuildSettings(i.GuildID)
 
 	if errors.Is(err, er.ErrGuildSettingsNotFound) {
-		gp.Gk.CreateSettings(i.GuildID) // todo: перенести в обработчик при добаление бота на сервер
+		g.guildService.CreateSettings(i.GuildID) // todo: перенести в обработчик при добаление бота на сервер
 	}
 
 	buttons := []discordgo.MessageComponent{
@@ -67,24 +67,24 @@ func (gp *GuildPreferencesHandlers) showGuildPreferences(s *discordgo.Session, i
 	return nil
 }
 
-func (gp *GuildPreferencesHandlers) addRole(s *discordgo.Session, i *discordgo.InteractionCreate) error {
-	return addRole(gp.Gk, s, i)
+func (g *GuildPreferencesHandlers) addRole(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return addRole(g.guildService, s, i)
 }
 
-func (gp *GuildPreferencesHandlers) removeRole(s *discordgo.Session, i *discordgo.InteractionCreate) error {
-	return removeRole(gp.Gk, s, i)
+func (g *GuildPreferencesHandlers) removeRole(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return removeRole(g.guildService, s, i)
 }
 
-func (gp *GuildPreferencesHandlers) setMessageId(s *discordgo.Session, i *discordgo.InteractionCreate) error {
-	return setRolesMessage(gp.Gk, s, i)
+func (g *GuildPreferencesHandlers) setMessageId(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return setRolesMessage(g.guildService, s, i)
 }
 
-func (gp *GuildPreferencesHandlers) showAddedRoles(s *discordgo.Session, i *discordgo.InteractionCreate) error {
-	return showAllRoles(gp.Gk, s, i)
+func (g *GuildPreferencesHandlers) showAddedRoles(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return showAllRoles(g.guildService, s, i)
 }
 
-func (gp *GuildPreferencesHandlers) setWelcomeChannel(s *discordgo.Session, i *discordgo.InteractionCreate) error {
-	return setWelcomeChannel(gp.Gk, s, i)
+func (g *GuildPreferencesHandlers) setWelcomeChannel(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return setWelcomeChannel(g.guildService, s, i)
 }
 
 func (gp *GuildPreferencesHandlers) AddSettingsHandlers(handlers map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error) {

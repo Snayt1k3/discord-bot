@@ -28,8 +28,12 @@ func (d *DefaultHttpClient) Patch(ctx context.Context, url string, body []byte, 
 	return d.doRequest(ctx, http.MethodPatch, url, body, headers)
 }
 
-func (d *DefaultHttpClient) Delete(ctx context.Context, url string, headers map[string]string) (*http.Response, error) {
-	return d.doRequest(ctx, http.MethodDelete, url, nil, headers)
+func (d *DefaultHttpClient) Put(ctx context.Context, url string, body []byte, headers map[string]string) (*http.Response, error) {
+	return d.doRequest(ctx, http.MethodPatch, url, body, headers)
+}
+
+func (d *DefaultHttpClient) Delete(ctx context.Context, url string, body []byte, headers map[string]string) (*http.Response, error) {
+	return d.doRequest(ctx, http.MethodDelete, url, body, headers)
 }
 
 func (d *DefaultHttpClient) doRequest(ctx context.Context, method, url string, body []byte, headers map[string]string) (*http.Response, error) {

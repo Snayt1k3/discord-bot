@@ -15,29 +15,29 @@ import (
 )
 
 type EventHandlers struct {
-	guildKeeper interfaces.GuildKeeperInterface
+	service interfaces.GuildServiceInterface
 	cmds        []*discordgo.ApplicationCommand
 }
 
-func NewEventHandlers(guildKeeper interfaces.GuildKeeperInterface, cmds []*discordgo.ApplicationCommand) *EventHandlers {
-	return &EventHandlers{guildKeeper: guildKeeper, cmds: cmds}
+func NewEventHandlers(service interfaces.GuildServiceInterface, cmds []*discordgo.ApplicationCommand) *EventHandlers {
+	return &EventHandlers{service: service, cmds: cmds}
 }
 
 func (eh *EventHandlers) OnMessageReactionAdd(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
 	slog.Info("%v reacted with %v", r.UserID, r.Emoji.Name)
 
-	guildSetting, err := eh.guildKeeper.GetGuildSettings(r.GuildID)
+	guildSetting, err := eh.service.GetGuildSettings(r.GuildID)
 
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
 		return
 	}
 
-	if r.MessageID != guildSetting.Settings.Roles.MessageId {
+	if r.MessageID != guildSetting.Roles.MessageID {
 		return
 	}
 
-	roleId, exists := guildSetting.Settings.Roles.Matching[r.Emoji.ID]
+	roleId, exists := guildSetting.Roles.Matching[r.Emoji.ID]
 
 	if !exists {
 		return
@@ -53,18 +53,18 @@ func (eh *EventHandlers) OnMessageReactionAdd(s *discordgo.Session, r *discordgo
 func (eh *EventHandlers) OnMessageReactionRemove(s *discordgo.Session, r *discordgo.MessageReactionRemove) {
 	slog.Info("%v remove reaction %v", r.UserID, r.Emoji.Name)
 
-	guildSetting, err := eh.guildKeeper.GetGuildSettings(r.GuildID)
+	guildSetting, err := eh.service.GetGuildSettings(r.GuildID)
 
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
 		return
 	}
 
-	if r.MessageID != guildSetting.Settings.Roles.MessageId {
+	if r.MessageID != guildSetting.Roles.MessageID {
 		return
 	}
 
-	roleId, exists := guildSetting.Settings.Roles.Matching[r.Emoji.ID]
+	roleId, exists := guildSetting.Roles.Matching[r.Emoji.ID]
 
 	if !exists {
 		return
@@ -78,15 +78,15 @@ func (eh *EventHandlers) OnMessageReactionRemove(s *discordgo.Session, r *discor
 }
 
 func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMemberAdd) {
-	settings, _ := eh.guildKeeper.GetGuildSettings(u.GuildID)
+	settings, _ := eh.service.GetGuildSettings(u.GuildID)
 
 	randSource := rand.NewSource(time.Now().UnixNano())
 	randGen := rand.New(randSource)
 
-	randomIndex := randGen.Intn(len(config.HelloMessages))
-	formattedMessage := fmt.Sprintf(config.HelloMessages[randomIndex], u.Member.Mention())
+	randomIndex := randGen.Intn(len(settings.Welcome.Messages))
+	formattedMessage := fmt.Sprintf(settings.Welcome.Messages[randomIndex], u.Member.Mention())
 
-	discord.SendChannelMessage(settings.Settings.Welcome.ChannelId, formattedMessage)
+	discord.SendChannelMessage(settings.Welcome.ChannelID, formattedMessage)
 }
 
 func (eh *EventHandlers) OnBotReady(s *discordgo.Session, g *discordgo.Ready) {

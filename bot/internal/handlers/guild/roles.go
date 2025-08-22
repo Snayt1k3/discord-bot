@@ -3,17 +3,14 @@ package guild
 import (
 	"bot/internal/discord"
 	"bot/internal/interfaces"
-
-	dtoGuild "bot/internal/dto/settings"
 	"fmt"
 	"log/slog"
 	"strconv"
 	"strings"
-
 	"github.com/bwmarrin/discordgo"
 )
 
-func showAllRoles(gk interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func showAllRoles(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	settings, err := gk.GetGuildSettings(i.GuildID)
 
 	if err != nil {
@@ -22,7 +19,7 @@ func showAllRoles(gk interfaces.GuildKeeperInterface, s *discordgo.Session, i *d
 		return err
 	}
 
-	roles := settings.Settings.Roles
+	roles := settings.Roles
 
 	var roleList strings.Builder
 
@@ -56,7 +53,7 @@ func showAllRoles(gk interfaces.GuildKeeperInterface, s *discordgo.Session, i *d
 	return nil
 }
 
-func addRole(gk interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func addRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	emojiRaw := i.ApplicationCommandData().Options[1].StringValue()
 	var emojiKey string
 
@@ -70,24 +67,8 @@ func addRole(gk interfaces.GuildKeeperInterface, s *discordgo.Session, i *discor
 	}
 
 	roleID := i.ApplicationCommandData().Options[0].RoleValue(s, i.GuildID).ID
-	guildSetting, err := gk.GetGuildSettings(i.GuildID)
 
-	if err != nil {
-		slog.Error("Error while getting guild settings", "err", err)
-		discord.SendErrorMessage(s, i)
-		return err
-	}
-
-	if guildSetting.Settings.Roles.Matching == nil {
-		guildSetting.Settings.Roles.Matching = make(map[string]string)
-	}
-
-	guildSetting.Settings.Roles.Matching[emojiKey] = roleID
-
-	_, err = gk.UpdateRolesSetting(i.GuildID, dtoGuild.RolesSettings{
-		MessageId: guildSetting.Settings.Roles.MessageId,
-		Matching:  guildSetting.Settings.Roles.Matching,
-	})
+	_, err := gk.AddRole(roleID, emojiKey, i.GuildID)
 
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)
@@ -105,7 +86,7 @@ func addRole(gk interfaces.GuildKeeperInterface, s *discordgo.Session, i *discor
 	return nil
 }
 
-func removeRole(gk interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func removeRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	emojiRaw := i.ApplicationCommandData().Options[1].StringValue()
 	var emojiKey string
 
@@ -118,20 +99,9 @@ func removeRole(gk interfaces.GuildKeeperInterface, s *discordgo.Session, i *dis
 		emojiKey = emojiRaw
 	}
 
-	guildSetting, err := gk.GetGuildSettings(i.GuildID)
+	roleID := i.ApplicationCommandData().Options[0].RoleValue(s, i.GuildID).ID
 
-	if err != nil {
-		slog.Error("Error while getting guild settings", "err", err)
-		discord.SendErrorMessage(s, i)
-		return err
-	}
-
-	guildSetting.Settings.Roles.Matching[emojiKey] = ""
-
-	_, err = gk.UpdateRolesSetting(i.GuildID, dtoGuild.RolesSettings{
-		MessageId: guildSetting.Settings.Roles.MessageId,
-		Matching:  guildSetting.Settings.Roles.Matching,
-	})
+	_, err := gk.DeleteRole(roleID, emojiKey, i.GuildID)
 
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)
@@ -150,13 +120,10 @@ func removeRole(gk interfaces.GuildKeeperInterface, s *discordgo.Session, i *dis
 	return nil
 }
 
-func setRolesMessage(gk interfaces.GuildKeeperInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func setRolesMessage(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	messageId := i.ApplicationCommandData().Options[0].StringValue()
 
-	_, err := gk.UpdateRolesSetting(i.GuildID, dtoGuild.RolesSettings{
-		MessageId: messageId,
-		Matching:  map[string]string{},
-	})
+	_, err := gk.SetRoleMessageID(messageId, i.GuildID)
 
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)
