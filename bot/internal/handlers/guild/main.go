@@ -50,6 +50,11 @@ func (g *GuildPreferencesHandlers) removeWelcomeMessage(s *discordgo.Session, i 
 	return DeleteWelcomeMessage(g.guildService, s, i)
 }
 
+
+func (g *GuildPreferencesHandlers) showWelcomeSettings(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return showWelcomeSettings(g.guildService, s, i)
+}
+
 func (gp *GuildPreferencesHandlers) AddSettingsHandlers(handlers map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error) {
 	
 	// Настройка Roles/Reactions
@@ -66,5 +71,6 @@ func (gp *GuildPreferencesHandlers) AddSettingsHandlers(handlers map[string]func
 	handlers["settings"] = gp.menu
 	handlers["MainMenuSettings"] = gp.backToMenu
 	handlers["RolesReactionsSettings"] = gp.showAllRoles
+	handlers["WelcomeSettings"] = gp.showWelcomeSettings
 	// todo добавить проверку на админа. И поменять сообщение: Улучшить оформление
 }

@@ -19,7 +19,6 @@ func showAllRoles(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *
 	}
 
 	var roleList strings.Builder
-	slog.Info("Roles matching:", "matching", settings.Roles.Matching)
 	for emoji, roleID := range settings.Roles.Matching {
 		emojiStr := emoji
 		if _, err := strconv.ParseInt(emoji, 10, 64); err == nil {

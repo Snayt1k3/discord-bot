@@ -99,8 +99,8 @@ func (r *GuildRepositoryImpl) AddWelcomeMessage(guildId, message string) error {
         return err
     }
 
-    msg := models.Message{ID: 1, Message: message}
-    if err := r.db.FirstOrCreate(&msg, models.Message{ID: 1,Message: message}).Error; err != nil {
+    msg := models.Message{Message: message}
+    if err := r.db.FirstOrCreate(&msg, models.Message{Message: message}).Error; err != nil {
         return err
     }
 
