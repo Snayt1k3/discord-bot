@@ -61,25 +61,23 @@ func initBot(s *discordgo.Session, cmds []*discordgo.ApplicationCommand) {
 	appID := s.State.User.ID
 
 	for _, guild := range s.State.Guilds {
-		slog.Info("Syncing commands for server",
+		// Получаем текущие команды
+		oldCommands, _ := s.ApplicationCommands(appID, guild.ID)
+		for _, cmd := range oldCommands {
+			_ = s.ApplicationCommandDelete(appID, guild.ID, cmd.ID)
+		}
+
+		slog.Info("Old commands deleted, registering new ones...",
 			"server_name", guild.Name,
 			"server_id", guild.ID,
 		)
 
-		// BulkOverwrite заменяет все команды сразу
-		commands, err := s.ApplicationCommandBulkOverwrite(appID, guild.ID, cmds)
-		if err != nil {
-			slog.Error("failed to overwrite commands",
-				"server_name", guild.Name,
-				"error", err,
-			)
-			continue
+		for _, cmd := range cmds {
+			_, err := s.ApplicationCommandCreate(appID, guild.ID, cmd)
+			if err != nil {
+				slog.Error("Error creating command", "command", cmd.Name, "error", err)
+			}
 		}
-
-		slog.Info("Commands synced",
-			"server_name", guild.Name,
-			"count", len(commands),
-		)
 	}
 }
 
