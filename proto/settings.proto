@@ -9,7 +9,7 @@ service GuildService {
   rpc CreateSettings(CreateGuildSettingsRequest) returns (CreateGuildSettingsResponse);
 
   rpc AddRole(Role) returns (Role);
-  rpc DeleteRole(Role) returns (Role);
+  rpc DeleteRole(RoleDelete) returns (Role);
   rpc SetRoleMessageId(RoleMessage) returns (RoleMessage);
 
   rpc SetWelcomeChannel(SetWelcomeChannelRequest) returns (SetWelcomeChannelResponse);
@@ -61,6 +61,11 @@ message Role {
   string guild_id = 1;
   string role_id = 2; 
   string emoji = 3;         
+}
+
+message RoleDelete {
+  string guild_id = 1;
+  string role_id = 2;        
 }
 
 message RolesSettings {

@@ -11,7 +11,7 @@ type GuildRepository interface {
 
 	SetRoleMessageId(guildId, messageId string) error
 	AddRole(guildId, roleId, emoji string) error
-	DeleteRole(guildId, roleId, emoji string) error
+	DeleteRole(guildId, roleId string) error
 
 	SetWelcomeChannel(guildId, channelId string) error
 	AddWelcomeMessage(guildId, message string) error

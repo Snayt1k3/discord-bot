@@ -17,6 +17,12 @@ func NewGuildRepository(db *gorm.DB) interfaces.GuildRepository {
 func (r *GuildRepositoryImpl) CreateGuildSetting(guildId string) error {
 	obj := &models.Settings{
 		GuildID: guildId,
+		Role: models.RolesSettings{
+			GuildID: guildId,
+		},
+		Welcome: models.WelcomeSettings{
+			GuildID: guildId,
+		},
 	}
 	return r.db.Create(obj).Error
 }
@@ -57,14 +63,14 @@ func (r *GuildRepositoryImpl) AddRole(guildId, roleId, emoji string) error {
 	return r.db.Model(&roleSetting).Association("Roles").Append(&role)
 }
 
-func (r *GuildRepositoryImpl) DeleteRole(guildId, roleId, emoji string) error {
+func (r *GuildRepositoryImpl) DeleteRole(guildId, roleId string) error {
 	var roleSetting models.RolesSettings
 	if err := r.db.Where("guild_id = ?", guildId).First(&roleSetting).Error; err != nil {
 		return err
 	}
 
 	var role models.Role
-	if err := r.db.Where("role_id = ? AND emoji = ?", roleId, emoji).First(&role).Error; err != nil {
+	if err := r.db.Where("role_id = ?", roleId).First(&role).Error; err != nil {
 		return err
 	}
 

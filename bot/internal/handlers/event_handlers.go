@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"bot/config"
 	"bot/internal/discord"
 	"bot/internal/interfaces"
 	"context"
@@ -24,8 +23,6 @@ func NewEventHandlers(service interfaces.GuildServiceInterface, cmds []*discordg
 }
 
 func (eh *EventHandlers) OnMessageReactionAdd(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
-	slog.Info("%v reacted with %v", r.UserID, r.Emoji.Name)
-
 	guildSetting, err := eh.service.GetGuildSettings(r.GuildID)
 
 	if err != nil {
@@ -51,8 +48,6 @@ func (eh *EventHandlers) OnMessageReactionAdd(s *discordgo.Session, r *discordgo
 }
 
 func (eh *EventHandlers) OnMessageReactionRemove(s *discordgo.Session, r *discordgo.MessageReactionRemove) {
-	slog.Info("%v remove reaction %v", r.UserID, r.Emoji.Name)
-
 	guildSetting, err := eh.service.GetGuildSettings(r.GuildID)
 
 	if err != nil {
@@ -89,23 +84,12 @@ func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMe
 	discord.SendChannelMessage(settings.Welcome.ChannelID, formattedMessage)
 }
 
-func (eh *EventHandlers) OnBotReady(s *discordgo.Session, g *discordgo.Ready) {
-	err := s.UpdateCustomStatus(config.GetBotStatus())
-
+func (eh *EventHandlers) OnGuildCreate(s *discordgo.Session, r *discordgo.GuildCreate) {
+	err := eh.service.CreateSettings(r.ID)
+	
 	if err != nil {
-		slog.Warn("failed to update custom status", "error", err)
-	}
-
-	for _, guild := range s.State.Guilds {
-		slog.Info("Registering commands for server", "server_name", guild.Name, "server_id", guild.ID)
-		for _, cmd := range eh.cmds {
-			_, err := s.ApplicationCommandCreate(s.State.User.ID, guild.ID, cmd)
-			if err != nil {
-				slog.Error("Error while registering command", "command", cmd.Name, "server_name", guild.Name, "error", err)
-			} else {
-				slog.Info("Command registered successfully", "server_name", guild.Name, "command", cmd.Name)
-			}
-		}
+		slog.Error("Error while creating guild settings", "err", err)
+		return
 	}
 }
 

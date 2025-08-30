@@ -19,7 +19,7 @@ type GuildService struct {
 func (s *GuildService) GetGuildSettings(guild_id string) (dtoGuild.GuildSettings, error) {
 	resp, err := s.client.Get(
 		context.Background(),
-		fmt.Sprintf("%v/settings/guild/%v", s.gatewayAddr, guild_id),
+		fmt.Sprintf("%v/api/v1/settings/guild/%v", s.gatewayAddr, guild_id),
 		nil,
 	)
 
@@ -36,7 +36,7 @@ func (s *GuildService) GetGuildSettings(guild_id string) (dtoGuild.GuildSettings
 		return dtoGuild.GuildSettings{}, err
 	}
 
-	var settings dtoGuild.GuildSettings
+	var settings dtoGuild.GuildSettingsResponse
 
 	err = json.Unmarshal(body, &settings)
 
@@ -45,14 +45,14 @@ func (s *GuildService) GetGuildSettings(guild_id string) (dtoGuild.GuildSettings
 		return dtoGuild.GuildSettings{}, nil
 	}
 
-	return settings, nil
+	return settings.Settings, nil
 
 }
 
 func (s *GuildService) CreateSettings(guild_id string) error {
 	resp, err := s.client.Post(
 		context.Background(),
-		fmt.Sprintf("%v/settings/guild/%v", s.gatewayAddr, guild_id),
+		fmt.Sprintf("%v/api/v1/settings/guild/%v", s.gatewayAddr, guild_id),
 		nil,
 		nil,
 	)
@@ -78,7 +78,7 @@ func (s *GuildService) AddRole(roleId, emoji, guildID string) (dtoGuild.Role, er
 	
 	resp, err := s.client.Post(
 		context.Background(),
-		fmt.Sprintf("%v/settings/guild/%v/roles/role", s.gatewayAddr, guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/%v/roles/role", s.gatewayAddr, guildID),
 		bytes,
 		nil,
 	)
@@ -118,34 +118,19 @@ func (s *GuildService) DeleteRole(roleId, emoji, guildID string) (dtoGuild.Role,
 	
 	resp, err := s.client.Delete(
 		context.Background(),
-		fmt.Sprintf("%v/settings/guild/%v/roles/role", s.gatewayAddr, guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/%v/roles/role", s.gatewayAddr, guildID),
 		bytes,
 		nil,
 	)
 
 	if err != nil {
-		slog.Warn("Bad response when adding role", "err", err)
+		slog.Warn("Bad response when deleting role", "err", err)
 		return dtoGuild.Role{}, err
 	}
 
 	defer resp.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
-
-	if err != nil {
-		return dtoGuild.Role{}, err
-	}
-
-	var addedRole dtoGuild.Role
-
-	err = json.Unmarshal(body, &addedRole)
-
-	if err != nil {
-		slog.Error("Bad response when adding role", "err", err)
-		return dtoGuild.Role{}, err
-	}
-
-	return addedRole, nil
+	return dtoGuild.Role{}, nil
 }
 
 func (s *GuildService) SetRoleMessageID(messageID, guildID string) (dtoGuild.RoleMessage, error) {
@@ -156,7 +141,7 @@ func (s *GuildService) SetRoleMessageID(messageID, guildID string) (dtoGuild.Rol
 
 	resp, err := s.client.Put(
 		context.Background(),
-		fmt.Sprintf("%v/settings/guild/%v/roles/message", s.gatewayAddr, guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/%v/roles/message", s.gatewayAddr, guildID),
 		bytes,
 		nil,
 	)
@@ -197,7 +182,7 @@ func (s *GuildService) SetWelcomeChannel(guildID, channelID string) (dtoGuild.Se
 
 	resp, err := s.client.Put(
 		context.Background(),
-		fmt.Sprintf("%v/settings/guild/%v/welcome/channel", s.gatewayAddr, guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/%v/welcome/channel", s.gatewayAddr, guildID),
 		bodyBytes,
 		nil,
 	)
@@ -230,7 +215,7 @@ func (s *GuildService) AddWelcomeMessage(guildID, message string) (dtoGuild.Welc
 
 	resp, err := s.client.Post(
 		context.Background(),
-		fmt.Sprintf("%v/settings/guild/%v/welcome/message", s.gatewayAddr, guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/%v/welcome/message", s.gatewayAddr, guildID),
 		bodyBytes,
 		nil,
 	)
@@ -263,7 +248,7 @@ func (s *GuildService) DeleteWelcomeMessage(guildID, message string) (dtoGuild.W
 
 	resp, err := s.client.Delete(
 		context.Background(),
-		fmt.Sprintf("%v/settings/guild/%v/welcome/message", s.gatewayAddr, guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/%v/welcome/message", s.gatewayAddr, guildID),
 		bodyBytes,
 		nil,
 	)

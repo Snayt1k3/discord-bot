@@ -5,45 +5,45 @@ import (
 )
 
 var CommandsList = []*discordgo.ApplicationCommand{
-	{
-		Name:        "play",
-		Description: "Play a song or add it to the queue",
-		Options: []*discordgo.ApplicationCommandOption{
-			{
-				Type:        discordgo.ApplicationCommandOptionString,
-				Name:        "query",
-				Description: "The name or URL of the song",
-				Required:    true,
-			},
-		},
-	},
-	{
-		Name:        "stop",
-		Description: "Stop playing music",
-	},
-	{
-		Name:        "skip",
-		Description: "Skip the current song",
-	},
-	{
-		Name:        "help",
-		Description: "Display a list of available commands",
-	},
-	{
-		Name:        "resume",
-		Description: "Resume the paused song",
-	},
-	{
-		Name:        "pause",
-		Description: "Pause the currently playing song",
-	},
+	// {
+	// 	Name:        "play",
+	// 	Description: "Play a song or add it to the queue",
+	// 	Options: []*discordgo.ApplicationCommandOption{
+	// 		{
+	// 			Type:        discordgo.ApplicationCommandOptionString,
+	// 			Name:        "query",
+	// 			Description: "The name or URL of the song",
+	// 			Required:    true,
+	// 		},
+	// 	},
+	// },
+	// {
+	// 	Name:        "stop",
+	// 	Description: "Stop playing music",
+	// },
+	// {
+	// 	Name:        "skip",
+	// 	Description: "Skip the current song",
+	// },
+	// {
+	// 	Name:        "help",
+	// 	Description: "Display a list of available commands",
+	// },
+	// {
+	// 	Name:        "resume",
+	// 	Description: "Resume the paused song",
+	// },
+	// {
+	// 	Name:        "pause",
+	// 	Description: "Pause the currently playing song",
+	// },
 	{
 		Name:        "settings",
-		Description: "Configure server settings. Only for admins",
+		Description: "Configure server settings.",
 	},
 	{
-		Name:        "add-role-reactions",
-		Description: "Add a role. Only for admins",
+		Name:        "rr-add",
+		Description: "Add a role.",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
 				Type:        discordgo.ApplicationCommandOptionRole,
@@ -60,8 +60,8 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		},
 	},
 	{
-		Name:        "remove-role-reactions",
-		Description: "Remove a role. Only for admins",
+		Name:        "rr-remove",
+		Description: "Remove a role.",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
 				Type:        discordgo.ApplicationCommandOptionRole,
@@ -72,8 +72,8 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		},
 	},
 	{
-		Name:        "set-roles-message-id",
-		Description: "Set the message ID for role reactions. Only for admins",
+		Name:        "rr-message",
+		Description: "Set the message ID for role reactions.",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
 				Type:        discordgo.ApplicationCommandOptionString,
@@ -83,41 +83,41 @@ var CommandsList = []*discordgo.ApplicationCommand{
 			},
 		},
 	},
-	{
-		Name:        "set-welcome-channel",
-		Description: "Set the welcome channel. Only for admins",
-		Options: []*discordgo.ApplicationCommandOption{
-			{
-				Type:        discordgo.ApplicationCommandOptionChannel,
-				Name:        "channel",
-				Description: "The channel to send welcome messages",
-				Required:    true,
-			},
-		},
-	},
-	{
-		Name:        "add-welcome-msg",
-		Description: "Add a welcome message. Only for admins",
-		Options: []*discordgo.ApplicationCommandOption{
-			{
-				Type:        discordgo.ApplicationCommandOptionChannel,
-				Name:        "msg",
-				Description: "The welcome message to add",
-				Required:    true,
-			},
-		},
-	},
-	{
-		Name:        "del-welcome-msg",
-		Description: "Remove a welcome message. Only for admins",
-		Options: []*discordgo.ApplicationCommandOption{
-			{
-				Type:        discordgo.ApplicationCommandOptionChannel,
-				Name:        "msg",
-				Description: "The welcome message to remove",
-				Required:    true,
-			},
-		},
-	},
+	// {
+	// 	Name:        "set-welcome-channel",
+	// 	Description: "Set the welcome channel. Only for admins",
+	// 	Options: []*discordgo.ApplicationCommandOption{
+	// 		{
+	// 			Type:        discordgo.ApplicationCommandOptionChannel,
+	// 			Name:        "channel",
+	// 			Description: "The channel to send welcome messages",
+	// 			Required:    true,
+	// 		},
+	// 	},
+	// },
+	// {
+	// 	Name:        "add-welcome-msg",
+	// 	Description: "Add a welcome message. Only for admins",
+	// 	Options: []*discordgo.ApplicationCommandOption{
+	// 		{
+	// 			Type:        discordgo.ApplicationCommandOptionChannel,
+	// 			Name:        "msg",
+	// 			Description: "The welcome message to add",
+	// 			Required:    true,
+	// 		},
+	// 	},
+	// },
+	// {
+	// 	Name:        "del-welcome-msg",
+	// 	Description: "Remove a welcome message. Only for admins",
+	// 	Options: []*discordgo.ApplicationCommandOption{
+	// 		{
+	// 			Type:        discordgo.ApplicationCommandOptionChannel,
+	// 			Name:        "msg",
+	// 			Description: "The welcome message to remove",
+	// 			Required:    true,
+	// 		},
+	// 	},
+	// },
 	
 }

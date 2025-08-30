@@ -55,7 +55,7 @@ services:
     depends_on:
       - redis
   settings-db:
-    image: postgres:latest
+    image: postgres:15
     restart: on-failure:5
     container_name: $SETTINGS_POSTGRES_HOST
     environment:

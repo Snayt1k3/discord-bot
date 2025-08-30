@@ -12,23 +12,20 @@ import (
 
 func showAllRoles(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	settings, err := gk.GetGuildSettings(i.GuildID)
-
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
 		discord.SendErrorMessage(s, i)
 		return err
 	}
 
-	roles := settings.Roles
-
 	var roleList strings.Builder
-
-	for emoji, roleID := range roles.Matching {
+	slog.Info("Roles matching:", "matching", settings.Roles.Matching)
+	for emoji, roleID := range settings.Roles.Matching {
 		emojiStr := emoji
 		if _, err := strconv.ParseInt(emoji, 10, 64); err == nil {
 			emojiStr = fmt.Sprintf("<:emoji:%s>", emoji)
 		}
-		roleList.WriteString(fmt.Sprintf("%s - (<@&%s>)\n", emojiStr, roleID))
+		roleList.WriteString(fmt.Sprintf("%s - <@&%s>\n", emojiStr, roleID))
 	}
 
 	embed := &discordgo.MessageEmbed{
@@ -37,11 +34,12 @@ func showAllRoles(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *
 		Color:       0x3498DB,
 	}
 
+	// отвечаем на интеракцию
 	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Embeds: []*discordgo.MessageEmbed{embed},
-			Flags:  discordgo.MessageFlagsEphemeral,
+			Flags:  discordgo.MessageFlagsEphemeral, // приватное сообщение
 		},
 	})
 
@@ -87,21 +85,9 @@ func addRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *disco
 }
 
 func removeRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
-	emojiRaw := i.ApplicationCommandData().Options[1].StringValue()
-	var emojiKey string
-
-	if strings.HasPrefix(emojiRaw, "<:") && strings.HasSuffix(emojiRaw, ">") {
-		parts := strings.Split(emojiRaw, ":")
-		if len(parts) == 3 {
-			emojiKey = strings.TrimSuffix(parts[2], ">")
-		}
-	} else {
-		emojiKey = emojiRaw
-	}
-
 	roleID := i.ApplicationCommandData().Options[0].RoleValue(s, i.GuildID).ID
 
-	_, err := gk.DeleteRole(roleID, emojiKey, i.GuildID)
+	_, err := gk.DeleteRole(roleID, "", i.GuildID)
 
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)

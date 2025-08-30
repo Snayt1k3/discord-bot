@@ -38,3 +38,7 @@ type GuildSettings struct {
 	Roles   RolesSettings   `json:"roles"`
 	Welcome WelcomeSettings `json:"welcome"`
 }
+
+type GuildSettingsResponse struct {
+	Settings GuildSettings `json:"settings"`
+}

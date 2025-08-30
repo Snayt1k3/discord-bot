@@ -18,6 +18,10 @@ func (g *GuildPreferencesHandlers) menu(s *discordgo.Session, i *discordgo.Inter
 	return menu(s, i)
 }
 
+func (g *GuildPreferencesHandlers) backToMenu(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return backToMenu(s, i)
+}
+
 func (g *GuildPreferencesHandlers) addRole(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	return addRole(g.guildService, s, i)
 }
@@ -30,7 +34,7 @@ func (g *GuildPreferencesHandlers) setMessageId(s *discordgo.Session, i *discord
 	return setRolesMessage(g.guildService, s, i)
 }
 
-func (g *GuildPreferencesHandlers) showAddedRoles(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	func (g *GuildPreferencesHandlers) showAllRoles(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	return showAllRoles(g.guildService, s, i)
 }
 
@@ -39,11 +43,19 @@ func (g *GuildPreferencesHandlers) setWelcomeChannel(s *discordgo.Session, i *di
 }
 
 func (gp *GuildPreferencesHandlers) AddSettingsHandlers(handlers map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error) {
-	handlers["add-role-reactions"] = gp.addRole
-	handlers["remove-role-reactions"] = gp.removeRole
-	handlers["set-roles-message-id"] = gp.setMessageId
+	
+	// Настройка Roles/Reactions
+	handlers["rr-add"] = gp.addRole
+	handlers["rr-remove"] = gp.removeRole
+	handlers["rr-message"] = gp.setMessageId
+
+	// Настройка Welcome
 	handlers["set-welcome-channel"] = gp.setWelcomeChannel
-	handlers["menu"] = gp.menu
-	handlers["ViewReactionRoles"] = gp.showAddedRoles
+	handlers["add-welcome-msg"] = gp.setWelcomeChannel
+
+	// Меню, Кнопки связанные с меню
+	handlers["settings"] = gp.menu
+	handlers["MainMenuSettings"] = gp.backToMenu
+	handlers["RolesReactionsSettings"] = gp.showAllRoles
 	// todo добавить проверку на админа. И поменять сообщение: Улучшить оформление
 }

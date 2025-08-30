@@ -112,7 +112,7 @@ func (s *SettingsHandlers) AddRole(c *gin.Context) {
 
 func (s *SettingsHandlers) DeleteRole(c *gin.Context) {
 	guildID := c.Param("guild_id")
-	var req pb.Role
+	var req pb.RoleDelete
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		slog.Error("Error while binding json", "error", err)

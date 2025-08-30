@@ -26,7 +26,33 @@ func (s *SettingsServer) GetSettings(ctx context.Context, req *pb.GetSettingsByG
 		return nil, status.Error(codes.NotFound, "Data not found")
 	}
 
-	response := &pb.GetSettingsByGuildResponse{}
+	matching := make(map[string]string)
+	var welcomeMessages []string
+
+	for _, role := range guildSettings.Role.Roles {
+		matching[role.Emoji] = role.RoleID
+	}
+
+	for _, msg := range guildSettings.Welcome.Messages {
+		welcomeMessages = append(welcomeMessages, msg.Message)
+	}
+
+
+
+	response := &pb.GetSettingsByGuildResponse{
+		Settings: &pb.GuildSettings{
+			GuildId:       guildSettings.GuildID,
+			Roles: &pb.RolesSettings{
+				MessageId: guildSettings.Role.MessageID,
+				Matching: matching,
+			},
+
+			Welcome: &pb.WelcomeSettings{
+				ChannelId: guildSettings.Welcome.ChannelId,
+				Messages:  welcomeMessages,
+			},
+		},
+	}
 	return response, nil
 }
 
@@ -56,8 +82,8 @@ func (s *SettingsServer) AddRole(ctx context.Context, req *pb.Role) (*pb.Role, e
 	return response, nil
 }
 
-func (s *SettingsServer) DeleteRole(ctx context.Context, req *pb.Role) (*pb.Role, error) {
-	err := s.GuildRepo.DeleteRole(req.GuildId, req.RoleId, req.Emoji)
+func (s *SettingsServer) DeleteRole(ctx context.Context, req *pb.RoleDelete) (*pb.Role, error) {
+	err := s.GuildRepo.DeleteRole(req.GuildId, req.RoleId)
 
 	if err != nil {
 		return nil, err
@@ -66,7 +92,7 @@ func (s *SettingsServer) DeleteRole(ctx context.Context, req *pb.Role) (*pb.Role
 	response := &pb.Role{
 		GuildId: req.GuildId,
 		RoleId:  req.RoleId,
-		Emoji:   req.Emoji,
+		Emoji:   "",
 	}
 	return response, nil
 }

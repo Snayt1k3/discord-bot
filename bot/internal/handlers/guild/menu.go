@@ -1,41 +1,24 @@
 package guild
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"log/slog"
+
+	"github.com/bwmarrin/discordgo"
+)
 
 
 
 func menu(s *discordgo.Session, i *discordgo.InteractionCreate) error {
-	buttons := []discordgo.MessageComponent{
-		discordgo.Button{
-			Label:    "Roles/Reactions.",
-			Style:    discordgo.PrimaryButton,
-			CustomID: "RolesReactionsSettings",
-			Emoji: &discordgo.ComponentEmoji{
-				Name: "⚙️",
-			},
-		},
-		discordgo.Button{
-			Label:    "Welcome.",
-			Style:    discordgo.PrimaryButton,
-			CustomID: "WelcomeSettings",
-			Emoji: &discordgo.ComponentEmoji{
-				Name: "👋",
-			},
-		},
-	}
+	buttons := menuButtons("MainMenuSettings")
 
 	message := &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
-			Content: "**⚙️ Server Settings**\n\n" +
-				"Welcome to the settings panel! Here you can manage various aspects of your server.\n\n" +
-				"🔹 *Click the button below to see all roles configured for this server!*\n\n" +
-				"**🔧 Admin Commands:**\n" +
-				"- `/add-role-reactions <role> <emoji>` – Add a role reaction.\n" +
-				"- `/remove-role-reactions <role>` – Remove a role reaction.\n" +
-				"- `/set-roles-message-id <message_id>` – Set the message ID for role reactions.\n" +
-				"- `/set-welcome-channel <channel_id>` – Set the channel ID for new users.\n\n" +
-				"*(Only administrators can use these commands.)*",
+			Content: "** Friren – Server Control Panel**\n\n" +
+			"Hello, I'm Friren! I'll help you set up some useful features for your server ✨\n\n" +
+			"🔹 **Reaction/Roles** – configure adding or removing roles when users react to a specific message.\n" +
+			"🔹 **Welcome** – choose a channel and customize the message to greet new members.\n\n" +
+			"Use the buttons below to open the settings 👇",
 			Components: []discordgo.MessageComponent{
 				discordgo.ActionsRow{
 					Components: buttons,
@@ -44,42 +27,25 @@ func menu(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 		},
 	}
 
-	s.InteractionRespond(i.Interaction, message)
+	err := s.InteractionRespond(i.Interaction, message)
 	
+	if err != nil {
+		slog.Error("Failed to respond to interaction", "err", err)
+		return err
+	}
 	
 	return nil
 }
 
 
 func backToMenu(s *discordgo.Session, i *discordgo.InteractionCreate) error {
-	buttons := []discordgo.MessageComponent{
-		discordgo.Button{
-			Label:    "Roles/Reactions.",
-			Style:    discordgo.PrimaryButton,
-			CustomID: "RolesReactionsSettings",
-			Emoji: &discordgo.ComponentEmoji{
-				Name: "⚙️",
-			},
-		},
-		discordgo.Button{
-			Label:    "Welcome.",
-			Style:    discordgo.PrimaryButton,
-			CustomID: "WelcomeSettings",
-			Emoji: &discordgo.ComponentEmoji{
-				Name: "👋",
-			},
-		},
-	}
+	buttons := menuButtons("MainMenuSettings")
 
-	content := "**⚙️ Server Settings**\n\n" +
-    "Welcome to the settings panel! Here you can manage various aspects of your server.\n\n" +
-    "🔹 *Click the button below to see all roles configured for this server!*\n\n" +
-    "**🔧 Admin Commands:**\n" +
-    "- `/add-role-reactions <role> <emoji>` – Add a role reaction.\n" +
-    "- `/remove-role-reactions <role>` – Remove a role reaction.\n" +
-    "- `/set-roles-message-id <message_id>` – Set the message ID for role reactions.\n" +
-    "- `/set-welcome-channel <channel_id>` – Set the channel ID for new users.\n\n" +
-    "*(Only administrators can use these commands.)*"
+	content := "** Friren – Server Control Panel**\n\n" +
+		"Hello, I'm Friren! I'll help you set up some useful features for your server ✨\n\n" +
+		"🔹 **Reaction/Roles** – configure adding or removing roles when users react to a specific message.\n" +
+		"🔹 **Welcome** – choose a channel and customize the message to greet new members.\n\n" +
+		"Use the buttons below to open the settings 👇"
 
 	message := &discordgo.WebhookEdit{
 		Content: &content,
@@ -92,4 +58,45 @@ func backToMenu(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 
 	_, err := s.InteractionResponseEdit(i.Interaction, message)
 	return err
+}
+
+func menuButtons(disabledIDs ...string) []discordgo.MessageComponent {
+	isDisabled := func(id string) bool {
+		for _, d := range disabledIDs {
+			if d == id {
+				return true
+			}
+		}
+		return false
+	}
+	buttons := []discordgo.MessageComponent{
+		discordgo.Button{
+			Label:    "Roles/Reactions.",
+			Style:    discordgo.PrimaryButton,
+			CustomID: "RolesReactionsSettings",
+			Disabled: isDisabled("RolesReactionsSettings"),
+			Emoji: &discordgo.ComponentEmoji{
+				Name: "⚙️",
+			},
+		},
+		discordgo.Button{
+			Label:    "Main Menu",
+			Style:    discordgo.PrimaryButton,
+			CustomID: "MainMenuSettings",
+			Disabled: isDisabled("MainMenuSettings"),
+			Emoji: &discordgo.ComponentEmoji{
+				Name: "⚙️",
+			},
+		},
+		discordgo.Button{
+			Label:    "Welcome.",
+			Style:    discordgo.PrimaryButton,
+			CustomID: "WelcomeSettings",
+			Disabled: isDisabled("WelcomeSettings"),
+			Emoji: &discordgo.ComponentEmoji{
+				Name: "👋",
+			},
+		},
+	}
+	return buttons
 }
