@@ -4,9 +4,9 @@ import (
 	"bot/internal/discord"
 	"bot/internal/interfaces"
 	"context"
-	"fmt"
 	"log/slog"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
@@ -75,11 +75,17 @@ func (eh *EventHandlers) OnMessageReactionRemove(s *discordgo.Session, r *discor
 func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMemberAdd) {
 	settings, _ := eh.service.GetGuildSettings(u.GuildID)
 
+	if len(settings.Welcome.Messages) == 0 {
+		return
+	}
+
 	randSource := rand.NewSource(time.Now().UnixNano())
 	randGen := rand.New(randSource)
-
 	randomIndex := randGen.Intn(len(settings.Welcome.Messages))
-	formattedMessage := fmt.Sprintf(settings.Welcome.Messages[randomIndex], u.Member.Mention())
+
+	message := settings.Welcome.Messages[randomIndex]
+
+	formattedMessage := strings.ReplaceAll(message, "{username}", u.User.Mention())
 
 	discord.SendChannelMessage(settings.Welcome.ChannelID, formattedMessage)
 }

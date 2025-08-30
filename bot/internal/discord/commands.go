@@ -83,41 +83,41 @@ var CommandsList = []*discordgo.ApplicationCommand{
 			},
 		},
 	},
-	// {
-	// 	Name:        "set-welcome-channel",
-	// 	Description: "Set the welcome channel. Only for admins",
-	// 	Options: []*discordgo.ApplicationCommandOption{
-	// 		{
-	// 			Type:        discordgo.ApplicationCommandOptionChannel,
-	// 			Name:        "channel",
-	// 			Description: "The channel to send welcome messages",
-	// 			Required:    true,
-	// 		},
-	// 	},
-	// },
-	// {
-	// 	Name:        "add-welcome-msg",
-	// 	Description: "Add a welcome message. Only for admins",
-	// 	Options: []*discordgo.ApplicationCommandOption{
-	// 		{
-	// 			Type:        discordgo.ApplicationCommandOptionChannel,
-	// 			Name:        "msg",
-	// 			Description: "The welcome message to add",
-	// 			Required:    true,
-	// 		},
-	// 	},
-	// },
-	// {
-	// 	Name:        "del-welcome-msg",
-	// 	Description: "Remove a welcome message. Only for admins",
-	// 	Options: []*discordgo.ApplicationCommandOption{
-	// 		{
-	// 			Type:        discordgo.ApplicationCommandOptionChannel,
-	// 			Name:        "msg",
-	// 			Description: "The welcome message to remove",
-	// 			Required:    true,
-	// 		},
-	// 	},
-	// },
+	{
+		Name:        "welcome-chnl",
+		Description: "Set the welcome channel",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionChannel,
+				Name:        "channel",
+				Description: "The channel to send welcome messages",
+				Required:    true,
+			},
+		},
+	},
+	{
+		Name:        "welcomemsg-add",
+		Description: "Add a welcome message. Variables: {username}",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionString,
+				Name:        "msg",
+				Description: "The welcome message to add",
+				Required:    true,
+			},
+		},
+	},
+	{
+		Name:        "welcomemsg-remove",
+		Description: "Remove a welcome message",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionString,
+				Name:        "msg",
+				Description: "The welcome message to remove",
+				Required:    true,
+			},
+		},
+	},
 	
 }

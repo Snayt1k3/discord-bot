@@ -42,6 +42,14 @@ func (g *GuildPreferencesHandlers) setWelcomeChannel(s *discordgo.Session, i *di
 	return setWelcomeChannel(g.guildService, s, i)
 }
 
+func (g *GuildPreferencesHandlers) addWelcomeMessage(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return AddWelcomeMessage(g.guildService, s, i)
+}
+
+func (g *GuildPreferencesHandlers) removeWelcomeMessage(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return DeleteWelcomeMessage(g.guildService, s, i)
+}
+
 func (gp *GuildPreferencesHandlers) AddSettingsHandlers(handlers map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error) {
 	
 	// Настройка Roles/Reactions
@@ -50,8 +58,9 @@ func (gp *GuildPreferencesHandlers) AddSettingsHandlers(handlers map[string]func
 	handlers["rr-message"] = gp.setMessageId
 
 	// Настройка Welcome
-	handlers["set-welcome-channel"] = gp.setWelcomeChannel
-	handlers["add-welcome-msg"] = gp.setWelcomeChannel
+	handlers["welcome-chnl"] = gp.setWelcomeChannel
+	handlers["welcomemsg-add"] = gp.addWelcomeMessage
+	handlers["welcomemsg-remove"] = gp.removeWelcomeMessage
 
 	// Меню, Кнопки связанные с меню
 	handlers["settings"] = gp.menu

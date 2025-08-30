@@ -16,7 +16,7 @@ func SettingsRoutes(r *gin.Engine, handler *handlers.SettingsHandlers) {
 	settings.DELETE("/guild/:guild_id/roles/role", handler.DeleteRole)
 
 	settings.PUT("/guild/:guild_id/welcome/channel", handler.SetWelcomeChannel)
-	settings.POST("/guild/:guild_id/welcome/message", handler.SetWelcomeChannel)
-	settings.DELETE("/guild/:guild_id/welcome/message", handler.SetWelcomeChannel)
+	settings.POST("/guild/:guild_id/welcome/message", handler.AddWelcomeMessage)
+	settings.DELETE("/guild/:guild_id/welcome/message", handler.DeleteWelcomeMessage)
 
 }

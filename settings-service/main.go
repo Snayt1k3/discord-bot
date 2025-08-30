@@ -6,6 +6,8 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
+	"os"
+	"log/slog"
 	"net"
 	"settings-service/config"
 	"settings-service/internal/adapters"
@@ -15,6 +17,7 @@ import (
 )
 
 func main() {
+	initLogging()
 	cfg, err := config.LoadConfig()
 
 	if err != nil {
@@ -47,4 +50,15 @@ func main() {
 	if err := grpcServer.Serve(listener); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}
+}
+
+func initLogging() {
+	opts := &slog.HandlerOptions{
+		Level:     slog.LevelInfo,
+		AddSource: true,
+	}
+	// Вывод логов в консоль
+	logger := slog.New(slog.NewTextHandler(os.Stdout, opts))
+	slog.SetDefault(logger)
+	slog.Info("Logger initialized")
 }
