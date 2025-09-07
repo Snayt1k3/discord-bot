@@ -11,6 +11,12 @@ import (
 )
 
 func showAllRoles(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
+
 	settings, err := gk.GetGuildSettings(i.GuildID)
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
@@ -51,6 +57,12 @@ func showAllRoles(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *
 }
 
 func addRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
+
 	emojiRaw := i.ApplicationCommandData().Options[1].StringValue()
 	var emojiKey string
 
@@ -84,6 +96,12 @@ func addRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *disco
 }
 
 func removeRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
+
 	roleID := i.ApplicationCommandData().Options[0].RoleValue(s, i.GuildID).ID
 
 	_, err := gk.DeleteRole(roleID, "", i.GuildID)
@@ -106,6 +124,12 @@ func removeRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *di
 }
 
 func setRolesMessage(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
+
 	messageId := i.ApplicationCommandData().Options[0].StringValue()
 
 	_, err := gk.SetRoleMessageID(messageId, i.GuildID)

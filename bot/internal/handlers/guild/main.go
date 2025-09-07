@@ -72,5 +72,4 @@ func (gp *GuildPreferencesHandlers) AddSettingsHandlers(handlers map[string]func
 	handlers["MainMenuSettings"] = gp.backToMenu
 	handlers["RolesReactionsSettings"] = gp.showAllRoles
 	handlers["WelcomeSettings"] = gp.showWelcomeSettings
-	// todo добавить проверку на админа. И поменять сообщение: Улучшить оформление
 }

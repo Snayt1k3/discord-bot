@@ -37,7 +37,7 @@ func SendChannelFile(channelID string, filepath string, filename string) {
 
 func IsAdmin(session *discordgo.Session, guildID, userID string) (bool) {
 	member, err := session.GuildMember(guildID, userID)
-	
+
 	if err != nil {
 		return false
 	}
@@ -67,6 +67,16 @@ func SendErrorMessage(session *discordgo.Session, i *discordgo.InteractionCreate
 		},
 	})
 	return nil
+}
+
+func SendNoPermissionMessage(session *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: "⛔ You do not have permission to use this command.",
+			Flags:   discordgo.MessageFlagsEphemeral,
+		},
+	})
 }
 
 func EditMessage(session *discordgo.Session, message *discordgo.MessageEdit) {

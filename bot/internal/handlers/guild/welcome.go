@@ -10,6 +10,12 @@ import (
 )
 
 func showWelcomeSettings(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
+
 	settings, err := gk.GetGuildSettings(i.GuildID)
 	if err != nil {
 		slog.Error("Error while fetching welcome settings", "err", err)
@@ -66,6 +72,12 @@ func showWelcomeSettings(gk interfaces.GuildServiceInterface, s *discordgo.Sessi
 
 
 func setWelcomeChannel(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
+
 	channelId := i.ApplicationCommandData().Options[0].ChannelValue(nil).ID
 
 	_, err := gk.SetWelcomeChannel(i.GuildID, channelId)
@@ -88,6 +100,12 @@ func setWelcomeChannel(gk interfaces.GuildServiceInterface, s *discordgo.Session
 }
 
 func AddWelcomeMessage(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
+
 	msg := i.ApplicationCommandData().Options[0].StringValue()
 
 	_, err := gk.AddWelcomeMessage(i.GuildID, msg)
@@ -109,6 +127,12 @@ func AddWelcomeMessage(gk interfaces.GuildServiceInterface, s *discordgo.Session
 }
 
 func DeleteWelcomeMessage(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
+
 	msg := i.ApplicationCommandData().Options[0].StringValue()
 
 	_, err := gk.DeleteWelcomeMessage(i.GuildID, msg)

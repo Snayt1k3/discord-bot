@@ -14,14 +14,6 @@ func HelpHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 		},
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name: "🎼 Commands to Guide the Melody:",
-				Value: "`/play <song_name/link>` – Let the music flow, one song at a time.\n" +
-					"`/pause` – Even melodies need a moment of rest.\n" +
-					"`/resume` – Continue where you left off, like an old journey resumed.\n" +
-					"`/stop` – Bring the music to a quiet end, clearing all that remains.\n" +
-					"`/skip` – Move past this tune, towards the next story in sound.",
-			},
-			{
 				Name:  "📖 Knowledge in the Wind:",
 				Value: "`/help` – If you have forgotten, let this guide you once more.",
 			},
