@@ -1,18 +1,17 @@
 package handlers
 
 import (
-	"bot/internal/discord"
 	"bot/internal/interfaces"
-	"context"
 	"log/slog"
 	"math/rand"
 	"strings"
 	"time"
-
+	"bot/internal/utils"
 	"github.com/bwmarrin/discordgo"
-	"github.com/disgoorg/snowflake/v2"
 )
 
+
+// Хендлеры событий Discord отличных от Interaction событий
 type EventHandlers struct {
 	service interfaces.GuildServiceInterface
 	cmds        []*discordgo.ApplicationCommand
@@ -87,7 +86,7 @@ func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMe
 
 	formattedMessage := strings.ReplaceAll(message, "{username}", u.User.Mention())
 
-	discord.SendChannelMessage(settings.Welcome.ChannelID, formattedMessage)
+	utils.SendChannelMessage(settings.Welcome.ChannelID, formattedMessage)
 }
 
 func (eh *EventHandlers) OnGuildCreate(s *discordgo.Session, r *discordgo.GuildCreate) {
@@ -97,27 +96,4 @@ func (eh *EventHandlers) OnGuildCreate(s *discordgo.Session, r *discordgo.GuildC
 		slog.Error("Error while creating guild settings", "err", err)
 		return
 	}
-}
-
-func (eh *EventHandlers) OnVoiceStateUpdate(session *discordgo.Session, event *discordgo.VoiceStateUpdate) {
-	if event.UserID != session.State.User.ID {
-		return
-	}
-
-	var channelID *snowflake.ID
-
-	if event.ChannelID != "" {
-		id := snowflake.MustParse(event.ChannelID)
-		channelID = &id
-	}
-
-	discord.Bot.Lavalink.OnVoiceStateUpdate(context.TODO(), snowflake.MustParse(event.GuildID), channelID, event.SessionID)
-
-	if event.ChannelID == "" {
-		discord.Bot.Queues.Delete(event.GuildID)
-	}
-}
-
-func (eh *EventHandlers) OnVoiceServerUpdate(session *discordgo.Session, event *discordgo.VoiceServerUpdate) {
-	discord.Bot.Lavalink.OnVoiceServerUpdate(context.TODO(), snowflake.MustParse(event.GuildID), event.Token, event.Endpoint)
 }

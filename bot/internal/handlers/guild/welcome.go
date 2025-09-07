@@ -1,7 +1,7 @@
 package guild
 
 import (
-	"bot/internal/discord"
+	"bot/internal/utils"
 	"bot/internal/interfaces"
 	"log/slog"
 	"strings"
@@ -13,7 +13,7 @@ func showWelcomeSettings(gk interfaces.GuildServiceInterface, s *discordgo.Sessi
 	settings, err := gk.GetGuildSettings(i.GuildID)
 	if err != nil {
 		slog.Error("Error while fetching welcome settings", "err", err)
-		discord.SendErrorMessage(s, i)
+		utils.SendErrorMessage(s, i)
 		return err
 	}
 
@@ -72,7 +72,7 @@ func setWelcomeChannel(gk interfaces.GuildServiceInterface, s *discordgo.Session
 
 	if err != nil {
 		slog.Error("Error while updating welcome settings", "err", err)
-		discord.SendErrorMessage(s, i)
+		utils.SendErrorMessage(s, i)
 		return err
 	}
 
@@ -94,7 +94,7 @@ func AddWelcomeMessage(gk interfaces.GuildServiceInterface, s *discordgo.Session
 
 	if err != nil {
 		slog.Error("Error while updating welcome settings", "err", err)
-		discord.SendErrorMessage(s, i)
+		utils.SendErrorMessage(s, i)
 		return err
 	}
 
@@ -115,7 +115,7 @@ func DeleteWelcomeMessage(gk interfaces.GuildServiceInterface, s *discordgo.Sess
 
 	if err != nil {
 		slog.Error("Error while updating welcome settings", "err", err)
-		discord.SendErrorMessage(s, i)
+		utils.SendErrorMessage(s, i)
 		return err
 	}
 

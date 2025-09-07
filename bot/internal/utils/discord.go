@@ -1,32 +1,20 @@
-package discord
+package utils
 
 import (
-	"fmt"
 	"log/slog"
 	"os"
-
 	"github.com/bwmarrin/discordgo"
+	"bot/internal/discord"
 )
 
 func SearchGuildByChannelID(textChannelID string) (guildID string) {
-	channel, _ := Bot.Session.Channel(textChannelID)
+	channel, _ := discord.Bot.Session.Channel(textChannelID)
 	guildID = channel.GuildID
 	return guildID
 }
 
-func SearchVoiceChannelByUserID(userID string) (voiceChannelID string) {
-	for _, g := range Bot.Session.State.Guilds {
-		for _, v := range g.VoiceStates {
-			if v.UserID == userID {
-				return v.ChannelID
-			}
-		}
-	}
-	return ""
-}
-
 func SendChannelMessage(channelID string, message string) {
-	_, err := Bot.Session.ChannelMessageSend(channelID, message)
+	_, err := discord.Bot.Session.ChannelMessageSend(channelID, message)
 	if err != nil {
 		slog.Error("failed to send message to channel", "channelId", channelID, "message", message, "error", err)
 	}
@@ -34,63 +22,40 @@ func SendChannelMessage(channelID string, message string) {
 
 func SendChannelFile(channelID string, filepath string, filename string) {
 	reader, err := os.Open(filepath)
+
 	if err != nil {
 		slog.Warn("failed to open file", "filepath", filepath, "error", err)
 		return
 	}
 
-	_, err = Bot.Session.ChannelFileSend(channelID, filename, reader)
+	_, err = discord.Bot.Session.ChannelFileSend(channelID, filename, reader)
+
 	if err != nil {
 		slog.Warn("failed to send file to channel", "channelId", channelID, "filepath", filepath, "error", err)
 	}
 }
 
-func JoinVoiceChannel(guildID string, voiceChannelID string, mute bool, deafen bool) (*discordgo.VoiceConnection, error) {
-	voiceConnection, err := Bot.Session.ChannelVoiceJoin(guildID, voiceChannelID, mute, deafen)
-	if err != nil {
-		slog.Warn("failed to join voice channel", "error", err)
-	}
-
-	return voiceConnection, err
-}
-
-func SendMusicEmbedMessage(title string, url string, duration string, thumbnail string) {
-	Bot.Session.ChannelMessageSendEmbed("config.MusicChannelId", &discordgo.MessageEmbed{ // todo: Поправить канал
-		Title:       "Now is playing 🎶",
-		Description: fmt.Sprintf("[%s](%s)", title, url),
-		Thumbnail: &discordgo.MessageEmbedThumbnail{
-			URL: thumbnail,
-		},
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:   "Duration",
-				Value:  duration,
-				Inline: true,
-			},
-		},
-	})
-}
-
-func IsAdmin(session *discordgo.Session, guildID, userID string) (bool, error) {
+func IsAdmin(session *discordgo.Session, guildID, userID string) (bool) {
 	member, err := session.GuildMember(guildID, userID)
+	
 	if err != nil {
-		return false, err
+		return false
 	}
 
 	guild, err := session.State.Guild(guildID)
 	if err != nil {
-		return false, err
+		return false
 	}
 
 	for _, roleID := range member.Roles {
 		for _, role := range guild.Roles {
 			if role.ID == roleID && (role.Permissions&discordgo.PermissionAdministrator) != 0 {
-				return true, nil
+				return true
 			}
 		}
 	}
 
-	return false, nil
+	return false
 }
 
 func SendErrorMessage(session *discordgo.Session, i *discordgo.InteractionCreate) error {

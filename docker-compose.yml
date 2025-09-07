@@ -1,21 +1,21 @@
 services:
-  lavalink:
-    image: ghcr.io/lavalink-devs/lavalink:4
-    container_name: lavalink
-    restart: unless-stopped
-    environment:
-      - _JAVA_OPTIONS=-Xmx4G
-      - SERVER_PORT=2333
-      - LAVALINK_SERVER_PASSWORD=$LAVALINK_PASS
-    volumes:
-      - ./docker/configs/application.yml:/opt/Lavalink/application.yml
-      - ./docker/plugins/:/opt/Lavalink/plugins/
-    networks:
-      - bot
-    expose:
-      - 2333
-    ports:
-      - "2333:2333"
+  # lavalink:
+  #   image: ghcr.io/lavalink-devs/lavalink:4
+  #   container_name: lavalink
+  #   restart: unless-stopped
+  #   environment:
+  #     - _JAVA_OPTIONS=-Xmx4G
+  #     - SERVER_PORT=2333
+  #     - LAVALINK_SERVER_PASSWORD=$LAVALINK_PASS
+  #   volumes:
+  #     - ./docker/configs/application.yml:/opt/Lavalink/application.yml
+  #     - ./docker/plugins/:/opt/Lavalink/plugins/
+  #   networks:
+  #     - bot
+  #   expose:
+  #     - 2333
+  #   ports:
+  #     - "2333:2333"
 
   frieren:
     build: 

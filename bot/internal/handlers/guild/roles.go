@@ -1,8 +1,8 @@
 package guild
 
 import (
-	"bot/internal/discord"
 	"bot/internal/interfaces"
+	"bot/internal/utils"
 	"fmt"
 	"log/slog"
 	"strconv"
@@ -14,7 +14,7 @@ func showAllRoles(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *
 	settings, err := gk.GetGuildSettings(i.GuildID)
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
-		discord.SendErrorMessage(s, i)
+		utils.SendErrorMessage(s, i)
 		return err
 	}
 
@@ -69,7 +69,7 @@ func addRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *disco
 
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)
-		discord.SendErrorMessage(s, i)
+		utils.SendErrorMessage(s, i)
 		return err
 	}
 
@@ -90,7 +90,7 @@ func removeRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *di
 
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)
-		discord.SendErrorMessage(s, i)
+		utils.SendErrorMessage(s, i)
 		return err
 	}
 
@@ -112,7 +112,7 @@ func setRolesMessage(gk interfaces.GuildServiceInterface, s *discordgo.Session, 
 
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)
-		discord.SendErrorMessage(s, i)
+		utils.SendErrorMessage(s, i)
 		return err
 	}
 
