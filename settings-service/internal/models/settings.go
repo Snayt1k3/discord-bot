@@ -6,10 +6,12 @@ import (
 )
 
 type Settings struct {
-	ID        uint            `gorm:"primaryKey"`
-	GuildID   string          `gorm:"unique;not null"`
-	Role      RolesSettings   `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
-	Welcome   WelcomeSettings `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
+	ID        uint             `gorm:"primaryKey"`
+	GuildID   string           `gorm:"unique;not null"`
+	Role      RolesSettings    `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
+	Welcome   WelcomeSettings  `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
+	AutoMode  AutoModeSettings `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
+	Log       LogSettings      `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
@@ -37,6 +39,34 @@ type WelcomeSettings struct {
 type Message struct {
 	ID      uint   `gorm:"primaryKey"`
 	Message string `json:"message"`
+}
+
+type AutoModeSettings struct {
+	ID          uint             `gorm:"primaryKey"`
+	GuildID     string           `gorm:"not null;index"`
+	CapsLock    []ChannelSetting `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE;"`
+	AntiLink    []ChannelSetting `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE;"`
+	BannedWords []BannedWord     `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE;"`
+	Enabled     bool             `json:"enabled"`
+}
+
+type BannedWord struct {
+	ID      uint   `gorm:"primaryKey"`
+	GuildID string `gorm:"not null;index"`
+	Word    string `json:"word"`
+}
+
+type ChannelSetting struct {
+	ID        uint   `gorm:"primaryKey"`
+	GuildID   string `gorm:"not null;index"`
+	ChannelID string `json:"channel_id"`
+}
+
+type LogSettings struct {
+	ID        uint   `gorm:"primaryKey"`
+	GuildID   string `gorm:"not null;index"`
+	ChannelID string `json:"channel_id"`
+	Enabled   bool
 }
 
 func Migrate(db *gorm.DB) {
