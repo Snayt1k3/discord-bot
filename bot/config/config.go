@@ -6,11 +6,11 @@ import (
 )
 
 type configuration struct {
-	ApplicationId    string
-	GuildId          string
-	BotStatus        string
-	DiscordToken     string
-	ApiGatewayAddr   string
+	ApplicationId  string
+	GuildId        string
+	BotStatus      string
+	DiscordToken   string
+	ApiGatewayAddr string
 }
 
 var config *configuration
@@ -19,11 +19,11 @@ func Load() {
 	ApiGatewayAddr := os.Getenv("API_GATEWAY_ADDR")
 	ApiGatewayPort := os.Getenv("API_GATEWAY_PORT")
 	config = &configuration{
-		ApplicationId:    os.Getenv("APPLICATION_ID"),
-		DiscordToken:     os.Getenv("DISCORD_TOKEN"),
-		GuildId:          os.Getenv("GUILD_ID"),
-		BotStatus:        os.Getenv("BOT_STATUS"),
-		ApiGatewayAddr:   fmt.Sprintf("%v:%v", ApiGatewayAddr, ApiGatewayPort),
+		ApplicationId:  os.Getenv("APPLICATION_ID"),
+		DiscordToken:   os.Getenv("DISCORD_TOKEN"),
+		GuildId:        os.Getenv("GUILD_ID"),
+		BotStatus:      os.Getenv("BOT_STATUS"),
+		ApiGatewayAddr: fmt.Sprintf("%v:%v", ApiGatewayAddr, ApiGatewayPort),
 	}
 }
 

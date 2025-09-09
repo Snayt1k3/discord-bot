@@ -21,7 +21,6 @@ func main() {
 	// init deps
 	guildKeeper := adapters.NewServiceSettingsClient()
 
-
 	// init handlers/commands
 	dispatcher := handlers.NewCommandsDispatcher(guildKeeper)
 	eventHandlers := handlers.NewEventHandlers(guildKeeper, discord.CommandsList)
@@ -34,7 +33,6 @@ func main() {
 	}
 
 	initBot(discord.Bot.Session, discord.CommandsList)
-
 
 	defer discord.Bot.Session.Close()
 
@@ -78,7 +76,6 @@ func initBot(s *discordgo.Session, cmds []*discordgo.ApplicationCommand) {
 		}
 	}
 }
-
 
 func initLogging() {
 	opts := &slog.HandlerOptions{

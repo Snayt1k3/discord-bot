@@ -28,7 +28,6 @@ func main() {
 		panic("Failed to connect to settings service: " + err.Error())
 	}
 
-
 	defer settingsConn.Close()
 
 	settingsProtoClient := pb.NewGuildServiceClient(settingsConn)

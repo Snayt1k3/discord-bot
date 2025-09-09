@@ -6,8 +6,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-
-
 func menu(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	buttons := menuButtons("MainMenuSettings")
 
@@ -15,10 +13,10 @@ func menu(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "** Friren – Server Control Panel**\n\n" +
-			"Hello, I'm Friren! I'll help you set up some useful features for your server ✨\n\n" +
-			"🔹 **Reaction/Roles** – configure adding or removing roles when users react to a specific message.\n" +
-			"🔹 **Welcome** – choose a channel and customize the message to greet new members.\n\n" +
-			"Use the buttons below to open the settings 👇",
+				"Hello, I'm Friren! I'll help you set up some useful features for your server ✨\n\n" +
+				"🔹 **Reaction/Roles** – configure adding or removing roles when users react to a specific message.\n" +
+				"🔹 **Welcome** – choose a channel and customize the message to greet new members.\n\n" +
+				"Use the buttons below to open the settings 👇",
 			Components: []discordgo.MessageComponent{
 				discordgo.ActionsRow{
 					Components: buttons,
@@ -28,15 +26,14 @@ func menu(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	}
 
 	err := s.InteractionRespond(i.Interaction, message)
-	
+
 	if err != nil {
 		slog.Error("Failed to respond to interaction", "err", err)
 		return err
 	}
-	
+
 	return nil
 }
-
 
 func backToMenu(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	buttons := menuButtons("MainMenuSettings")

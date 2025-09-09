@@ -12,7 +12,7 @@ import (
 )
 
 type GuildService struct {
-	client interfaces.HttpClient
+	client      interfaces.HttpClient
 	gatewayAddr string
 }
 
@@ -69,13 +69,13 @@ func (s *GuildService) CreateSettings(guild_id string) error {
 }
 
 func (s *GuildService) AddRole(roleId, emoji, guildID string) (dtoGuild.Role, error) {
-	
+
 	bytes, _ := json.Marshal(map[string]string{
-		"role_id": roleId,
-		"emoji":   emoji,
+		"role_id":  roleId,
+		"emoji":    emoji,
 		"guild_id": guildID,
 	})
-	
+
 	resp, err := s.client.Post(
 		context.Background(),
 		fmt.Sprintf("%v/api/v1/settings/guild/%v/roles/role", s.gatewayAddr, guildID),
@@ -109,13 +109,13 @@ func (s *GuildService) AddRole(roleId, emoji, guildID string) (dtoGuild.Role, er
 }
 
 func (s *GuildService) DeleteRole(roleId, emoji, guildID string) (dtoGuild.Role, error) {
-	
+
 	bytes, _ := json.Marshal(map[string]string{
-		"role_id": roleId,
-		"emoji":   emoji,
+		"role_id":  roleId,
+		"emoji":    emoji,
 		"guild_id": guildID,
 	})
-	
+
 	resp, err := s.client.Delete(
 		context.Background(),
 		fmt.Sprintf("%v/api/v1/settings/guild/%v/roles/role", s.gatewayAddr, guildID),

@@ -4,10 +4,10 @@ import (
 	"bot/internal/interfaces"
 	"bot/internal/utils"
 	"fmt"
+	"github.com/bwmarrin/discordgo"
 	"log/slog"
 	"strconv"
 	"strings"
-	"github.com/bwmarrin/discordgo"
 )
 
 func showAllRoles(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {

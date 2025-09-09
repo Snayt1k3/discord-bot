@@ -10,16 +10,16 @@ import (
 
 type CommandsDispatcher struct {
 	guildService interfaces.GuildServiceInterface
-	handlers    map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error
+	handlers     map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error
 
-	guildHandlers   guild.GuildPreferencesHandlers
+	guildHandlers guild.GuildPreferencesHandlers
 }
 
 func NewCommandsDispatcher(guildService interfaces.GuildServiceInterface) *CommandsDispatcher {
 	return &CommandsDispatcher{
-		guildService:     guildService,
-		handlers:        map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error{},
-		guildHandlers:   *guild.NewSettingsHandlers(guildService),
+		guildService:  guildService,
+		handlers:      map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error{},
+		guildHandlers: *guild.NewSettingsHandlers(guildService),
 	}
 }
 

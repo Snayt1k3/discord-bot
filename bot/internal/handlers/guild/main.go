@@ -34,7 +34,7 @@ func (g *GuildPreferencesHandlers) setMessageId(s *discordgo.Session, i *discord
 	return setRolesMessage(g.guildService, s, i)
 }
 
-	func (g *GuildPreferencesHandlers) showAllRoles(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func (g *GuildPreferencesHandlers) showAllRoles(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	return showAllRoles(g.guildService, s, i)
 }
 
@@ -50,13 +50,12 @@ func (g *GuildPreferencesHandlers) removeWelcomeMessage(s *discordgo.Session, i 
 	return DeleteWelcomeMessage(g.guildService, s, i)
 }
 
-
 func (g *GuildPreferencesHandlers) showWelcomeSettings(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	return showWelcomeSettings(g.guildService, s, i)
 }
 
 func (gp *GuildPreferencesHandlers) AddSettingsHandlers(handlers map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error) {
-	
+
 	// Настройка Roles/Reactions
 	handlers["rr-add"] = gp.addRole
 	handlers["rr-remove"] = gp.removeRole

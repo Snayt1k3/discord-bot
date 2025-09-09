@@ -37,14 +37,12 @@ func (s *SettingsServer) GetSettings(ctx context.Context, req *pb.GetSettingsByG
 		welcomeMessages = append(welcomeMessages, msg.Message)
 	}
 
-
-
 	response := &pb.GetSettingsByGuildResponse{
 		Settings: &pb.GuildSettings{
-			GuildId:       guildSettings.GuildID,
+			GuildId: guildSettings.GuildID,
 			Roles: &pb.RolesSettings{
 				MessageId: guildSettings.Role.MessageID,
-				Matching: matching,
+				Matching:  matching,
 			},
 
 			Welcome: &pb.WelcomeSettings{

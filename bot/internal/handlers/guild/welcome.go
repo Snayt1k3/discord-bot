@@ -1,8 +1,8 @@
 package guild
 
 import (
-	"bot/internal/utils"
 	"bot/internal/interfaces"
+	"bot/internal/utils"
 	"log/slog"
 	"strings"
 
@@ -68,8 +68,6 @@ func showWelcomeSettings(gk interfaces.GuildServiceInterface, s *discordgo.Sessi
 
 	return nil
 }
-
-
 
 func setWelcomeChannel(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 

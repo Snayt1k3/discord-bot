@@ -7,7 +7,7 @@ import (
 )
 
 type DiscordBot struct {
-	Session  *discordgo.Session
+	Session *discordgo.Session
 }
 
 var Bot *DiscordBot
@@ -29,7 +29,6 @@ func initBot() {
 		slog.Error("failed to create discord session", "error", err)
 	}
 }
-
 
 func initConnection() {
 	if err := Bot.Session.Open(); err != nil {

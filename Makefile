@@ -49,4 +49,4 @@ grpc-init:
 	@echo "gRPC server initialized. Files distributed to services."
 
 lint: 
-	gofmt -w bot/ settings-service/ api-gateway/ gachas-service/
+	gofmt -w bot/ settings-service/ api-gateway/

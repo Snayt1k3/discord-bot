@@ -87,5 +87,4 @@ var CommandsList = []*discordgo.ApplicationCommand{
 			},
 		},
 	},
-	
 }

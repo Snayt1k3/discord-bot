@@ -2,19 +2,18 @@ package handlers
 
 import (
 	"bot/internal/interfaces"
+	"bot/internal/utils"
+	"github.com/bwmarrin/discordgo"
 	"log/slog"
 	"math/rand"
 	"strings"
 	"time"
-	"bot/internal/utils"
-	"github.com/bwmarrin/discordgo"
 )
-
 
 // Хендлеры событий Discord отличных от Interaction событий
 type EventHandlers struct {
 	service interfaces.GuildServiceInterface
-	cmds        []*discordgo.ApplicationCommand
+	cmds    []*discordgo.ApplicationCommand
 }
 
 func NewEventHandlers(service interfaces.GuildServiceInterface, cmds []*discordgo.ApplicationCommand) *EventHandlers {
@@ -91,7 +90,7 @@ func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMe
 
 func (eh *EventHandlers) OnGuildCreate(s *discordgo.Session, r *discordgo.GuildCreate) {
 	err := eh.service.CreateSettings(r.ID)
-	
+
 	if err != nil {
 		slog.Error("Error while creating guild settings", "err", err)
 		return

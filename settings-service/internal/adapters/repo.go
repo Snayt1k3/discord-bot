@@ -94,17 +94,17 @@ func (r *GuildRepositoryImpl) SetWelcomeChannel(guildId, channelId string) error
 }
 
 func (r *GuildRepositoryImpl) AddWelcomeMessage(guildId, message string) error {
-    var welcomeSetting models.WelcomeSettings
-    if err := r.db.Where("guild_id = ?", guildId).First(&welcomeSetting).Error; err != nil {
-        return err
-    }
+	var welcomeSetting models.WelcomeSettings
+	if err := r.db.Where("guild_id = ?", guildId).First(&welcomeSetting).Error; err != nil {
+		return err
+	}
 
-    msg := models.Message{Message: message}
-    if err := r.db.FirstOrCreate(&msg, models.Message{Message: message}).Error; err != nil {
-        return err
-    }
+	msg := models.Message{Message: message}
+	if err := r.db.FirstOrCreate(&msg, models.Message{Message: message}).Error; err != nil {
+		return err
+	}
 
-    return r.db.Model(&welcomeSetting).Association("Messages").Append(&msg)
+	return r.db.Model(&welcomeSetting).Association("Messages").Append(&msg)
 }
 
 func (r *GuildRepositoryImpl) DeleteWelcomeMessage(guildId, message string) error {

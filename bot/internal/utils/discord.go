@@ -1,10 +1,10 @@
 package utils
 
 import (
+	"bot/internal/discord"
+	"github.com/bwmarrin/discordgo"
 	"log/slog"
 	"os"
-	"github.com/bwmarrin/discordgo"
-	"bot/internal/discord"
 )
 
 func SearchGuildByChannelID(textChannelID string) (guildID string) {
@@ -35,7 +35,7 @@ func SendChannelFile(channelID string, filepath string, filename string) {
 	}
 }
 
-func IsAdmin(session *discordgo.Session, guildID, userID string) (bool) {
+func IsAdmin(session *discordgo.Session, guildID, userID string) bool {
 	member, err := session.GuildMember(guildID, userID)
 
 	if err != nil {
