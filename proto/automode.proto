@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package settings;
+
+option go_package = "proto/";
+import "google/protobuf/empty.proto";
+
+service AutoModService {
+  rpc ToggleAutoMod(ToggleAutoModRequest) returns (ToggleAutoModResponse);
+  rpc AddBannedWord(AddBannedWordRequest) returns (AddBannedWordResponse);
+  rpc RemoveBannedWord(RemoveBannedWordRequest) returns (google.protobuf.Empty);
+  rpc AddCapsLockChannel(AddCapsLockChannelRequest) returns (AddCapsLockChannelResponse);
+  rpc RemoveCapsLockChannel(RemoveCapsLockChannelRequest) returns (google.protobuf.Empty);
+  rpc AddAntiLinkChannel(AddAntiLinkChannelRequest) returns (AddAntiLinkChannelResponse);
+  rpc RemoveAntiLinkChannel(RemoveAntiLinkChannelRequest) returns (google.protobuf.Empty);
+}
+
+message ToggleAutoModRequest {
+  string guild_id = 1;
+  bool enabled = 2;
+}
+
+message ToggleAutoModResponse {
+  string guild_id = 1;
+  bool enabled = 2;
+}
+
+message AddBannedWordRequest {
+  string guild_id = 1;
+  string word = 2;
+}
+
+message AddBannedWordResponse{
+  string id = 1;
+  string guild_id = 2;
+  string word = 3;
+}
+
+message RemoveBannedWordRequest {
+  string guild_id = 1;
+  string word = 2;
+}
+
+message AddCapsLockChannelRequest {
+  string guild_id = 1;
+  string channel_id = 2;
+}
+
+message AddCapsLockChannelResponse {
+  string id = 1;
+  string guild_id = 2;
+  string channel_id = 3;
+}
+
+message RemoveCapsLockChannelRequest {
+  string guild_id = 1;
+  string channel_id = 2;
+}
+
+message AddAntiLinkChannelRequest {
+  string guild_id = 1;
+  string channel_id = 2;
+}
+
+message AddAntiLinkChannelResponse {
+  string id = 1;
+  string guild_id = 2;
+  string channel_id = 3;
+}
+
+message RemoveAntiLinkChannelRequest {
+  string guild_id = 1;
+  string channel_id = 2;
+}
