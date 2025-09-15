@@ -44,8 +44,8 @@ type Message struct {
 type AutoModeSettings struct {
 	ID          uint             `gorm:"primaryKey"`
 	GuildID     string           `gorm:"not null;index"`
-	CapsLock    []ChannelSetting `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE;"`
-	AntiLink    []ChannelSetting `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE;"`
+	CapsLock    []AntiCapsChannel `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE;"`
+	AntiLink    []AntiLinkChannel `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE;"`
 	BannedWords []BannedWord     `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE;"`
 	Enabled     bool             `json:"enabled"`
 }
@@ -56,7 +56,13 @@ type BannedWord struct {
 	Word    string `json:"word"`
 }
 
-type ChannelSetting struct {
+type AntiCapsChannel struct {
+	ID        uint   `gorm:"primaryKey"`
+	GuildID   string `gorm:"not null;index"`
+	ChannelID string `json:"channel_id"`
+}
+
+type AntiLinkChannel struct {
 	ID        uint   `gorm:"primaryKey"`
 	GuildID   string `gorm:"not null;index"`
 	ChannelID string `json:"channel_id"`
@@ -76,6 +82,11 @@ func Migrate(db *gorm.DB) {
 		&WelcomeSettings{},
 		&Role{},
 		&Message{},
+		&AutoModeSettings{},
+		&BannedWord{},
+		&AntiCapsChannel{},
+		&AntiLinkChannel{},
+		&LogSettings{},
 	)
 	if err != nil {
 		panic("Migration Error: " + err.Error())
