@@ -7,7 +7,7 @@ option go_package = "proto/";
 service LogService {
   rpc AddLogChannel(UpdateLogChannelRequest) returns (UpdateLogChannelResponse);
   rpc RemoveLogChannel(UpdateLogChannelRequest) returns (UpdateLogChannelResponse);
-  rpc ToggleLog(UpdateLogChannelRequest) returns (UpdateLogChannelResponse);
+  rpc ToggleLog(ToggleLogRequest) returns (ToggleLogResponse);
 }
 
 message UpdateLogChannelRequest {

@@ -64,7 +64,7 @@ message RemoveCapsLockChannelRequest {
 
 message RemoveCapsLockChannelResponse {
   string guild_id = 1;
-  string word = 2;
+  string channel_id = 2;
 }
 
 message AddAntiLinkChannelRequest {
@@ -85,5 +85,5 @@ message RemoveAntiLinkChannelRequest {
 
 message RemoveAntiLinkChannelResponse {
   string guild_id = 1;
-  string word = 2;
+  string channel_id = 2;
 }

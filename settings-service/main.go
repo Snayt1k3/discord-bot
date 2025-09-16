@@ -10,7 +10,7 @@ import (
 	"net"
 	"os"
 	"settings-service/config"
-	"settings-service/internal/adapters"
+	"settings-service/internal/adapters/repos"
 	"settings-service/internal/models"
 	"settings-service/internal/server"
 	pb "settings-service/proto"
@@ -31,7 +31,7 @@ func main() {
 	}
 
 	models.Migrate(db)
-	guildRepo := adapters.NewGuildRepository(db)
+	repositories := repos.NewRepos(db)
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%v", cfg.GrpcPort))
 
@@ -41,8 +41,20 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	pb.RegisterGuildServiceServer(grpcServer, &server.SettingsServer{
-		GuildRepo: guildRepo,
+	pb.RegisterAutoModServiceServer(grpcServer, &server.AutomodeServer{
+		Repo: repositories.AutoMode,
+	})
+	pb.RegisterLogServiceServer(grpcServer, &server.LogServer{
+		Repo: repositories.Log,
+	})
+	pb.RegisterRolesServiceServer(grpcServer, &server.RolesReactionServer{
+		Repo: repositories.ReactionRoles,
+	})
+	pb.RegisterSettingsServiceServer(grpcServer, &server.GuildServer{
+		Repo: repositories.Settings,
+	})
+	pb.RegisterWelcomeServiceServer(grpcServer, &server.WelcomeServer{
+		Repo: repositories.Welcome,
 	})
 
 	log.Printf("gRPC server is running on port :%v \n", cfg.GrpcPort)
