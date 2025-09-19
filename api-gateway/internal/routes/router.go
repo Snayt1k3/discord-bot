@@ -8,12 +8,12 @@ import (
 	"github.com/swaggo/gin-swagger"
 )
 
-func SetupRouter(SettingsHandlers *handlers.SettingsHandlers) *gin.Engine {
+func SetupRouter(handlers *handlers.Handlers) *gin.Engine {
 	r := gin.Default()
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Setup routes
-	v1.SettingsRoutes(r, SettingsHandlers)
+	v1.SettingsRoutes(r, handlers)
 
 	return r
 }

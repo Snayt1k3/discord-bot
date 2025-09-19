@@ -9,8 +9,6 @@ import (
 type Config struct {
 	GrpcSettingsHost string
 	GrpcSettingsPort string
-	GrpcGachasHost   string
-	GrpcGachasPort   string
 	RedisHost        string
 	RedisPort        string
 	RedisPass        string
@@ -29,8 +27,6 @@ func LoadConfig() (*Config, error) {
 	config := &Config{
 		GrpcSettingsHost: os.Getenv("SETTINGS_ADDRESS"),
 		GrpcSettingsPort: os.Getenv("SETTINGS_PORT"),
-		GrpcGachasHost:   os.Getenv("GACHAS_ADDRESS"),
-		GrpcGachasPort:   os.Getenv("GACHAS_PORT"),
 		RedisHost:        os.Getenv("REDIS_HOST"),
 		RedisPort:        os.Getenv("REDIS_PORT"),
 		RedisPass:        os.Getenv("REDIS_PASS"),

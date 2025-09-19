@@ -5,11 +5,9 @@ import (
 	"api-gateway/internal/adapters"
 	"api-gateway/internal/handlers"
 	"api-gateway/internal/routes"
-	pb "api-gateway/proto"
 	"fmt"
 	"log/slog"
 	"os"
-
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -22,18 +20,16 @@ func main() {
 		panic("Failed to load config: " + err.Error())
 	}
 
-	settingsConn, err := grpc.NewClient(fmt.Sprintf("%v:%v", cfg.GrpcSettingsHost, cfg.GrpcSettingsPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	settingsServiceConn, err := grpc.NewClient(fmt.Sprintf("%v:%v", cfg.GrpcSettingsHost, cfg.GrpcSettingsPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
 		panic("Failed to connect to settings service: " + err.Error())
 	}
 
-	defer settingsConn.Close()
-
-	settingsProtoClient := pb.NewGuildServiceClient(settingsConn)
+	defer settingsServiceConn.Close()
 
 	redisClient := adapters.NewRedisAdapter(fmt.Sprintf("%v:%v", cfg.RedisHost, cfg.RedisPort), cfg.RedisPass, cfg.RedisDB)
-	settingsHandlers := handlers.NewSettingsHandlers(settingsProtoClient, redisClient)
+	settingsHandlers := handlers.NewHandlers(settingsServiceConn, redisClient)
 
 	r := routes.SetupRouter(settingsHandlers)
 
