@@ -1,15 +1,17 @@
 package main
 
 import (
+	"fmt"
+	"log/slog"
+	"os"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+
 	"api-gateway/config"
 	"api-gateway/internal/adapters"
 	"api-gateway/internal/handlers"
 	"api-gateway/internal/routes"
-	"fmt"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
-	"log/slog"
-	"os"
 )
 
 func main() {
@@ -36,6 +38,7 @@ func main() {
 	port := ":" + cfg.Port
 
 	slog.Info("Starting server", "port", port)
+	slog.Info("docs at", "url", "http://localhost"+port+"/swagger/index.html")
 
 	if err := r.Run(port); err != nil {
 		slog.Error("Failed to start server", "error", err)
