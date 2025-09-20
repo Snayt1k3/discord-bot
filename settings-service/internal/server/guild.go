@@ -57,9 +57,9 @@ func (s *GuildServer) CreateSettings(ctx context.Context, req *pb.CreateSettings
 
 	guildSettings, _ := s.Repo.GetGuildSettings(req.GuildId)
 
-    if guildSettings != nil && guildSettings.ID != 0 {
-        return nil, status.Error(codes.AlreadyExists, "Guild settings already exist")
-    }
+	if guildSettings != nil && guildSettings.ID != 0 {
+		return nil, status.Error(codes.AlreadyExists, "Guild settings already exist")
+	}
 
 	settings, err := s.Repo.CreateGuildSetting(req.GuildId)
 

@@ -8,7 +8,6 @@ import (
 	// "google.golang.org/grpc/status"
 )
 
-
 type RolesReactionServer struct {
 	Repo interfaces.ReactionRolesRepository
 	pb.UnimplementedRolesServiceServer

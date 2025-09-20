@@ -8,12 +8,10 @@ import (
 	// "google.golang.org/grpc/status"
 )
 
-
 type LogServer struct {
 	Repo interfaces.LogRepository
 	pb.UnimplementedLogServiceServer
 }
-
 
 func (s *LogServer) ToggleLog(ctx context.Context, req *pb.ToggleLogRequest) (*pb.ToggleLogResponse, error) {
 	err := s.Repo.ToggleLog(req.GuildId, req.Enabled)
@@ -55,6 +53,6 @@ func (s *LogServer) RemoveLogChannel(ctx context.Context, req *pb.UpdateLogChann
 		GuildId:   req.GuildId,
 		ChannelId: req.ChannelId,
 	}
-	
+
 	return response, nil
 }

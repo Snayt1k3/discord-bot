@@ -5,9 +5,7 @@ import (
 	"fmt"
 	"settings-service/internal/interfaces"
 	pb "settings-service/proto"
-
 )
-
 
 type AutomodeServer struct {
 	Repo interfaces.AutoModeRepository
@@ -50,7 +48,7 @@ func (s *AutomodeServer) RemoveBannedWord(ctx context.Context, req *pb.RemoveBan
 	if err != nil {
 		return nil, err
 	}
-	
+
 	response := &pb.RemoveBannedWordResponse{
 		GuildId: req.GuildId,
 		Word:    req.Word,
@@ -67,9 +65,9 @@ func (s *AutomodeServer) AddCapsLockChannel(ctx context.Context, req *pb.AddCaps
 	}
 
 	response := &pb.AddCapsLockChannelResponse{
-		Id:      fmt.Sprintf("%d", res.ID),
-		GuildId: req.GuildId,
-		ChannelId:    req.ChannelId,
+		Id:        fmt.Sprintf("%d", res.ID),
+		GuildId:   req.GuildId,
+		ChannelId: req.ChannelId,
 	}
 
 	return response, nil
@@ -81,10 +79,10 @@ func (s *AutomodeServer) RemoveCapsLockChannel(ctx context.Context, req *pb.Remo
 	if err != nil {
 		return nil, err
 	}
-	
+
 	response := &pb.RemoveCapsLockChannelResponse{
-		GuildId: req.GuildId,
-		ChannelId:    req.ChannelId,
+		GuildId:   req.GuildId,
+		ChannelId: req.ChannelId,
 	}
 
 	return response, nil
@@ -98,9 +96,9 @@ func (s *AutomodeServer) AddAntiLinkChannel(ctx context.Context, req *pb.AddAnti
 	}
 
 	response := &pb.AddAntiLinkChannelResponse{
-		Id:      fmt.Sprintf("%d", res.ID),
-		GuildId: req.GuildId,
-		ChannelId:    req.ChannelId,
+		Id:        fmt.Sprintf("%d", res.ID),
+		GuildId:   req.GuildId,
+		ChannelId: req.ChannelId,
 	}
 
 	return response, nil
@@ -112,10 +110,10 @@ func (s *AutomodeServer) RemoveAntiLinkChannel(ctx context.Context, req *pb.Remo
 	if err != nil {
 		return nil, err
 	}
-	
+
 	response := &pb.RemoveAntiLinkChannelResponse{
-		GuildId: req.GuildId,
-		ChannelId:    req.ChannelId,
+		GuildId:   req.GuildId,
+		ChannelId: req.ChannelId,
 	}
 
 	return response, nil

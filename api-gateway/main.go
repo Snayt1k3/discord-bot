@@ -6,10 +6,10 @@ import (
 	"api-gateway/internal/handlers"
 	"api-gateway/internal/routes"
 	"fmt"
-	"log/slog"
-	"os"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"log/slog"
+	"os"
 )
 
 func main() {

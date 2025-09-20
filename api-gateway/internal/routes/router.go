@@ -5,9 +5,9 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
+	_ "api-gateway/docs"
 	"api-gateway/internal/handlers"
 	v1 "api-gateway/internal/routes/v1"
-	_ "api-gateway/docs"
 )
 
 func SetupRouter(handlers *handlers.Handlers) *gin.Engine {

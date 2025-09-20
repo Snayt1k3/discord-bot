@@ -5,7 +5,6 @@ import (
 	"settings-service/internal/models"
 )
 
-
 type WelcomeRepositoryImpl struct {
 	db *gorm.DB
 }

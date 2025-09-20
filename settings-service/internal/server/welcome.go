@@ -6,12 +6,10 @@ import (
 	pb "settings-service/proto"
 )
 
-
 type WelcomeServer struct {
 	Repo interfaces.WelcomeRepository
 	pb.UnimplementedWelcomeServiceServer
 }
-
 
 func (s *WelcomeServer) SetWelcomeChannel(ctx context.Context, req *pb.SetWelcomeChannelRequest) (*pb.SetWelcomeChannelResponse, error) {
 	err := s.Repo.SetWelcomeChannel(req.GuildId, req.ChannelId)

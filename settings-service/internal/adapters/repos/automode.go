@@ -34,7 +34,7 @@ func (r *AutoModeRepositoryImpl) ToggleAutoMode(guildId string, enabled bool) (m
 
 func (r *AutoModeRepositoryImpl) AddBannedWord(guildId string, word string) (models.BannedWord, error) {
 	bannedWord := models.BannedWord{
-		Word:    word,
+		Word: word,
 	}
 	if err := r.db.Create(&bannedWord).Error; err != nil {
 		return models.BannedWord{}, err

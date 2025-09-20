@@ -53,7 +53,6 @@ func (s *LogHandlers) ToggleLog(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-
 // AddLogChannel godoc
 // @Summary      Add log channel
 // @Description  Добавляет новый канал для логирования действий в указанной гильдии

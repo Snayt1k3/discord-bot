@@ -43,12 +43,12 @@ type Message struct {
 }
 
 type AutoModeSettings struct {
-	ID          uint             `gorm:"primaryKey"`
-	GuildID     string           `gorm:"not null;index"`
-	CapsLocks []AntiCapsChannel  `gorm:"many2many:auto_mode_capslock;joinForeignKey:AutoModeID;joinReferences:ChannelID;constraint:OnDelete:CASCADE;"`
-    AntiLinks []AntiLinkChannel  `gorm:"many2many:auto_mode_antilink;joinForeignKey:AutoModeID;joinReferences:ChannelID;constraint:OnDelete:CASCADE;"`
-    BannedWords []BannedWord   `gorm:"many2many:auto_mode_bannedwords;joinForeignKey:AutoModeID;joinReferences:WordID;constraint:OnDelete:CASCADE;"`
-	Enabled     bool             `json:"enabled"`
+	ID          uint              `gorm:"primaryKey"`
+	GuildID     string            `gorm:"not null;index"`
+	CapsLocks   []AntiCapsChannel `gorm:"many2many:auto_mode_capslock;joinForeignKey:AutoModeID;joinReferences:ChannelID;constraint:OnDelete:CASCADE;"`
+	AntiLinks   []AntiLinkChannel `gorm:"many2many:auto_mode_antilink;joinForeignKey:AutoModeID;joinReferences:ChannelID;constraint:OnDelete:CASCADE;"`
+	BannedWords []BannedWord      `gorm:"many2many:auto_mode_bannedwords;joinForeignKey:AutoModeID;joinReferences:WordID;constraint:OnDelete:CASCADE;"`
+	Enabled     bool              `json:"enabled"`
 }
 
 type BannedWord struct {

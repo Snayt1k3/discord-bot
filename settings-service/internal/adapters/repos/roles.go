@@ -5,7 +5,6 @@ import (
 	"settings-service/internal/models"
 )
 
-
 type ReactionRolesRepoImpl struct {
 	db *gorm.DB
 }
@@ -15,7 +14,6 @@ func NewReactionRolesRepo(db *gorm.DB) *ReactionRolesRepoImpl {
 		db: db,
 	}
 }
-
 
 func (r *ReactionRolesRepoImpl) SetRoleMessageId(guildId, messageId string) error {
 	return r.db.Model(&models.RolesSettings{}).
@@ -48,7 +46,7 @@ func (r *ReactionRolesRepoImpl) AddRole(guildId, roleId, emoji string) (models.R
 
 func (r *ReactionRolesRepoImpl) DeleteRole(guildId, roleId string) error {
 	var roleSetting models.RolesSettings
-	
+
 	if err := r.db.Where("guild_id = ?", guildId).First(&roleSetting).Error; err != nil {
 		return err
 	}
@@ -64,7 +62,7 @@ func (r *ReactionRolesRepoImpl) DeleteRole(guildId, roleId string) error {
 
 	var count int64
 	r.db.Model(&models.RolesSettings{}).Where("id IN (SELECT roles_settings_id FROM roles_settings_roles WHERE role_id = ?)", role.ID).Count(&count)
-	
+
 	if count == 0 {
 		return r.db.Delete(&role).Error
 	}

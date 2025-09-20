@@ -49,7 +49,6 @@ type GuildSettingsRepository interface {
 	GetGuildSettings(guildID string) (*models.Settings, error)
 }
 
-
 type WelcomeRepository interface {
 	// Задать канал для welcome-сообщений
 	SetWelcomeChannel(guildId, channelId string) error
