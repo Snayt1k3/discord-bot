@@ -2,9 +2,9 @@ package repos
 
 import (
 	"gorm.io/gorm"
+
 	"settings-service/internal/models"
 )
-
 
 type GuildSettingsRepoImpl struct {
 	db *gorm.DB
@@ -33,7 +33,6 @@ func (r *GuildSettingsRepoImpl) CreateGuildSetting(guildId string) (models.Setti
 			GuildID: guildId,
 			Enabled: false,
 		},
-
 	}
 	if err := r.db.Create(obj).Error; err != nil {
 		return models.Settings{}, err
@@ -45,12 +44,12 @@ func (r *GuildSettingsRepoImpl) CreateGuildSetting(guildId string) (models.Setti
 func (r *GuildSettingsRepoImpl) GetGuildSettings(guildID string) (*models.Settings, error) {
 	var settings models.Settings
 	if err := r.db.
-	Preload("Role.Roles").
-	Preload("Welcome.Messages").
-	Preload("AutoMode.BannedWords").
-	Preload("AutoMode.AntiCapsChannels").
-	Preload("AutoMode.AntiLinkChannels").
-	Where("guild_id = ?", guildID).First(&settings).Error; err != nil {
+		Preload("Role.Roles").
+		Preload("Welcome.Messages").
+		Preload("AutoMode.AntiLinks").
+		Preload("AutoMode.CapsLocks").
+		Preload("AutoMode.BannedWords").
+		Where("guild_id = ?", guildID).First(&settings).Error; err != nil {
 		return nil, err
 	}
 	return &settings, nil

@@ -1,13 +1,14 @@
 package models
 
 import (
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Settings struct {
 	ID        uint             `gorm:"primaryKey"`
-	GuildID   string           `gorm:"unique;not null"`
+	GuildID   string           `gorm:"not null;uniqueIndex"`
 	Role      RolesSettings    `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
 	Welcome   WelcomeSettings  `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
 	AutoMode  AutoModeSettings `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
@@ -18,7 +19,7 @@ type Settings struct {
 
 type RolesSettings struct {
 	ID        uint   `gorm:"primaryKey"`
-	GuildID   string `gorm:"not null;index"`
+	GuildID   string `gorm:"not null;uniqueIndex"`
 	MessageID string `json:"message_id"`
 	Roles     []Role `gorm:"many2many:roles_settings_roles;constraint:OnDelete:CASCADE;"`
 }
@@ -31,7 +32,7 @@ type Role struct {
 
 type WelcomeSettings struct {
 	ID        uint      `gorm:"primaryKey"`
-	GuildID   string    `gorm:"not null;index"`
+	GuildID   string    `gorm:"not null;uniqueIndex"`
 	ChannelId string    `json:"channel_id"`
 	Messages  []Message `gorm:"many2many:welcome_setting_messages;constraint:OnDelete:CASCADE;"`
 }
@@ -44,33 +45,33 @@ type Message struct {
 type AutoModeSettings struct {
 	ID          uint             `gorm:"primaryKey"`
 	GuildID     string           `gorm:"not null;index"`
-	CapsLock    []AntiCapsChannel `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE;"`
-	AntiLink    []AntiLinkChannel `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE;"`
-	BannedWords []BannedWord     `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE;"`
+	CapsLocks []AntiCapsChannel  `gorm:"many2many:auto_mode_capslock;joinForeignKey:AutoModeID;joinReferences:ChannelID;constraint:OnDelete:CASCADE;"`
+    AntiLinks []AntiLinkChannel  `gorm:"many2many:auto_mode_antilink;joinForeignKey:AutoModeID;joinReferences:ChannelID;constraint:OnDelete:CASCADE;"`
+    BannedWords []BannedWord   `gorm:"many2many:auto_mode_bannedwords;joinForeignKey:AutoModeID;joinReferences:WordID;constraint:OnDelete:CASCADE;"`
 	Enabled     bool             `json:"enabled"`
 }
 
 type BannedWord struct {
 	ID      uint   `gorm:"primaryKey"`
-	GuildID string `gorm:"not null;index"`
+	GuildID string `gorm:"not null;uniqueIndex"`
 	Word    string `json:"word"`
 }
 
 type AntiCapsChannel struct {
 	ID        uint   `gorm:"primaryKey"`
-	GuildID   string `gorm:"not null;index"`
+	GuildID   string `gorm:"not null;uniqueIndex"`
 	ChannelID string `json:"channel_id"`
 }
 
 type AntiLinkChannel struct {
 	ID        uint   `gorm:"primaryKey"`
-	GuildID   string `gorm:"not null;index"`
+	GuildID   string `gorm:"not null;uniqueIndex"`
 	ChannelID string `json:"channel_id"`
 }
 
 type LogSettings struct {
 	ID        uint   `gorm:"primaryKey"`
-	GuildID   string `gorm:"not null;index"`
+	GuildID   string `gorm:"not null;uniqueIndex"`
 	ChannelID string `json:"channel_id"`
 	Enabled   bool
 }

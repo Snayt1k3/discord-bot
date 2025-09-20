@@ -2,12 +2,13 @@ package server
 
 import (
 	"context"
-	"settings-service/internal/interfaces"
-	pb "settings-service/proto"
+
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-)
 
+	"settings-service/internal/interfaces"
+	pb "settings-service/proto"
+)
 
 type GuildServer struct {
 	Repo interfaces.GuildSettingsRepository
@@ -48,7 +49,7 @@ func (s *GuildServer) GetSettings(ctx context.Context, req *pb.GetSettingsReques
 			Messages:  welcomeMessages,
 		}, // todo: Добавить остальные настройки
 	}
-	
+
 	return response, nil
 }
 
@@ -56,9 +57,9 @@ func (s *GuildServer) CreateSettings(ctx context.Context, req *pb.CreateSettings
 
 	guildSettings, _ := s.Repo.GetGuildSettings(req.GuildId)
 
-	if guildSettings.ID != 0 {
-		return nil, status.Error(codes.AlreadyExists, "Guild settings already exist")
-	}
+    if guildSettings != nil && guildSettings.ID != 0 {
+        return nil, status.Error(codes.AlreadyExists, "Guild settings already exist")
+    }
 
 	settings, err := s.Repo.CreateGuildSetting(req.GuildId)
 

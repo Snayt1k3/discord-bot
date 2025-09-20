@@ -2,9 +2,9 @@ package repos
 
 import (
 	"gorm.io/gorm"
+
 	"settings-service/internal/models"
 )
-
 
 type AutoModeRepositoryImpl struct {
 	db *gorm.DB
@@ -34,7 +34,6 @@ func (r *AutoModeRepositoryImpl) ToggleAutoMode(guildId string, enabled bool) (m
 
 func (r *AutoModeRepositoryImpl) AddBannedWord(guildId string, word string) (models.BannedWord, error) {
 	bannedWord := models.BannedWord{
-		GuildID: guildId,
 		Word:    word,
 	}
 	if err := r.db.Create(&bannedWord).Error; err != nil {
@@ -43,14 +42,13 @@ func (r *AutoModeRepositoryImpl) AddBannedWord(guildId string, word string) (mod
 	return bannedWord, nil
 }
 
-func (r *AutoModeRepositoryImpl) DeleteBannedWord(guildId string, word string) (error) {
+func (r *AutoModeRepositoryImpl) DeleteBannedWord(guildId string, word string) error {
 	res := r.db.Where("word = ?", word).Where("guild_id = ?", guildId).Delete(&models.BannedWord{})
 	return res.Error
 }
 
 func (r *AutoModeRepositoryImpl) AddCapsLockChannel(guildId string, channelId string) (models.AntiCapsChannel, error) {
 	model := models.AntiCapsChannel{
-		GuildID:   guildId,
 		ChannelID: channelId,
 	}
 	if err := r.db.Create(&model).Error; err != nil {
@@ -65,7 +63,6 @@ func (r *AutoModeRepositoryImpl) DeleteCapsLockChannel(guildId string, channelId
 
 func (r *AutoModeRepositoryImpl) AddAntiLinkChannel(guildId string, channelId string) (models.AntiLinkChannel, error) {
 	model := models.AntiLinkChannel{
-		GuildID:   guildId,
 		ChannelID: channelId,
 	}
 	if err := r.db.Create(&model).Error; err != nil {

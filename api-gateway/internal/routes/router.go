@@ -1,11 +1,13 @@
 package routes
 
 import (
-	"api-gateway/internal/handlers"
-	"api-gateway/internal/routes/v1"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	"api-gateway/internal/handlers"
+	v1 "api-gateway/internal/routes/v1"
+	_ "api-gateway/docs"
 )
 
 func SetupRouter(handlers *handlers.Handlers) *gin.Engine {
