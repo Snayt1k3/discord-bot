@@ -28,7 +28,7 @@ grpc-clean:
 	@rm -rf $(GO_OUT_DIR)/*
 	@echo "Cleaned up generated Go code in $(GO_OUT_DIR)"
 
-docker-run:
+run:
 	docker compose up --build
 
 
