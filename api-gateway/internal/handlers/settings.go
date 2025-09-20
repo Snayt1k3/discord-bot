@@ -1,27 +1,39 @@
 package handlers
 
 import (
-	"api-gateway/internal/interfaces"
-	pb "api-gateway/proto"
 	"context"
 	"fmt"
 	"log/slog"
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"api-gateway/internal/interfaces"
+	pb "api-gateway/proto"
 )
 
 type SettingsHandlers struct {
 	clients Clients
-	redis  interfaces.RedisInterface
+	redis   interfaces.RedisInterface
 }
 
 func NewSettingsHandlers(cc grpc.ClientConnInterface, redis interfaces.RedisInterface) *SettingsHandlers {
 	return &SettingsHandlers{clients: *NewClients(cc), redis: redis}
 }
 
+// GetGuildSettings godoc
+// @Summary      Get guild settings
+// @Description  Получить настройки гильдии. Сначала проверяет Redis-кэш, если нет — тянет данные из gRPC.
+// @Tags         settings
+// @Produce      json
+// @Param        guild_id path string true "Guild ID"
+// @Success      200 {object} pb.GetSettingsResponse
+// @Failure      404 {object} dto.APIResponse "Guild settings not found"
+// @Failure      500 {object} dto.APIResponse "Internal server error"
+// @Router       /api/v1/settings/guild/{guild_id} [get]
 func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 	guildID := c.Param("guild_id")
 
@@ -66,6 +78,16 @@ func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+// CreateSettings godoc
+// @Summary      Create guild settings
+// @Description  Создаёт настройки гильдии, если их ещё нет
+// @Tags         settings
+// @Produce      json
+// @Param        guild_id path string true "Guild ID"
+// @Success      200 {object} pb.CreateSettingsResponse
+// @Failure      409 {object} dto.APIResponse "Guild settings already exist"
+// @Failure      500 {object} dto.APIResponse "Internal server error"
+// @Router       /api/v1/settings/guild/{guild_id} [post]
 func (s *SettingsHandlers) CreateSettings(c *gin.Context) {
 	guildID := c.Param("guild_id")
 
@@ -87,4 +109,3 @@ func (s *SettingsHandlers) CreateSettings(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp)
 }
-

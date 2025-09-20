@@ -50,3 +50,7 @@ grpc-init:
 lint: 
 	gofmt -w bot/ settings-service/ api-gateway/
 	@echo "Code formatted with gofmt."
+
+docs: 
+	swag init -g api-gateway/main.go --output api-gateway/docs
+	@echo "Swagger docs generated."

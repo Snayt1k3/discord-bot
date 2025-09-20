@@ -1,13 +1,14 @@
 package handlers
 
 import (
-	pb "api-gateway/proto"
 	"context"
 	"log/slog"
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 
+	pb "api-gateway/proto"
 )
 
 type WelcomeHandlers struct {
@@ -18,6 +19,18 @@ func NewWelcomeHandlers(cc grpc.ClientConnInterface) *WelcomeHandlers {
 	return &WelcomeHandlers{clients: *NewClients(cc)}
 }
 
+// SetWelcomeChannel godoc
+// @Summary      Set welcome channel
+// @Description  Устанавливает канал, в который бот будет отправлять приветственные сообщения.
+// @Tags         welcome
+// @Accept       json
+// @Produce      json
+// @Param        guild_id path string true "Guild ID"
+// @Param        request body pb.SetWelcomeChannelRequest true "Welcome channel data"
+// @Success      200 {object} pb.SetWelcomeChannelResponse
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
+// @Failure      500 {object} dto.APIResponse "Internal server error"
+// @Router       /api/v1/settings/guild/{guild_id}/welcome/channel [put]
 func (s *WelcomeHandlers) SetWelcomeChannel(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.SetWelcomeChannelRequest
@@ -40,6 +53,18 @@ func (s *WelcomeHandlers) SetWelcomeChannel(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+// AddWelcomeMessage godoc
+// @Summary      Add welcome message
+// @Description  Добавляет приветственное сообщение для гильдии.
+// @Tags         welcome
+// @Accept       json
+// @Produce      json
+// @Param        guild_id path string true "Guild ID"
+// @Param        request body pb.WelcomeMessageRequest true "Welcome message data"
+// @Success      200 {object} pb.WelcomeMessageResponse
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
+// @Failure      500 {object} dto.APIResponse "Internal server error"
+// @Router       /api/v1/settings/guild/{guild_id}/welcome/message [post]
 func (s *WelcomeHandlers) AddWelcomeMessage(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.WelcomeMessageRequest
@@ -61,6 +86,19 @@ func (s *WelcomeHandlers) AddWelcomeMessage(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp)
 }
+
+// DeleteWelcomeMessage godoc
+// @Summary      Delete welcome message
+// @Description  Удаляет одно из приветственных сообщений гильдии.
+// @Tags         welcome
+// @Accept       json
+// @Produce      json
+// @Param        guild_id path string true "Guild ID"
+// @Param        request body pb.WelcomeMessageRequest true "Welcome message data"
+// @Success      200 {object} pb.WelcomeMessageResponse
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
+// @Failure      500 {object} dto.APIResponse "Internal server error"
+// @Router       /api/v1/settings/guild/{guild_id}/welcome/message [delete]
 func (s *WelcomeHandlers) DeleteWelcomeMessage(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.WelcomeMessageRequest
