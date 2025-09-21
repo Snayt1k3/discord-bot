@@ -1,25 +1,26 @@
 package handlers
 
 import (
-	"bot/internal/handlers/guild"
-	"bot/internal/interfaces"
-	"github.com/bwmarrin/discordgo"
 	"log/slog"
 	"strings"
+
+	"github.com/bwmarrin/discordgo"
+
+	"bot/internal/handlers/guild"
+	guildAdapters "bot/internal/adapters/guild"
 )
 
 type CommandsDispatcher struct {
-	guildService interfaces.GuildServiceInterface
-	handlers     map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error
-
-	guildHandlers guild.GuildPreferencesHandlers
+	guildAdapter guildAdapters.GuildAdapter
+	handlers     map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error // todo: Change naming
+	Handlers guild.Handlers
 }
 
-func NewCommandsDispatcher(guildService interfaces.GuildServiceInterface) *CommandsDispatcher {
+func NewCommandsDispatcher(guildService guildAdapters.GuildAdapter) *CommandsDispatcher {
 	return &CommandsDispatcher{
-		guildService:  guildService,
-		handlers:      map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error{},
-		guildHandlers: *guild.NewSettingsHandlers(guildService),
+		guildAdapter: guildService,
+		handlers:     map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error{},
+		Handlers:     *guild.NewHandlers(guildService),
 	}
 }
 
@@ -29,8 +30,7 @@ func (cd *CommandsDispatcher) AddHandler(name string, handler func(s *discordgo.
 
 func (cd *CommandsDispatcher) InitHandlers() {
 	cd.AddHandler("help", HelpHandler)
-
-	cd.guildHandlers.AddSettingsHandlers(cd.handlers)
+	cd.Handlers.AddHandlers(cd.handlers)
 }
 
 func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.InteractionCreate) {

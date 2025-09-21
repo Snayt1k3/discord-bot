@@ -7,7 +7,7 @@ import (
 var CommandsList = []*discordgo.ApplicationCommand{
 	{
 		Name:        "settings",
-		Description: "Configure server settings.",
+		Description: "View server settings.",
 	},
 	{
 		Name:        "rr-add",
@@ -87,4 +87,46 @@ var CommandsList = []*discordgo.ApplicationCommand{
 			},
 		},
 	},
+	{
+		Name:        "automod-bw-add",
+		Description: "Add a banned word to automod.",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionString,
+				Name:        "word",
+				Description: "The word to ban",
+				Required:    true,
+			},
+		},
+	},
+	{
+		Name:        "automod-bw-rm",
+		Description: "Remove a banned word from automod.",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionString,
+				Name:        "word",
+				Description: "The word to ban",
+				Required:    true,
+			},
+		},
+	},
+	{
+		Name:        "automod-al-enable",
+		Description: "Enable Antilink filter in current chat.",
+	},
+	{
+		Name:        "automod-al-disable",
+		Description: "Disable Antilink filter in current chat.",
+	},
+	{
+		Name:        "automod-ac-enable",
+		Description: "Disable AntiCaps filter in current chat.",
+	},
+	{
+		Name:        "automod-ac-disable",
+		Description: "Disable AntiCaps filter in current chat.",
+	},
+
+
 }

@@ -1,16 +1,18 @@
 package main
 
 import (
-	"bot/config"
-	"bot/internal/adapters"
-	"bot/internal/discord"
-	"bot/internal/handlers"
 	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
+
+	"bot/config"
+	"bot/internal/adapters"
+	"bot/internal/adapters/guild"
+	"bot/internal/discord"
+	"bot/internal/handlers"
 )
 
 func main() {
@@ -19,11 +21,12 @@ func main() {
 	discord.InitDiscordBot()
 
 	// init deps
-	guildKeeper := adapters.NewServiceSettingsClient()
+	http := adapters.NewDefaultHttpClient()
+	guildAdapter := guild.NewGuildAdapter(http)
 
 	// init handlers/commands
-	dispatcher := handlers.NewCommandsDispatcher(guildKeeper)
-	eventHandlers := handlers.NewEventHandlers(guildKeeper, discord.CommandsList)
+	dispatcher := handlers.NewCommandsDispatcher(*guildAdapter)
+	eventHandlers := handlers.NewEventHandlers(*guildAdapter, discord.CommandsList)
 	dispatcher.InitHandlers()
 
 	addHandlers(dispatcher, eventHandlers)

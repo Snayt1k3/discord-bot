@@ -1,23 +1,25 @@
-package guild
+package settings
 
 import (
-	"bot/internal/interfaces"
-	"bot/internal/utils"
 	"fmt"
-	"github.com/bwmarrin/discordgo"
 	"log/slog"
 	"strconv"
 	"strings"
+
+	"github.com/bwmarrin/discordgo"
+
+	"bot/internal/adapters/guild"
+	"bot/internal/utils"
 )
 
-func showAllRoles(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func showAllRoles(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
 
-	settings, err := gk.GetGuildSettings(i.GuildID)
+	settings, err := gk.Settings.Get(i.GuildID)
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
 		utils.SendErrorMessage(s, i)
@@ -56,7 +58,7 @@ func showAllRoles(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *
 	return nil
 }
 
-func addRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func addRole(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
@@ -77,7 +79,7 @@ func addRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *disco
 
 	roleID := i.ApplicationCommandData().Options[0].RoleValue(s, i.GuildID).ID
 
-	_, err := gk.AddRole(roleID, emojiKey, i.GuildID)
+	err := gk.RolesReactions.Add(roleID, emojiKey, i.GuildID)
 
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)
@@ -95,7 +97,7 @@ func addRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *disco
 	return nil
 }
 
-func removeRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func removeRole(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
@@ -104,7 +106,7 @@ func removeRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *di
 
 	roleID := i.ApplicationCommandData().Options[0].RoleValue(s, i.GuildID).ID
 
-	_, err := gk.DeleteRole(roleID, "", i.GuildID)
+	err := gk.RolesReactions.Delete(roleID, "", i.GuildID)
 
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)
@@ -123,7 +125,7 @@ func removeRole(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *di
 	return nil
 }
 
-func setRolesMessage(gk interfaces.GuildServiceInterface, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func setRolesMessage(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
@@ -132,7 +134,7 @@ func setRolesMessage(gk interfaces.GuildServiceInterface, s *discordgo.Session, 
 
 	messageId := i.ApplicationCommandData().Options[0].StringValue()
 
-	_, err := gk.SetRoleMessageID(messageId, i.GuildID)
+	err := gk.RolesReactions.SetMessageID(messageId, i.GuildID)
 
 	if err != nil {
 		slog.Error("Error while updating guild settings", "err", err)

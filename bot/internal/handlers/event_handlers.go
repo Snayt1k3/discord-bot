@@ -1,27 +1,29 @@
 package handlers
 
 import (
-	"bot/internal/interfaces"
-	"bot/internal/utils"
-	"github.com/bwmarrin/discordgo"
 	"log/slog"
 	"math/rand"
 	"strings"
 	"time"
+
+	"github.com/bwmarrin/discordgo"
+
+	"bot/internal/adapters/guild"
+	"bot/internal/utils"
 )
 
 // Хендлеры событий Discord отличных от Interaction событий
 type EventHandlers struct {
-	service interfaces.GuildServiceInterface
+	service guild.GuildAdapter
 	cmds    []*discordgo.ApplicationCommand
 }
 
-func NewEventHandlers(service interfaces.GuildServiceInterface, cmds []*discordgo.ApplicationCommand) *EventHandlers {
+func NewEventHandlers(service guild.GuildAdapter, cmds []*discordgo.ApplicationCommand) *EventHandlers {
 	return &EventHandlers{service: service, cmds: cmds}
 }
 
 func (eh *EventHandlers) OnMessageReactionAdd(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
-	guildSetting, err := eh.service.GetGuildSettings(r.GuildID)
+	guildSetting, err := eh.service.Settings.Get(r.GuildID)
 
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
@@ -46,7 +48,7 @@ func (eh *EventHandlers) OnMessageReactionAdd(s *discordgo.Session, r *discordgo
 }
 
 func (eh *EventHandlers) OnMessageReactionRemove(s *discordgo.Session, r *discordgo.MessageReactionRemove) {
-	guildSetting, err := eh.service.GetGuildSettings(r.GuildID)
+	guildSetting, err := eh.service.Settings.Get(r.GuildID)
 
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
@@ -71,7 +73,7 @@ func (eh *EventHandlers) OnMessageReactionRemove(s *discordgo.Session, r *discor
 }
 
 func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMemberAdd) {
-	settings, _ := eh.service.GetGuildSettings(u.GuildID)
+	settings, _ := eh.service.Settings.Get(u.GuildID)
 
 	if len(settings.Welcome.Messages) == 0 {
 		return
@@ -89,7 +91,7 @@ func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMe
 }
 
 func (eh *EventHandlers) OnGuildCreate(s *discordgo.Session, r *discordgo.GuildCreate) {
-	err := eh.service.CreateSettings(r.ID)
+	err := eh.service.Settings.Create(r.ID)
 
 	if err != nil {
 		slog.Error("Error while creating guild settings", "err", err)
