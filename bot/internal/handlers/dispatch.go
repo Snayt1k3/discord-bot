@@ -6,21 +6,19 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 
-	"bot/internal/handlers/guild"
+	guildHandlers "bot/internal/handlers/guild"
 	guildAdapters "bot/internal/adapters/guild"
 )
 
 type CommandsDispatcher struct {
 	guildAdapter guildAdapters.GuildAdapter
-	handlers     map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error // todo: Change naming
-	Handlers guild.Handlers
+	handlers     map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error
 }
 
 func NewCommandsDispatcher(guildService guildAdapters.GuildAdapter) *CommandsDispatcher {
 	return &CommandsDispatcher{
 		guildAdapter: guildService,
 		handlers:     map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error{},
-		Handlers:     *guild.NewHandlers(guildService),
 	}
 }
 
@@ -28,9 +26,9 @@ func (cd *CommandsDispatcher) AddHandler(name string, handler func(s *discordgo.
 	cd.handlers[name] = handler
 }
 
-func (cd *CommandsDispatcher) InitHandlers() {
+func (cd *CommandsDispatcher) InitHandlers(handlers guildHandlers.Handlers) {
 	cd.AddHandler("help", HelpHandler)
-	cd.Handlers.AddHandlers(cd.handlers)
+	handlers.AddHandlers(cd.handlers)
 }
 
 func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.InteractionCreate) {

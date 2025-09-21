@@ -13,6 +13,7 @@ import (
 	"bot/internal/adapters/guild"
 	"bot/internal/discord"
 	"bot/internal/handlers"
+	guildHandlers "bot/internal/handlers/guild"
 )
 
 func main() {
@@ -27,8 +28,9 @@ func main() {
 	// init handlers/commands
 	dispatcher := handlers.NewCommandsDispatcher(*guildAdapter)
 	eventHandlers := handlers.NewEventHandlers(*guildAdapter, discord.CommandsList)
-	dispatcher.InitHandlers()
-
+	guildHandlers := guildHandlers.NewHandlers(*guildAdapter)
+	
+	dispatcher.InitHandlers(*guildHandlers)
 	addHandlers(dispatcher, eventHandlers)
 
 	if err := discord.Bot.Session.UpdateCustomStatus(config.GetBotStatus()); err != nil {
