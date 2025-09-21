@@ -31,6 +31,8 @@ message GetSettingsResponse {
   string guild_id = 2;
   RolesSettings roles = 3;
   WelcomeSettings welcome = 4;
+  AutoModSettings automode = 5;
+  LogSettings log = 6;
 }
 
 message RolesSettings {
