@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 
@@ -13,12 +14,13 @@ import (
 )
 
 func showAllRoles(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
-
+	// Check admin permissions
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
 
+	// Fetch guild settings
 	settings, err := gk.Settings.Get(i.GuildID)
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
@@ -26,9 +28,26 @@ func showAllRoles(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.Inte
 		return err
 	}
 
+	// Check if there are roles configured
+	if len(settings.Roles.Matching) == 0 {
+		embed := &discordgo.MessageEmbed{
+			Title:       "📜 Roles configured for this server:",
+			Description: "⚠️ No roles configured.",
+			Color:       0x95A5A6, // gray
+		}
+		return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+			Type: discordgo.InteractionResponseChannelMessageWithSource,
+			Data: &discordgo.InteractionResponseData{
+				Embeds: []*discordgo.MessageEmbed{embed},
+			},
+		})
+	}
+
+	// Build role list
 	var roleList strings.Builder
 	for emoji, roleID := range settings.Roles.Matching {
 		emojiStr := emoji
+		// If the emoji is numeric, assume it's a custom emoji ID
 		if _, err := strconv.ParseInt(emoji, 10, 64); err == nil {
 			emojiStr = fmt.Sprintf("<:emoji:%s>", emoji)
 		}
@@ -36,17 +55,20 @@ func showAllRoles(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.Inte
 	}
 
 	embed := &discordgo.MessageEmbed{
-		Title:       "📜 Roles configured for this server:",
+		Title:       "📜 Roles configured for this server",
 		Description: roleList.String(),
-		Color:       0x3498DB,
+		Color:       0x3498DB, // nice blue
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "React with the corresponding emoji to get the role",
+		},
+		Timestamp: time.Now().Format(time.RFC3339),
 	}
 
-	// отвечаем на интеракцию
+	// Respond to the interaction
 	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Embeds: []*discordgo.MessageEmbed{embed},
-			Flags:  discordgo.MessageFlagsEphemeral, // приватное сообщение
 		},
 	})
 

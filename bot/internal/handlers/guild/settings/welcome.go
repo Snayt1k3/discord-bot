@@ -10,13 +10,14 @@ import (
 	"bot/internal/utils"
 )
 
-func showWelcomeSettings(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
-
+func ShowWelcomeSettings(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	// Check admin permissions
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
 
+	// Get guild settings
 	settings, err := gk.Settings.Get(i.GuildID)
 	if err != nil {
 		slog.Error("Error while fetching welcome settings", "err", err)
@@ -24,50 +25,56 @@ func showWelcomeSettings(gk guild.GuildAdapter, s *discordgo.Session, i *discord
 		return err
 	}
 
-	// Проверяем, есть ли сообщения
+	// Format channel mention
+	channelMention := "—"
+	if settings.Welcome.ChannelID != "" {
+		channelMention = "<#" + settings.Welcome.ChannelID + ">"
+	}
+
+	// Check if there are welcome messages
 	if len(settings.Welcome.Messages) == 0 {
 		embed := &discordgo.MessageEmbed{
-			Title:       "📜 Messages configured for this server:",
-			Description: "⚠️ No welcome messages configured.",
-			Color:       0xFFFFFF, // белый
+			Title:       "📜 Welcome messages configuration",
+			Description: "⚠️ No welcome messages have been configured.",
+			Color:       0xFFFFFF,
+			Fields: []*discordgo.MessageEmbedField{
+				{
+					Name:  "📍 Channel",
+					Value: channelMention,
+				},
+			},
 		}
 		return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
 				Embeds: []*discordgo.MessageEmbed{embed},
-				Flags:  discordgo.MessageFlagsEphemeral,
 			},
 		})
 	}
 
-	// Собираем список сообщений
-	var messageList strings.Builder
-	for _, message := range settings.Welcome.Messages {
-		messageList.WriteString("• ")
-		messageList.WriteString(message)
-		messageList.WriteString("\n")
-	}
-
+	// If messages exist, show them with channel
+	messageList := strings.Join(settings.Welcome.Messages, "\n• ")
 	embed := &discordgo.MessageEmbed{
-		Title:       "📜 Messages configured for this server:",
-		Description: messageList.String(),
-		Color:       0xFFFFFF, // белый
+		Title: "📜 Welcome messages for this server",
+		Color: 0x2ECC71,
+		Fields: []*discordgo.MessageEmbedField{
+			{
+				Name:  "📍 Channel",
+				Value: channelMention,
+			},
+			{
+				Name:  "✉️ Messages",
+				Value: "• " + messageList,
+			},
+		},
 	}
 
-	// Отвечаем на интеракцию
-	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Embeds: []*discordgo.MessageEmbed{embed},
-			Flags:  discordgo.MessageFlagsEphemeral,
 		},
 	})
-	if err != nil {
-		slog.Error("Failed to respond to interaction", "err", err)
-		return err
-	}
-
-	return nil
 }
 
 func setWelcomeChannel(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {

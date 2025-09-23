@@ -68,7 +68,7 @@ func menuButtons(disabledIDs ...string) []discordgo.MessageComponent {
 	}
 	buttons := []discordgo.MessageComponent{
 		discordgo.Button{
-			Label:    "Roles/Reactions.",
+			Label:    "Roles/Reactions",
 			Style:    discordgo.PrimaryButton,
 			CustomID: "RolesReactionsSettings",
 			Disabled: isDisabled("RolesReactionsSettings"),
@@ -77,21 +77,21 @@ func menuButtons(disabledIDs ...string) []discordgo.MessageComponent {
 			},
 		},
 		discordgo.Button{
-			Label:    "Main Menu",
-			Style:    discordgo.PrimaryButton,
-			CustomID: "MainMenuSettings",
-			Disabled: isDisabled("MainMenuSettings"),
-			Emoji: &discordgo.ComponentEmoji{
-				Name: "⚙️",
-			},
-		},
-		discordgo.Button{
-			Label:    "Welcome.",
+			Label:    "Welcome",
 			Style:    discordgo.PrimaryButton,
 			CustomID: "WelcomeSettings",
 			Disabled: isDisabled("WelcomeSettings"),
 			Emoji: &discordgo.ComponentEmoji{
 				Name: "👋",
+			},
+		},
+		discordgo.Button{
+			Label:    "AutoMode",
+			Style:    discordgo.PrimaryButton,
+			CustomID: "AutoModeSettings",
+			Disabled: isDisabled("AutoModeSettings"),
+			Emoji: &discordgo.ComponentEmoji{
+				Name: "🤖",
 			},
 		},
 	}
