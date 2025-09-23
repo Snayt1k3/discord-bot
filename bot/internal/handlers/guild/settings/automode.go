@@ -11,6 +11,11 @@ import (
 )
 
 func AddBannedWord(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
+
 	word := i.ApplicationCommandData().Options[0].StringValue()
 
 	err := guildService.AutoMode.AddBannedWord(i.GuildID, word)
@@ -33,6 +38,11 @@ func AddBannedWord(guildService guild.GuildAdapter, s *discordgo.Session, i *dis
 }
 
 func RemoveBannedWord(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
+
 	word := i.ApplicationCommandData().Options[0].StringValue()
 
 	err := guildService.AutoMode.RemoveBannedWord(i.GuildID, word)
@@ -54,6 +64,10 @@ func RemoveBannedWord(guildService guild.GuildAdapter, s *discordgo.Session, i *
 }
 
 func AddAntiLinkChannel(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
 	err := guildService.AutoMode.AddAntiLinkChannel(i.GuildID, i.ChannelID)
 
 	if err != nil {
@@ -73,6 +87,10 @@ func AddAntiLinkChannel(guildService guild.GuildAdapter, s *discordgo.Session, i
 }
 
 func RemoveAntiLinkChannel(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
 	err := guildService.AutoMode.RemoveAntiLinkChannel(i.GuildID, i.ChannelID)
 
 	if err != nil {
@@ -92,6 +110,10 @@ func RemoveAntiLinkChannel(guildService guild.GuildAdapter, s *discordgo.Session
 }
 
 func AddCapsLockChannel(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
 	err := guildService.AutoMode.AddCapsLockChannel(i.GuildID, i.ChannelID)
 
 	if err != nil {
@@ -111,6 +133,10 @@ func AddCapsLockChannel(guildService guild.GuildAdapter, s *discordgo.Session, i
 }
 
 func RemoveCapsLockChannel(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
 	err := guildService.AutoMode.RemoveCapsLockChannel(i.GuildID, i.ChannelID)
 
 	if err != nil {
@@ -131,6 +157,10 @@ func RemoveCapsLockChannel(guildService guild.GuildAdapter, s *discordgo.Session
 
 // Выводит сообщение в дискорд, о том какие настройки 'Automode' установлены
 func ShowAutoModeSettings(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
 	guildSettings, err := guildService.Settings.Get(i.GuildID)
 
 	if err != nil {
