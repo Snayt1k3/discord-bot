@@ -108,7 +108,7 @@ func (s *GuildServer) CreateSettings(ctx context.Context, req *pb.CreateSettings
 	if err != nil {
 		return nil, err
 	}
-	
+
 	matching := make(map[string]string)
 	var welcomeMessages []string
 	var bannedWords []*pb.BannedWord
@@ -172,5 +172,5 @@ func (s *GuildServer) CreateSettings(ctx context.Context, req *pb.CreateSettings
 			CapsLock:    capsLocks,
 			AntiLink:    antiLinks,
 		},
-	}, nil 
+	}, nil
 }

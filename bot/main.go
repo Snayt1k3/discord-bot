@@ -29,7 +29,7 @@ func main() {
 	dispatcher := handlers.NewCommandsDispatcher(*guildAdapter)
 	eventHandlers := handlers.NewEventHandlers(*guildAdapter, discord.CommandsList)
 	guildHandlers := guildHandlers.NewHandlers(*guildAdapter)
-	
+
 	dispatcher.InitHandlers(*guildHandlers)
 	addHandlers(dispatcher, eventHandlers)
 

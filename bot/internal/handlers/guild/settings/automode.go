@@ -32,7 +32,7 @@ func AddBannedWord(guildService guild.GuildAdapter, s *discordgo.Session, i *dis
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
-	
+
 	return nil
 
 }
@@ -59,7 +59,7 @@ func RemoveBannedWord(guildService guild.GuildAdapter, s *discordgo.Session, i *
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
-	
+
 	return nil
 }
 

@@ -128,7 +128,7 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		Description: "Disable AntiCaps filter in current chat.",
 	},
 	{
-		Name: 	  "automod-toggle",
+		Name:        "automod-toggle",
 		Description: "Toggle automod on/off.",
 	},
 	{
@@ -151,5 +151,4 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		Name:        "log-chnl-rm",
 		Description: "Remove the logging channel",
 	},
-
 }

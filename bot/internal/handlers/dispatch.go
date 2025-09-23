@@ -6,8 +6,8 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 
-	guildHandlers "bot/internal/handlers/guild"
 	guildAdapters "bot/internal/adapters/guild"
+	guildHandlers "bot/internal/handlers/guild"
 )
 
 type CommandsDispatcher struct {

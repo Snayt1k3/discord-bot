@@ -10,7 +10,6 @@ import (
 	"bot/internal/interfaces"
 )
 
-
 type RolesAdapter struct {
 	http interfaces.HttpClient
 }
@@ -19,7 +18,7 @@ func NewRolesAdapter(http interfaces.HttpClient) *RolesAdapter {
 	return &RolesAdapter{http: http}
 }
 
-func (s *RolesAdapter) Add(roleId, emoji, guildID string) (error) {
+func (s *RolesAdapter) Add(roleId, emoji, guildID string) error {
 
 	bytes, _ := json.Marshal(map[string]string{
 		"role_id":  roleId,
@@ -42,7 +41,7 @@ func (s *RolesAdapter) Add(roleId, emoji, guildID string) (error) {
 	return nil
 }
 
-func (s *RolesAdapter) Delete(roleId, emoji, guildID string) (error) {
+func (s *RolesAdapter) Delete(roleId, emoji, guildID string) error {
 
 	bytes, _ := json.Marshal(map[string]string{
 		"role_id":  roleId,
@@ -65,7 +64,7 @@ func (s *RolesAdapter) Delete(roleId, emoji, guildID string) (error) {
 	return nil
 }
 
-func (s *RolesAdapter) SetMessageID(messageID, guildID string) (error) {
+func (s *RolesAdapter) SetMessageID(messageID, guildID string) error {
 	bytes, _ := json.Marshal(map[string]string{
 		"message_id": messageID,
 		"guild_id":   guildID,
@@ -84,5 +83,5 @@ func (s *RolesAdapter) SetMessageID(messageID, guildID string) (error) {
 	}
 
 	return nil
-	
+
 }

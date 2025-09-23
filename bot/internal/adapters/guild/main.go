@@ -5,19 +5,19 @@ import (
 )
 
 type GuildAdapter struct {
-	Welcome interfaces.WelcomeAdapterInterface
+	Welcome        interfaces.WelcomeAdapterInterface
 	RolesReactions interfaces.RolesAdapterInterface
-	AutoMode interfaces.AutoModeAdapterInterface
-	Settings interfaces.SettingsAdapterInterface
-	Log interfaces.LogAdapterInterface
+	AutoMode       interfaces.AutoModeAdapterInterface
+	Settings       interfaces.SettingsAdapterInterface
+	Log            interfaces.LogAdapterInterface
 }
 
 func NewGuildAdapter(http interfaces.HttpClient) *GuildAdapter {
 	return &GuildAdapter{
-		Welcome: NewWelcomeAdapter(http),
+		Welcome:        NewWelcomeAdapter(http),
 		RolesReactions: NewRolesAdapter(http),
-		AutoMode: NewAutoMode(http),
-		Settings: NewSettingsAdapter(http),
-		Log: NewLogAdapter(http),
+		AutoMode:       NewAutoMode(http),
+		Settings:       NewSettingsAdapter(http),
+		Log:            NewLogAdapter(http),
 	}
 }

@@ -10,7 +10,6 @@ import (
 	"bot/internal/interfaces"
 )
 
-
 type WelcomeAdapter struct {
 	http interfaces.HttpClient
 }
@@ -19,8 +18,7 @@ func NewWelcomeAdapter(http interfaces.HttpClient) *WelcomeAdapter {
 	return &WelcomeAdapter{http: http}
 }
 
-
-func (s *WelcomeAdapter) SetChannel(guildID, channelID string) (error) {
+func (s *WelcomeAdapter) SetChannel(guildID, channelID string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id":   guildID,
 		"channel_id": channelID,
@@ -35,13 +33,13 @@ func (s *WelcomeAdapter) SetChannel(guildID, channelID string) (error) {
 
 	if err != nil {
 		slog.Warn("Bad response when setting welcome channel", "err", err)
-		return err	
+		return err
 	}
 
 	return nil
 }
 
-func (s *WelcomeAdapter) AddMessage(guildID, message string) (error) {
+func (s *WelcomeAdapter) AddMessage(guildID, message string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id": guildID,
 		"message":  message,
@@ -58,11 +56,11 @@ func (s *WelcomeAdapter) AddMessage(guildID, message string) (error) {
 		slog.Warn("Bad response when adding welcome message", "err", err)
 		return err
 	}
-	
+
 	return nil
 }
 
-func (s *WelcomeAdapter) DeleteMessage(guildID, message string) (error) {
+func (s *WelcomeAdapter) DeleteMessage(guildID, message string) error {
 	bodyBytes, err := json.Marshal(map[string]string{
 		"guild_id": guildID,
 		"message":  message,
@@ -81,7 +79,7 @@ func (s *WelcomeAdapter) DeleteMessage(guildID, message string) (error) {
 
 	if err != nil {
 		slog.Warn("Bad response when deleting welcome message", "err", err)
-		return err 
+		return err
 	}
 
 	return nil

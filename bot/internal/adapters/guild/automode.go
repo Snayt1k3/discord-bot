@@ -18,7 +18,7 @@ func NewAutoMode(http interfaces.HttpClient) *AutoModeAdapter {
 	return &AutoModeAdapter{http: http}
 }
 
-func (s *AutoModeAdapter) Toggle(guildID string, enable bool) (error) {
+func (s *AutoModeAdapter) Toggle(guildID string, enable bool) error {
 	bodyBytes, _ := json.Marshal(map[string]interface{}{
 		"guild_id": guildID,
 		"enable":   enable,
@@ -38,7 +38,7 @@ func (s *AutoModeAdapter) Toggle(guildID string, enable bool) (error) {
 	return nil
 }
 
-func (s *AutoModeAdapter) AddCapsLockChannel(guildID, channelID string) (error) {
+func (s *AutoModeAdapter) AddCapsLockChannel(guildID, channelID string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id":   guildID,
 		"channel_id": channelID,
@@ -58,7 +58,7 @@ func (s *AutoModeAdapter) AddCapsLockChannel(guildID, channelID string) (error) 
 	return nil
 }
 
-func (s *AutoModeAdapter) RemoveCapsLockChannel(guildID, channelID string) (error) {
+func (s *AutoModeAdapter) RemoveCapsLockChannel(guildID, channelID string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id":   guildID,
 		"channel_id": channelID,
@@ -78,7 +78,7 @@ func (s *AutoModeAdapter) RemoveCapsLockChannel(guildID, channelID string) (erro
 	return nil
 }
 
-func (s *AutoModeAdapter) AddAntiLinkChannel(guildID, channelID string) (error) {
+func (s *AutoModeAdapter) AddAntiLinkChannel(guildID, channelID string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id":   guildID,
 		"channel_id": channelID,
@@ -98,7 +98,7 @@ func (s *AutoModeAdapter) AddAntiLinkChannel(guildID, channelID string) (error) 
 	return nil
 }
 
-func (s *AutoModeAdapter) RemoveAntiLinkChannel(guildID, channelID string) (error) {
+func (s *AutoModeAdapter) RemoveAntiLinkChannel(guildID, channelID string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id":   guildID,
 		"channel_id": channelID,
@@ -118,7 +118,7 @@ func (s *AutoModeAdapter) RemoveAntiLinkChannel(guildID, channelID string) (erro
 	return nil
 }
 
-func (s *AutoModeAdapter) AddBannedWord(guildID, word string) (error) {
+func (s *AutoModeAdapter) AddBannedWord(guildID, word string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id": guildID,
 		"word":     word,
@@ -138,7 +138,7 @@ func (s *AutoModeAdapter) AddBannedWord(guildID, word string) (error) {
 	return nil
 }
 
-func (s *AutoModeAdapter) RemoveBannedWord(guildID, word string) (error) {
+func (s *AutoModeAdapter) RemoveBannedWord(guildID, word string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id": guildID,
 		"word":     word,

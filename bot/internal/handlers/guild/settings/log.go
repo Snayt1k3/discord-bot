@@ -9,8 +9,7 @@ import (
 	"bot/internal/utils"
 )
 
-
-func ToggleLogging (guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func ToggleLogging(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
@@ -37,7 +36,7 @@ func ToggleLogging (guildService guild.GuildAdapter, s *discordgo.Session, i *di
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
-	
+
 	return nil
 }
 
@@ -62,7 +61,7 @@ func AddLoggingChannel(guildService guild.GuildAdapter, s *discordgo.Session, i 
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
-	
+
 	return nil
 }
 
@@ -78,7 +77,7 @@ func RemoveLoggingChannel(guildService guild.GuildAdapter, s *discordgo.Session,
 		utils.SendErrorMessage(s, i)
 		return err
 	}
-	
+
 	err = guildService.Log.RemoveChannel(i.GuildID, settings.Log.ChannelID)
 
 	if err != nil {
@@ -93,6 +92,6 @@ func RemoveLoggingChannel(guildService guild.GuildAdapter, s *discordgo.Session,
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
-	
+
 	return nil
 }
