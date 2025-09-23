@@ -76,6 +76,18 @@ func (g *GuildPreferencesHandlers) removeAntiCapsLock(s *discordgo.Session, i *d
 	return RemoveCapsLockChannel(g.guildService, s, i)
 }
 
+func (g *GuildPreferencesHandlers) toggleLogging(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return ToggleLogging(g.guildService, s, i)
+}
+
+func (g *GuildPreferencesHandlers) addLoggingChannel(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return AddLoggingChannel(g.guildService, s, i)
+}
+
+func (g *GuildPreferencesHandlers) removeLoggingChannel(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return RemoveLoggingChannel(g.guildService, s, i)
+}
+
 func (gp *GuildPreferencesHandlers) AddHandlers(handlers map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error) {
 
 	// Настройка Roles/Reactions
@@ -100,4 +112,9 @@ func (gp *GuildPreferencesHandlers) AddHandlers(handlers map[string]func(s *disc
 	handlers["automod-al-disable"] = gp.removeAntiLinkChannel
 	handlers["automod-ac-enable"] = gp.addAntiCapsLock
 	handlers["automod-ac-disable"] = gp.removeAntiCapsLock
+
+	// Logging
+	handlers["log-toggle"] = gp.toggleLogging
+	handlers["log-chnl"] = gp.addLoggingChannel
+	handlers["log-chnl-rm"] = gp.removeLoggingChannel
 }

@@ -58,13 +58,19 @@ type BannedWord struct {
 	GuildID  string `json:"guild_id"`
 }
 
+type LogSettings struct {
+	GuildID  string `json:"guild_id"`
+	ChannelID string `json:"channel_id"`
+	Enabled   bool   `json:"enabled"`
+}
+
 type GuildSettings struct {
 	ID      string          `json:"id"`
 	GuildID string          `json:"guild_id"`
 	Roles   RolesSettings   `json:"roles"`
 	Welcome WelcomeSettings `json:"welcome"`
 	AutoMode AutoModeSettings 		`json:"automode"`
-	Log string 		`json:"log"`
+	Log LogSettings 		`json:"log"`
 }
 
 type GuildSettingsResponse struct {
