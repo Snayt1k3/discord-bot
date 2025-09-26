@@ -63,18 +63,15 @@ message LogSettings {
 
 message CapsLock {
     string id = 1;
-    string guild_id = 2;
-    string channel_id = 3;
+    string channel_id = 2;
 }
 
 message AntiLink {
     string id = 1;
-    string guild_id = 2;
-    string channel_id = 3;
+    string channel_id = 2;
 }
 
 message BannedWord {
     string id = 1;
-    string guild_id = 2;
-    string word = 3;
+    string word = 2;
 }

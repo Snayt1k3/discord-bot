@@ -45,7 +45,6 @@ func (s *GuildServer) GetSettings(ctx context.Context, req *pb.GetSettingsReques
 		bannedWords = append(bannedWords, &pb.BannedWord{
 			Id:      strconv.FormatUint(uint64(bw.ID), 10),
 			Word:    bw.Word,
-			GuildId: bw.GuildID,
 		})
 	}
 
@@ -53,7 +52,6 @@ func (s *GuildServer) GetSettings(ctx context.Context, req *pb.GetSettingsReques
 		capsLocks = append(capsLocks, &pb.CapsLock{
 			Id:        strconv.FormatUint(uint64(c.ID), 10),
 			ChannelId: c.ChannelID,
-			GuildId:   c.GuildID,
 		})
 	}
 
@@ -61,7 +59,6 @@ func (s *GuildServer) GetSettings(ctx context.Context, req *pb.GetSettingsReques
 		antiLinks = append(antiLinks, &pb.AntiLink{
 			Id:        strconv.FormatUint(uint64(a.ID), 10),
 			ChannelId: a.ChannelID,
-			GuildId:   a.GuildID,
 		})
 	}
 
@@ -127,7 +124,6 @@ func (s *GuildServer) CreateSettings(ctx context.Context, req *pb.CreateSettings
 		bannedWords = append(bannedWords, &pb.BannedWord{
 			Id:      strconv.FormatUint(uint64(bw.ID), 10),
 			Word:    bw.Word,
-			GuildId: bw.GuildID,
 		})
 	}
 
@@ -135,7 +131,6 @@ func (s *GuildServer) CreateSettings(ctx context.Context, req *pb.CreateSettings
 		capsLocks = append(capsLocks, &pb.CapsLock{
 			Id:        strconv.FormatUint(uint64(c.ID), 10),
 			ChannelId: c.ChannelID,
-			GuildId:   c.GuildID,
 		})
 	}
 
@@ -143,7 +138,6 @@ func (s *GuildServer) CreateSettings(ctx context.Context, req *pb.CreateSettings
 		antiLinks = append(antiLinks, &pb.AntiLink{
 			Id:        strconv.FormatUint(uint64(a.ID), 10),
 			ChannelId: a.ChannelID,
-			GuildId:   a.GuildID,
 		})
 	}
 

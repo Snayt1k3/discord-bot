@@ -12,7 +12,8 @@ type AutomodeServer struct {
 	pb.UnimplementedAutoModServiceServer
 }
 
-func (s *AutomodeServer) ToggleAutoMode(ctx context.Context, req *pb.ToggleAutoModRequest) (*pb.ToggleAutoModResponse, error) {
+
+func (s *AutomodeServer) ToggleAutoMod(ctx context.Context, req *pb.ToggleAutoModRequest) (*pb.ToggleAutoModResponse, error) {
 	_, err := s.Repo.ToggleAutoMode(req.GuildId, req.Enabled)
 
 	if err != nil {

@@ -76,6 +76,10 @@ func (g *GuildPreferencesHandlers) removeAntiCapsLock(s *discordgo.Session, i *d
 	return RemoveCapsLockChannel(g.guildService, s, i)
 }
 
+func (g *GuildPreferencesHandlers) toggleAutomode(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return toggleAutomode(g.guildService, s, i)
+}
+
 func (g *GuildPreferencesHandlers) toggleLogging(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	return ToggleLogging(g.guildService, s, i)
 }
@@ -106,6 +110,7 @@ func (gp *GuildPreferencesHandlers) AddHandlers(handlers map[string]func(s *disc
 	handlers["AutoModeSettings"] = gp.showAutoModeSettings
 
 	// Automode
+	handlers["automod-toggle"] = gp.toggleAutomode
 	handlers["automod-bw-add"] = gp.addBannedWord
 	handlers["automod-bw-rm"] = gp.removeBannedWord
 	handlers["automod-al-enable"] = gp.addAntiLinkChannel

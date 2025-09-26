@@ -10,6 +10,45 @@ import (
 	"bot/internal/utils"
 )
 
+func toggleAutomode(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
+		utils.SendNoPermissionMessage(s, i)
+		return nil
+	}
+
+	guildSettings, err := guildService.Settings.Get(i.GuildID)
+
+	if err != nil {
+		utils.SendErrorMessage(s, i)
+		return err
+	}
+
+	autoMode := guildSettings.AutoMode
+	
+	newStatus := !autoMode.Enabled
+	err = guildService.AutoMode.Toggle(i.GuildID, newStatus)
+
+	if err != nil {
+		utils.SendErrorMessage(s, i)
+		return err
+	}
+
+	statusText := "enabled"
+
+	if !newStatus {
+		statusText = "disabled"
+	}
+
+	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: "AutoMode has been " + statusText + " successfully!",
+			Flags:   discordgo.MessageFlagsEphemeral,
+		},
+	})
+	return nil
+}
+
 func AddBannedWord(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)

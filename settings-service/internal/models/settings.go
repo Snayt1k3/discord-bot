@@ -45,33 +45,30 @@ type Message struct {
 type AutoModeSettings struct {
 	ID          uint              `gorm:"primaryKey"`
 	GuildID     string            `gorm:"not null;index"`
-	CapsLocks   []AntiCapsChannel `gorm:"many2many:auto_mode_capslock;joinForeignKey:AutoModeID;joinReferences:ChannelID;constraint:OnDelete:CASCADE;"`
-	AntiLinks   []AntiLinkChannel `gorm:"many2many:auto_mode_antilink;joinForeignKey:AutoModeID;joinReferences:ChannelID;constraint:OnDelete:CASCADE;"`
-	BannedWords []BannedWord      `gorm:"many2many:auto_mode_bannedwords;joinForeignKey:AutoModeID;joinReferences:WordID;constraint:OnDelete:CASCADE;"`
+	CapsLocks   []AntiCapsChannel `gorm:"many2many:auto_mode_capslock;constraint:OnDelete:CASCADE;"`
+	AntiLinks   []AntiLinkChannel `gorm:"many2many:auto_mode_antilink;constraint:OnDelete:CASCADE;"`
+	BannedWords []BannedWord      `gorm:"many2many:auto_mode_bannedwords;constraint:OnDelete:CASCADE;"`
 	Enabled     bool              `json:"enabled"`
 }
 
 type BannedWord struct {
 	ID      uint   `gorm:"primaryKey"`
-	GuildID string `gorm:"not null;uniqueIndex"`
 	Word    string `json:"word"`
 }
 
 type AntiCapsChannel struct {
 	ID        uint   `gorm:"primaryKey"`
-	GuildID   string `gorm:"not null;uniqueIndex"`
 	ChannelID string `json:"channel_id"`
 }
 
 type AntiLinkChannel struct {
 	ID        uint   `gorm:"primaryKey"`
-	GuildID   string `gorm:"not null;uniqueIndex"`
 	ChannelID string `json:"channel_id"`
 }
 
 type LogSettings struct {
 	ID        uint   `gorm:"primaryKey"`
-	GuildID   string `gorm:"not null;uniqueIndex"`
+	GuildID   string `gorm:"not null"`
 	ChannelID string `json:"channel_id"`
 	Enabled   bool
 }

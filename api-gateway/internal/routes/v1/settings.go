@@ -19,7 +19,7 @@ func SettingsRoutes(r *gin.Engine, handler *handlers.Handlers) {
 	settings.POST("/guild/:guild_id/welcome/message", handler.Welcome.AddWelcomeMessage)
 	settings.DELETE("/guild/:guild_id/welcome/message", handler.Welcome.DeleteWelcomeMessage)
 
-	settings.PATCH("/guild/:guild_id/automode/toggle", handler.Automode.ToggleAutoMod)
+	settings.POST("/guild/:guild_id/automode/toggle", handler.Automode.ToggleAutoMod)
 	settings.POST("/guild/:guild_id/automode/bannedword", handler.Automode.AddBannedWord)
 	settings.DELETE("/guild/:guild_id/automode/bannedword", handler.Automode.RemoveBannedWord)
 	settings.POST("/guild/:guild_id/automode/antilink", handler.Automode.AddAntiLink)
@@ -27,7 +27,7 @@ func SettingsRoutes(r *gin.Engine, handler *handlers.Handlers) {
 	settings.POST("/guild/:guild_id/automode/capslock", handler.Automode.AddCapsLock)
 	settings.DELETE("/guild/:guild_id/automode/capslock", handler.Automode.RemoveCapsLock)
 
-	settings.PATCH("/guild/:guild_id/logging/toggle", handler.Log.ToggleLog)
+	settings.POST("/guild/:guild_id/logging/toggle", handler.Log.ToggleLog)
 	settings.POST("/guild/:guild_id/logging/channel", handler.Log.AddLogChannel)
 	settings.DELETE("/guild/:guild_id/logging/channel", handler.Log.RemoveLogChannel)
 }

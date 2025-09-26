@@ -40,7 +40,7 @@ func (s *SettingsAdapter) Get(guild_id string) (dtoGuild.GuildSettings, error) {
 		return dtoGuild.GuildSettings{}, err
 	}
 
-	var settings dtoGuild.GuildSettingsResponse
+	var settings dtoGuild.GuildSettings
 
 	err = json.Unmarshal(body, &settings)
 
@@ -49,7 +49,7 @@ func (s *SettingsAdapter) Get(guild_id string) (dtoGuild.GuildSettings, error) {
 		return dtoGuild.GuildSettings{}, nil
 	}
 
-	return settings.Settings, nil
+	return settings, nil
 
 }
 
