@@ -4,16 +4,31 @@ import (
 	"context"
 	"settings-service/internal/interfaces"
 	pb "settings-service/proto"
-	// "google.golang.org/grpc/codes"
-	// "google.golang.org/grpc/status"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type RolesReactionServer struct {
 	Repo interfaces.ReactionRolesRepository
+	GuildRepo interfaces.GuildSettingsRepository
 	pb.UnimplementedRolesServiceServer
 }
 
 func (s *RolesReactionServer) AddRole(ctx context.Context, req *pb.AddRoleRequest) (*pb.AddRoleResponse, error) {
+
+	settungs, err := s.GuildRepo.GetGuildSettings(req.GuildId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if len(settungs.AutoMode.CapsLocks) >= 50 {
+	return nil, status.Errorf(
+		codes.ResourceExhausted,
+		"Reaction roles limit (50) reached",
+	)
+	}
+
 	role, err := s.Repo.AddRole(req.GuildId, req.RoleId, req.Emoji)
 
 	if err != nil {

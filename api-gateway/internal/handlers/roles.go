@@ -7,6 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	pb "api-gateway/proto"
 )
@@ -63,6 +65,7 @@ func (s *RolesHandlers) SetRoleMessageId(c *gin.Context) {
 // @Param        request body pb.AddRoleRequest true "Add role request"
 // @Success      200 {object} pb.AddRoleResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
+// @Failure      429 {object} dto.APIResponse "Quota exceeded"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/{guild_id}/roles/role [post]
 func (s *RolesHandlers) AddRole(c *gin.Context) {
@@ -79,6 +82,15 @@ func (s *RolesHandlers) AddRole(c *gin.Context) {
 	resp, err := s.clients.Roles.AddRole(context.Background(), &req)
 
 	if err != nil {
+		st, ok := status.FromError(err)
+
+		if ok && st.Code() == codes.ResourceExhausted {
+			slog.Warn("Quota exceeded for Roles/Reactions", "guild_id", guildID)
+			c.JSON(http.StatusTooManyRequests, gin.H{"error": "Quota exceeded for Roles/Reactions"})
+			return
+		}
+
+
 		slog.Error("Error while adding role", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

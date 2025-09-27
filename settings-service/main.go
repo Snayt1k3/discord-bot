@@ -42,19 +42,19 @@ func main() {
 	grpcServer := grpc.NewServer()
 
 	pb.RegisterAutoModServiceServer(grpcServer, &server.AutomodeServer{
-		Repo: repositories.AutoMode,
+		Repo: repositories.AutoMode, GuildRepo: repositories.Settings,
 	})
 	pb.RegisterLogServiceServer(grpcServer, &server.LogServer{
-		Repo: repositories.Log,
+		Repo: repositories.Log, 
 	})
 	pb.RegisterRolesServiceServer(grpcServer, &server.RolesReactionServer{
-		Repo: repositories.ReactionRoles,
+		Repo: repositories.ReactionRoles, GuildRepo: repositories.Settings,
 	})
 	pb.RegisterSettingsServiceServer(grpcServer, &server.GuildServer{
-		Repo: repositories.Settings,
+		Repo: repositories.Settings, 
 	})
 	pb.RegisterWelcomeServiceServer(grpcServer, &server.WelcomeServer{
-		Repo: repositories.Welcome,
+		Repo: repositories.Welcome, GuildRepo: repositories.Settings,
 	})
 
 	log.Printf("gRPC server is running on port :%v \n", cfg.GrpcPort)

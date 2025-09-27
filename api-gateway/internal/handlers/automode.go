@@ -7,6 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	pb "api-gateway/proto"
 )
@@ -63,6 +65,7 @@ func (s *AutoModeHandlers) ToggleAutoMod(c *gin.Context) {
 // @Param        request body pb.AddBannedWordRequest true "Add banned word request"
 // @Success      200 {object} pb.AddBannedWordResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
+// @Failure      429 {object} dto.APIResponse "Quota exceeded"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/{guild_id}/automode/bannedword [post]
 func (s *AutoModeHandlers) AddBannedWord(c *gin.Context) {
@@ -79,6 +82,15 @@ func (s *AutoModeHandlers) AddBannedWord(c *gin.Context) {
 	resp, err := s.clients.AutoMode.AddBannedWord(context.Background(), &req)
 
 	if err != nil {
+
+		st, ok := status.FromError(err)
+
+		if ok && st.Code() == codes.ResourceExhausted {
+			slog.Warn("Quota exceeded for banned words", "guild_id", guildID)
+			c.JSON(http.StatusTooManyRequests, gin.H{"error": "Quota exceeded for banned words"})
+			return
+		}
+		
 		slog.Error("Error while adding banned word", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -131,6 +143,7 @@ func (s *AutoModeHandlers) RemoveBannedWord(c *gin.Context) {
 // @Param        request body pb.RemoveAntiLinkChannelRequest true "Remove anti-link channel request"
 // @Success      200 {object} pb.RemoveAntiLinkChannelResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
+// @Failure      429 {object} dto.APIResponse "Quota exceeded"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/{guild_id}/automode/antilink [delete]
 func (s *AutoModeHandlers) RemoveAntiLink(c *gin.Context) {
@@ -147,6 +160,15 @@ func (s *AutoModeHandlers) RemoveAntiLink(c *gin.Context) {
 	resp, err := s.clients.AutoMode.RemoveAntiLinkChannel(context.Background(), &req)
 
 	if err != nil {
+
+		st, ok := status.FromError(err)
+
+		if ok && st.Code() == codes.ResourceExhausted {
+			slog.Warn("Quota exceeded for antilink", "guild_id", guildID)
+			c.JSON(http.StatusTooManyRequests, gin.H{"error": "Quota exceeded for antilink"})
+			return
+		}
+
 		slog.Error("Error while removing antilink channel", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -199,6 +221,7 @@ func (s *AutoModeHandlers) AddAntiLink(c *gin.Context) {
 // @Param        request body pb.AddCapsLockChannelRequest true "Add capslock channel request"
 // @Success      200 {object} pb.AddCapsLockChannelResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
+// @Failure      429 {object} dto.APIResponse "Quota exceeded"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/{guild_id}/automode/capslock [post]
 func (s *AutoModeHandlers) AddCapsLock(c *gin.Context) {
@@ -215,6 +238,15 @@ func (s *AutoModeHandlers) AddCapsLock(c *gin.Context) {
 	resp, err := s.clients.AutoMode.AddCapsLockChannel(context.Background(), &req)
 
 	if err != nil {
+
+		st, ok := status.FromError(err)
+
+		if ok && st.Code() == codes.ResourceExhausted {
+			slog.Warn("Quota exceeded for capslock", "guild_id", guildID)
+			c.JSON(http.StatusTooManyRequests, gin.H{"error": "Quota exceeded for capslock"})
+			return
+		}
+
 		slog.Error("Error while adding capslock channel", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

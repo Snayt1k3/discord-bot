@@ -7,6 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	pb "api-gateway/proto"
 )
@@ -63,6 +65,7 @@ func (s *WelcomeHandlers) SetWelcomeChannel(c *gin.Context) {
 // @Param        request body pb.WelcomeMessageRequest true "Welcome message data"
 // @Success      200 {object} pb.WelcomeMessageResponse
 // @Failure      400 {object} dto.APIResponse "Invalid request body"
+// @Failure      429 {object} dto.APIResponse "Quota exceeded"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/{guild_id}/welcome/message [post]
 func (s *WelcomeHandlers) AddWelcomeMessage(c *gin.Context) {
@@ -79,6 +82,14 @@ func (s *WelcomeHandlers) AddWelcomeMessage(c *gin.Context) {
 	resp, err := s.clients.Welcome.AddWelcomeMessage(context.Background(), &req)
 
 	if err != nil {
+		st, ok := status.FromError(err)
+
+		if ok && st.Code() == codes.ResourceExhausted {
+			slog.Warn("Quota exceeded for welcome messages", "guild_id", guildID)
+			c.JSON(http.StatusTooManyRequests, gin.H{"error": "Quota exceeded for welcome messages"})
+			return
+		}
+
 		slog.Error("Error while updating welcome channel", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

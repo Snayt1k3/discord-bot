@@ -3,11 +3,14 @@ package server
 import (
 	"context"
 	"settings-service/internal/interfaces"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	pb "settings-service/proto"
 )
 
 type WelcomeServer struct {
 	Repo interfaces.WelcomeRepository
+	GuildRepo interfaces.GuildSettingsRepository
 	pb.UnimplementedWelcomeServiceServer
 }
 
@@ -26,7 +29,21 @@ func (s *WelcomeServer) SetWelcomeChannel(ctx context.Context, req *pb.SetWelcom
 }
 
 func (s *WelcomeServer) AddWelcomeMessage(ctx context.Context, req *pb.WelcomeMessageRequest) (*pb.WelcomeMessageResponse, error) {
-	err := s.Repo.AddWelcomeMessage(req.GuildId, req.Message)
+	
+	settungs, err := s.GuildRepo.GetGuildSettings(req.GuildId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if len(settungs.Welcome.Messages) >= 5 {
+	return nil, status.Errorf(
+		codes.ResourceExhausted,
+		"Welcome messages limit (5) reached",
+	)
+	}
+	
+	err = s.Repo.AddWelcomeMessage(req.GuildId, req.Message)
 
 	if err != nil {
 		return nil, err
