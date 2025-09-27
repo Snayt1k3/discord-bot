@@ -35,26 +35,23 @@ type AutoModeSettings struct {
 	Enabled     bool         `json:"enabled"`
 	GuildID     string       `json:"guild_id"`
 	BannedWords []BannedWord `json:"banned_words"`
-	AntiLink    []AntiLink   `json:"anti_link_channels"`
-	CapsLock    []CapsLock   `json:"caps_lock_channels"`
+	AntiLink    []AntiLink   `json:"anti_link"`
+	CapsLock    []CapsLock   `json:"caps_lock"`
 }
 
 type AntiLink struct {
 	ChannelId string `json:"channel_id"`
 	Id        string `json:"id"`
-	GuildID   string `json:"guild_id"`
 }
 
 type CapsLock struct {
 	ChannelId string `json:"channel_id"`
 	Id        string `json:"id"`
-	GuildID   string `json:"guild_id"`
 }
 
 type BannedWord struct {
 	Word    string `json:"word"`
 	Id      string `json:"id"`
-	GuildID string `json:"guild_id"`
 }
 
 type LogSettings struct {

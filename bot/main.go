@@ -55,6 +55,7 @@ func addHandlers(cd *handlers.CommandsDispatcher, eh *handlers.EventHandlers) {
 	discord.Bot.Session.AddHandler(eh.OnMessageReactionAdd)
 	discord.Bot.Session.AddHandler(eh.OnMessageReactionRemove)
 	discord.Bot.Session.AddHandler(eh.OnGuildCreate)
+	discord.Bot.Session.AddHandler(eh.MessageCreate)
 
 }
 

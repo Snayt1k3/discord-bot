@@ -40,10 +40,7 @@ func backToMenu(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 
 	content := "** Friren – Server Control Panel**\n\n" +
 		"Hello, I'm Friren! I'll help you set up some useful features for your server ✨\n\n" +
-		"🔹 **Reaction/Roles** – configure adding or removing roles when users react to a specific message.\n" +
-		"🔹 **Welcome** – choose a channel and customize the message to greet new members.\n\n" +
 		"Use the buttons below to open the settings 👇"
-
 	message := &discordgo.WebhookEdit{
 		Content: &content,
 		Components: &[]discordgo.MessageComponent{

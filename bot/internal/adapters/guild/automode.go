@@ -21,10 +21,10 @@ func NewAutoMode(http interfaces.HttpClient) *AutoModeAdapter {
 func (s *AutoModeAdapter) Toggle(guildID string, enable bool) error {
 	bodyBytes, _ := json.Marshal(map[string]interface{}{
 		"guild_id": guildID,
-		"enable":   enable,
+		"enabled":   enable,
 	})
 
-	_, err := s.http.Patch(
+	_, err := s.http.Post(
 		context.Background(),
 		fmt.Sprintf("%v/api/v1/settings/guild/%v/automode/toggle", config.GetApiGatewayAddr(), guildID),
 		bodyBytes,
@@ -46,7 +46,7 @@ func (s *AutoModeAdapter) AddCapsLockChannel(guildID, channelID string) error {
 
 	_, err := s.http.Post(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/automode/capslock/channel", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/%v/automode/capslock", config.GetApiGatewayAddr(), guildID),
 		bodyBytes,
 		nil,
 	)
@@ -86,7 +86,7 @@ func (s *AutoModeAdapter) AddAntiLinkChannel(guildID, channelID string) error {
 
 	_, err := s.http.Post(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/automode/AntiLink", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/%v/automode/antilink", config.GetApiGatewayAddr(), guildID),
 		bodyBytes,
 		nil,
 	)

@@ -1,6 +1,7 @@
 package settings
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -219,7 +220,7 @@ func ShowAutoModeSettings(guildService guild.GuildAdapter, s *discordgo.Session,
 		})
 	}
 
-	channelList := func(items []string) string {
+	joinOrDash := func(items []string) string {
 		if len(items) == 0 {
 			return "—"
 		}
@@ -253,22 +254,22 @@ func ShowAutoModeSettings(guildService guild.GuildAdapter, s *discordgo.Session,
 	// Формируем Embed
 	embed := &discordgo.MessageEmbed{
 		Title:       "⚙️ AutoMode Settings",
-		Color:       0x2ECC71,
-		Description: "Current automatic moderation settings:",
+		Color:       0x57F287, // Discord green
+		Description: "Here are the current automatic moderation settings:",
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:   "🚫 Banned Words",
-				Value:  channelList(bannedWords),
+				Value:  fmt.Sprintf("%s\n**Quota:** %d / 50", joinOrDash(bannedWords), len(bannedWords)),
 				Inline: false,
 			},
 			{
 				Name:   "🔗 Anti-Link (Channels)",
-				Value:  channelList(mentionChannels(antiLinkChannels)),
+				Value:  fmt.Sprintf("%s\n**Quota:** %d / 5", joinOrDash(mentionChannels(antiLinkChannels)), len(antiLinkChannels)),
 				Inline: false,
 			},
 			{
 				Name:   "🔠 CapsLock (Channels)",
-				Value:  channelList(mentionChannels(capsLockChannels)),
+				Value:  fmt.Sprintf("%s\n**Quota:** %d / 5", joinOrDash(mentionChannels(capsLockChannels)), len(capsLockChannels)),
 				Inline: false,
 			},
 		},

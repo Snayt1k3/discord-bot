@@ -1,6 +1,7 @@
 package settings
 
 import (
+	"fmt"
 	"log/slog"
 	"strings"
 
@@ -61,6 +62,11 @@ func ShowWelcomeSettings(gk guild.GuildAdapter, s *discordgo.Session, i *discord
 			{
 				Name:  "📍 Channel",
 				Value: channelMention,
+				Inline: false,
+			},
+			{
+				Name:  "〽️ Quota:",
+				Value: fmt.Sprintf("%d/5 Messages", len(settings.Welcome.Messages)),
 			},
 			{
 				Name:  "✉️ Messages",
@@ -152,7 +158,7 @@ func DeleteWelcomeMessage(gk guild.GuildAdapter, s *discordgo.Session, i *discor
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
-			Content: "Message added successfully!",
+			Content: "Message removed successfully!",
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
