@@ -2,9 +2,11 @@ package utils
 
 import (
 	"bot/internal/discord"
-	"github.com/bwmarrin/discordgo"
 	"log/slog"
 	"os"
+	"time"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 func SearchGuildByChannelID(textChannelID string) (guildID string) {
@@ -84,4 +86,21 @@ func EditMessage(session *discordgo.Session, message *discordgo.MessageEdit) {
 	if err != nil {
 		slog.Error("failed to edit message", "error", err)
 	}
+}
+
+// SendTempMessage sends a message and deletes it after 5 seconds
+func SendTempMessage(s *discordgo.Session, channelID, content string) {
+	msg, err := s.ChannelMessageSend(channelID, content)
+	if err != nil {
+		slog.Error("failed to send temp message", "error", err)
+		return
+	}
+
+	// Удаляем сообщение через 5 секунд (не блокируем основной поток)
+	time.AfterFunc(5*time.Second, func() {
+		err := s.ChannelMessageDelete(channelID, msg.ID)
+		if err != nil {
+			slog.Error("failed to delete temp message", "error", err)
+		}
+	})
 }

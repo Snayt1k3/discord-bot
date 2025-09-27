@@ -129,7 +129,7 @@ func (eh *EventHandlers) automodeCheck (s *discordgo.Session, m *discordgo.Messa
 	for _, bw := range autoMode.BannedWords {
 		if strings.Contains(strings.ToLower(content), strings.ToLower(bw.Word)) {
 			s.ChannelMessageDelete(m.ChannelID, m.ID)
-			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("❌ %s, your message contains a banned word!", m.Author.Mention()))
+			utils.SendTempMessage(s, m.ChannelID, fmt.Sprintf("❌ %s, your message contains a banned word!", m.Author.Mention()))
 			return
 		}
 	}
@@ -138,7 +138,7 @@ func (eh *EventHandlers) automodeCheck (s *discordgo.Session, m *discordgo.Messa
 		if strings.Contains(content, "http://") || strings.Contains(content, "https://") || strings.Contains(content, "discord.gg/") {
 			if al.ChannelId == m.ChannelID {
 				s.ChannelMessageDelete(m.ChannelID, m.ID)
-				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("❌ %s, links are not allowed in this channel!", m.Author.Mention()))
+				utils.SendTempMessage(s, m.ChannelID, fmt.Sprintf("❌ %s, links are not allowed in this channel!", m.Author.Mention()))
 				return
 			}
 		}
@@ -158,7 +158,7 @@ func (eh *EventHandlers) automodeCheck (s *discordgo.Session, m *discordgo.Messa
 			}
 			if letters > 0 && float64(upperCount)/float64(letters) > 0.7 {
 				s.ChannelMessageDelete(m.ChannelID, m.ID)
-				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("❌ %s, please do not write in caps!", m.Author.Mention()))
+				utils.SendTempMessage(s, m.ChannelID, fmt.Sprintf("❌ %s, please do not write in caps!", m.Author.Mention()))
 				return
 			}
 		}
