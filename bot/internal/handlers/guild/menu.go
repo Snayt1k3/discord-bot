@@ -94,6 +94,15 @@ func menuButtons(disabledIDs ...string) []discordgo.MessageComponent {
 				Name: "🤖",
 			},
 		},
+		discordgo.Button{
+			Label:    "Logging",
+			Style:    discordgo.PrimaryButton,
+			CustomID: "LogSettings",
+			Disabled: isDisabled("LogSettings"),
+			Emoji: &discordgo.ComponentEmoji{
+				Name: "📜",
+			},
+		},
 	}
 	return buttons
 }

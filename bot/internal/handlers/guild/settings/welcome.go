@@ -36,7 +36,7 @@ func ShowWelcomeSettings(gk guild.GuildAdapter, s *discordgo.Session, i *discord
 		embed := &discordgo.MessageEmbed{
 			Title:       "📜 Welcome messages configuration",
 			Description: "⚠️ No welcome messages have been configured.",
-			Color:       0xFFFFFF,
+			Color:       0xED4245,
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:  "📍 Channel",
@@ -56,7 +56,7 @@ func ShowWelcomeSettings(gk guild.GuildAdapter, s *discordgo.Session, i *discord
 	messageList := strings.Join(settings.Welcome.Messages, "\n• ")
 	embed := &discordgo.MessageEmbed{
 		Title: "📜 Welcome messages for this server",
-		Color: 0x2ECC71,
+		Color: 0x57F287,
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "📍 Channel",

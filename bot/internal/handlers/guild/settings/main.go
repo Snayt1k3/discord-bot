@@ -92,6 +92,10 @@ func (g *GuildPreferencesHandlers) removeLoggingChannel(s *discordgo.Session, i 
 	return RemoveLoggingChannel(g.guildService, s, i)
 }
 
+func (g *GuildPreferencesHandlers) ShowLogSettings(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return ShowLogSettings(g.guildService, s, i)
+}
+
 func (gp *GuildPreferencesHandlers) AddHandlers(handlers map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error) {
 
 	// Настройка Roles/Reactions
@@ -108,6 +112,7 @@ func (gp *GuildPreferencesHandlers) AddHandlers(handlers map[string]func(s *disc
 	handlers["RolesReactionsSettings"] = gp.showAllRoles
 	handlers["WelcomeSettings"] = gp.showWelcomeSettings
 	handlers["AutoModeSettings"] = gp.showAutoModeSettings
+	handlers["LogSettings"] = gp.ShowLogSettings
 
 	// Automode
 	handlers["automod-toggle"] = gp.toggleAutomode

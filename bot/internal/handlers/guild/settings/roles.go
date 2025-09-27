@@ -33,7 +33,7 @@ func showAllRoles(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.Inte
 		embed := &discordgo.MessageEmbed{
 			Title:       "📜 Roles configured for this server:",
 			Description: "⚠️ No roles configured.",
-			Color:       0x95A5A6, // gray
+			Color:       0xED4245, // red
 		}
 		return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
@@ -57,7 +57,7 @@ func showAllRoles(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.Inte
 	embed := &discordgo.MessageEmbed{
 		Title:       "📜 Roles configured for this server",
 		Description: roleList.String(),
-		Color:       0x3498DB, // nice blue
+		Color:       0x57F287, // green
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: "React with the corresponding emoji to get the role",
 		},

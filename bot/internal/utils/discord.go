@@ -73,7 +73,7 @@ func SendNoPermissionMessage(session *discordgo.Session, i *discordgo.Interactio
 	return session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
-			Content: "⛔ You do not have permission to use this command.",
+			Content: "⛔ You do not have permission to use this command/button.",
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})

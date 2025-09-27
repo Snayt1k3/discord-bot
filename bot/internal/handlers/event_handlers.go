@@ -98,3 +98,16 @@ func (eh *EventHandlers) OnGuildCreate(s *discordgo.Session, r *discordgo.GuildC
 		return
 	}
 }
+
+func (eh *EventHandlers) MessageCreate(s *discordgo.Session, r *discordgo.MessageCreate) {
+	if r.Author.Bot {
+		return
+	}
+
+	_, err := eh.service.Settings.Get(r.GuildID)
+
+	if err != nil {
+		slog.Error("Error while fetching guild settings", "err", err)
+		return
+	}
+}
