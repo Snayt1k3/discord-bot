@@ -90,7 +90,6 @@ func (s *RolesHandlers) AddRole(c *gin.Context) {
 			return
 		}
 
-
 		slog.Error("Error while adding role", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

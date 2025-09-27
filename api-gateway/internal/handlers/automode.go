@@ -90,7 +90,7 @@ func (s *AutoModeHandlers) AddBannedWord(c *gin.Context) {
 			c.JSON(http.StatusTooManyRequests, gin.H{"error": "Quota exceeded for banned words"})
 			return
 		}
-		
+
 		slog.Error("Error while adding banned word", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

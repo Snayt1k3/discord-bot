@@ -111,7 +111,7 @@ func (eh *EventHandlers) MessageCreate(s *discordgo.Session, m *discordgo.Messag
 }
 
 // Вспомогательная функция для проверки всех условий автомодерации.
-func (eh *EventHandlers) automodeCheck (s *discordgo.Session, m *discordgo.MessageCreate) {
+func (eh *EventHandlers) automodeCheck(s *discordgo.Session, m *discordgo.MessageCreate) {
 	settings, err := eh.service.Settings.Get(m.GuildID)
 
 	if err != nil {

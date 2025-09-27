@@ -50,8 +50,8 @@ type CapsLock struct {
 }
 
 type BannedWord struct {
-	Word    string `json:"word"`
-	Id      string `json:"id"`
+	Word string `json:"word"`
+	Id   string `json:"id"`
 }
 
 type LogSettings struct {

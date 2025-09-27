@@ -43,8 +43,8 @@ func (s *GuildServer) GetSettings(ctx context.Context, req *pb.GetSettingsReques
 
 	for _, bw := range guildSettings.AutoMode.BannedWords {
 		bannedWords = append(bannedWords, &pb.BannedWord{
-			Id:      strconv.FormatUint(uint64(bw.ID), 10),
-			Word:    bw.Word,
+			Id:   strconv.FormatUint(uint64(bw.ID), 10),
+			Word: bw.Word,
 		})
 	}
 
@@ -122,8 +122,8 @@ func (s *GuildServer) CreateSettings(ctx context.Context, req *pb.CreateSettings
 
 	for _, bw := range settings.AutoMode.BannedWords {
 		bannedWords = append(bannedWords, &pb.BannedWord{
-			Id:      strconv.FormatUint(uint64(bw.ID), 10),
-			Word:    bw.Word,
+			Id:   strconv.FormatUint(uint64(bw.ID), 10),
+			Word: bw.Word,
 		})
 	}
 

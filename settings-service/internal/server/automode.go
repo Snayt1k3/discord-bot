@@ -3,18 +3,17 @@ package server
 import (
 	"context"
 	"fmt"
-	"settings-service/internal/interfaces"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"settings-service/internal/interfaces"
 	pb "settings-service/proto"
 )
 
 type AutomodeServer struct {
-	Repo interfaces.AutoModeRepository
+	Repo      interfaces.AutoModeRepository
 	GuildRepo interfaces.GuildSettingsRepository
 	pb.UnimplementedAutoModServiceServer
 }
-
 
 func (s *AutomodeServer) ToggleAutoMod(ctx context.Context, req *pb.ToggleAutoModRequest) (*pb.ToggleAutoModResponse, error) {
 	_, err := s.Repo.ToggleAutoMode(req.GuildId, req.Enabled)
@@ -38,11 +37,11 @@ func (s *AutomodeServer) AddBannedWord(ctx context.Context, req *pb.AddBannedWor
 	}
 
 	if len(settings.AutoMode.BannedWords) >= 50 {
-    return nil, status.Errorf(
-        codes.ResourceExhausted,
-        "Banned words limit (50) reached",
-    )
-}
+		return nil, status.Errorf(
+			codes.ResourceExhausted,
+			"Banned words limit (50) reached",
+		)
+	}
 
 	res, err := s.Repo.AddBannedWord(req.GuildId, req.Word)
 
@@ -83,10 +82,10 @@ func (s *AutomodeServer) AddCapsLockChannel(ctx context.Context, req *pb.AddCaps
 	}
 
 	if len(settungs.AutoMode.CapsLocks) >= 10 {
-	return nil, status.Errorf(
-		codes.ResourceExhausted,
-		"Caps lock channels limit (10) reached",
-	)
+		return nil, status.Errorf(
+			codes.ResourceExhausted,
+			"Caps lock channels limit (10) reached",
+		)
 	}
 
 	res, err := s.Repo.AddCapsLockChannel(req.GuildId, req.ChannelId)
@@ -120,7 +119,7 @@ func (s *AutomodeServer) RemoveCapsLockChannel(ctx context.Context, req *pb.Remo
 }
 
 func (s *AutomodeServer) AddAntiLinkChannel(ctx context.Context, req *pb.AddAntiLinkChannelRequest) (*pb.AddAntiLinkChannelResponse, error) {
-	
+
 	settungs, err := s.GuildRepo.GetGuildSettings(req.GuildId)
 
 	if err != nil {
@@ -128,12 +127,12 @@ func (s *AutomodeServer) AddAntiLinkChannel(ctx context.Context, req *pb.AddAnti
 	}
 
 	if len(settungs.AutoMode.AntiLinks) >= 10 {
-	return nil, status.Errorf(
-		codes.ResourceExhausted,
-		"Anti link channels limit (10) reached",
-	)
+		return nil, status.Errorf(
+			codes.ResourceExhausted,
+			"Anti link channels limit (10) reached",
+		)
 	}
-	
+
 	res, err := s.Repo.AddAntiLinkChannel(req.GuildId, req.ChannelId)
 
 	if err != nil {

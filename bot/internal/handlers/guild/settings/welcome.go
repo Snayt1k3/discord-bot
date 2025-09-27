@@ -60,8 +60,8 @@ func ShowWelcomeSettings(gk guild.GuildAdapter, s *discordgo.Session, i *discord
 		Color: 0x57F287,
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name:  "📍 Channel",
-				Value: channelMention,
+				Name:   "📍 Channel",
+				Value:  channelMention,
 				Inline: false,
 			},
 			{

@@ -90,7 +90,6 @@ func (r *AutoModeRepositoryImpl) AddCapsLockChannel(guildId string, channelId st
 	return model, nil
 }
 
-
 func (r *AutoModeRepositoryImpl) DeleteCapsLockChannel(guildId string, channelId string) error {
 	settings, err := r.getOrCreateAutoMode(guildId)
 	if err != nil {

@@ -25,7 +25,7 @@ func toggleAutomode(guildService guild.GuildAdapter, s *discordgo.Session, i *di
 	}
 
 	autoMode := guildSettings.AutoMode
-	
+
 	newStatus := !autoMode.Enabled
 	err = guildService.AutoMode.Toggle(i.GuildID, newStatus)
 

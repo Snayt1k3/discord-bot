@@ -52,8 +52,8 @@ type AutoModeSettings struct {
 }
 
 type BannedWord struct {
-	ID      uint   `gorm:"primaryKey"`
-	Word    string `json:"word"`
+	ID   uint   `gorm:"primaryKey"`
+	Word string `json:"word"`
 }
 
 type AntiCapsChannel struct {

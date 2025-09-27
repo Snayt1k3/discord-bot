@@ -133,8 +133,8 @@ func ShowLogSettings(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.I
 	}
 
 	embed := &discordgo.MessageEmbed{
-		Title:       "📜 Logging Events configuration",
-		Color:       color,
+		Title: "📜 Logging Events configuration",
+		Color: color,
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "📍 Channel",
