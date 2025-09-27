@@ -5,7 +5,7 @@
 <div align="center">
     <img src="https://img.shields.io/badge/Golang-gray?logo=go" height="30">
     <img src="https://img.shields.io/badge/Discord-gray?logo=discord" height="30">
-    <img src="https://img.shields.io/badge/Youtube-gray?logo=youtube&logoColor=red" height="30">
+
     
 </div>
 
