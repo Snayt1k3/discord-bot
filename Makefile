@@ -1,34 +1,56 @@
-PROTO_DIR=proto
-OUT_DIR=settings-service/proto
-GATEWAY_OUT_DIR=api-gateway/proto
-PROTO_FILES=$(wildcard $(PROTO_DIR)/*.proto)
+# Путь к директории с .proto файлами
+PROTO_DIR := ./proto
 
-.PHONY: all generate copy clean
+# Путь к директории, куда будет генерироваться Go-код
+GO_OUT_DIR := ./grpc
 
-all: generate copy
+# Список .proto файлов
+PROTO_FILES := $(PROTO_DIR)/settings.proto $(PROTO_DIR)/automode.proto  $(PROTO_DIR)/log.proto  $(PROTO_DIR)/roles.proto  $(PROTO_DIR)/welcome.proto
 
-generate:
-	@echo "Generating gRPC code..."
-	mkdir -p $(OUT_DIR)
-	protoc --proto_path=$(PROTO_DIR) \
-		--go_out=$(OUT_DIR) --go_opt=paths=source_relative \
-		--go-grpc_out=$(OUT_DIR) --go-grpc_opt=paths=source_relative \
-		$(PROTO_FILES)
+# Команда генерации gRPC и Go-кода
+PROTOC_COMMAND = protoc -I=$(PROTO_DIR) \
+	--go_out=$(GO_OUT_DIR) \
+	--go-grpc_out=$(GO_OUT_DIR)
 
-copy:
-	@echo "Copying generated files to api-gateway..."
-	mkdir -p $(GATEWAY_OUT_DIR)
-	cp -r $(OUT_DIR)/* $(GATEWAY_OUT_DIR)/
+.PHONY: all generate docker-up lint
 
-	@echo "Files copied successfully."
+all: generate
 
-clean:
-	@echo "Cleaning generated files..."
-	rm -rf $(OUT_DIR) $(GATEWAY_OUT_DIR)
-	@echo "Cleanup complete."
+generate-grpc:
+	@echo "Generating Go code from .proto files..."
+	@mkdir -p $(GO_OUT_DIR)
+	@$(PROTOC_COMMAND) $(PROTO_FILES)
+	@echo "Go code generated in $(GO_OUT_DIR)"
 
-docker-up:
+
+grpc-clean:
+	@echo "Cleaning up generated Go code..."
+	@rm -rf $(GO_OUT_DIR)/*
+	@echo "Cleaned up generated Go code in $(GO_OUT_DIR)"
+
+run:
 	docker compose up --build
+
+
+grpc-init:
+	@echo "Initializing gRPC server..."
+	@$(MAKE) generate-grpc
+
+	@echo "Copying all generated files to api-gateway/proto..."
+	@mkdir -p api-gateway/proto
+	@cp -r grpc/* api-gateway/
+
+	@echo "Moving settings proto files to settings-service..."
+	@mkdir -p settings-service/proto
+	@cp -r grpc/* settings-service/
+	@echo "gRPC server initialized. Files distributed to services."
+
+	@$(MAKE) grpc-clean
 
 lint: 
 	gofmt -w bot/ settings-service/ api-gateway/
+	@echo "Code formatted with gofmt."
+
+docs: 
+	swag init -g api-gateway/main.go --output api-gateway/docs
+	@echo "Swagger docs generated."

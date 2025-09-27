@@ -1,41 +1,60 @@
 package main
 
 import (
+	"fmt"
+	"log/slog"
+	"os"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+
 	"api-gateway/config"
 	"api-gateway/internal/adapters"
 	"api-gateway/internal/handlers"
 	"api-gateway/internal/routes"
-	pb "api-gateway/proto"
-	"fmt"
-	"log"
-
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
+	initLogging()
 	cfg, err := config.LoadConfig()
 
 	if err != nil {
-		log.Fatalf("Unable to load config: %v", err)
+		panic("Failed to load config: " + err.Error())
 	}
 
-	conn, err := grpc.NewClient(fmt.Sprintf("%v:%v", cfg.GrpcHost, cfg.GrpcPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	settingsServiceConn, err := grpc.NewClient(fmt.Sprintf("%v:%v", cfg.GrpcSettingsHost, cfg.GrpcSettingsPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
-		log.Fatalf("Не удалось подключиться к gRPC-серверу: %v", err)
+		panic("Failed to connect to settings service: " + err.Error())
 	}
 
-	defer conn.Close()
+	defer settingsServiceConn.Close()
 
-	protoClient := pb.NewSettingsServiceClient(conn)
 	redisClient := adapters.NewRedisAdapter(fmt.Sprintf("%v:%v", cfg.RedisHost, cfg.RedisPort), cfg.RedisPass, cfg.RedisDB)
-	settingsClient := handlers.NewClient(protoClient, redisClient)
-	r := routes.SetupRouter(settingsClient)
+	settingsHandlers := handlers.NewHandlers(settingsServiceConn, redisClient)
 
-	port := ":8080"
-	log.Printf("server is running on port %s", port)
+	r := routes.SetupRouter(settingsHandlers)
+
+	port := ":" + cfg.Port
+
+	slog.Info("Starting server", "port", port)
+	slog.Info("docs at", "url", "http://localhost"+port+"/swagger/index.html")
+
 	if err := r.Run(port); err != nil {
-		log.Fatalf("Error while trying to start server: %v", err)
+		slog.Error("Failed to start server", "error", err)
 	}
+}
+
+func initLogging() {
+	file, err := os.OpenFile("api-gateway.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		panic("Failed to open log file: " + err.Error())
+	}
+	opts := &slog.HandlerOptions{
+		Level:     slog.LevelInfo,
+		AddSource: true,
+	}
+	logger := slog.New(slog.NewTextHandler(file, opts))
+	slog.SetDefault(logger)
+	slog.Info("Logger initialized")
 }
