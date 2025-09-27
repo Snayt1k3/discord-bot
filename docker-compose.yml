@@ -1,22 +1,21 @@
 services:
-  lavalink:
-    image: ghcr.io/lavalink-devs/lavalink:4
-    container_name: lavalink
-    restart: unless-stopped
-    environment:
-      - _JAVA_OPTIONS=-Xmx4G
-      - SERVER_PORT=2333
-      - LAVALINK_SERVER_PASSWORD=$LAVALINK_PASS
-    volumes:
-      # mount application.yml from the same directory or use environment variables
-      - ./application.yml:/opt/Lavalink/application.yml
-      - ./plugins/:/opt/Lavalink/plugins/
-    networks:
-      - bot
-    expose:
-      - 2333
-    ports:
-      - "2333:2333"
+  # lavalink:
+  #   image: ghcr.io/lavalink-devs/lavalink:4
+  #   container_name: lavalink
+  #   restart: unless-stopped
+  #   environment:
+  #     - _JAVA_OPTIONS=-Xmx4G
+  #     - SERVER_PORT=2333
+  #     - LAVALINK_SERVER_PASSWORD=$LAVALINK_PASS
+  #   volumes:
+  #     - ./docker/configs/application.yml:/opt/Lavalink/application.yml
+  #     - ./docker/plugins/:/opt/Lavalink/plugins/
+  #   networks:
+  #     - bot
+  #   expose:
+  #     - 2333
+  #   ports:
+  #     - "2333:2333"
 
   frieren:
     build: 
@@ -24,8 +23,6 @@ services:
       dockerfile: Dockerfile
     networks:
       - bot
-    depends_on:
-      - lavalink
     env_file:
       - .env
     restart: always
@@ -41,7 +38,7 @@ services:
     depends_on:
       - settings-db
     restart: always
-
+  
   api-gateway:
     container_name: api-gateway
     build: 
@@ -56,7 +53,7 @@ services:
     depends_on:
       - redis
   settings-db:
-    image: postgres:latest
+    image: postgres:15
     restart: on-failure:5
     container_name: $SETTINGS_POSTGRES_HOST
     environment:
@@ -68,7 +65,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data/pgdata:/var/lib/postgresql/data
+      - ./docker/volumes/pgdata:/var/lib/postgresql/data
     networks:
       - bot
 
@@ -84,7 +81,7 @@ services:
       - REDIS_PASSWORD=$REDIS_PASS
     command: [ "redis-server", "--requirepass", "$REDIS_PASS" ]
     volumes:
-      - ./data/redis_data:/data 
+      - ./docker/volumes/redis_data:/data 
 
 volumes:
   data: 

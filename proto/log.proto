@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package settings;
+
+option go_package = "proto/";
+
+service LogService {
+  rpc AddLogChannel(UpdateLogChannelRequest) returns (UpdateLogChannelResponse);
+  rpc RemoveLogChannel(UpdateLogChannelRequest) returns (UpdateLogChannelResponse);
+  rpc ToggleLog(ToggleLogRequest) returns (ToggleLogResponse);
+}
+
+message UpdateLogChannelRequest {
+  string guild_id = 1;
+  string channel_id = 2;
+}
+
+message UpdateLogChannelResponse {
+  string guild_id = 1;
+  string channel_id = 2;
+}
+
+message ToggleLogRequest {
+  string guild_id = 1;
+  bool enabled = 2;
+}
+
+message ToggleLogResponse {
+  string guild_id = 1;
+  bool enabled = 2;
+}

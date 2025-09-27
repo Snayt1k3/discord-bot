@@ -1,57 +1,94 @@
 package main
 
 import (
-	"bot/config"
-	"bot/internal/discord"
-	"bot/internal/handlers"
 	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/bwmarrin/discordgo"
+
+	"bot/config"
+	"bot/internal/adapters"
+	"bot/internal/adapters/guild"
+	"bot/internal/discord"
+	"bot/internal/handlers"
+	guildHandlers "bot/internal/handlers/guild"
 )
 
 func main() {
+	initLogging()
+	config.Load()
+	discord.InitDiscordBot()
+
+	// init deps
+	http := adapters.NewDefaultHttpClient()
+	guildAdapter := guild.NewGuildAdapter(http)
+
+	// init handlers/commands
+	dispatcher := handlers.NewCommandsDispatcher(*guildAdapter)
+	eventHandlers := handlers.NewEventHandlers(*guildAdapter, discord.CommandsList)
+	guildHandlers := guildHandlers.NewHandlers(*guildAdapter)
+
+	dispatcher.InitHandlers(*guildHandlers)
+	addHandlers(dispatcher, eventHandlers)
+
+	if err := discord.Bot.Session.UpdateCustomStatus(config.GetBotStatus()); err != nil {
+		slog.Warn("failed to update custom status", "error", err)
+	}
+
+	initBot(discord.Bot.Session, discord.CommandsList)
+
+	defer discord.Bot.Session.Close()
+
+	slog.Info("Bot is running. Press Ctrl + C to exit.")
+
+	sc := make(chan os.Signal, 1)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
+	<-sc
+}
+
+func addHandlers(cd *handlers.CommandsDispatcher, eh *handlers.EventHandlers) {
+	discord.Bot.Session.AddHandler(cd.Dispatch)
+
+	discord.Bot.Session.AddHandler(eh.OnMemberJoin)
+	discord.Bot.Session.AddHandler(eh.OnMessageReactionAdd)
+	discord.Bot.Session.AddHandler(eh.OnMessageReactionRemove)
+	discord.Bot.Session.AddHandler(eh.OnGuildCreate)
+	discord.Bot.Session.AddHandler(eh.MessageCreate)
+
+}
+
+func initBot(s *discordgo.Session, cmds []*discordgo.ApplicationCommand) {
+	appID := s.State.User.ID
+
+	for _, guild := range s.State.Guilds {
+		// Получаем текущие команды
+		oldCommands, _ := s.ApplicationCommands(appID, guild.ID)
+		for _, cmd := range oldCommands {
+			_ = s.ApplicationCommandDelete(appID, guild.ID, cmd.ID)
+		}
+
+		slog.Info("Old commands deleted, registering new ones...",
+			"server_name", guild.Name,
+			"server_id", guild.ID,
+		)
+
+		for _, cmd := range cmds {
+			_, err := s.ApplicationCommandCreate(appID, guild.ID, cmd)
+			if err != nil {
+				slog.Error("Error creating command", "command", cmd.Name, "error", err)
+			}
+		}
+	}
+}
+
+func initLogging() {
 	opts := &slog.HandlerOptions{
 		Level:     slog.LevelInfo,
 		AddSource: true,
 	}
 	logger := slog.New(slog.NewTextHandler(os.Stdout, opts))
 	slog.SetDefault(logger)
-
-	config.Load()
-	discord.InitBot()
-	discord.InitConnection()
-	discord.InitLavalink()
-	dispatcher := handlers.NewCommandsDispatcher()
-	addHandlers(dispatcher)
-	registerCommands()
-
-	defer discord.Bot.Session.Close()
-
-	slog.Info("Bot is running. Press Ctrl + C to exit.")
-	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
-	<-sc
-}
-
-func registerCommands() {
-	for _, command := range discord.CommandsList {
-		_, err := discord.Bot.Session.ApplicationCommandCreate(discord.Bot.Session.State.User.ID, "609869875053199366", command)
-		if err != nil {
-			slog.Error("Failed to create command", "name", command.Name, "error", err)
-			continue
-		}
-		slog.Info("Command registered successfully", "name", command.Name)
-	}
-}
-
-func addHandlers(cd *handlers.CommandsDispatcher) {
-	discord.Bot.Session.AddHandler(handlers.ReadyHandler)
-	discord.Bot.Session.AddHandler(handlers.OnVoiceServerUpdate)
-	discord.Bot.Session.AddHandler(handlers.OnVoiceStateUpdate)
-
-	discord.Bot.Session.AddHandler(cd.OnMemberJoin)
-	discord.Bot.Session.AddHandler(cd.Dispatch)
-	discord.Bot.Session.AddHandler(cd.OnMessageReactionAdd)
-	discord.Bot.Session.AddHandler(cd.OnMessageReactionRemove)
+	slog.Info("Logger initialized")
 }

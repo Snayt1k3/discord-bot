@@ -1,15 +1,12 @@
 <h1 align="center">Frieren (Discord Bot)</h1> 
 
-![Frieren](assets/frieren.jpg)
+![Frieren](assets/frieren.jpeg)
 
 <div align="center">
-  <img src="https://img.shields.io/badge/Golang-gray?logo=go" height="30">
-  <img src="https://img.shields.io/badge/Discord-gray?logo=discord" height="30">
-  <img src="https://img.shields.io/badge/Youtube-gray?logo=youtube&logoColor=red" height="30">
-  <img src="https://img.shields.io/badge/Docker-gray?logo=docker" height="30">
-  <img src="https://img.shields.io/badge/PostgreSQL-gray?logo=postgresql" height="30">
-  <img src="https://img.shields.io/badge/Redis-gray?logo=redis" height="30">
-  <!-- <img src="https://img.shields.io/badge/License-MIT-green" height="30"> -->
+    <img src="https://img.shields.io/badge/Golang-gray?logo=go" height="30">
+    <img src="https://img.shields.io/badge/Discord-gray?logo=discord" height="30">
+
+    
 </div>
 
 
@@ -18,85 +15,55 @@
 <h2 align="center">ABOUT</h2> 
 
 <div align="center">
-  <img src="https://media.tenor.com/rHlkrXa_lW8AAAAM/anime-frieren.gif" align="right" height="230" width="250"/>
+  <img src="assets/frieren_1.png" align="right" height="240" width="250"/>
 </div>
 
 <div align="left">
-This is a Discord bot written in Go, designed to bring fun and utility to your server! <br> While the bot's current functionality is simple, we're actively working on expanding its capabilities.
+This is a Discord bot written in Go, made to bring fun and utility to your server!  
+The current features are simple, but we’re actively adding more.
 
-- 🎵 Music: Play, stop, skip, pause, and resume.
-- 🎭 Roles by Reaction
-- ⚙️ Manual Command Customization
-- 🎮 Games in Frieren Style (Coming Soon)
-- 📱 Gacha Game Support (Coming Soon)
+<!-- - 🎵 **Music**: play, pause, skip, and stop tracks. -->
+- 🎭 **Reaction Roles**: assign roles to users via message reactions.
+- 🛡️ **Automode**: banned-word filter, anti-caps, and anti-link protection.
+- 🎮 **Frieren-Style Games (Coming Soon)**: calm and relaxing mini-games inspired by Frieren.
 
-The bot's mascot is <b>Frieren<b>.<br>
+The bot’s mascot is **Frieren**.<br>
 Built with [discordgo](https://github.com/bwmarrin/discordgo) and [disgolink](https://github.com/disgoorg/disgolink/tree/v3).
-
-
 </div>
 
 <br>
-<hr>
+<br>
+<br>
 <br>
 
+<h2 align="center">DEVELOPMENT</h2>
 
-### 🛠 Installation & Setup
+<div align="center">
+  <img src="assets/frieren_2.png" align="right" height="250" width="250"/>
+</div>
 
-Ensure you have the following installed:
-- **Docker**
-- **Git**
+<div align="left">
 
-#### 1️⃣ Clone the Repository
+**Setup**  
+1. Run `make grpc-init` to generate gRPC files.  
+2. Create a `.env` file based on `.env_example`.  
+
+**Optional (Swagger)**  
+- Run `make docs` to generate API docs.  
+- Open [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html) to view them.
+
+**Run the Bot**  
 ```bash
-git clone https://github.com/Snayt1k3/discord-bot
-cd discord-bot
+make run
 ```
 
-#### 2️⃣ Set Up Environment Variables
-
-Create a `.env` file in the project root and add the following variables:
-```env
-DISCORD_TOKEN=""
-BOT_STATUS=""
-APPLICATION_ID=""
-GUILD_ID=""
-LAVALINK_ADDR=""
-LAVALINK_PASS=""
-LAVALINK_NODE_NAME=""
-LavalinkSecure=""
-
-SETTINGS_ADDRESS=""
-SETTINGS_PORT=""
-
-API_GATEWAY_ADDR=""
-API_GATEWAY_PORT=""
-
-SETTINGS_POSTGRES_HOST=""
-SETTINGS_POSTGRES_PORT=""
-SETTINGS_POSTGRES_USER=""
-SETTINGS_POSTGRES_PASSWORD=""
-SETTINGS_POSTGRES_DB=""
-SETTINGS_POSTGRES_SSLMODE=""
-SETTINGS_POSTGRES_TIMEZONE=""
-
-REDIS_HOST=""
-REDIS_PORT=""
-REDIS_PASS=""
-REDIS_DB=""
-```
-
-#### 3️⃣ Build and Run with Docker
-```bash
-docker-compose up --build -d
-```
-
-This will build and start the bot in a Docker container.
-
-
-<br>
+</div>
 <hr>
 
-🤝 Contributing
+
+
+
+### 🤝 Contributing
 
 Feel free to submit issues, feature requests, or pull requests to improve Frieren!
+

@@ -1,36 +1,91 @@
 package models
 
 import (
-	"encoding/json"
 	"time"
 
 	"gorm.io/gorm"
 )
 
-type RoleSetting struct {
-	ID        uint            `gorm:"primaryKey"`
-	GuildID   string          `gorm:"not null;index"`
-	MessageID string          `json:"message_id" gorm:""`
-	Role      json.RawMessage `gorm:"type:json"`
-}
-
-type WelcomeSetting struct {
-	ID        uint   `gorm:"primaryKey"`
-	GuildID   string `gorm:"not null;index"`
-	ChannelId string `json:"channel_id" gorm:""`
-}
-
-type GuildSetting struct {
-	ID        uint           `gorm:"primaryKey"`
-	GuildID   string         `gorm:"unique;not null"`
-	Role      RoleSetting    `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
-	Welcome   WelcomeSetting `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
+type Settings struct {
+	ID        uint             `gorm:"primaryKey"`
+	GuildID   string           `gorm:"not null;uniqueIndex"`
+	Role      RolesSettings    `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
+	Welcome   WelcomeSettings  `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
+	AutoMode  AutoModeSettings `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
+	Log       LogSettings      `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
+type RolesSettings struct {
+	ID        uint   `gorm:"primaryKey"`
+	GuildID   string `gorm:"not null;uniqueIndex"`
+	MessageID string `json:"message_id"`
+	Roles     []Role `gorm:"many2many:roles_settings_roles;constraint:OnDelete:CASCADE;"`
+}
+
+type Role struct {
+	ID     uint   `gorm:"primaryKey"`
+	RoleID string `json:"role_id"`
+	Emoji  string `json:"emoji"`
+}
+
+type WelcomeSettings struct {
+	ID        uint      `gorm:"primaryKey"`
+	GuildID   string    `gorm:"not null;uniqueIndex"`
+	ChannelId string    `json:"channel_id"`
+	Messages  []Message `gorm:"many2many:welcome_setting_messages;constraint:OnDelete:CASCADE;"`
+}
+
+type Message struct {
+	ID      uint   `gorm:"primaryKey"`
+	Message string `json:"message"`
+}
+
+type AutoModeSettings struct {
+	ID          uint              `gorm:"primaryKey"`
+	GuildID     string            `gorm:"not null;index"`
+	CapsLocks   []AntiCapsChannel `gorm:"many2many:auto_mode_capslock;constraint:OnDelete:CASCADE;"`
+	AntiLinks   []AntiLinkChannel `gorm:"many2many:auto_mode_antilink;constraint:OnDelete:CASCADE;"`
+	BannedWords []BannedWord      `gorm:"many2many:auto_mode_bannedwords;constraint:OnDelete:CASCADE;"`
+	Enabled     bool              `json:"enabled"`
+}
+
+type BannedWord struct {
+	ID   uint   `gorm:"primaryKey"`
+	Word string `json:"word"`
+}
+
+type AntiCapsChannel struct {
+	ID        uint   `gorm:"primaryKey"`
+	ChannelID string `json:"channel_id"`
+}
+
+type AntiLinkChannel struct {
+	ID        uint   `gorm:"primaryKey"`
+	ChannelID string `json:"channel_id"`
+}
+
+type LogSettings struct {
+	ID        uint   `gorm:"primaryKey"`
+	GuildID   string `gorm:"not null"`
+	ChannelID string `json:"channel_id"`
+	Enabled   bool
+}
+
 func Migrate(db *gorm.DB) {
-	err := db.AutoMigrate(&GuildSetting{}, &RoleSetting{}, &WelcomeSetting{})
+	err := db.AutoMigrate(
+		&Settings{},
+		&RolesSettings{},
+		&WelcomeSettings{},
+		&Role{},
+		&Message{},
+		&AutoModeSettings{},
+		&BannedWord{},
+		&AntiCapsChannel{},
+		&AntiLinkChannel{},
+		&LogSettings{},
+	)
 	if err != nil {
 		panic("Migration Error: " + err.Error())
 	}
