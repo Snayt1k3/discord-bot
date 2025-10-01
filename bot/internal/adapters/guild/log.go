@@ -22,10 +22,10 @@ func (s *LogAdapter) Toggle(guildID string, enable bool) error {
 
 	bytes, _ := json.Marshal(map[string]interface{}{
 		"guild_id": guildID,
-		"enable":   enable,
+		"enabled":   enable,
 	})
 
-	_, err := s.http.Patch(
+	_, err := s.http.Post(
 		context.Background(),
 		fmt.Sprintf("%v/api/v1/settings/guild/%v/logging/toggle", config.GetApiGatewayAddr(), guildID),
 		bytes,
