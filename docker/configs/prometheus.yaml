@@ -6,6 +6,6 @@ scrape_configs:
     static_configs:
       - targets: ["localhost:9090"]
 
-  # - job_name: "go-app"
-  #   static_configs:
-  #     - targets: ["host.docker.internal:8080"]
+  - job_name: "grpc-settings-service"
+    static_configs:
+      - targets: ["host.docker.internal:8081"]

@@ -39,20 +39,20 @@ func (s *SettingsHandlers) GetGuildSettings(c *gin.Context) {
 
 	key := fmt.Sprintf("guild-settings-%v", guildID)
 
-	exists, _ := s.redis.Exists(key)
+	// exists, _ := s.redis.Exists(key)
 
-	if exists {
-		resp, err := s.redis.Get(key)
+	// if exists {
+	// 	resp, err := s.redis.Get(key)
 
-		if err != nil {
-			slog.Error("Error while get data from redis", "error", err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
+	// 	if err != nil {
+	// 		slog.Error("Error while get data from redis", "error", err)
+	// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	// 		return
+	// 	}
 
-		c.JSON(http.StatusOK, resp)
-		return
-	}
+	// 	c.JSON(http.StatusOK, resp)
+	// 	return
+	// }
 
 	resp, err := s.clients.Settings.GetSettings(context.Background(), &pb.GetSettingsRequest{GuildId: guildID})
 

@@ -23,7 +23,7 @@ services:
       - "3100:3100"
     volumes:
       - ./docker/configs/loki.yml:/etc/loki/loki-config.yaml
-      - ./docker/volumes/loki/data:/loki    
+      - ./docker/volumes/loki:/loki    
 
   grafana:
     image: grafana/grafana:latest
@@ -66,6 +66,8 @@ services:
       - bot
     env_file:
       - .env
+    ports:
+      - "8081:8081"
     depends_on:
       - settings-db
     restart: always
@@ -92,7 +94,7 @@ services:
       POSTGRES_PASSWORD: $SETTINGS_POSTGRES_PASSWORD
       POSTGRES_DB: $SETTINGS_POSTGRES_DB
       POSTGRES_SSLMODE: $SETTINGS_POSTGRES_SSLMODE
-      POSTGRES_TIMEZONE: $SETTINGS_POSTGRES_TIMEZONE
+
     ports:
       - "5432:5432"
     volumes:
