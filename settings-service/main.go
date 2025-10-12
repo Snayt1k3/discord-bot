@@ -42,8 +42,6 @@ func main() {
 	models.Migrate(db)
 	repositories := repos.NewRepos(db)
 
-	// listener, err := net.Listen("tcp", fmt.Sprintf(":%v", cfg.GrpcPort))
-
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}

@@ -7,7 +7,8 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-
+	"github.com/prometheus/client_golang/prometheus"
+	"api-gateway/internal/metrics"
 	"api-gateway/config"
 	"api-gateway/internal/adapters"
 	"api-gateway/internal/handlers"
@@ -16,6 +17,7 @@ import (
 
 func main() {
 	initLogging()
+	InitProm()
 	cfg, err := config.LoadConfig()
 
 	if err != nil {
@@ -38,7 +40,7 @@ func main() {
 	port := ":" + cfg.Port
 
 	slog.Info("Starting server", "port", port)
-	slog.Info("docs at", "url", "http://localhost"+port+"/swagger/index.html")
+	slog.Info("Docs available at", "url", "http://localhost"+port+"/swagger/index.html")
 
 	if err := r.Run(port); err != nil {
 		slog.Error("Failed to start server", "error", err)
@@ -57,4 +59,9 @@ func initLogging() {
 	logger := slog.New(slog.NewTextHandler(file, opts))
 	slog.SetDefault(logger)
 	slog.Info("Logger initialized")
+}
+
+func InitProm() {
+	prometheus.MustRegister(metrics.HttpRequestsTotal)
+	prometheus.MustRegister(metrics.HttpRequestDuration)
 }
