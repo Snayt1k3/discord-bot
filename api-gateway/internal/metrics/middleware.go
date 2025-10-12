@@ -10,24 +10,23 @@ import (
 
 // MetricsMiddleware is a Gin middleware that records basic HTTP metrics.
 func MetricsMiddleware() gin.HandlerFunc {
-    return func(c *gin.Context) {
-        start := time.Now()
-        c.Next()
-        duration := time.Since(start).Seconds()
-		
-        path := c.FullPath()
-        if path == "" {
-            path = "unknown"
-        }
+	return func(c *gin.Context) {
+		start := time.Now()
+		c.Next()
+		duration := time.Since(start).Seconds()
+
+		path := c.FullPath()
+		if path == "" {
+			path = "unknown"
+		}
 		group := extractGroup(path)
 
-        status := strconv.Itoa(c.Writer.Status())
-		
-        HttpRequestsTotal.WithLabelValues(group, c.Request.Method, path, status).Inc()
-        HttpRequestDuration.WithLabelValues(group, path).Observe(duration)
-    }
-}
+		status := strconv.Itoa(c.Writer.Status())
 
+		HttpRequestsTotal.WithLabelValues(group, c.Request.Method, path, status).Inc()
+		HttpRequestDuration.WithLabelValues(group, path).Observe(duration)
+	}
+}
 
 // extractGroup вырезает группу после /settings/guild/:guild_id/
 func extractGroup(path string) string {

@@ -18,8 +18,8 @@ import (
 	grpcprom "github.com/grpc-ecosystem/go-grpc-middleware/providers/prometheus"
 	"github.com/oklog/run"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/client_golang/prometheus/collectors"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -60,8 +60,7 @@ func main() {
 	reg.MustRegister(
 		srvMetrics,
 		collectors.NewGoCollector(),
-    	collectors.NewProcessCollector(collectors.ProcessCollectorOpts{},
-	))
+		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}))
 
 	grpcServer := grpc.NewServer(
 		grpc.ChainStreamInterceptor(srvMetrics.StreamServerInterceptor()),
@@ -85,7 +84,7 @@ func main() {
 	})
 
 	srvMetrics.InitializeMetrics(grpcServer)
-	
+
 	g := &run.Group{}
 	g.Add(func() error {
 		l, err := net.Listen("tcp", fmt.Sprintf(":%v", cfg.GrpcPort))

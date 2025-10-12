@@ -22,7 +22,7 @@ func (s *LogAdapter) Toggle(guildID string, enable bool) error {
 
 	bytes, _ := json.Marshal(map[string]interface{}{
 		"guild_id": guildID,
-		"enabled":   enable,
+		"enabled":  enable,
 	})
 
 	_, err := s.http.Post(

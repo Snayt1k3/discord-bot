@@ -1,14 +1,14 @@
 package routes
 
 import (
+	_ "api-gateway/docs"
+	"api-gateway/internal/handlers"
+	"api-gateway/internal/metrics"
+	v1 "api-gateway/internal/routes/v1"
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"api-gateway/internal/metrics"
-	_ "api-gateway/docs"
-	"api-gateway/internal/handlers"
-	v1 "api-gateway/internal/routes/v1"
 )
 
 func SetupRouter(handlers *handlers.Handlers) *gin.Engine {
