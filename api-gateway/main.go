@@ -10,9 +10,11 @@ import (
 	"api-gateway/internal/handlers"
 	"api-gateway/internal/metrics"
 	"api-gateway/internal/routes"
+
 	"github.com/prometheus/client_golang/prometheus"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+
+	"google.golang.org/grpc"
 )
 
 func main() {
