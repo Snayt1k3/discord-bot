@@ -105,6 +105,22 @@ services:
     volumes:
       - ./docker/volumes/redis_data:/data 
 
+  interaction-db:
+    image: postgres:15
+    restart: on-failure:5
+    container_name: $INTERACTION_POSTGRES_HOST
+    environment:
+      POSTGRES_USER: $INTERACTION_POSTGRES_USER
+      POSTGRES_PASSWORD: $INTERACTION_POSTGRES_PASSWORD
+      POSTGRES_DB: $INTERACTION_POSTGRES_DB
+      POSTGRES_SSLMODE: $INTERACTION_POSTGRES_SSLMODE
+    networks:
+        - bot
+    volumes:
+      - ./docker/volumes/pg/interaction:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
 volumes:
   data: 
     driver: local
