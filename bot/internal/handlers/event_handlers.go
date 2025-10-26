@@ -201,7 +201,7 @@ func (eh *EventHandlers) sendLogMessage(
 	guildId string,
 	title string,
 	description string,
-	color int, 
+	color int,
 	fields []*discordgo.MessageEmbedField,
 ) error {
 
