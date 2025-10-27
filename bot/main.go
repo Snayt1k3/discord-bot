@@ -56,6 +56,12 @@ func addHandlers(cd *handlers.CommandsDispatcher, eh *handlers.EventHandlers) {
 	discord.Bot.Session.AddHandler(eh.OnMessageReactionRemove)
 	discord.Bot.Session.AddHandler(eh.OnGuildCreate)
 	discord.Bot.Session.AddHandler(eh.MessageCreate)
+	discord.Bot.Session.AddHandler(eh.GuildBanAdd)
+	discord.Bot.Session.AddHandler(eh.GuildBanRemove)
+	discord.Bot.Session.AddHandler(eh.GuildMemberRemove)
+	discord.Bot.Session.AddHandler(eh.MessageDelete)
+	discord.Bot.Session.AddHandler(eh.MessageDeleteBulk)
+	discord.Bot.Session.AddHandler(eh.OnInviteCreate)
 
 }
 
@@ -64,15 +70,15 @@ func initBot(s *discordgo.Session, cmds []*discordgo.ApplicationCommand) {
 
 	for _, guild := range s.State.Guilds {
 		// Получаем текущие команды
-		oldCommands, _ := s.ApplicationCommands(appID, guild.ID)
-		for _, cmd := range oldCommands {
-			_ = s.ApplicationCommandDelete(appID, guild.ID, cmd.ID)
-		}
+		// oldCommands, _ := s.ApplicationCommands(appID, guild.ID)
+		// for _, cmd := range oldCommands {
+		// 	_ = s.ApplicationCommandDelete(appID, guild.ID, cmd.ID)
+		// }
 
-		slog.Info("Old commands deleted, registering new ones...",
-			"server_name", guild.Name,
-			"server_id", guild.ID,
-		)
+		// slog.Info("Old commands deleted, registering new ones...",
+		// 	"server_name", guild.Name,
+		// 	"server_id", guild.ID,
+		// )
 
 		for _, cmd := range cmds {
 			_, err := s.ApplicationCommandCreate(appID, guild.ID, cmd)
