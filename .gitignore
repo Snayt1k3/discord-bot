@@ -30,3 +30,4 @@ data
 docker/volumes
 docker/plugins
 docs/
+.idea
