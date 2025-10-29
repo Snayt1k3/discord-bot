@@ -2,8 +2,9 @@ package adapters
 
 import (
 	"context"
-	"github.com/redis/go-redis/v9"
 	"time"
+
+	"github.com/redis/go-redis/v9"
 )
 
 // RedisAdapter impl interface RedisI.

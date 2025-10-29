@@ -12,7 +12,6 @@ type Config struct {
 	Password string
 	DBName   string
 	SSLMode  string
-
 	GrpcPort string
 }
 
