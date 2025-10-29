@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package interaction;
+
+option go_package = "your_project_path/proto/interaction;interaction";
+
+// ----------------------
+// Message definitions
+// ----------------------
+
+message User {
+  uint64 id = 1;
+  string user_id = 2;
+  string guild_id = 3;
+  string username = 4;
+  int32 experience = 5;
+  int32 level = 6;
+  int32 next_level_xp = 7;
+  string avatar_url = 8;
+  string last_message_at = 9; // ISO timestamp string
+}
+
+message GetUserRequest {
+  string user_id = 1;
+  string guild_id = 2;
+}
+
+message GetUserResponse {
+  User user = 1;
+}
+
+message AddXPRequest {
+  string user_id = 1;
+  string guild_id = 2;
+  int32 xp = 3;
+}
+
+message AddXPResponse {
+  User user = 1;
+  bool level_up = 2; // true если уровень повысился
+  int32 added_xp = 3;
+}
+
+// ----------------------
+// Service definition
+// ----------------------
+
+service InteractionService {
+  rpc GetUser (GetUserRequest) returns (GetUserResponse);
+  rpc AddXP (AddXPRequest) returns (AddXPResponse);
+}
