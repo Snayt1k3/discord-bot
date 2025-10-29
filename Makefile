@@ -43,12 +43,17 @@ grpc-init:
 	@echo "Moving settings proto files to settings-service..."
 	@mkdir -p settings-service/proto
 	@cp -r grpc/* settings-service/
+
+	@echo "Moving settings proto files to interaction-service..."
+	@mkdir -p interaction-service/proto
+	@cp -r grpc/* interaction-service/
+
 	@echo "gRPC server initialized. Files distributed to services."
 
 	@$(MAKE) grpc-clean
 
 lint: 
-	gofmt -w bot/ settings-service/ api-gateway/
+	gofmt -w bot/ settings-service/ api-gateway/ interaction-servive/
 	@echo "Code formatted with gofmt."
 
 docs: 
