@@ -13,12 +13,12 @@ import (
 	pb "api-gateway/proto"
 )
 
-type WelcomeHandlers struct {
-	clients Clients
+type Welcome struct {
+	client pb.WelcomeServiceClient
 }
 
-func NewWelcomeHandlers(cc grpc.ClientConnInterface) *WelcomeHandlers {
-	return &WelcomeHandlers{clients: *NewClients(cc)}
+func NewWelcomeHandlers(cc grpc.ClientConnInterface) *Welcome {
+	return &Welcome{client: pb.NewWelcomeServiceClient(cc)}
 }
 
 // SetWelcomeChannel godoc
@@ -33,7 +33,7 @@ func NewWelcomeHandlers(cc grpc.ClientConnInterface) *WelcomeHandlers {
 // @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/{guild_id}/welcome/channel [put]
-func (s *WelcomeHandlers) SetWelcomeChannel(c *gin.Context) {
+func (s *Welcome) SetWelcomeChannel(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.SetWelcomeChannelRequest
 
@@ -44,7 +44,7 @@ func (s *WelcomeHandlers) SetWelcomeChannel(c *gin.Context) {
 	}
 
 	req.GuildId = guildID
-	resp, err := s.clients.Welcome.SetWelcomeChannel(context.Background(), &req)
+	resp, err := s.client.SetWelcomeChannel(context.Background(), &req)
 
 	if err != nil {
 		slog.Error("Error while updating welcome channel", "error", err)
@@ -68,7 +68,7 @@ func (s *WelcomeHandlers) SetWelcomeChannel(c *gin.Context) {
 // @Failure      429 {object} dto.APIResponse "Quota exceeded"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/{guild_id}/welcome/message [post]
-func (s *WelcomeHandlers) AddWelcomeMessage(c *gin.Context) {
+func (s *Welcome) AddWelcomeMessage(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.WelcomeMessageRequest
 
@@ -79,7 +79,7 @@ func (s *WelcomeHandlers) AddWelcomeMessage(c *gin.Context) {
 	}
 
 	req.GuildId = guildID
-	resp, err := s.clients.Welcome.AddWelcomeMessage(context.Background(), &req)
+	resp, err := s.client.AddWelcomeMessage(context.Background(), &req)
 
 	if err != nil {
 		st, ok := status.FromError(err)
@@ -110,7 +110,7 @@ func (s *WelcomeHandlers) AddWelcomeMessage(c *gin.Context) {
 // @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/{guild_id}/welcome/message [delete]
-func (s *WelcomeHandlers) DeleteWelcomeMessage(c *gin.Context) {
+func (s *Welcome) DeleteWelcomeMessage(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.WelcomeMessageRequest
 
@@ -121,7 +121,7 @@ func (s *WelcomeHandlers) DeleteWelcomeMessage(c *gin.Context) {
 	}
 
 	req.GuildId = guildID
-	resp, err := s.clients.Welcome.DeleteWelcomeMessage(context.Background(), &req)
+	resp, err := s.client.DeleteWelcomeMessage(context.Background(), &req)
 
 	if err != nil {
 		slog.Error("Error while updating welcome channel", "error", err)

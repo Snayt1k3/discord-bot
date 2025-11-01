@@ -35,9 +35,16 @@ func main() {
 	defer settingsServiceConn.Close()
 
 	redisClient := adapters.NewRedisAdapter(fmt.Sprintf("%v:%v", cfg.RedisHost, cfg.RedisPort), cfg.RedisPass, cfg.RedisDB)
-	settingsHandlers := handlers.NewHandlers(settingsServiceConn, redisClient)
 
-	r := routes.SetupRouter(settingsHandlers)
+	// Инициализация handlers
+	settings := handlers.NewSettingsHandlers(settingsServiceConn, redisClient)
+	roles := handlers.NewRolesHandlers(settingsServiceConn)
+	welcome := handlers.NewWelcomeHandlers(settingsServiceConn)
+	log := handlers.NewLogHandlers(settingsServiceConn)
+	automode := handlers.NewAutoModeHandlers(settingsServiceConn)
+	interaction := handlers.NewInteraction(nil)
+
+	r := routes.SetupRouter(settings, roles, welcome, automode, log, interaction)
 
 	port := ":" + cfg.Port
 
