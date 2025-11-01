@@ -63,7 +63,7 @@ func main() {
 
 	g := &run.Group{}
 	addGrpcServer(g, grpcServer, cfg.GrpcPort)
-	addPrometheusServer(g, reg, 8081)
+	addPrometheusServer(g, reg, cfg.PromPort)
 
 	g.Add(run.SignalHandler(context.Background(), syscall.SIGINT, syscall.SIGTERM))
 
@@ -84,8 +84,8 @@ func initLogging() {
 	slog.Info("Logger initialized")
 }
 
-func addPrometheusServer(g *run.Group, reg *prometheus.Registry, port int) {
-	httpSrv := &http.Server{Addr: fmt.Sprintf(":%d", port)}
+func addPrometheusServer(g *run.Group, reg *prometheus.Registry, port string) {
+	httpSrv := &http.Server{Addr: fmt.Sprintf(":%v", port)}
 
 	g.Add(func() error {
 		mux := http.NewServeMux()

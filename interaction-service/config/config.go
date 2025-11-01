@@ -12,6 +12,7 @@ type Config struct {
 	Password string
 	DBName   string
 	GrpcPort string
+	PromPort string
 }
 
 func LoadConfig() (*Config, error) {
@@ -22,6 +23,7 @@ func LoadConfig() (*Config, error) {
 		Password: os.Getenv("INTERACTION_POSTGRES_PASSWORD"),
 		DBName:   os.Getenv("INTERACTION_POSTGRES_DB"),
 		GrpcPort: os.Getenv("INTERACTION_PORT"),
+		PromPort: os.Getenv("INTERACTION_PROMETHEUS_PORT"),
 	}
 
 	if config.Host == "" || config.Port == "" || config.User == "" || config.Password == "" || config.DBName == "" || config.GrpcPort == "" {
