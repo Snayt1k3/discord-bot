@@ -53,7 +53,7 @@ grpc-init:
 	@$(MAKE) grpc-clean
 
 lint: 
-	gofmt -w bot/ settings-service/ api-gateway/ interaction-servive/
+	gofmt -w bot/ settings-service/ api-gateway/ interaction-service/
 	@echo "Code formatted with gofmt."
 
 docs: 
