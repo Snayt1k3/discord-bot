@@ -12,12 +12,10 @@ message User {
   uint64 id = 1;
   string user_id = 2;
   string guild_id = 3;
-  string username = 4;
-  int32 experience = 5;
-  int32 level = 6;
-  int32 next_level_xp = 7;
-  string avatar_url = 8;
-  string last_message_at = 9; // ISO timestamp string
+  int32 experience = 4;
+  int32 level = 5;
+  int32 next_level_xp = 6;
+  string last_message_at = 7; // ISO timestamp string
 }
 
 message GetUserRequest {

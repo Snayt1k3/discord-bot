@@ -3,12 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
+	"interaction-service/config"
 	"log"
 	"log/slog"
 	"net"
 	"net/http"
 	"os"
-	"interaction-service/config"
 	// "interaction-service/internal/adapters/repos"
 	"interaction-service/internal/models"
 	// "interaction-service/internal/server"
@@ -43,10 +43,6 @@ func main() {
 	models.Migrate(db)
 	// userRepo := repos.NewUserRepo(db)
 
-	if err != nil {
-		log.Fatalf("Failed to listen: %v", err)
-	}
-
 	srvMetrics := grpcprom.NewServerMetrics(
 		grpcprom.WithServerHandlingTimeHistogram(
 			grpcprom.WithHistogramBuckets([]float64{0.001, 0.01, 0.1, 0.3, 0.6, 1, 3, 6, 9, 20, 30, 60, 90, 120}),
@@ -67,7 +63,6 @@ func main() {
 		grpc.ChainStreamInterceptor(srvMetrics.StreamServerInterceptor()),
 		grpc.UnaryInterceptor(srvMetrics.UnaryServerInterceptor()),
 	)
-
 
 	srvMetrics.InitializeMetrics(grpcServer)
 
