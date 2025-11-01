@@ -25,7 +25,7 @@ generate-grpc:
 
 grpc-clean:
 	@echo "Cleaning up generated Go code..."
-	@rm -rf $(GO_OUT_DIR)/*
+	@rm -rf $(GO_OUT_DIR)
 	@echo "Cleaned up generated Go code in $(GO_OUT_DIR)"
 
 run:
