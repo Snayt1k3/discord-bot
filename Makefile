@@ -5,7 +5,7 @@ PROTO_DIR := ./proto
 GO_OUT_DIR := ./grpc
 
 # Список .proto файлов
-PROTO_FILES := $(PROTO_DIR)/settings.proto $(PROTO_DIR)/automode.proto  $(PROTO_DIR)/log.proto  $(PROTO_DIR)/roles.proto  $(PROTO_DIR)/welcome.proto
+PROTO_FILES := $(PROTO_DIR)/settings.proto $(PROTO_DIR)/automode.proto  $(PROTO_DIR)/log.proto  $(PROTO_DIR)/roles.proto  $(PROTO_DIR)/welcome.proto  $(PROTO_DIR)/interaction.proto
 
 # Команда генерации gRPC и Go-кода
 PROTOC_COMMAND = protoc -I=$(PROTO_DIR) \

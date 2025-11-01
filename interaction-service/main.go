@@ -11,8 +11,8 @@ import (
 	"os"
 	// "interaction-service/internal/adapters/repos"
 	"interaction-service/internal/models"
-	// "interaction-service/internal/server"
-	// pb "interaction-service/proto"
+	"interaction-service/internal/server"
+	pb "interaction-service/proto"
 	"syscall"
 
 	grpcprom "github.com/grpc-ecosystem/go-grpc-middleware/providers/prometheus"
@@ -41,7 +41,6 @@ func main() {
 	}
 
 	models.Migrate(db)
-	// userRepo := repos.NewUserRepo(db)
 
 	srvMetrics := grpcprom.NewServerMetrics(
 		grpcprom.WithServerHandlingTimeHistogram(
@@ -64,6 +63,7 @@ func main() {
 		grpc.UnaryInterceptor(srvMetrics.UnaryServerInterceptor()),
 	)
 
+	pb.RegisterInteractionServiceServer(grpcServer, server.NewUserServer(db))
 	srvMetrics.InitializeMetrics(grpcServer)
 
 	g := &run.Group{}
