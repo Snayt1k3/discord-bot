@@ -27,12 +27,14 @@ func main() {
 	}
 
 	settingsServiceConn, err := grpc.NewClient(fmt.Sprintf("%v:%v", cfg.GrpcSettingsHost, cfg.GrpcSettingsPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	interactionServiceConn, err := grpc.NewClient(fmt.Sprintf("%v:%v", cfg.GrpcInteractionHost, cfg.GrpcInteractionPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
 		panic("Failed to connect to settings service: " + err.Error())
 	}
 
 	defer settingsServiceConn.Close()
+	defer interactionServiceConn.Close()
 
 	redisClient := adapters.NewRedisAdapter(fmt.Sprintf("%v:%v", cfg.RedisHost, cfg.RedisPort), cfg.RedisPass, cfg.RedisDB)
 
@@ -42,7 +44,7 @@ func main() {
 	welcome := handlers.NewWelcomeHandlers(settingsServiceConn)
 	log := handlers.NewLogHandlers(settingsServiceConn)
 	automode := handlers.NewAutoModeHandlers(settingsServiceConn)
-	interaction := handlers.NewInteraction(nil)
+	interaction := handlers.NewInteraction(interactionServiceConn)
 
 	r := routes.SetupRouter(settings, roles, welcome, automode, log, interaction)
 
