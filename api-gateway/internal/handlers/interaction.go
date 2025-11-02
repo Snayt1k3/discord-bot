@@ -24,11 +24,11 @@ func NewInteraction(cc grpc.ClientConnInterface) *Interaction {
 // @Tags         interaction
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.GetUserRequest
+// @Param        request body pb.GetUserRequest true "Get User"
 // @Success      200 {object} pb.GetUserResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/interaction/user
+// @Router /api/v1/interaction/user [get]
 func (i *Interaction) GetUser(c *gin.Context) {
 	var req pb.GetUserRequest
 
@@ -55,11 +55,11 @@ func (i *Interaction) GetUser(c *gin.Context) {
 // @Tags         interaction
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.AddXPRequest
+// @Param        request body pb.AddXPRequest true "Add XP"
 // @Success      200 {object} pb.AddXPResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/interaction/user/addxp
+// @Router /api/v1/interaction/user [post]
 func (i *Interaction) AddXp(c *gin.Context) {
 	var req pb.AddXPRequest
 
