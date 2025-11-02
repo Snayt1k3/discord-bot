@@ -60,7 +60,21 @@ services:
     depends_on:
       - settings-db
     restart: always
-  
+
+  interaction-service:
+    container_name: $INTERACTION_ADDRESS
+    build:
+      context: ./interaction-service
+    networks:
+      - bot
+    env_file:
+      - .env
+    ports:
+      - "8082:8082"
+    depends_on:
+      - interaction-db
+    restart: always
+
   api-gateway:
     container_name: api-gateway
     build: 
@@ -87,7 +101,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./docker/volumes/pgdata:/var/lib/postgresql/data
+      - ./docker/volumes/pg/settings:/var/lib/postgresql/data
     networks:
       - bot
 
