@@ -14,7 +14,7 @@ import (
 
 func SetupRouter(setting *handlers.Settings, roles *handlers.Roles, welcome *handlers.Welcome, automode *handlers.AutoMode, log *handlers.Log, interaction *handlers.Interaction) *gin.Engine {
 	r := gin.Default()
-	r.Use(metrics.MetricsMiddleware())
+	r.Use(metrics.Middleware())
 
 	// Swagger and Prometheus endpoints
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
