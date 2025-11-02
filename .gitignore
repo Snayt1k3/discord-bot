@@ -31,3 +31,4 @@ docker/volumes
 docker/plugins
 docs/
 .idea
+*.log
