@@ -1,7 +1,9 @@
 package repos
 
 import (
+	"errors"
 	"interaction-service/internal/models"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -18,10 +20,26 @@ func (r *UserRepo) CreateUser(user *models.User) error {
 	return r.db.Create(user).Error
 }
 
-func (r *UserRepo) GetUser(userID, guildID string) (*models.User, error) {
+func (r *UserRepo) GetOrCreateUser(userID, guildID string) (*models.User, error) {
 	var user models.User
 	err := r.db.Where("user_id = ? AND guild_id = ?", userID, guildID).First(&user).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			user = models.User{
+				UserID:        userID,
+				GuildID:       guildID,
+				Experience:    0,
+				Level:         1,
+				LastMessageAt: time.Now(),
+				NextLevelXP:   50,
+			}
+
+			err = r.CreateUser(&user)
+
+			if err != nil {
+				return nil, err
+			}
+		}
 		return nil, err
 	}
 	return &user, nil

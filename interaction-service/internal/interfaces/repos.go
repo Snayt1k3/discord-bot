@@ -6,6 +6,6 @@ import (
 
 type UserRepo interface {
 	CreateUser(user *models.User) error
-	GetUser(userID, guildID string) (*models.User, error)
+	GetOrCreateUser(userID, guildID string) (*models.User, error)
 	UpdateUser(user *models.User) error
 }
