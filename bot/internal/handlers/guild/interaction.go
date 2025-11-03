@@ -39,7 +39,7 @@ func ViewInteractionProfile(guildService guild.GuildAdapter, s *discordgo.Sessio
 			},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: fmt.Sprintf("User ID: %s", user.UserID),
+			Text: fmt.Sprintf("Username - %s", i.User.Username),
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
