@@ -6,6 +6,7 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"net/url"
 )
 
 type DefaultHttpClient struct {
@@ -16,8 +17,19 @@ func NewDefaultHttpClient() *DefaultHttpClient {
 	return &DefaultHttpClient{Client: &http.Client{}}
 }
 
-func (d *DefaultHttpClient) Get(ctx context.Context, url string, headers map[string]string) (*http.Response, error) {
-	return d.doRequest(ctx, http.MethodGet, url, nil, headers)
+func (d *DefaultHttpClient) Get(ctx context.Context, rawURL string, params map[string]string, headers map[string]string) (*http.Response, error) {
+	u, err := url.Parse(rawURL)
+	if err != nil {
+		return nil, err
+	}
+
+	q := u.Query()
+	for k, v := range params {
+		q.Set(k, v)
+	}
+	u.RawQuery = q.Encode()
+
+	return d.doRequest(ctx, http.MethodGet, u.String(), nil, headers)
 }
 
 func (d *DefaultHttpClient) Post(ctx context.Context, url string, body []byte, headers map[string]string) (*http.Response, error) {

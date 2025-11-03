@@ -50,7 +50,7 @@ func (s *UserServer) AddXP(ctx context.Context, req *pb.AddXPRequest) (*pb.AddXP
 	currentExperience := int32(user.Experience) + req.Xp
 	nextLevelXP := int32(user.NextLevelXP)
 	leveledUp := false
-	user.LastMessageAt = time.Now()
+	user.LastMessageAt = time.Now() // TODO Добавить ограничение
 
 	if currentExperience >= int32(user.NextLevelXP) {
 		user.Experience = int(currentExperience - int32(user.NextLevelXP))

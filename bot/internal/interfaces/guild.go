@@ -34,3 +34,8 @@ type LogAdapterInterface interface {
 	AddChannel(guildID, channelID string) error
 	RemoveChannel(guildID, channelID string) error
 }
+
+type InteractionAdapterInterface interface {
+	GetUser(guildId, userId string) (dtoGuild.User, error)
+	AddXP(guildId, userId string, xp int32) error
+}

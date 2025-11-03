@@ -10,6 +10,7 @@ type GuildAdapter struct {
 	AutoMode       interfaces.AutoModeAdapterInterface
 	Settings       interfaces.SettingsAdapterInterface
 	Log            interfaces.LogAdapterInterface
+	Interaction    interfaces.InteractionAdapterInterface
 }
 
 func NewGuildAdapter(http interfaces.HttpClient) *GuildAdapter {
@@ -19,5 +20,6 @@ func NewGuildAdapter(http interfaces.HttpClient) *GuildAdapter {
 		AutoMode:       NewAutoMode(http),
 		Settings:       NewSettingsAdapter(http),
 		Log:            NewLogAdapter(http),
+		Interaction:    NewInteraction(http),
 	}
 }

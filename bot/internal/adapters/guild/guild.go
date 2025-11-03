@@ -25,6 +25,7 @@ func (s *SettingsAdapter) Get(guild_id string) (dtoGuild.GuildSettings, error) {
 		context.Background(),
 		fmt.Sprintf("%v/api/v1/settings/guild/%v", config.GetApiGatewayAddr(), guild_id),
 		nil,
+		nil,
 	)
 
 	if err != nil {

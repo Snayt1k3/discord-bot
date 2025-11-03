@@ -106,7 +106,15 @@ func (eh *EventHandlers) MessageCreate(s *discordgo.Session, m *discordgo.Messag
 		return
 	}
 
-	eh.automodeCheck(s, m)
+	res := eh.automodeCheck(s, m)
+
+	// Adding XP to user
+	if !res {
+		err := eh.service.Interaction.AddXP(m.GuildID, m.Author.ID, 10)
+		if err != nil {
+			slog.Error("Error while adding XP", "error", err)
+		}
+	}
 
 }
 
@@ -237,39 +245,44 @@ func (eh *EventHandlers) sendLogMessage(
 }
 
 // Вспомогательная функция для проверки всех условий автомодерации.
-func (eh *EventHandlers) automodeCheck(s *discordgo.Session, m *discordgo.MessageCreate) {
+func (eh *EventHandlers) automodeCheck(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 	settings, err := eh.service.Settings.Get(m.GuildID)
 
 	if err != nil {
 		slog.Error("Error while fetching guild settings", "err", err)
-		return
+		return false
 	}
 
 	autoMode := settings.AutoMode
 	if !autoMode.Enabled {
-		return
+		return false
 	}
 
 	content := m.Content
 
+	// 🚫 Проверка запрещённых слов
 	for _, bw := range autoMode.BannedWords {
 		if strings.Contains(strings.ToLower(content), strings.ToLower(bw.Word)) {
 			s.ChannelMessageDelete(m.ChannelID, m.ID)
-			utils.SendTempMessage(s, m.ChannelID, fmt.Sprintf("❌ %s, your message contains a banned word!", m.Author.Mention()))
-			return
+			utils.SendTempMessage(s, m.ChannelID,
+				fmt.Sprintf("❌ %s, your message contains a banned word!", m.Author.Mention()))
+			return true
 		}
 	}
 
+	// 🔗 Проверка ссылок
 	for _, al := range autoMode.AntiLink {
 		if strings.Contains(content, "http://") || strings.Contains(content, "https://") || strings.Contains(content, "discord.gg/") {
 			if al.ChannelId == m.ChannelID {
 				s.ChannelMessageDelete(m.ChannelID, m.ID)
-				utils.SendTempMessage(s, m.ChannelID, fmt.Sprintf("❌ %s, links are not allowed in this channel!", m.Author.Mention()))
-				return
+				utils.SendTempMessage(s, m.ChannelID,
+					fmt.Sprintf("❌ %s, links are not allowed in this channel!", m.Author.Mention()))
+				return true
 			}
 		}
 	}
 
+	// 🔠 Проверка капслока
 	for _, cl := range autoMode.CapsLock {
 		if cl.ChannelId == m.ChannelID {
 			upperCount := 0
@@ -284,9 +297,12 @@ func (eh *EventHandlers) automodeCheck(s *discordgo.Session, m *discordgo.Messag
 			}
 			if letters > 0 && float64(upperCount)/float64(letters) > 0.7 {
 				s.ChannelMessageDelete(m.ChannelID, m.ID)
-				utils.SendTempMessage(s, m.ChannelID, fmt.Sprintf("❌ %s, please do not write in caps!", m.Author.Mention()))
-				return
+				utils.SendTempMessage(s, m.ChannelID,
+					fmt.Sprintf("❌ %s, please do not write in caps!", m.Author.Mention()))
+				return true
 			}
 		}
 	}
+
+	return false
 }

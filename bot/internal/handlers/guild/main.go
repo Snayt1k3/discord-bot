@@ -27,9 +27,13 @@ func (h *Handlers) backToMenu(s *discordgo.Session, i *discordgo.InteractionCrea
 	return backToMenu(s, i)
 }
 
+func (h *Handlers) viewProfileInteraction(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return ViewInteractionProfile(h.guildService, s, i)
+}
+
 func (h *Handlers) AddHandlers(handlers map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error) {
 	handlers["settings"] = h.menu
 	handlers["MainMenuSettings"] = h.backToMenu
-
+	handlers["iprofile"] = h.viewProfileInteraction
 	h.settings.AddHandlers(handlers)
 }

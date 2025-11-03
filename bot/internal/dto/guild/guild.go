@@ -72,3 +72,12 @@ type GuildSettings struct {
 type GuildSettingsResponse struct {
 	Settings GuildSettings `json:"settings"`
 }
+
+type User struct {
+	UserID        string `json:"user_id"`
+	GuildID       string `json:"guild_id"`
+	Experience    int32  `json:"experience"`
+	Level         int32  `json:"level"`
+	NextLevelXP   int32  `json:"next_level_xp"`
+	LastMessageAt string `json:"last_message_at"` // ISO timestamp string
+}

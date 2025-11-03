@@ -151,4 +151,8 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		Name:        "log-chnl-rm",
 		Description: "Remove the logging channel",
 	},
+	{
+		Name:        "iprofile",
+		Description: "View your profile",
+	},
 }
