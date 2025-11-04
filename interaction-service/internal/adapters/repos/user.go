@@ -39,6 +39,7 @@ func (r *UserRepo) GetOrCreateUser(userID, guildID string) (*models.User, error)
 			if err != nil {
 				return nil, err
 			}
+			return &user, nil
 		}
 		return nil, err
 	}
