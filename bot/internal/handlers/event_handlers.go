@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"bot/internal/discord"
 	"bot/internal/http"
 	"fmt"
 	"log/slog"
@@ -93,7 +94,16 @@ func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMe
 }
 
 func (eh *EventHandlers) OnGuildCreate(s *discordgo.Session, r *discordgo.GuildCreate) {
+	appID := s.State.User.ID
 
+	for _, guild := range s.State.Guilds {
+		for _, cmd := range discord.CommandsList {
+			_, err := s.ApplicationCommandCreate(appID, guild.ID, cmd)
+			if err != nil {
+				slog.Error("Error creating command", "command", cmd.Name, "error", err)
+			}
+		}
+	}
 }
 
 func (eh *EventHandlers) MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {

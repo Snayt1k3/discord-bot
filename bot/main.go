@@ -7,8 +7,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/bwmarrin/discordgo"
-
 	"bot/config"
 	"bot/internal/discord"
 	"bot/internal/handlers"
@@ -33,8 +31,6 @@ func main() {
 		slog.Warn("failed to update custom status", "error", err)
 	}
 
-	initBot(discord.Bot.Session, discord.CommandsList)
-
 	defer discord.Bot.Session.Close()
 
 	slog.Info("Bot is running. Press Ctrl + C to exit.")
@@ -58,30 +54,6 @@ func addEventHandlers(cd *handlers.CommandsDispatcher, eh *handlers.EventHandler
 	discord.Bot.Session.AddHandler(eh.MessageDeleteBulk)
 	discord.Bot.Session.AddHandler(eh.OnInviteCreate)
 
-}
-
-func initBot(s *discordgo.Session, cmds []*discordgo.ApplicationCommand) {
-	appID := s.State.User.ID
-
-	for _, guild := range s.State.Guilds {
-		// Получаем текущие команды
-		// oldCommands, _ := s.ApplicationCommands(appID, http.ID)
-		// for _, cmd := range oldCommands {
-		// 	_ = s.ApplicationCommandDelete(appID, http.ID, cmd.ID)
-		// }
-
-		// slog.Info("Old commands deleted, registering new ones...",
-		// 	"server_name", http.Name,
-		// 	"server_id", http.ID,
-		// )
-
-		for _, cmd := range cmds {
-			_, err := s.ApplicationCommandCreate(appID, guild.ID, cmd)
-			if err != nil {
-				slog.Error("Error creating command", "command", cmd.Name, "error", err)
-			}
-		}
-	}
 }
 
 func initLogging() {
