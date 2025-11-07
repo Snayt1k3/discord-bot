@@ -1,38 +1,35 @@
-package settings
+package preferences
 
 import (
+	"bot/internal/http"
 	"fmt"
 	"log/slog"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
 
-	"bot/internal/adapters/guild"
 	"bot/internal/utils"
 )
 
-func ShowWelcomeSettings(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
-	// Check admin permissions
+func WelcomeSettings(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
 
-	// Get guild settings
-	settings, err := gk.Settings.Get(i.GuildID)
+	settings, err := http.Settings.Get(i.GuildID)
+
 	if err != nil {
 		slog.Error("Error while fetching welcome settings", "err", err)
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	// Format channel mention
 	channelMention := "—"
 	if settings.Welcome.ChannelID != "" {
 		channelMention = "<#" + settings.Welcome.ChannelID + ">"
 	}
 
-	// Check if there are welcome messages
 	if len(settings.Welcome.Messages) == 0 {
 		embed := &discordgo.MessageEmbed{
 			Title:       "📜 Welcome messages configuration",
@@ -53,7 +50,6 @@ func ShowWelcomeSettings(gk guild.GuildAdapter, s *discordgo.Session, i *discord
 		})
 	}
 
-	// If messages exist, show them with channel
 	messageList := strings.Join(settings.Welcome.Messages, "\n• ")
 	embed := &discordgo.MessageEmbed{
 		Title: "📜 Welcome messages for this server",
@@ -83,7 +79,7 @@ func ShowWelcomeSettings(gk guild.GuildAdapter, s *discordgo.Session, i *discord
 	})
 }
 
-func setWelcomeChannel(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func SetWelcomeChnl(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
@@ -92,7 +88,7 @@ func setWelcomeChannel(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo
 
 	channelId := i.ApplicationCommandData().Options[0].ChannelValue(nil).ID
 
-	err := gk.Welcome.SetChannel(i.GuildID, channelId)
+	err := http.Welcome.SetChannel(i.GuildID, channelId)
 
 	if err != nil {
 		slog.Error("Error while updating welcome settings", "err", err)
@@ -100,7 +96,7 @@ func setWelcomeChannel(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo
 		return err
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "Channel set successfully! New members will be welcomed in this channel.",
@@ -111,8 +107,7 @@ func setWelcomeChannel(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo
 	return nil
 }
 
-func AddWelcomeMessage(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
-
+func AddWelcomeMessage(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
@@ -120,7 +115,7 @@ func AddWelcomeMessage(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo
 
 	msg := i.ApplicationCommandData().Options[0].StringValue()
 
-	err := gk.Welcome.AddMessage(i.GuildID, msg)
+	err := http.Welcome.AddMessage(i.GuildID, msg)
 
 	if err != nil {
 		slog.Error("Error while updating welcome settings", "err", err)
@@ -128,7 +123,7 @@ func AddWelcomeMessage(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo
 		return err
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "Message added successfully!",
@@ -138,7 +133,7 @@ func AddWelcomeMessage(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo
 	return nil
 }
 
-func DeleteWelcomeMessage(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func DeleteWelcomeMessage(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
@@ -147,7 +142,7 @@ func DeleteWelcomeMessage(gk guild.GuildAdapter, s *discordgo.Session, i *discor
 
 	msg := i.ApplicationCommandData().Options[0].StringValue()
 
-	err := gk.Welcome.DeleteMessage(i.GuildID, msg)
+	err := http.Welcome.DeleteMessage(i.GuildID, msg)
 
 	if err != nil {
 		slog.Error("Error while updating welcome settings", "err", err)
@@ -155,7 +150,7 @@ func DeleteWelcomeMessage(gk guild.GuildAdapter, s *discordgo.Session, i *discor
 		return err
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "Message removed successfully!",

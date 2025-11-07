@@ -32,7 +32,7 @@ func NewRolesHandlers(cc grpc.ClientConnInterface) *Roles {
 // @Success      200 {object} pb.SetMessageResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/roles/message [put]
+// @Router       /api/v1/settings/http/{guild_id}/roles/message [put]
 func (s *Roles) SetRoleMessageId(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.SetMessageRequest
@@ -67,7 +67,7 @@ func (s *Roles) SetRoleMessageId(c *gin.Context) {
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      429 {object} dto.APIResponse "Quota exceeded"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/roles/role [post]
+// @Router       /api/v1/settings/http/{guild_id}/roles/role [post]
 func (s *Roles) AddRole(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.AddRoleRequest
@@ -109,7 +109,7 @@ func (s *Roles) AddRole(c *gin.Context) {
 // @Success      200 {object} pb.RemoveRoleResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/roles/role [delete]
+// @Router       /api/v1/settings/http/{guild_id}/roles/role [delete]
 func (s *Roles) DeleteRole(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.RemoveRoleRequest

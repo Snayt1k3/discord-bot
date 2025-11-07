@@ -1,7 +1,8 @@
-package guild
+package commands
 
 import (
-	"bot/internal/adapters/guild"
+	"bot/internal/http"
+	"bot/internal/utils"
 	"fmt"
 	"log/slog"
 	"time"
@@ -9,9 +10,10 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func ViewInteractionProfile(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func InteractionProfile(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	guildID := i.GuildID
-	user, err := guildService.Interaction.GetUser(guildID, i.User.ID)
+	user, err := http.Interaction.GetUser(guildID, i.User.ID)
+
 	if err != nil {
 		slog.Error("Failed to fetch user profile", "err", err)
 		return err
@@ -34,7 +36,7 @@ func ViewInteractionProfile(guildService guild.GuildAdapter, s *discordgo.Sessio
 			},
 			{
 				Name:   "🕒 Last Message",
-				Value:  formatLastMessage(user.LastMessageAt),
+				Value:  utils.FormatLastMessage(user.LastMessageAt),
 				Inline: false,
 			},
 		},
@@ -53,13 +55,6 @@ func ViewInteractionProfile(guildService guild.GuildAdapter, s *discordgo.Sessio
 	})
 }
 
-func formatLastMessage(ts string) string {
-	if ts == "" {
-		return "No messages yet"
-	}
-	t, err := time.Parse(time.RFC3339, ts)
-	if err != nil {
-		return ts // fallback — показать как есть
-	}
-	return t.Format("02 Jan 2006 15:04")
+func ShowLeaderBoard(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{})
 }

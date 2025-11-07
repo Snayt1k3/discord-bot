@@ -30,7 +30,7 @@ func NewLogHandlers(cc grpc.ClientConnInterface) *Log {
 // @Success      200 {object} pb.ToggleLogResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/logging/toggle [post]
+// @Router       /api/v1/settings/http/{guild_id}/logging/toggle [post]
 func (s *Log) ToggleLog(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.ToggleLogRequest
@@ -64,7 +64,7 @@ func (s *Log) ToggleLog(c *gin.Context) {
 // @Success      200 {object} pb.UpdateLogChannelResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/logging/channel [post]
+// @Router       /api/v1/settings/http/{guild_id}/logging/channel [post]
 func (s *Log) AddLogChannel(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.UpdateLogChannelRequest
@@ -98,7 +98,7 @@ func (s *Log) AddLogChannel(c *gin.Context) {
 // @Success      200 {object} pb.UpdateLogChannelResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/logging/channel [delete]
+// @Router       /api/v1/settings/http/{guild_id}/logging/channel [delete]
 func (s *Log) RemoveLogChannel(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.UpdateLogChannelRequest

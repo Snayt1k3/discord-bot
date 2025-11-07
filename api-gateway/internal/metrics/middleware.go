@@ -28,7 +28,7 @@ func Middleware() gin.HandlerFunc {
 	}
 }
 
-// extractGroup вырезает группу после /settings/guild/:guild_id/
+// extractGroup вырезает группу после /settings/http/:guild_id/
 func extractGroup(path string) string {
 	if path == "" {
 		return "unknown"
@@ -37,14 +37,14 @@ func extractGroup(path string) string {
 	// убираем версию API
 	path = strings.TrimPrefix(path, "/api/v1/")
 
-	// ищем "settings/guild/"
-	idx := strings.Index(path, "settings/guild/")
+	// ищем "settings/http/"
+	idx := strings.Index(path, "settings/http/")
 	if idx == -1 {
 		return "other"
 	}
 
-	// убираем всё до guild/
-	rest := path[idx+len("settings/guild/"):]
+	// убираем всё до http/
+	rest := path[idx+len("settings/http/"):]
 	// отбрасываем guild_id (оно может быть числом или :guild_id)
 	parts := strings.SplitN(rest, "/", 2)
 	if len(parts) < 2 {

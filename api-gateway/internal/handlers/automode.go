@@ -32,7 +32,7 @@ func NewAutoModeHandlers(cc grpc.ClientConnInterface) *AutoMode {
 // @Success      200 {object} pb.ToggleAutoModResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/automode/toggle [post]
+// @Router       /api/v1/settings/http/{guild_id}/automode/toggle [post]
 func (s *AutoMode) ToggleAutoMod(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.ToggleAutoModRequest
@@ -67,7 +67,7 @@ func (s *AutoMode) ToggleAutoMod(c *gin.Context) {
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      429 {object} dto.APIResponse "Quota exceeded"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/automode/bannedword [post]
+// @Router       /api/v1/settings/http/{guild_id}/automode/bannedword [post]
 func (s *AutoMode) AddBannedWord(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.AddBannedWordRequest
@@ -110,7 +110,7 @@ func (s *AutoMode) AddBannedWord(c *gin.Context) {
 // @Success      200 {object} pb.RemoveBannedWordResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/automode/bannedword [delete]
+// @Router       /api/v1/settings/http/{guild_id}/automode/bannedword [delete]
 func (s *AutoMode) RemoveBannedWord(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.RemoveBannedWordRequest
@@ -145,7 +145,7 @@ func (s *AutoMode) RemoveBannedWord(c *gin.Context) {
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      429 {object} dto.APIResponse "Quota exceeded"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/automode/antilink [delete]
+// @Router       /api/v1/settings/http/{guild_id}/automode/antilink [delete]
 func (s *AutoMode) RemoveAntiLink(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.RemoveAntiLinkChannelRequest
@@ -188,7 +188,7 @@ func (s *AutoMode) RemoveAntiLink(c *gin.Context) {
 // @Success      200 {object} pb.AddAntiLinkChannelResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/automode/antilink [post]
+// @Router       /api/v1/settings/http/{guild_id}/automode/antilink [post]
 func (s *AutoMode) AddAntiLink(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.AddAntiLinkChannelRequest
@@ -223,7 +223,7 @@ func (s *AutoMode) AddAntiLink(c *gin.Context) {
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      429 {object} dto.APIResponse "Quota exceeded"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/automode/capslock [post]
+// @Router       /api/v1/settings/http/{guild_id}/automode/capslock [post]
 func (s *AutoMode) AddCapsLock(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.AddCapsLockChannelRequest
@@ -266,7 +266,7 @@ func (s *AutoMode) AddCapsLock(c *gin.Context) {
 // @Success      200 {object} pb.RemoveCapsLockChannelResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/automode/capslock [delete]
+// @Router       /api/v1/settings/http/{guild_id}/automode/capslock [delete]
 func (s *AutoMode) RemoveCapsLock(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.RemoveCapsLockChannelRequest

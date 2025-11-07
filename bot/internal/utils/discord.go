@@ -60,25 +60,31 @@ func IsAdmin(session *discordgo.Session, guildID, userID string) bool {
 	return false
 }
 
-func SendErrorMessage(session *discordgo.Session, i *discordgo.InteractionCreate) error {
-	session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+func SendErrorMessage(session *discordgo.Session, i *discordgo.InteractionCreate) {
+	err := session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "⚠️ Oops! Something went wrong. Please try again. ⚠️",
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
-	return nil
+	if err != nil {
+		slog.Error("failed to send interaction response", "error", err)
+	}
+
 }
 
-func SendNoPermissionMessage(session *discordgo.Session, i *discordgo.InteractionCreate) error {
-	return session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+func SendNoPermissionMessage(session *discordgo.Session, i *discordgo.InteractionCreate) {
+	err := session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "⛔ You do not have permission to use this command/button.",
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
+	if err != nil {
+		slog.Error("failed to send message to channel", "channelId", i.ChannelID, "error", err)
+	}
 }
 
 func EditMessage(session *discordgo.Session, message *discordgo.MessageEdit) {
@@ -103,4 +109,11 @@ func SendTempMessage(s *discordgo.Session, channelID, content string) {
 			slog.Error("failed to delete temp message", "error", err)
 		}
 	})
+}
+
+func Respond(s *discordgo.Session, m *discordgo.InteractionCreate, resp *discordgo.InteractionResponse) {
+	err := s.InteractionRespond(m.Interaction, resp)
+	if err != nil {
+		slog.Error("failed to send interaction response", "error", err)
+	}
 }

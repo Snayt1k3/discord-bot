@@ -25,7 +25,7 @@ func NewSettingsHandlers(cc grpc.ClientConnInterface, redis interfaces.RedisInte
 }
 
 // GetGuildSettings godoc
-// @Summary      Get guild settings
+// @Summary      Get http settings
 // @Description  Получить настройки гильдии. Сначала проверяет Redis-кэш, если нет — тянет данные из gRPC.
 // @Tags         settings
 // @Produce      json
@@ -33,11 +33,11 @@ func NewSettingsHandlers(cc grpc.ClientConnInterface, redis interfaces.RedisInte
 // @Success      200 {object} pb.GetSettingsResponse
 // @Failure      404 {object} dto.APIResponse "Guild settings not found"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id} [get]
+// @Router       /api/v1/settings/http/{guild_id} [get]
 func (s *Settings) GetGuildSettings(c *gin.Context) {
 	guildID := c.Param("guild_id")
 
-	key := fmt.Sprintf("guild-settings-%v", guildID)
+	key := fmt.Sprintf("http-settings-%v", guildID)
 
 	exists, _ := s.redis.Exists(key)
 
@@ -79,7 +79,7 @@ func (s *Settings) GetGuildSettings(c *gin.Context) {
 }
 
 // CreateSettings godoc
-// @Summary      Create guild settings
+// @Summary      Create http settings
 // @Description  Создаёт настройки гильдии, если их ещё нет
 // @Tags         settings
 // @Produce      json
@@ -87,7 +87,7 @@ func (s *Settings) GetGuildSettings(c *gin.Context) {
 // @Success      200 {object} pb.CreateSettingsResponse
 // @Failure      409 {object} dto.APIResponse "Guild settings already exist"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id} [post]
+// @Router       /api/v1/settings/http/{guild_id} [post]
 func (s *Settings) CreateSettings(c *gin.Context) {
 	guildID := c.Param("guild_id")
 
@@ -102,7 +102,7 @@ func (s *Settings) CreateSettings(c *gin.Context) {
 			return
 		}
 
-		slog.Error("Error while creating guild settings", "error", err)
+		slog.Error("Error while creating http settings", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

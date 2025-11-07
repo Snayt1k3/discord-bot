@@ -32,7 +32,7 @@ func NewWelcomeHandlers(cc grpc.ClientConnInterface) *Welcome {
 // @Success      200 {object} pb.SetWelcomeChannelResponse
 // @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/welcome/channel [put]
+// @Router       /api/v1/settings/http/{guild_id}/welcome/channel [put]
 func (s *Welcome) SetWelcomeChannel(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.SetWelcomeChannelRequest
@@ -67,7 +67,7 @@ func (s *Welcome) SetWelcomeChannel(c *gin.Context) {
 // @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      429 {object} dto.APIResponse "Quota exceeded"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/welcome/message [post]
+// @Router       /api/v1/settings/http/{guild_id}/welcome/message [post]
 func (s *Welcome) AddWelcomeMessage(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.WelcomeMessageRequest
@@ -109,7 +109,7 @@ func (s *Welcome) AddWelcomeMessage(c *gin.Context) {
 // @Success      200 {object} pb.WelcomeMessageResponse
 // @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/welcome/message [delete]
+// @Router       /api/v1/settings/http/{guild_id}/welcome/message [delete]
 func (s *Welcome) DeleteWelcomeMessage(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.WelcomeMessageRequest

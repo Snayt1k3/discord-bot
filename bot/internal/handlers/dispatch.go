@@ -5,30 +5,51 @@ import (
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
-
-	guildAdapters "bot/internal/adapters/guild"
-	guildHandlers "bot/internal/handlers/guild"
 )
 
 type CommandsDispatcher struct {
-	guildAdapter guildAdapters.GuildAdapter
-	handlers     map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error
+	handlers map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate)
 }
 
-func NewCommandsDispatcher(guildService guildAdapters.GuildAdapter) *CommandsDispatcher {
+func NewCommandsDispatcher() *CommandsDispatcher {
 	return &CommandsDispatcher{
-		guildAdapter: guildService,
-		handlers:     map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error{},
+		handlers: map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){},
 	}
 }
 
-func (cd *CommandsDispatcher) AddHandler(name string, handler func(s *discordgo.Session, i *discordgo.InteractionCreate) error) {
-	cd.handlers[name] = handler
-}
+func (cd *CommandsDispatcher) InitHandlers(container *Container) {
+	cd.handlers["help"] = container.Help
+	cd.handlers["menu"] = container.Menu
+	cd.handlers["iprofile"] = container.InteractionProfile
 
-func (cd *CommandsDispatcher) InitHandlers(handlers guildHandlers.Handlers) {
-	cd.AddHandler("help", HelpHandler)
-	handlers.AddHandlers(cd.handlers)
+	// Настройка Welcome
+	cd.handlers["welcome-chnl"] = container.SetWelcomeChnl
+	cd.handlers["welcomemsg-add"] = container.AddWelcomeMsg
+	cd.handlers["welcomemsg-remove"] = container.RemoveWelcomeMsg
+
+	// Настройка Roles/Reactions
+	cd.handlers["rr-add"] = container.AddRole
+	cd.handlers["rr-remove"] = container.RemoveRole
+	cd.handlers["rr-message"] = container.SetRoleMsg
+
+	// Logging
+	cd.handlers["log-toggle"] = container.ToggleLog
+	cd.handlers["log-chnl"] = container.AddLogChnl
+	cd.handlers["log-chnl-rm"] = container.RemoveLogChnl
+
+	cd.handlers["RolesReactionsSettings"] = container.RolesSettings
+	cd.handlers["WelcomeSettings"] = container.WelcomePreferences
+	cd.handlers["AutoModeSettings"] = container.ModerationSettings
+	cd.handlers["LogSettings"] = container.LoggingSettings
+
+	cd.handlers["automod-toggle"] = container.ToggleModeration
+	cd.handlers["automod-bw-add"] = container.AddBannedWord
+	cd.handlers["automod-bw-rm"] = container.RemoveBannedWord
+	cd.handlers["automod-al-enable"] = container.AddAntiLinkChnl
+	cd.handlers["automod-al-disable"] = container.RemoveAntiLinkChnl
+	cd.handlers["automod-ac-enable"] = container.AddCapsLockChnl
+	cd.handlers["automod-ac-disable"] = container.RemoveCapsLockChnl
+
 }
 
 func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.InteractionCreate) {
@@ -50,11 +71,7 @@ func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.Intera
 	slog.Info("Cmd:", "name", name)
 
 	if handler, ok := cd.handlers[name]; ok {
-
-		if err := handler(s, i); err != nil {
-			slog.Error("Error handling command", "err", err, "name", name)
-		}
-
+		handler(s, i)
 	} else {
 		slog.Warn("No handler found for command", "name", name)
 	}

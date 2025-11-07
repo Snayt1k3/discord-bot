@@ -1,10 +1,12 @@
-package handlers
+package commands
 
 import (
+	"bot/internal/utils"
+
 	"github.com/bwmarrin/discordgo"
 )
 
-func HelpHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func Help(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	helpEmbed := &discordgo.MessageEmbed{
 		Title:       "🌿 Frieren Bot - Traces of Music 🌿",
 		Description: "Time passes, but music stays with us. If you wish to fill the silence, here’s what you can do:",
@@ -20,14 +22,12 @@ func HelpHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 		},
 	}
 
-	s.InteractionRespond(
-		i.Interaction,
-		&discordgo.InteractionResponse{
-			Type: discordgo.InteractionResponseChannelMessageWithSource,
-			Data: &discordgo.InteractionResponseData{
-				Embeds: []*discordgo.MessageEmbed{helpEmbed},
-			},
+	resp := &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Embeds: []*discordgo.MessageEmbed{helpEmbed},
 		},
-	)
-	return nil
+	}
+
+	utils.Respond(s, i, resp)
 }

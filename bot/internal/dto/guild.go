@@ -1,4 +1,4 @@
-package settings
+package dto
 
 type SetWelcomeChannelResponse struct {
 	GuildID   string `json:"guild_id"`

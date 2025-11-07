@@ -1,8 +1,8 @@
-package guild
+package http
 
 import (
 	"bot/config"
-	dtoGuild "bot/internal/dto/guild"
+	dtoGuild "bot/internal/dto"
 	"bot/internal/interfaces"
 	"context"
 	"encoding/json"
@@ -14,8 +14,8 @@ type Interaction struct {
 	http interfaces.HttpClient
 }
 
-func NewInteraction(http interfaces.HttpClient) *Interaction {
-	return &Interaction{http: http}
+func NewInteraction() *Interaction {
+	return &Interaction{http: NewDefaultHttpClient()}
 }
 
 func (i *Interaction) GetUser(guildId, userId string) (dtoGuild.User, error) {
@@ -34,6 +34,7 @@ func (i *Interaction) GetUser(guildId, userId string) (dtoGuild.User, error) {
 		slog.Warn("Bad response when adding xp", "err", err)
 		return dtoGuild.User{}, err
 	}
+
 	defer response.Body.Close()
 
 	var user dtoGuild.User

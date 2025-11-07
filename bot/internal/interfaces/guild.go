@@ -1,6 +1,8 @@
 package interfaces
 
-import dtoGuild "bot/internal/dto/guild"
+import (
+	dtoGuild "bot/internal/dto"
+)
 
 type SettingsAdapterInterface interface {
 	Get(guildID string) (dtoGuild.GuildSettings, error)

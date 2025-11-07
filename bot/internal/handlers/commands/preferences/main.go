@@ -1,13 +1,11 @@
-package settings
+package preferences
 
 import (
 	"github.com/bwmarrin/discordgo"
-
-	"bot/internal/adapters/guild"
 )
 
 type GuildPreferencesHandlers struct {
-	guildService guild.GuildAdapter
+	guildService guild.guild
 }
 
 func NewSettingsHandlers(guildService guild.GuildAdapter) *GuildPreferencesHandlers {
@@ -103,17 +101,6 @@ func (gp *GuildPreferencesHandlers) AddHandlers(handlers map[string]func(s *disc
 	handlers["rr-remove"] = gp.removeRole
 	handlers["rr-message"] = gp.setMessageId
 
-	// Настройка Welcome
-	handlers["welcome-chnl"] = gp.setWelcomeChannel
-	handlers["welcomemsg-add"] = gp.addWelcomeMessage
-	handlers["welcomemsg-remove"] = gp.removeWelcomeMessage
-
-	// Меню, Кнопки связанные с меню
-	handlers["RolesReactionsSettings"] = gp.showAllRoles
-	handlers["WelcomeSettings"] = gp.showWelcomeSettings
-	handlers["AutoModeSettings"] = gp.showAutoModeSettings
-	handlers["LogSettings"] = gp.ShowLogSettings
-
 	// Automode
 	handlers["automod-toggle"] = gp.toggleAutomode
 	handlers["automod-bw-add"] = gp.addBannedWord
@@ -123,8 +110,4 @@ func (gp *GuildPreferencesHandlers) AddHandlers(handlers map[string]func(s *disc
 	handlers["automod-ac-enable"] = gp.addAntiCapsLock
 	handlers["automod-ac-disable"] = gp.removeAntiCapsLock
 
-	// Logging
-	handlers["log-toggle"] = gp.toggleLogging
-	handlers["log-chnl"] = gp.addLoggingChannel
-	handlers["log-chnl-rm"] = gp.removeLoggingChannel
 }
