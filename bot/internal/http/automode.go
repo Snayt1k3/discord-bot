@@ -1,4 +1,4 @@
-package guild
+package http
 
 import (
 	"context"
@@ -10,15 +10,15 @@ import (
 	"bot/internal/interfaces"
 )
 
-type AutoModeAdapter struct {
+type AutoMode struct {
 	http interfaces.HttpClient
 }
 
-func NewAutoMode(http interfaces.HttpClient) *AutoModeAdapter {
-	return &AutoModeAdapter{http: http}
+func NewAutoMode() *AutoMode {
+	return &AutoMode{http: NewDefaultHttpClient()}
 }
 
-func (s *AutoModeAdapter) Toggle(guildID string, enable bool) error {
+func (s *AutoMode) Toggle(guildID string, enable bool) error {
 	bodyBytes, _ := json.Marshal(map[string]interface{}{
 		"guild_id": guildID,
 		"enabled":  enable,
@@ -38,7 +38,7 @@ func (s *AutoModeAdapter) Toggle(guildID string, enable bool) error {
 	return nil
 }
 
-func (s *AutoModeAdapter) AddCapsLockChannel(guildID, channelID string) error {
+func (s *AutoMode) AddCapsLockChannel(guildID, channelID string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id":   guildID,
 		"channel_id": channelID,
@@ -58,7 +58,7 @@ func (s *AutoModeAdapter) AddCapsLockChannel(guildID, channelID string) error {
 	return nil
 }
 
-func (s *AutoModeAdapter) RemoveCapsLockChannel(guildID, channelID string) error {
+func (s *AutoMode) RemoveCapsLockChannel(guildID, channelID string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id":   guildID,
 		"channel_id": channelID,
@@ -78,7 +78,7 @@ func (s *AutoModeAdapter) RemoveCapsLockChannel(guildID, channelID string) error
 	return nil
 }
 
-func (s *AutoModeAdapter) AddAntiLinkChannel(guildID, channelID string) error {
+func (s *AutoMode) AddAntiLinkChannel(guildID, channelID string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id":   guildID,
 		"channel_id": channelID,
@@ -98,7 +98,7 @@ func (s *AutoModeAdapter) AddAntiLinkChannel(guildID, channelID string) error {
 	return nil
 }
 
-func (s *AutoModeAdapter) RemoveAntiLinkChannel(guildID, channelID string) error {
+func (s *AutoMode) RemoveAntiLinkChannel(guildID, channelID string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id":   guildID,
 		"channel_id": channelID,
@@ -118,7 +118,7 @@ func (s *AutoModeAdapter) RemoveAntiLinkChannel(guildID, channelID string) error
 	return nil
 }
 
-func (s *AutoModeAdapter) AddBannedWord(guildID, word string) error {
+func (s *AutoMode) AddBannedWord(guildID, word string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id": guildID,
 		"word":     word,
@@ -138,7 +138,7 @@ func (s *AutoModeAdapter) AddBannedWord(guildID, word string) error {
 	return nil
 }
 
-func (s *AutoModeAdapter) RemoveBannedWord(guildID, word string) error {
+func (s *AutoMode) RemoveBannedWord(guildID, word string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id": guildID,
 		"word":     word,

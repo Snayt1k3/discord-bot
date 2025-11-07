@@ -1,23 +1,23 @@
-package settings
+package preferences
 
 import (
+	"bot/internal/http"
 	"fmt"
 	"strings"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
 
-	"bot/internal/adapters/guild"
 	"bot/internal/utils"
 )
 
-func toggleAutomode(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func ToggleModeration(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
 
-	guildSettings, err := guildService.Settings.Get(i.GuildID)
+	guildSettings, err := http.Settings.Get(i.GuildID)
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
@@ -27,7 +27,7 @@ func toggleAutomode(guildService guild.GuildAdapter, s *discordgo.Session, i *di
 	autoMode := guildSettings.AutoMode
 
 	newStatus := !autoMode.Enabled
-	err = guildService.AutoMode.Toggle(i.GuildID, newStatus)
+	err = http.Moderation.Toggle(i.GuildID, newStatus)
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
@@ -40,7 +40,7 @@ func toggleAutomode(guildService guild.GuildAdapter, s *discordgo.Session, i *di
 		statusText = "disabled"
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "AutoMode has been " + statusText + " successfully!",
@@ -50,7 +50,7 @@ func toggleAutomode(guildService guild.GuildAdapter, s *discordgo.Session, i *di
 	return nil
 }
 
-func AddBannedWord(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func AddBannedWord(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
@@ -58,14 +58,14 @@ func AddBannedWord(guildService guild.GuildAdapter, s *discordgo.Session, i *dis
 
 	word := i.ApplicationCommandData().Options[0].StringValue()
 
-	err := guildService.AutoMode.AddBannedWord(i.GuildID, word)
+	err := http.Moderation.AddBannedWord(i.GuildID, word)
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "The word has been added to the banned list successfully!",
@@ -77,7 +77,7 @@ func AddBannedWord(guildService guild.GuildAdapter, s *discordgo.Session, i *dis
 
 }
 
-func RemoveBannedWord(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func RemoveBannedWord(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
@@ -85,14 +85,14 @@ func RemoveBannedWord(guildService guild.GuildAdapter, s *discordgo.Session, i *
 
 	word := i.ApplicationCommandData().Options[0].StringValue()
 
-	err := guildService.AutoMode.RemoveBannedWord(i.GuildID, word)
+	err := http.Moderation.RemoveBannedWord(i.GuildID, word)
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "The word has been removed from banned list successfully!",
@@ -103,19 +103,19 @@ func RemoveBannedWord(guildService guild.GuildAdapter, s *discordgo.Session, i *
 	return nil
 }
 
-func AddAntiLinkChannel(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func AddAntiLinkChnl(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
-	err := guildService.AutoMode.AddAntiLinkChannel(i.GuildID, i.ChannelID)
+	err := http.Moderation.AddAntiLinkChannel(i.GuildID, i.ChannelID)
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "This channel has been added to Anti-Link successfully!",
@@ -126,19 +126,19 @@ func AddAntiLinkChannel(guildService guild.GuildAdapter, s *discordgo.Session, i
 	return nil
 }
 
-func RemoveAntiLinkChannel(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func RemoveAntiLinkChnl(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
-	err := guildService.AutoMode.RemoveAntiLinkChannel(i.GuildID, i.ChannelID)
+	err := http.Moderation.RemoveAntiLinkChannel(i.GuildID, i.ChannelID)
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "This channel has been remove from Anti-Link successfully!",
@@ -149,19 +149,19 @@ func RemoveAntiLinkChannel(guildService guild.GuildAdapter, s *discordgo.Session
 	return nil
 }
 
-func AddCapsLockChannel(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func AddCapsLockChnl(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
-	err := guildService.AutoMode.AddCapsLockChannel(i.GuildID, i.ChannelID)
+	err := http.Moderation.AddCapsLockChannel(i.GuildID, i.ChannelID)
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "This channel has been added to CapsLock successfully!",
@@ -172,19 +172,19 @@ func AddCapsLockChannel(guildService guild.GuildAdapter, s *discordgo.Session, i
 	return nil
 }
 
-func RemoveCapsLockChannel(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func RemoveCapsLockChnl(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
-	err := guildService.AutoMode.RemoveCapsLockChannel(i.GuildID, i.ChannelID)
+	err := http.Moderation.RemoveCapsLockChannel(i.GuildID, i.ChannelID)
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "This channel has been removed from CapsLock successfully!",
@@ -195,13 +195,12 @@ func RemoveCapsLockChannel(guildService guild.GuildAdapter, s *discordgo.Session
 	return nil
 }
 
-// Выводит сообщение в дискорд, о том какие настройки 'Automode' установлены
-func ShowAutoModeSettings(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func AutoModeSettings(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
-	guildSettings, err := guildService.Settings.Get(i.GuildID)
+	guildSettings, err := http.Settings.Get(i.GuildID)
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)

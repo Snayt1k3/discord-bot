@@ -13,12 +13,12 @@ import (
 	pb "api-gateway/proto"
 )
 
-type RolesHandlers struct {
-	clients Clients
+type Roles struct {
+	client pb.RolesServiceClient
 }
 
-func NewRolesHandlers(cc grpc.ClientConnInterface) *RolesHandlers {
-	return &RolesHandlers{clients: *NewClients(cc)}
+func NewRolesHandlers(cc grpc.ClientConnInterface) *Roles {
+	return &Roles{client: pb.NewRolesServiceClient(cc)}
 }
 
 // SetRoleMessageId godoc
@@ -32,8 +32,8 @@ func NewRolesHandlers(cc grpc.ClientConnInterface) *RolesHandlers {
 // @Success      200 {object} pb.SetMessageResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/roles/message [put]
-func (s *RolesHandlers) SetRoleMessageId(c *gin.Context) {
+// @Router       /api/v1/settings/http/{guild_id}/roles/message [put]
+func (s *Roles) SetRoleMessageId(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.SetMessageRequest
 
@@ -44,7 +44,7 @@ func (s *RolesHandlers) SetRoleMessageId(c *gin.Context) {
 	}
 
 	req.GuildId = guildID
-	resp, err := s.clients.Roles.SetRoleMessageId(context.Background(), &req)
+	resp, err := s.client.SetRoleMessageId(context.Background(), &req)
 
 	if err != nil {
 		slog.Error("Error while deleting role", "error", err)
@@ -67,8 +67,8 @@ func (s *RolesHandlers) SetRoleMessageId(c *gin.Context) {
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      429 {object} dto.APIResponse "Quota exceeded"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/roles/role [post]
-func (s *RolesHandlers) AddRole(c *gin.Context) {
+// @Router       /api/v1/settings/http/{guild_id}/roles/role [post]
+func (s *Roles) AddRole(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.AddRoleRequest
 
@@ -79,7 +79,7 @@ func (s *RolesHandlers) AddRole(c *gin.Context) {
 	}
 
 	req.GuildId = guildID
-	resp, err := s.clients.Roles.AddRole(context.Background(), &req)
+	resp, err := s.client.AddRole(context.Background(), &req)
 
 	if err != nil {
 		st, ok := status.FromError(err)
@@ -109,8 +109,8 @@ func (s *RolesHandlers) AddRole(c *gin.Context) {
 // @Success      200 {object} pb.RemoveRoleResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/roles/role [delete]
-func (s *RolesHandlers) DeleteRole(c *gin.Context) {
+// @Router       /api/v1/settings/http/{guild_id}/roles/role [delete]
+func (s *Roles) DeleteRole(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.RemoveRoleRequest
 
@@ -121,7 +121,7 @@ func (s *RolesHandlers) DeleteRole(c *gin.Context) {
 	}
 
 	req.GuildId = guildID
-	resp, err := s.clients.Roles.RemoveRole(context.Background(), &req)
+	resp, err := s.client.RemoveRole(context.Background(), &req)
 
 	if err != nil {
 		slog.Error("Error while deleting role", "error", err)

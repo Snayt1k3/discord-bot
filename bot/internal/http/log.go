@@ -1,4 +1,4 @@
-package guild
+package http
 
 import (
 	"context"
@@ -10,15 +10,15 @@ import (
 	"bot/internal/interfaces"
 )
 
-type LogAdapter struct {
+type Log struct {
 	http interfaces.HttpClient
 }
 
-func NewLogAdapter(http interfaces.HttpClient) *LogAdapter {
-	return &LogAdapter{http: http}
+func NewLog() *Log {
+	return &Log{http: NewDefaultHttpClient()}
 }
 
-func (s *LogAdapter) Toggle(guildID string, enable bool) error {
+func (s *Log) Toggle(guildID string, enable bool) error {
 
 	bytes, _ := json.Marshal(map[string]interface{}{
 		"guild_id": guildID,
@@ -39,7 +39,7 @@ func (s *LogAdapter) Toggle(guildID string, enable bool) error {
 	return nil
 }
 
-func (s *LogAdapter) AddChannel(guildID, channelID string) error {
+func (s *Log) AddChannel(guildID, channelID string) error {
 	bytes, _ := json.Marshal(map[string]string{
 		"guild_id":   guildID,
 		"channel_id": channelID,
@@ -59,7 +59,7 @@ func (s *LogAdapter) AddChannel(guildID, channelID string) error {
 	return nil
 }
 
-func (s *LogAdapter) RemoveChannel(guildID, channelID string) error {
+func (s *Log) RemoveChannel(guildID, channelID string) error {
 	bytes, _ := json.Marshal(map[string]string{
 		"guild_id":   guildID,
 		"channel_id": channelID,

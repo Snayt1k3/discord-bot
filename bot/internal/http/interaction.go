@@ -1,0 +1,69 @@
+package http
+
+import (
+	"bot/config"
+	dtoGuild "bot/internal/dto"
+	"bot/internal/interfaces"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log/slog"
+)
+
+type Interaction struct {
+	http interfaces.HttpClient
+}
+
+func NewInteraction() *Interaction {
+	return &Interaction{http: NewDefaultHttpClient()}
+}
+
+func (i *Interaction) GetUser(guildId, userId string) (dtoGuild.User, error) {
+	params := map[string]string{
+		"user_id":  userId,
+		"guild_id": guildId,
+	}
+
+	response, err := i.http.Get(
+		context.Background(),
+		fmt.Sprintf("%v/api/v1/interaction/user", config.GetApiGatewayAddr()),
+		params,
+		nil,
+	)
+	if err != nil {
+		slog.Warn("Bad response when adding xp", "err", err)
+		return dtoGuild.User{}, err
+	}
+
+	defer response.Body.Close()
+
+	var user dtoGuild.User
+	if err := json.NewDecoder(response.Body).Decode(&user); err != nil {
+		slog.Warn("Failed to decode user response", "err", err)
+		return dtoGuild.User{}, err
+	}
+
+	return user, nil
+}
+
+func (i *Interaction) AddXP(guildId, userId string, xp int32) error {
+	bodyBytes, _ := json.Marshal(map[string]interface{}{
+		"guild_id": guildId,
+		"user_id":  userId,
+		"xp":       xp,
+	})
+
+	_, err := i.http.Post(
+		context.Background(),
+		fmt.Sprintf("%v/api/v1/interaction/user/addxp", config.GetApiGatewayAddr()),
+		bodyBytes,
+		nil,
+	)
+
+	if err != nil {
+		slog.Warn("Bad response when adding xp", "err", err)
+		return err
+	}
+
+	return nil
+}

@@ -1,6 +1,7 @@
-package settings
+package preferences
 
 import (
+	"bot/internal/http"
 	"fmt"
 	"log/slog"
 	"strconv"
@@ -9,21 +10,18 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 
-	"bot/internal/adapters/guild"
 	"bot/internal/utils"
 )
 
-func showAllRoles(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
-	// Check admin permissions
+func RolesSettings(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
 
-	// Fetch guild settings
-	settings, err := gk.Settings.Get(i.GuildID)
+	settings, err := http.Settings.Get(i.GuildID)
 	if err != nil {
-		slog.Error("Error while getting guild settings", "err", err)
+		slog.Error("Error while getting http settings", "err", err)
 		utils.SendErrorMessage(s, i)
 		return err
 	}
@@ -65,23 +63,17 @@ func showAllRoles(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.Inte
 	}
 
 	// Respond to the interaction
-	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Embeds: []*discordgo.MessageEmbed{embed},
 		},
 	})
 
-	if err != nil {
-		slog.Error("Failed to respond to interaction", "err", err)
-		return err
-	}
-
 	return nil
 }
 
-func addRole(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
-
+func AddRole(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
@@ -101,15 +93,15 @@ func addRole(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.Interacti
 
 	roleID := i.ApplicationCommandData().Options[0].RoleValue(s, i.GuildID).ID
 
-	err := gk.RolesReactions.Add(roleID, emojiKey, i.GuildID)
+	err := http.Roles.Add(roleID, emojiKey, i.GuildID)
 
 	if err != nil {
-		slog.Error("Error while updating guild settings", "err", err)
+		slog.Error("Error while updating http settings", "err", err)
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "Role has been added successfully!",
@@ -119,7 +111,7 @@ func addRole(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.Interacti
 	return nil
 }
 
-func removeRole(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func RemoveRole(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
@@ -128,15 +120,15 @@ func removeRole(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.Intera
 
 	roleID := i.ApplicationCommandData().Options[0].RoleValue(s, i.GuildID).ID
 
-	err := gk.RolesReactions.Delete(roleID, "", i.GuildID)
+	err := http.Roles.Delete(roleID, "", i.GuildID)
 
 	if err != nil {
-		slog.Error("Error while updating guild settings", "err", err)
+		slog.Error("Error while updating http settings", "err", err)
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "Role has been deleted successfully!",
@@ -147,8 +139,7 @@ func removeRole(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.Intera
 	return nil
 }
 
-func setRolesMessage(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
-
+func SetRolesMsg(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
@@ -156,20 +147,21 @@ func setRolesMessage(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.I
 
 	messageId := i.ApplicationCommandData().Options[0].StringValue()
 
-	err := gk.RolesReactions.SetMessageID(messageId, i.GuildID)
+	err := http.Roles.SetMessageID(messageId, i.GuildID)
 
 	if err != nil {
-		slog.Error("Error while updating guild settings", "err", err)
+		slog.Error("Error while updating http settings", "err", err)
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "Message ID has been set successfully!",
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
+
 	return nil
 }

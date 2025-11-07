@@ -11,12 +11,12 @@ import (
 	pb "api-gateway/proto"
 )
 
-type LogHandlers struct {
-	clients Clients
+type Log struct {
+	client pb.LogServiceClient
 }
 
-func NewLogHandlers(cc grpc.ClientConnInterface) *LogHandlers {
-	return &LogHandlers{clients: *NewClients(cc)}
+func NewLogHandlers(cc grpc.ClientConnInterface) *Log {
+	return &Log{client: pb.NewLogServiceClient(cc)}
 }
 
 // ToggleLog godoc
@@ -30,8 +30,8 @@ func NewLogHandlers(cc grpc.ClientConnInterface) *LogHandlers {
 // @Success      200 {object} pb.ToggleLogResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/logging/toggle [post]
-func (s *LogHandlers) ToggleLog(c *gin.Context) {
+// @Router       /api/v1/settings/http/{guild_id}/logging/toggle [post]
+func (s *Log) ToggleLog(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.ToggleLogRequest
 
@@ -42,7 +42,7 @@ func (s *LogHandlers) ToggleLog(c *gin.Context) {
 	}
 
 	req.GuildId = guildID
-	resp, err := s.clients.Log.ToggleLog(context.Background(), &req)
+	resp, err := s.client.ToggleLog(context.Background(), &req)
 
 	if err != nil {
 		slog.Error("Error while toggling log", "error", err)
@@ -64,8 +64,8 @@ func (s *LogHandlers) ToggleLog(c *gin.Context) {
 // @Success      200 {object} pb.UpdateLogChannelResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/logging/channel [post]
-func (s *LogHandlers) AddLogChannel(c *gin.Context) {
+// @Router       /api/v1/settings/http/{guild_id}/logging/channel [post]
+func (s *Log) AddLogChannel(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.UpdateLogChannelRequest
 
@@ -76,7 +76,7 @@ func (s *LogHandlers) AddLogChannel(c *gin.Context) {
 	}
 
 	req.GuildId = guildID
-	resp, err := s.clients.Log.AddLogChannel(context.Background(), &req)
+	resp, err := s.client.AddLogChannel(context.Background(), &req)
 
 	if err != nil {
 		slog.Error("Error while toggling log", "error", err)
@@ -87,7 +87,7 @@ func (s *LogHandlers) AddLogChannel(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-// AddLogChannel godoc
+// RemoveLogChannel godoc
 // @Summary      Remove log channel
 // @Description  Удаляет канал для логирования действий из указанной гильдии
 // @Tags         logging
@@ -98,8 +98,8 @@ func (s *LogHandlers) AddLogChannel(c *gin.Context) {
 // @Success      200 {object} pb.UpdateLogChannelResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/logging/channel [delete]
-func (s *LogHandlers) RemoveLogChannel(c *gin.Context) {
+// @Router       /api/v1/settings/http/{guild_id}/logging/channel [delete]
+func (s *Log) RemoveLogChannel(c *gin.Context) {
 	guildID := c.Param("guild_id")
 	var req pb.UpdateLogChannelRequest
 
@@ -110,7 +110,7 @@ func (s *LogHandlers) RemoveLogChannel(c *gin.Context) {
 	}
 
 	req.GuildId = guildID
-	resp, err := s.clients.Log.RemoveLogChannel(context.Background(), &req)
+	resp, err := s.client.RemoveLogChannel(context.Background(), &req)
 
 	if err != nil {
 		slog.Error("Error while toggling log", "error", err)

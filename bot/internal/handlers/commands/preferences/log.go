@@ -1,39 +1,39 @@
-package settings
+package preferences
 
 import (
+	"bot/internal/http"
 	"fmt"
 	"log/slog"
 
 	"github.com/bwmarrin/discordgo"
 
-	"bot/internal/adapters/guild"
 	"bot/internal/utils"
 )
 
-func ToggleLogging(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func ToggleLogging(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
 
-	settings, err := guildService.Settings.Get(i.GuildID)
+	settings, err := http.Settings.Get(i.GuildID)
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	err = guildService.Log.Toggle(i.GuildID, !settings.Log.Enabled)
+	err = http.Log.Toggle(i.GuildID, !settings.Log.Enabled)
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
-			Content: fmt.Sprintf(("Logging has been %s successfully!"), map[bool]string{true: "enabled", false: "disabled"}[!settings.Log.Enabled]),
+			Content: fmt.Sprintf("Logging has been %s successfully!", map[bool]string{true: "enabled", false: "disabled"}[!settings.Log.Enabled]),
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
@@ -41,21 +41,21 @@ func ToggleLogging(guildService guild.GuildAdapter, s *discordgo.Session, i *dis
 	return nil
 }
 
-func AddLoggingChannel(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func AddLoggingChnl(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
 
 	channelID := i.ApplicationCommandData().Options[0].ChannelValue(s).ID
-	err := guildService.Log.AddChannel(i.GuildID, channelID)
+	err := http.Log.AddChannel(i.GuildID, channelID)
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "Logging channel has been set successfully!",
@@ -66,27 +66,27 @@ func AddLoggingChannel(guildService guild.GuildAdapter, s *discordgo.Session, i 
 	return nil
 }
 
-func RemoveLoggingChannel(guildService guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func RemoveLoggingChnl(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
 
-	settings, err := guildService.Settings.Get(i.GuildID)
+	settings, err := http.Settings.Get(i.GuildID)
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	err = guildService.Log.RemoveChannel(i.GuildID, settings.Log.ChannelID)
+	err = http.Log.RemoveChannel(i.GuildID, settings.Log.ChannelID)
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "Logging channel has been removed successfully!",
@@ -97,15 +97,15 @@ func RemoveLoggingChannel(guildService guild.GuildAdapter, s *discordgo.Session,
 	return nil
 }
 
-func ShowLogSettings(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func LogSettings(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	// Check admin permissions
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
 
-	// Get guild settings
-	settings, err := gk.Settings.Get(i.GuildID)
+	// Get http settings
+	settings, err := http.Settings.Get(i.GuildID)
 
 	if err != nil {
 		slog.Error("Error while fetching welcome settings", "err", err)
@@ -115,7 +115,7 @@ func ShowLogSettings(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.I
 
 	if !settings.Log.Enabled {
 		// Если AutoMode полностью выключен
-		return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		utils.Respond(s, i, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
 				Content: "🚨 **Logging is disabled on this server.**",
@@ -143,10 +143,11 @@ func ShowLogSettings(gk guild.GuildAdapter, s *discordgo.Session, i *discordgo.I
 		},
 	}
 
-	return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Embeds: []*discordgo.MessageEmbed{embed},
 		},
 	})
+	return nil
 }

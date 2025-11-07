@@ -11,20 +11,19 @@ type Config struct {
 	User     string
 	Password string
 	DBName   string
-	SSLMode  string
 	GrpcPort string
+	PromPort string
 }
 
 func LoadConfig() (*Config, error) {
 	config := &Config{
-		Host:     os.Getenv("SETTINGS_POSTGRES_HOST"),
-		Port:     os.Getenv("SETTINGS_POSTGRES_PORT"),
-		User:     os.Getenv("SETTINGS_POSTGRES_USER"),
-		Password: os.Getenv("SETTINGS_POSTGRES_PASSWORD"),
-		DBName:   os.Getenv("SETTINGS_POSTGRES_DB"),
-		SSLMode:  os.Getenv("SETTINGS_POSTGRES_SSLMODE"),
-
-		GrpcPort: os.Getenv("SETTINGS_PORT"),
+		Host:     os.Getenv("INTERACTION_POSTGRES_HOST"),
+		Port:     os.Getenv("INTERACTION_POSTGRES_PORT"),
+		User:     os.Getenv("INTERACTION_POSTGRES_USER"),
+		Password: os.Getenv("INTERACTION_POSTGRES_PASSWORD"),
+		DBName:   os.Getenv("INTERACTION_POSTGRES_DB"),
+		GrpcPort: os.Getenv("INTERACTION_PORT"),
+		PromPort: os.Getenv("INTERACTION_PROMETHEUS_PORT"),
 	}
 
 	if config.Host == "" || config.Port == "" || config.User == "" || config.Password == "" || config.DBName == "" || config.GrpcPort == "" {
@@ -36,7 +35,7 @@ func LoadConfig() (*Config, error) {
 
 func (c *Config) DSN() string {
 	return fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
-		c.Host, c.User, c.Password, c.DBName, c.Port, c.SSLMode,
+		"host=%s user=%s password=%s dbname=%s port=%s",
+		c.Host, c.User, c.Password, c.DBName, c.Port,
 	)
 }

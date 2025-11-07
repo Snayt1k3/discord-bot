@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"bot/internal/http"
 	"fmt"
 	"log/slog"
 	"math/rand"
@@ -10,25 +11,24 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 
-	"bot/internal/adapters/guild"
 	"bot/internal/utils"
 )
 
-// Хендлеры событий Discord отличных от Interaction событий
+// EventHandlers Хендлеры событий Discord отличных от Interaction событий
 type EventHandlers struct {
-	service guild.GuildAdapter
-	cmds    []*discordgo.ApplicationCommand
+	http     *http.Container
+	commands []*discordgo.ApplicationCommand
 }
 
-func NewEventHandlers(service guild.GuildAdapter, cmds []*discordgo.ApplicationCommand) *EventHandlers {
-	return &EventHandlers{service: service, cmds: cmds}
+func NewEventHandlers(http *http.Container, commands []*discordgo.ApplicationCommand) *EventHandlers {
+	return &EventHandlers{http: http, commands: commands}
 }
 
 func (eh *EventHandlers) OnMessageReactionAdd(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
-	guildSetting, err := eh.service.Settings.Get(r.GuildID)
+	guildSetting, err := eh.http.Settings.Get(r.GuildID)
 
 	if err != nil {
-		slog.Error("Error while getting guild settings", "err", err)
+		slog.Error("Error while getting http settings", "err", err)
 		return
 	}
 
@@ -50,7 +50,7 @@ func (eh *EventHandlers) OnMessageReactionAdd(s *discordgo.Session, r *discordgo
 }
 
 func (eh *EventHandlers) OnMessageReactionRemove(s *discordgo.Session, r *discordgo.MessageReactionRemove) {
-	guildSetting, err := eh.service.Settings.Get(r.GuildID)
+	guildSetting, err := eh.http.Settings.Get(r.GuildID)
 
 	if err != nil {
 		slog.Error("Error while getting guild settings", "err", err)
@@ -75,7 +75,7 @@ func (eh *EventHandlers) OnMessageReactionRemove(s *discordgo.Session, r *discor
 }
 
 func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMemberAdd) {
-	settings, _ := eh.service.Settings.Get(u.GuildID)
+	settings, _ := eh.http.Settings.Get(u.GuildID)
 
 	if len(settings.Welcome.Messages) == 0 {
 		return
@@ -93,12 +93,7 @@ func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMe
 }
 
 func (eh *EventHandlers) OnGuildCreate(s *discordgo.Session, r *discordgo.GuildCreate) {
-	err := eh.service.Settings.Create(r.ID)
 
-	if err != nil {
-		slog.Error("Error while creating guild settings", "err", err)
-		return
-	}
 }
 
 func (eh *EventHandlers) MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -106,7 +101,15 @@ func (eh *EventHandlers) MessageCreate(s *discordgo.Session, m *discordgo.Messag
 		return
 	}
 
-	eh.automodeCheck(s, m)
+	res := eh.automodeCheck(s, m)
+
+	// Adding XP to user
+	if !res {
+		err := eh.http.Interaction.AddXP(m.GuildID, m.Author.ID, 10)
+		if err != nil {
+			slog.Error("Error while adding XP", "error", err)
+		}
+	}
 
 }
 
@@ -205,7 +208,7 @@ func (eh *EventHandlers) sendLogMessage(
 	fields []*discordgo.MessageEmbedField,
 ) error {
 
-	settings, err := eh.service.Settings.Get(guildId)
+	settings, err := eh.http.Settings.Get(guildId)
 
 	if err != nil {
 		slog.Error("Error while getting settings", "error", err)
@@ -237,39 +240,44 @@ func (eh *EventHandlers) sendLogMessage(
 }
 
 // Вспомогательная функция для проверки всех условий автомодерации.
-func (eh *EventHandlers) automodeCheck(s *discordgo.Session, m *discordgo.MessageCreate) {
-	settings, err := eh.service.Settings.Get(m.GuildID)
+func (eh *EventHandlers) automodeCheck(s *discordgo.Session, m *discordgo.MessageCreate) bool {
+	settings, err := eh.http.Settings.Get(m.GuildID)
 
 	if err != nil {
-		slog.Error("Error while fetching guild settings", "err", err)
-		return
+		slog.Error("Error while fetching http settings", "err", err)
+		return false
 	}
 
 	autoMode := settings.AutoMode
 	if !autoMode.Enabled {
-		return
+		return false
 	}
 
 	content := m.Content
 
+	// 🚫 Проверка запрещённых слов
 	for _, bw := range autoMode.BannedWords {
 		if strings.Contains(strings.ToLower(content), strings.ToLower(bw.Word)) {
 			s.ChannelMessageDelete(m.ChannelID, m.ID)
-			utils.SendTempMessage(s, m.ChannelID, fmt.Sprintf("❌ %s, your message contains a banned word!", m.Author.Mention()))
-			return
+			utils.SendTempMessage(s, m.ChannelID,
+				fmt.Sprintf("❌ %s, your message contains a banned word!", m.Author.Mention()))
+			return true
 		}
 	}
 
+	// 🔗 Проверка ссылок
 	for _, al := range autoMode.AntiLink {
 		if strings.Contains(content, "http://") || strings.Contains(content, "https://") || strings.Contains(content, "discord.gg/") {
 			if al.ChannelId == m.ChannelID {
 				s.ChannelMessageDelete(m.ChannelID, m.ID)
-				utils.SendTempMessage(s, m.ChannelID, fmt.Sprintf("❌ %s, links are not allowed in this channel!", m.Author.Mention()))
-				return
+				utils.SendTempMessage(s, m.ChannelID,
+					fmt.Sprintf("❌ %s, links are not allowed in this channel!", m.Author.Mention()))
+				return true
 			}
 		}
 	}
 
+	// 🔠 Проверка капслока
 	for _, cl := range autoMode.CapsLock {
 		if cl.ChannelId == m.ChannelID {
 			upperCount := 0
@@ -284,9 +292,12 @@ func (eh *EventHandlers) automodeCheck(s *discordgo.Session, m *discordgo.Messag
 			}
 			if letters > 0 && float64(upperCount)/float64(letters) > 0.7 {
 				s.ChannelMessageDelete(m.ChannelID, m.ID)
-				utils.SendTempMessage(s, m.ChannelID, fmt.Sprintf("❌ %s, please do not write in caps!", m.Author.Mention()))
-				return
+				utils.SendTempMessage(s, m.ChannelID,
+					fmt.Sprintf("❌ %s, please do not write in caps!", m.Author.Mention()))
+				return true
 			}
 		}
 	}
+
+	return false
 }

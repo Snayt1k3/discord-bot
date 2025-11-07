@@ -1,4 +1,4 @@
-package guild
+package http
 
 import (
 	"context"
@@ -10,15 +10,15 @@ import (
 	"bot/internal/interfaces"
 )
 
-type RolesAdapter struct {
+type Roles struct {
 	http interfaces.HttpClient
 }
 
-func NewRolesAdapter(http interfaces.HttpClient) *RolesAdapter {
-	return &RolesAdapter{http: http}
+func NewRoles() *Roles {
+	return &Roles{http: NewDefaultHttpClient()}
 }
 
-func (s *RolesAdapter) Add(roleId, emoji, guildID string) error {
+func (s *Roles) Add(roleId, emoji, guildID string) error {
 
 	bytes, _ := json.Marshal(map[string]string{
 		"role_id":  roleId,
@@ -41,7 +41,7 @@ func (s *RolesAdapter) Add(roleId, emoji, guildID string) error {
 	return nil
 }
 
-func (s *RolesAdapter) Delete(roleId, emoji, guildID string) error {
+func (s *Roles) Delete(roleId, emoji, guildID string) error {
 
 	bytes, _ := json.Marshal(map[string]string{
 		"role_id":  roleId,
@@ -64,7 +64,7 @@ func (s *RolesAdapter) Delete(roleId, emoji, guildID string) error {
 	return nil
 }
 
-func (s *RolesAdapter) SetMessageID(messageID, guildID string) error {
+func (s *Roles) SetMessageID(messageID, guildID string) error {
 	bytes, _ := json.Marshal(map[string]string{
 		"message_id": messageID,
 		"guild_id":   guildID,

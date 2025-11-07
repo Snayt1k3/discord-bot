@@ -5,7 +5,7 @@ PROTO_DIR := ./proto
 GO_OUT_DIR := ./grpc
 
 # Список .proto файлов
-PROTO_FILES := $(PROTO_DIR)/settings.proto $(PROTO_DIR)/automode.proto  $(PROTO_DIR)/log.proto  $(PROTO_DIR)/roles.proto  $(PROTO_DIR)/welcome.proto
+PROTO_FILES := $(PROTO_DIR)/settings.proto $(PROTO_DIR)/automode.proto  $(PROTO_DIR)/log.proto  $(PROTO_DIR)/roles.proto  $(PROTO_DIR)/welcome.proto  $(PROTO_DIR)/interaction.proto
 
 # Команда генерации gRPC и Go-кода
 PROTOC_COMMAND = protoc -I=$(PROTO_DIR) \
@@ -25,7 +25,7 @@ generate-grpc:
 
 grpc-clean:
 	@echo "Cleaning up generated Go code..."
-	@rm -rf $(GO_OUT_DIR)/*
+	@rm -rf $(GO_OUT_DIR)
 	@echo "Cleaned up generated Go code in $(GO_OUT_DIR)"
 
 run:
@@ -43,12 +43,17 @@ grpc-init:
 	@echo "Moving settings proto files to settings-service..."
 	@mkdir -p settings-service/proto
 	@cp -r grpc/* settings-service/
+
+	@echo "Moving settings proto files to interaction-service..."
+	@mkdir -p interaction-service/proto
+	@cp -r grpc/* interaction-service/
+
 	@echo "gRPC server initialized. Files distributed to services."
 
 	@$(MAKE) grpc-clean
 
 lint: 
-	gofmt -w bot/ settings-service/ api-gateway/
+	gofmt -w bot/ settings-service/ api-gateway/ interaction-service/
 	@echo "Code formatted with gofmt."
 
 docs: 

@@ -1,4 +1,4 @@
-package guild
+package http
 
 import (
 	"context"
@@ -10,15 +10,15 @@ import (
 	"bot/internal/interfaces"
 )
 
-type WelcomeAdapter struct {
+type Welcome struct {
 	http interfaces.HttpClient
 }
 
-func NewWelcomeAdapter(http interfaces.HttpClient) *WelcomeAdapter {
-	return &WelcomeAdapter{http: http}
+func NewWelcome() *Welcome {
+	return &Welcome{http: NewDefaultHttpClient()}
 }
 
-func (s *WelcomeAdapter) SetChannel(guildID, channelID string) error {
+func (s *Welcome) SetChannel(guildID, channelID string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id":   guildID,
 		"channel_id": channelID,
@@ -39,7 +39,7 @@ func (s *WelcomeAdapter) SetChannel(guildID, channelID string) error {
 	return nil
 }
 
-func (s *WelcomeAdapter) AddMessage(guildID, message string) error {
+func (s *Welcome) AddMessage(guildID, message string) error {
 	bodyBytes, _ := json.Marshal(map[string]string{
 		"guild_id": guildID,
 		"message":  message,
@@ -60,7 +60,7 @@ func (s *WelcomeAdapter) AddMessage(guildID, message string) error {
 	return nil
 }
 
-func (s *WelcomeAdapter) DeleteMessage(guildID, message string) error {
+func (s *Welcome) DeleteMessage(guildID, message string) error {
 	bodyBytes, err := json.Marshal(map[string]string{
 		"guild_id": guildID,
 		"message":  message,

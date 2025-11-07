@@ -2,8 +2,9 @@ package discord
 
 import (
 	"bot/config"
-	"github.com/bwmarrin/discordgo"
 	"log/slog"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 type DiscordBot struct {
@@ -20,14 +21,16 @@ func InitDiscordBot() {
 func initBot() {
 	Bot = &DiscordBot{}
 
-	session, err := discordgo.New("Bot " + config.GetDiscordToken()) // Initializing discord session
-	session.State.TrackVoice = true
-	session.Identify.Intents = discordgo.IntentsAll
-	Bot.Session = session
+	session, err := discordgo.New("Bot " + config.GetDiscordToken())
 
 	if err != nil {
 		slog.Error("failed to create discord session", "error", err)
 	}
+
+	session.State.TrackVoice = true
+	session.Identify.Intents = discordgo.IntentsAll
+	Bot.Session = session
+
 }
 
 func initConnection() {

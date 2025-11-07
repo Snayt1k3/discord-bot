@@ -1,6 +1,8 @@
 package interfaces
 
-import dtoGuild "bot/internal/dto/guild"
+import (
+	dtoGuild "bot/internal/dto"
+)
 
 type SettingsAdapterInterface interface {
 	Get(guildID string) (dtoGuild.GuildSettings, error)
@@ -33,4 +35,9 @@ type LogAdapterInterface interface {
 	Toggle(guildID string, enabled bool) error
 	AddChannel(guildID, channelID string) error
 	RemoveChannel(guildID, channelID string) error
+}
+
+type InteractionAdapterInterface interface {
+	GetUser(guildId, userId string) (dtoGuild.User, error)
+	AddXP(guildId, userId string, xp int32) error
 }

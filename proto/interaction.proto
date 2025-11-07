@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package settings;
+
+option go_package = "proto/";
+
+// ----------------------
+// Message definitions
+// ----------------------
+
+message User {
+  string user_id = 1;
+  string guild_id = 2;
+  int32 experience = 3;
+  int32 level = 4;
+  int32 next_level_xp = 5;
+  string last_message_at = 6; // ISO timestamp string
+}
+
+message GetUserRequest {
+  string user_id = 1;
+  string guild_id = 2;
+}
+
+message GetUserResponse {
+  User user = 1;
+}
+
+message AddXPRequest {
+  string user_id = 1;
+  string guild_id = 2;
+  int32 xp = 3;
+}
+
+message AddXPResponse {
+  User user = 1;
+  bool level_up = 2; // true если уровень повысился
+  int32 added_xp = 3;
+}
+
+// ----------------------
+// Service definition
+// ----------------------
+
+service InteractionService {
+  rpc GetUser (GetUserRequest) returns (GetUserResponse);
+  rpc AddXP (AddXPRequest) returns (AddXPResponse);
+}
