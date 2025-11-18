@@ -1,24 +1,20 @@
 package models
 
 import (
-	"time"
-
 	"gorm.io/gorm"
 )
 
 type Settings struct {
-	ID        uint             `gorm:"primaryKey"`
-	GuildID   string           `gorm:"not null;uniqueIndex"`
-	Role      RolesSettings    `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
-	Welcome   WelcomeSettings  `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
-	AutoMode  AutoModeSettings `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
-	Log       LogSettings      `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	gorm.Model
+	GuildID  string           `gorm:"not null;uniqueIndex"`
+	Role     RolesSettings    `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
+	Welcome  WelcomeSettings  `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
+	AutoMode AutoModeSettings `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
+	Log      LogSettings      `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
 }
 
 type RolesSettings struct {
-	ID        uint   `gorm:"primaryKey"`
+	gorm.Model
 	GuildID   string `gorm:"not null;uniqueIndex"`
 	MessageID string `json:"message_id"`
 	Roles     []Role `gorm:"many2many:roles_settings_roles;constraint:OnDelete:CASCADE;"`
@@ -31,7 +27,7 @@ type Role struct {
 }
 
 type WelcomeSettings struct {
-	ID        uint      `gorm:"primaryKey"`
+	gorm.Model
 	GuildID   string    `gorm:"not null;uniqueIndex"`
 	ChannelId string    `json:"channel_id"`
 	Messages  []Message `gorm:"many2many:welcome_setting_messages;constraint:OnDelete:CASCADE;"`
@@ -43,7 +39,7 @@ type Message struct {
 }
 
 type AutoModeSettings struct {
-	ID          uint              `gorm:"primaryKey"`
+	gorm.Model
 	GuildID     string            `gorm:"not null;index"`
 	CapsLocks   []AntiCapsChannel `gorm:"many2many:auto_mode_capslock;constraint:OnDelete:CASCADE;"`
 	AntiLinks   []AntiLinkChannel `gorm:"many2many:auto_mode_antilink;constraint:OnDelete:CASCADE;"`

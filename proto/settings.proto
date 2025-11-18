@@ -19,7 +19,7 @@ message CreateSettingsResponse {
   RolesSettings roles = 3;
   WelcomeSettings welcome = 4;
   LogSettings log = 5;
-  AutoModSettings automod = 6;
+  AutoModSettings automode = 6;
 }
 
 message GetSettingsRequest {

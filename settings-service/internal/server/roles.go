@@ -2,10 +2,11 @@ package server
 
 import (
 	"context"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"settings-service/internal/interfaces"
 	pb "settings-service/proto"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type RolesReactionServer struct {

@@ -43,7 +43,7 @@ type ReactionRolesRepository interface {
 
 type GuildSettingsRepository interface {
 	// Создать настройки гильдии
-	CreateGuildSetting(guildId string) (models.Settings, error)
+	CreateGuildSetting(guildId string) (*models.Settings, error)
 
 	// Получить настройки гильдии с прелоадами
 	GetGuildSettings(guildID string) (*models.Settings, error)
