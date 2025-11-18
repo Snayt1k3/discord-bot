@@ -46,14 +46,14 @@ func (i *Interaction) GetUser(guildId, userId string) (dtoGuild.User, error) {
 	return user, nil
 }
 
-func (i *Interaction) AddXP(guildId, userId string, xp int32) error {
+func (i *Interaction) AddXP(guildId, userId string, xp int32) (dtoGuild.AddXpResponse, error) {
 	bodyBytes, _ := json.Marshal(map[string]interface{}{
 		"guild_id": guildId,
 		"user_id":  userId,
 		"xp":       xp,
 	})
 
-	_, err := i.http.Post(
+	response, err := i.http.Post(
 		context.Background(),
 		fmt.Sprintf("%v/api/v1/interaction/user/addxp", config.GetApiGatewayAddr()),
 		bodyBytes,
@@ -62,8 +62,14 @@ func (i *Interaction) AddXP(guildId, userId string, xp int32) error {
 
 	if err != nil {
 		slog.Warn("Bad response when adding xp", "err", err)
-		return err
+		return dtoGuild.AddXpResponse{}, err
 	}
 
-	return nil
+	var resp dtoGuild.AddXpResponse
+	if err := json.NewDecoder(response.Body).Decode(&resp); err != nil {
+		slog.Warn("Failed to decode user response", "err", err)
+		return dtoGuild.AddXpResponse{}, err
+	}
+
+	return resp, nil
 }
