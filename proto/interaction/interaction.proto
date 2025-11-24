@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package settings;
+package interaction;
 
 option go_package = "proto/";
 
