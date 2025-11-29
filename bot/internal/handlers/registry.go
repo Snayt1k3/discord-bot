@@ -5,6 +5,8 @@ import (
 	"bot/internal/handlers/commands/preferences"
 	"bot/internal/http"
 	"log/slog"
+	"strconv"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -172,4 +174,19 @@ func (cd *Container) SetRoleMsg(s *discordgo.Session, i *discordgo.InteractionCr
 	if err != nil {
 		slog.Error(err.Error())
 	}
+}
+
+func (cd *Container) HelpPagination(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	_, pageStr, _ := strings.Cut(i.MessageComponentData().CustomID, "_")
+
+	page, _ := strconv.Atoi(pageStr)
+	commands.HelpPaginate(s, i, page)
+}
+
+func (cd *Container) HelpPaginationFirst(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	commands.HelpPaginate(s, i, 0)
+}
+
+func (cd *Container) HelpPaginationLast(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	commands.HelpPaginate(s, i, commands.TotalPages)
 }

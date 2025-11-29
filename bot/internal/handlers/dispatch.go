@@ -19,6 +19,9 @@ func NewCommandsDispatcher() *CommandsDispatcher {
 
 func (cd *CommandsDispatcher) InitHandlers(container *Container) {
 	cd.handlers["help"] = container.Help
+	cd.handlers["HelpPage"] = container.HelpPagination
+	cd.handlers["HelpPageLast"] = container.HelpPaginationLast
+	cd.handlers["HelpPageFirst"] = container.HelpPaginationFirst
 	cd.handlers["menu"] = container.Menu
 	cd.handlers["iprofile"] = container.InteractionProfile
 

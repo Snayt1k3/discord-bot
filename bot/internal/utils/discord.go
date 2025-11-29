@@ -117,3 +117,13 @@ func Respond(s *discordgo.Session, m *discordgo.InteractionCreate, resp *discord
 		slog.Error("failed to send interaction response", "error", err)
 	}
 }
+
+func Acknowledge(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseDeferredMessageUpdate,
+	})
+
+	if err != nil {
+		slog.Error("failed to send interaction response", "error", err)
+	}
+}
