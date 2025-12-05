@@ -42,10 +42,6 @@ func Rank(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCr
 			curXP, nextXP,
 		),
 
-		Footer: &discordgo.MessageEmbedFooter{
-			Text:    username,
-			IconURL: avatar,
-		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
 
