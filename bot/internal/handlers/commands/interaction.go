@@ -36,7 +36,7 @@ func Rank(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCr
 		},
 
 		Description: fmt.Sprintf(
-			"**🌟 Level %d**\n%s\n**%d / %d XP**",
+			"**🌟 Server Level %d**\n%s\n**%d / %d XP**",
 			level,
 			progressBlocks(int(curXP), int(nextXP), 10),
 			curXP, nextXP,
