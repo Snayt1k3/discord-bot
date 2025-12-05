@@ -2,46 +2,49 @@ package commands
 
 import (
 	"bot/internal/http"
-	"bot/internal/utils"
+
 	"fmt"
 	"log/slog"
+	"strings"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
 )
 
-func InteractionProfile(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func Rank(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	guildID := i.GuildID
-	user, err := http.Interaction.GetUser(guildID, i.User.ID)
 
+	user, err := http.Interaction.GetUser(guildID, i.Member.User.ID)
 	if err != nil {
 		slog.Error("Failed to fetch user profile", "err", err)
 		return err
 	}
 
+	username := i.Member.User.Username
+	avatar := discordgo.EndpointUserAvatar(i.Member.User.ID, i.Member.User.Avatar)
+
+	level := user.Level
+	curXP := user.Experience
+	nextXP := user.NextLevelXP
+
 	embed := &discordgo.MessageEmbed{
-		Title:       fmt.Sprintf("📜 Profile of %s", i.User.Username),
-		Color:       0x5865F2, // Discord blurple
-		Description: fmt.Sprintf("Here’s your current progress in **%s**!", guildID),
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:   "🏅 Level",
-				Value:  fmt.Sprintf("%d", user.Level),
-				Inline: true,
-			},
-			{
-				Name:   "⭐ Experience",
-				Value:  fmt.Sprintf("%d / %d", user.Experience, user.NextLevelXP),
-				Inline: true,
-			},
-			{
-				Name:   "🕒 Last Message",
-				Value:  utils.FormatLastMessage(user.LastMessageAt),
-				Inline: false,
-			},
+		Color: 0x5865F2,
+		Title: fmt.Sprintf("%s's Profile", username),
+
+		Thumbnail: &discordgo.MessageEmbedThumbnail{
+			URL: avatar,
 		},
+
+		Description: fmt.Sprintf(
+			"**🌟 Level %d**\n%s\n**%d / %d XP**",
+			level,
+			progressBlocks(int(curXP), int(nextXP), 10),
+			curXP, nextXP,
+		),
+
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: fmt.Sprintf("Username - %s", i.User.Username),
+			Text:    username,
+			IconURL: avatar,
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -50,9 +53,24 @@ func InteractionProfile(http *http.Container, s *discordgo.Session, i *discordgo
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Embeds: []*discordgo.MessageEmbed{embed},
-			Flags:  discordgo.MessageFlagsEphemeral,
 		},
 	})
+}
+
+// ▰▱ progress bar builder
+func progressBlocks(current, max, length int) string {
+	if max <= 0 {
+		max = 1
+	}
+
+	ratio := float64(current) / float64(max)
+	filled := int(ratio * float64(length))
+
+	if filled > length {
+		filled = length
+	}
+
+	return strings.Repeat("▰", filled) + strings.Repeat("▱", length-filled)
 }
 
 func ShowLeaderBoard(s *discordgo.Session, i *discordgo.InteractionCreate) error {

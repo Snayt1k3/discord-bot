@@ -6,8 +6,34 @@ import (
 
 var CommandsList = []*discordgo.ApplicationCommand{
 	{
-		Name:        "settings",
+		Name:        "menu",
 		Description: "View server settings.",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionString,
+				Name:        "type",
+				Description: "Menu to view",
+				Required:    true,
+				Choices: []*discordgo.ApplicationCommandOptionChoice{
+					{
+						Name: "Roles/Reactions",
+						Value: "RolesReactions",
+					},
+					{
+						Name: "Welcome",
+						Value: "Welcome",
+					},
+					{
+						Name: "AutoMode",
+						Value: "AutoMode",
+					},
+					{
+						Name: "Logging",
+						Value: "Logging",
+					},
+				},
+			},
+		},
 	},
 	{
 		Name:        "rr-add",
@@ -64,9 +90,25 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		},
 	},
 	{
-		Name:        "welcomemsg-add",
-		Description: "Add a welcome message. Variables: {username}",
+		Name:        "welcome-msg",
+		Description: "Add/Remove a welcome message. Available variables: {username}",
 		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionString,
+				Name:        "action",
+				Description: "Action to perform",
+				Required:    true,
+				Choices: []*discordgo.ApplicationCommandOptionChoice{
+					{
+						Name: "Add",
+						Value: "Add",
+					},
+					{
+						Name: "Remove",
+						Value: "Remove",
+					},
+				},
+			},
 			{
 				Type:        discordgo.ApplicationCommandOptionString,
 				Name:        "msg",
@@ -76,33 +118,25 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		},
 	},
 	{
-		Name:        "welcomemsg-remove",
-		Description: "Remove a welcome message",
+		Name:        "automod-bannedword",
+		Description: "Add/Remove a banned word to automod.",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
 				Type:        discordgo.ApplicationCommandOptionString,
-				Name:        "msg",
-				Description: "The welcome message to remove",
+				Name:        "action",
+				Description: "Action to perform",
 				Required:    true,
+				Choices: []*discordgo.ApplicationCommandOptionChoice{
+					{
+						Name: "Add",
+						Value: "Add",
+					},
+					{
+						Name: "Remove",
+						Value: "Remove",
+					},
+				},
 			},
-		},
-	},
-	{
-		Name:        "automod-bw-add",
-		Description: "Add a banned word to automod.",
-		Options: []*discordgo.ApplicationCommandOption{
-			{
-				Type:        discordgo.ApplicationCommandOptionString,
-				Name:        "word",
-				Description: "The word to ban",
-				Required:    true,
-			},
-		},
-	},
-	{
-		Name:        "automod-bw-rm",
-		Description: "Remove a banned word from automod.",
-		Options: []*discordgo.ApplicationCommandOption{
 			{
 				Type:        discordgo.ApplicationCommandOptionString,
 				Name:        "word",
@@ -112,47 +146,85 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		},
 	},
 	{
-		Name:        "automod-al-enable",
-		Description: "Enable Antilink filter in current chat.",
+		Name:        "automod-antilink",
+		Description: "Enable/Disable Antilink filter in current chat.",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionString,
+				Name:        "action",
+				Description: "Action to perform",
+				Required:    true,
+				Choices: []*discordgo.ApplicationCommandOptionChoice{
+					{
+						Name: "Add",
+						Value: "Add",
+					},
+					{
+						Name: "Remove",
+						Value: "Remove",
+					},
+				},
+			},
+		},
 	},
 	{
-		Name:        "automod-al-disable",
-		Description: "Disable Antilink filter in current chat.",
+		Name:        "automod-anticaps",
+		Description: "Enable/Disable AntiCaps filter in current chat.",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionString,
+				Name:        "action",
+				Description: "Action to perform",
+				Required:    true,
+				Choices: []*discordgo.ApplicationCommandOptionChoice{
+					{
+						Name: "Add",
+						Value: "Add",
+					},
+					{
+						Name: "Remove",
+						Value: "Remove",
+					},
+				},
+			},
+		},
 	},
 	{
-		Name:        "automod-ac-enable",
-		Description: "Disable AntiCaps filter in current chat.",
+		Name:        "toggle",
+		Description: "Toggle automod or log - on/off.",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionString,
+				Name:        "feature",
+				Description: "Feature to toggle",
+				Required:    true,
+				Choices: []*discordgo.ApplicationCommandOptionChoice{
+					{
+						Name: "Automod",
+						Value: "automod",
+					},
+					{
+						Name: "Logging",
+						Value: "logging",
+					},
+				},
+			},
+		},
 	},
 	{
-		Name:        "automod-ac-disable",
-		Description: "Disable AntiCaps filter in current chat.",
-	},
-	{
-		Name:        "automod-toggle",
-		Description: "Toggle automod on/off.",
-	},
-	{
-		Name:        "log-toggle",
-		Description: "Toggle logging on/off.",
-	},
-	{
-		Name:        "log-chnl",
+		Name:        "log-channel",
 		Description: "Set the logging channel",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
 				Type:        discordgo.ApplicationCommandOptionChannel,
 				Name:        "channel",
 				Description: "The channel to send logs",
-				Required:    true,
+				Required:    false,
 			},
 		},
 	},
 	{
-		Name:        "log-chnl-rm",
-		Description: "Remove the logging channel",
-	},
-	{
-		Name:        "iprofile",
-		Description: "View your profile",
+		Name:        "rank",
+		Description: "View your rank and experience points.",
 	},
 }

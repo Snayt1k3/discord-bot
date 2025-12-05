@@ -25,37 +25,30 @@ func (cd *Container) Help(s *discordgo.Session, i *discordgo.InteractionCreate) 
 	commands.Help(s, i)
 }
 
-func (cd *Container) Menu(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	commands.Menu(s, i)
-}
-
-func (cd *Container) InteractionProfile(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := commands.InteractionProfile(cd.Http, s, i)
+func (cd *Container) Rank(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	err := commands.Rank(cd.Http, s, i)
 	if err != nil {
 		slog.Error(err.Error())
 	}
 }
 
-func (cd *Container) WelcomePreferences(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := preferences.WelcomeSettings(cd.Http, s, i)
+func (cd *Container) WelcomeMsg(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	action := i.ApplicationCommandData().Options[0].StringValue()
+
+	var err error
+
+	switch action {
+	case "Add":
+		err = preferences.AddWelcomeMessage(cd.Http, s, i)
+	case "Remove":
+		err = preferences.DeleteWelcomeMessage(cd.Http, s, i)
+	}
+
 	if err != nil {
 		slog.Error(err.Error())
 	}
 }
 
-func (cd *Container) AddWelcomeMsg(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := preferences.AddWelcomeMessage(cd.Http, s, i)
-	if err != nil {
-		slog.Error(err.Error())
-	}
-}
-
-func (cd *Container) RemoveWelcomeMsg(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := preferences.DeleteWelcomeMessage(cd.Http, s, i)
-	if err != nil {
-		slog.Error(err.Error())
-	}
-}
 
 func (cd *Container) SetWelcomeChnl(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	err := preferences.SetWelcomeChnl(cd.Http, s, i)
@@ -64,8 +57,20 @@ func (cd *Container) SetWelcomeChnl(s *discordgo.Session, i *discordgo.Interacti
 	}
 }
 
-func (cd *Container) LoggingSettings(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := preferences.LogSettings(cd.Http, s, i)
+func (cd *Container) Menu(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	menuType := i.ApplicationCommandData().Options[0].StringValue()
+	var err error
+
+	switch menuType {
+		case "Welcome":
+			err = commands.WelcomeSettings(cd.Http, s, i)
+		case "RolesReactions":
+			err = commands.RolesSettings(cd.Http, s, i)
+		case "AutoMode":
+			err = commands.ModerationSettings(cd.Http, s, i)
+		case "Logging":
+			err = commands.LoggingSettings(cd.Http, s, i)
+	}
 	if err != nil {
 		slog.Error(err.Error())
 	}
@@ -78,43 +83,64 @@ func (cd *Container) RemoveLogChnl(s *discordgo.Session, i *discordgo.Interactio
 	}
 }
 
-func (cd *Container) AddLogChnl(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := preferences.AddLoggingChnl(cd.Http, s, i)
+func (cd *Container) LogChannel(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	channel := i.ApplicationCommandData().Options[0]
+	var err error
+
+	if channel != nil {
+		err = preferences.AddLoggingChnl(cd.Http, s, i)
+	} else {
+		err = preferences.RemoveLoggingChnl(cd.Http, s, i)
+	}
+
 	if err != nil {
 		slog.Error(err.Error())
 	}
 }
 
-func (cd *Container) ToggleLog(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := preferences.ToggleLogging(cd.Http, s, i)
+func (cd *Container) ToggleFeature(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	feature := i.ApplicationCommandData().Options[0].StringValue()
+	var err error
+
+	switch feature { 
+	case "automod":
+		err = preferences.ToggleModeration(cd.Http, s, i)
+	case "logging":
+		err = preferences.ToggleLogging(cd.Http, s, i)
+	}
+
 	if err != nil {
 		slog.Error(err.Error())
 	}
 }
 
-func (cd *Container) ToggleModeration(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := preferences.ToggleModeration(cd.Http, s, i)
+func (cd *Container) BannedWord(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	action := i.ApplicationCommandData().Options[0].StringValue()
+	var err error
+
+	switch action {
+	case "Add":
+		err = preferences.AddBannedWord(cd.Http, s, i)
+	case "Remove":
+		err = preferences.RemoveBannedWord(cd.Http, s, i)
+	}
+
 	if err != nil {
 		slog.Error(err.Error())
 	}
 }
 
-func (cd *Container) AddBannedWord(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := preferences.AddBannedWord(cd.Http, s, i)
-	if err != nil {
-		slog.Error(err.Error())
-	}
-}
+func (cd *Container) AntiLink(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	action := i.ApplicationCommandData().Options[0].StringValue()
+	var err error
 
-func (cd *Container) RemoveBannedWord(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := preferences.RemoveBannedWord(cd.Http, s, i)
-	if err != nil {
-		slog.Error(err.Error())
+	switch action {
+	case "Add":
+		err = preferences.AddAntiLinkChnl(cd.Http, s, i)
+	case "Remove":
+		err = preferences.RemoveAntiLinkChnl(cd.Http, s, i)
 	}
-}
 
-func (cd *Container) AddAntiLinkChnl(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := preferences.AddAntiLinkChnl(cd.Http, s, i)
 	if err != nil {
 		slog.Error(err.Error())
 	}
@@ -127,8 +153,17 @@ func (cd *Container) RemoveAntiLinkChnl(s *discordgo.Session, i *discordgo.Inter
 	}
 }
 
-func (cd *Container) AddCapsLockChnl(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := preferences.AddCapsLockChnl(cd.Http, s, i)
+func (cd *Container) AntiCaps(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	action := i.ApplicationCommandData().Options[0].StringValue()
+	var err error
+
+	switch action {
+	case "Add":
+		err = preferences.AddCapsLockChnl(cd.Http, s, i)
+	case "Remove":
+		err = preferences.RemoveCapsLockChnl(cd.Http, s, i)
+	}
+	
 	if err != nil {
 		slog.Error(err.Error())
 	}
@@ -136,20 +171,6 @@ func (cd *Container) AddCapsLockChnl(s *discordgo.Session, i *discordgo.Interact
 
 func (cd *Container) RemoveCapsLockChnl(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	err := preferences.RemoveCapsLockChnl(cd.Http, s, i)
-	if err != nil {
-		slog.Error(err.Error())
-	}
-}
-
-func (cd *Container) ModerationSettings(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := preferences.AutoModeSettings(cd.Http, s, i)
-	if err != nil {
-		slog.Error(err.Error())
-	}
-}
-
-func (cd *Container) RolesSettings(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := preferences.RolesSettings(cd.Http, s, i)
 	if err != nil {
 		slog.Error(err.Error())
 	}

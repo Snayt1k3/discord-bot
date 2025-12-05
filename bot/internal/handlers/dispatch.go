@@ -22,36 +22,26 @@ func (cd *CommandsDispatcher) InitHandlers(container *Container) {
 	cd.handlers["HelpPage"] = container.HelpPagination
 	cd.handlers["HelpPageLast"] = container.HelpPaginationLast
 	cd.handlers["HelpPageFirst"] = container.HelpPaginationFirst
+	cd.handlers["rank"] = container.Rank 
+	cd.handlers["toggle"] = container.ToggleFeature
 	cd.handlers["menu"] = container.Menu
-	cd.handlers["iprofile"] = container.InteractionProfile
 
-	// Настройка Welcome
+	// Welcome
 	cd.handlers["welcome-chnl"] = container.SetWelcomeChnl
-	cd.handlers["welcomemsg-add"] = container.AddWelcomeMsg
-	cd.handlers["welcomemsg-remove"] = container.RemoveWelcomeMsg
+	cd.handlers["welcome-msg"] = container.WelcomeMsg
 
-	// Настройка Roles/Reactions
+	// Roles/Reactions
 	cd.handlers["rr-add"] = container.AddRole
 	cd.handlers["rr-remove"] = container.RemoveRole
 	cd.handlers["rr-message"] = container.SetRoleMsg
 
 	// Logging
-	cd.handlers["log-toggle"] = container.ToggleLog
-	cd.handlers["log-chnl"] = container.AddLogChnl
-	cd.handlers["log-chnl-rm"] = container.RemoveLogChnl
+	cd.handlers["log-channel"] = container.LogChannel
 
-	cd.handlers["RolesReactionsSettings"] = container.RolesSettings
-	cd.handlers["WelcomeSettings"] = container.WelcomePreferences
-	cd.handlers["AutoModeSettings"] = container.ModerationSettings
-	cd.handlers["LogSettings"] = container.LoggingSettings
-
-	cd.handlers["automod-toggle"] = container.ToggleModeration
-	cd.handlers["automod-bw-add"] = container.AddBannedWord
-	cd.handlers["automod-bw-rm"] = container.RemoveBannedWord
-	cd.handlers["automod-al-enable"] = container.AddAntiLinkChnl
-	cd.handlers["automod-al-disable"] = container.RemoveAntiLinkChnl
-	cd.handlers["automod-ac-enable"] = container.AddCapsLockChnl
-	cd.handlers["automod-ac-disable"] = container.RemoveCapsLockChnl
+	// Moderation
+	cd.handlers["automod-bannedword"] = container.BannedWord 
+	cd.handlers["automod-antilink"] = container.AntiLink
+	cd.handlers["automod-anticaps"] = container.AntiCaps 
 
 }
 

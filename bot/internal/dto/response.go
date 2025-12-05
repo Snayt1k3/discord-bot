@@ -82,6 +82,10 @@ type User struct {
 	LastMessageAt string `json:"last_message_at"` // ISO timestamp string
 }
 
+type UserResponse struct {
+	User User `json:"user"`
+}
+
 type AddXpResponse struct {
 	AddedXp int  `json:"added_xp"`
 	LevelUp bool `json:"level_up"`

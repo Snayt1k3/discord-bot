@@ -37,13 +37,13 @@ func (i *Interaction) GetUser(guildId, userId string) (dtoGuild.User, error) {
 
 	defer response.Body.Close()
 
-	var user dtoGuild.User
+	var user dtoGuild.UserResponse
 	if err := json.NewDecoder(response.Body).Decode(&user); err != nil {
 		slog.Warn("Failed to decode user response", "err", err)
 		return dtoGuild.User{}, err
 	}
 
-	return user, nil
+	return user.User, nil
 }
 
 func (i *Interaction) AddXP(guildId, userId string, xp int32) (dtoGuild.AddXpResponse, error) {
