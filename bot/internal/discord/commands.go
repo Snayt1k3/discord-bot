@@ -227,4 +227,8 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		Name:        "rank",
 		Description: "View your rank and experience points.",
 	},
+	{
+		Name:        "leaderboard",
+		Description: "View the server leaderboard.",
+	},
 }

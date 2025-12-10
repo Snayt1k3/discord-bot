@@ -210,3 +210,23 @@ func (cd *Container) HelpPaginationFirst(s *discordgo.Session, i *discordgo.Inte
 func (cd *Container) HelpPaginationLast(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	commands.HelpPaginate(s, i, commands.TotalPages)
 }
+
+func (cd *Container) Leaderboard(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	commands.ShowLeaderBoard(cd.Http, s, i)
+}
+
+func (cd *Container) LeaderboardPagination(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	_, pageStr, _ := strings.Cut(i.MessageComponentData().CustomID, "_")
+	page, _ := strconv.Atoi(pageStr)
+	commands.ShowLeaderBoardPaginate(cd.Http, s, i, page)
+}
+
+func (cd *Container) LeaderboardPaginationFirst(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	commands.ShowLeaderBoardPaginate(cd.Http, s, i, 0)
+}
+
+func (cd *Container) LeaderboardPaginationLast(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	_, pageStr, _ := strings.Cut(i.MessageComponentData().CustomID, "_")
+	page, _ := strconv.Atoi(pageStr)
+	commands.ShowLeaderBoardPaginate(cd.Http, s, i, page)
+}

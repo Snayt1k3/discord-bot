@@ -22,9 +22,15 @@ func (cd *CommandsDispatcher) InitHandlers(container *Container) {
 	cd.handlers["HelpPage"] = container.HelpPagination
 	cd.handlers["HelpPageLast"] = container.HelpPaginationLast
 	cd.handlers["HelpPageFirst"] = container.HelpPaginationFirst
-	cd.handlers["rank"] = container.Rank
 	cd.handlers["toggle"] = container.ToggleFeature
 	cd.handlers["menu"] = container.Menu
+
+	// interactions
+	cd.handlers["rank"] = container.Rank
+	cd.handlers["leaderboard"] = container.Leaderboard
+	cd.handlers["LeaderboardPage"] = container.LeaderboardPagination
+	cd.handlers["LeaderboardPageLast"] = container.LeaderboardPaginationLast
+	cd.handlers["LeaderboardPageFirst"] = container.LeaderboardPaginationFirst
 
 	// Welcome
 	cd.handlers["welcome-chnl"] = container.SetWelcomeChnl

@@ -6,18 +6,19 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func HelpPaginationButtons(currentPage, totalPages int) []discordgo.MessageComponent {
+
+func LeaderboardButtons(currentPage, totalPages int) []discordgo.MessageComponent {
 	return []discordgo.MessageComponent{
 		discordgo.Button{
 			Label:    "⏮ First",
 			Style:    discordgo.PrimaryButton,
-			CustomID: "HelpPageFirst",
+			CustomID: "LeaderboardPageFirst",
 			Disabled: currentPage == 0,
 		},
 		discordgo.Button{
 			Label:    "◀ Prev",
 			Style:    discordgo.SecondaryButton,
-			CustomID: fmt.Sprintf("HelpPage_%d", currentPage-1),
+			CustomID: fmt.Sprintf("Leaderboard_%d", currentPage-1),
 			Disabled: currentPage < 1,
 		},
 		discordgo.Button{
@@ -29,13 +30,13 @@ func HelpPaginationButtons(currentPage, totalPages int) []discordgo.MessageCompo
 		discordgo.Button{
 			Label:    "Next ▶",
 			Style:    discordgo.SecondaryButton,
-			CustomID: fmt.Sprintf("HelpPage_%d", currentPage+1),
+			CustomID: fmt.Sprintf("Leaderboard_%d", currentPage+1),
 			Disabled: currentPage > totalPages,
 		},
 		discordgo.Button{
 			Label:    "Last ⏭",
 			Style:    discordgo.PrimaryButton,
-			CustomID: "HelpPageLast",
+			CustomID: fmt.Sprintf("LeaderboardLast_%d", totalPages),
 			Disabled: currentPage == totalPages,
 		},
 	}

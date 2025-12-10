@@ -46,6 +46,35 @@ func (i *Interaction) GetUser(guildId, userId string) (dtoGuild.User, error) {
 	return user.User, nil
 }
 
+func (i *Interaction) GetUsers(guildId string, page, size int) (dtoGuild.UsersResponse, error) {
+	params := map[string]string{
+		"page":  string(rune(page)),
+		"size":  string(rune(page)),
+		"guild_id": guildId,
+	}
+
+	response, err := i.http.Get(
+		context.Background(),
+		fmt.Sprintf("%v/api/v1/interaction/users", config.GetApiGatewayAddr()),
+		params,
+		nil,
+	)
+	if err != nil {
+		slog.Warn("Bad response when getting users", "err", err)
+		return dtoGuild.UsersResponse{}, err
+	}
+
+	defer response.Body.Close()
+
+	var users dtoGuild.UsersResponse
+	if err := json.NewDecoder(response.Body).Decode(&users); err != nil {
+		slog.Warn("Failed to decode user response", "err", err)
+		return dtoGuild.UsersResponse{}, err
+	}
+
+	return users, nil
+}
+
 func (i *Interaction) AddXP(guildId, userId string, xp int32) (dtoGuild.AddXpResponse, error) {
 	bodyBytes, _ := json.Marshal(map[string]interface{}{
 		"guild_id": guildId,
