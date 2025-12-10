@@ -28,17 +28,20 @@ generate-grpc:
 	@echo "Go code generated in ./grpc"
 
 interaction-init:
-	@mkdir "./interaction-service/proto"
-	@cp ./grpc/interaction/* ./interaction-service/proto
+	@mkdir -p "./interaction-service/proto"
+	@rm -f ./interaction-service/proto/*.go
+	@cp ./grpc/interaction/proto/* ./interaction-service/proto
 
 preferences-init:
-	@mkdir "./settings-service/proto"
-	@cp ./grpc/preferences/* ./settings-service/proto
+	@mkdir -p "./settings-service/proto"
+	@rm -f ./settings-service/proto/*.go
+	@cp ./grpc/preferences/proto/* ./settings-service/proto
 
 api-gateway-init:
-	@mkdir "./api-gateway/proto"
-	@cp ./grpc/interaction/* ./api-gateway/proto
-	@cp ./grpc/preferences/* ./api-gateway/proto
+	@mkdir -p "./api-gateway/proto"
+	@rm -f ./api-gateway/proto/*.go
+	@cp ./grpc/interaction/proto/* ./api-gateway/proto
+	@cp ./grpc/preferences/proto/* ./api-gateway/proto
 
 grpc-clean:
 	@echo "Cleaning up generated Go code..."
