@@ -49,7 +49,6 @@ func (cd *Container) WelcomeMsg(s *discordgo.Session, i *discordgo.InteractionCr
 	}
 }
 
-
 func (cd *Container) SetWelcomeChnl(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	err := preferences.SetWelcomeChnl(cd.Http, s, i)
 	if err != nil {
@@ -62,14 +61,14 @@ func (cd *Container) Menu(s *discordgo.Session, i *discordgo.InteractionCreate) 
 	var err error
 
 	switch menuType {
-		case "Welcome":
-			err = commands.WelcomeSettings(cd.Http, s, i)
-		case "RolesReactions":
-			err = commands.RolesSettings(cd.Http, s, i)
-		case "AutoMode":
-			err = commands.ModerationSettings(cd.Http, s, i)
-		case "Logging":
-			err = commands.LoggingSettings(cd.Http, s, i)
+	case "Welcome":
+		err = commands.WelcomeSettings(cd.Http, s, i)
+	case "RolesReactions":
+		err = commands.RolesSettings(cd.Http, s, i)
+	case "AutoMode":
+		err = commands.ModerationSettings(cd.Http, s, i)
+	case "Logging":
+		err = commands.LoggingSettings(cd.Http, s, i)
 	}
 	if err != nil {
 		slog.Error(err.Error())
@@ -102,7 +101,7 @@ func (cd *Container) ToggleFeature(s *discordgo.Session, i *discordgo.Interactio
 	feature := i.ApplicationCommandData().Options[0].StringValue()
 	var err error
 
-	switch feature { 
+	switch feature {
 	case "automod":
 		err = preferences.ToggleModeration(cd.Http, s, i)
 	case "logging":
@@ -163,7 +162,7 @@ func (cd *Container) AntiCaps(s *discordgo.Session, i *discordgo.InteractionCrea
 	case "Remove":
 		err = preferences.RemoveCapsLockChnl(cd.Http, s, i)
 	}
-	
+
 	if err != nil {
 		slog.Error(err.Error())
 	}

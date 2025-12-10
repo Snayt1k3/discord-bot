@@ -9,5 +9,5 @@ type UserRepo interface {
 	GetOrCreateUser(userID, guildID string) (*models.User, error)
 	UpdateUser(user *models.User) error
 	GetUsers(guildID string, page, size int) ([]models.User, error)
-	GetCountUsers(guildID string) int 
+	GetCountUsers(guildID string) int
 }

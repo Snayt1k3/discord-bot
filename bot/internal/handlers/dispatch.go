@@ -22,7 +22,7 @@ func (cd *CommandsDispatcher) InitHandlers(container *Container) {
 	cd.handlers["HelpPage"] = container.HelpPagination
 	cd.handlers["HelpPageLast"] = container.HelpPaginationLast
 	cd.handlers["HelpPageFirst"] = container.HelpPaginationFirst
-	cd.handlers["rank"] = container.Rank 
+	cd.handlers["rank"] = container.Rank
 	cd.handlers["toggle"] = container.ToggleFeature
 	cd.handlers["menu"] = container.Menu
 
@@ -39,9 +39,9 @@ func (cd *CommandsDispatcher) InitHandlers(container *Container) {
 	cd.handlers["log-channel"] = container.LogChannel
 
 	// Moderation
-	cd.handlers["automod-bannedword"] = container.BannedWord 
+	cd.handlers["automod-bannedword"] = container.BannedWord
 	cd.handlers["automod-antilink"] = container.AntiLink
-	cd.handlers["automod-anticaps"] = container.AntiCaps 
+	cd.handlers["automod-anticaps"] = container.AntiCaps
 
 }
 

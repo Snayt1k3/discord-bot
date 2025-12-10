@@ -54,7 +54,7 @@ func (s *UserServer) AddXP(ctx context.Context, req *pb.AddXPRequest) (*pb.AddXP
 	if currentExperience >= int32(user.NextLevelXP) {
 		user.Experience = int(currentExperience - int32(user.NextLevelXP))
 		user.Level += 1
-		user.NextLevelXP = int(5 * (user.Level^2) + 50 * user.Level + 100)
+		user.NextLevelXP = int(5*(user.Level^2) + 50*user.Level + 100)
 		leveledUp = true
 	} else {
 		user.Experience = int(currentExperience)
@@ -82,7 +82,7 @@ func (s *UserServer) AddXP(ctx context.Context, req *pb.AddXPRequest) (*pb.AddXP
 
 func (s *UserServer) GetUsers(ctx context.Context, req *pb.GetUsersRequest) (*pb.GetUsersResponse, error) {
 	users, err := s.repo.GetUsers(req.GetGuildId(), int(req.GetPage()), int(req.GetSize()))
-	
+
 	if err != nil {
 		return nil, err
 	}
@@ -101,9 +101,9 @@ func (s *UserServer) GetUsers(ctx context.Context, req *pb.GetUsersRequest) (*pb
 	}
 
 	return &pb.GetUsersResponse{
-		Users: pbUsers,
+		Users:      pbUsers,
 		TotalCount: int32(count),
-		Page: req.GetPage(),
-		Size: req.GetSize(),
+		Page:       req.GetPage(),
+		Size:       req.GetSize(),
 	}, nil
 }

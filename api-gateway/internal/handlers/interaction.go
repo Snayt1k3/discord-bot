@@ -92,8 +92,8 @@ func (i *Interaction) GetUsers(c *gin.Context) {
 
 	req := pb.GetUsersRequest{
 		GuildId: guildID,
-		Page: int32(pageInt),
-		Size: int32(sizeInt),
+		Page:    int32(pageInt),
+		Size:    int32(sizeInt),
 	}
 
 	resp, err := i.client.GetUsers(context.Background(), &req)

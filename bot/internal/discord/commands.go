@@ -16,19 +16,19 @@ var CommandsList = []*discordgo.ApplicationCommand{
 				Required:    true,
 				Choices: []*discordgo.ApplicationCommandOptionChoice{
 					{
-						Name: "Roles/Reactions",
+						Name:  "Roles/Reactions",
 						Value: "RolesReactions",
 					},
 					{
-						Name: "Welcome",
+						Name:  "Welcome",
 						Value: "Welcome",
 					},
 					{
-						Name: "AutoMode",
+						Name:  "AutoMode",
 						Value: "AutoMode",
 					},
 					{
-						Name: "Logging",
+						Name:  "Logging",
 						Value: "Logging",
 					},
 				},
@@ -100,11 +100,11 @@ var CommandsList = []*discordgo.ApplicationCommand{
 				Required:    true,
 				Choices: []*discordgo.ApplicationCommandOptionChoice{
 					{
-						Name: "Add",
+						Name:  "Add",
 						Value: "Add",
 					},
 					{
-						Name: "Remove",
+						Name:  "Remove",
 						Value: "Remove",
 					},
 				},
@@ -128,11 +128,11 @@ var CommandsList = []*discordgo.ApplicationCommand{
 				Required:    true,
 				Choices: []*discordgo.ApplicationCommandOptionChoice{
 					{
-						Name: "Add",
+						Name:  "Add",
 						Value: "Add",
 					},
 					{
-						Name: "Remove",
+						Name:  "Remove",
 						Value: "Remove",
 					},
 				},
@@ -156,11 +156,11 @@ var CommandsList = []*discordgo.ApplicationCommand{
 				Required:    true,
 				Choices: []*discordgo.ApplicationCommandOptionChoice{
 					{
-						Name: "Add",
+						Name:  "Add",
 						Value: "Add",
 					},
 					{
-						Name: "Remove",
+						Name:  "Remove",
 						Value: "Remove",
 					},
 				},
@@ -178,11 +178,11 @@ var CommandsList = []*discordgo.ApplicationCommand{
 				Required:    true,
 				Choices: []*discordgo.ApplicationCommandOptionChoice{
 					{
-						Name: "Add",
+						Name:  "Add",
 						Value: "Add",
 					},
 					{
-						Name: "Remove",
+						Name:  "Remove",
 						Value: "Remove",
 					},
 				},
@@ -200,11 +200,11 @@ var CommandsList = []*discordgo.ApplicationCommand{
 				Required:    true,
 				Choices: []*discordgo.ApplicationCommandOptionChoice{
 					{
-						Name: "Automod",
+						Name:  "Automod",
 						Value: "automod",
 					},
 					{
-						Name: "Logging",
+						Name:  "Logging",
 						Value: "logging",
 					},
 				},

@@ -12,7 +12,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-
 func RolesSettings(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
@@ -20,7 +19,7 @@ func RolesSettings(http *http.Container, s *discordgo.Session, i *discordgo.Inte
 	}
 
 	settings, err := http.Settings.Get(i.GuildID)
-	
+
 	if err != nil {
 		slog.Error("Error while getting http settings", "err", err)
 		utils.SendErrorMessage(s, i)
@@ -230,7 +229,7 @@ func LoggingSettings(http *http.Container, s *discordgo.Session, i *discordgo.In
 		utils.SendNoPermissionMessage(s, i)
 		return nil
 	}
-	
+
 	settings, err := http.Settings.Get(i.GuildID)
 
 	if err != nil {
@@ -247,7 +246,6 @@ func LoggingSettings(http *http.Container, s *discordgo.Session, i *discordgo.In
 			},
 		})
 	}
-
 
 	channelMention := "—"
 	color := 0xED4245 // red
