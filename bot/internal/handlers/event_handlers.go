@@ -115,9 +115,16 @@ func (eh *EventHandlers) MessageCreate(s *discordgo.Session, m *discordgo.Messag
 
 	// Adding XP to user
 	if !res {
-		_, err := eh.http.Interaction.AddXP(m.GuildID, m.Author.ID, 10)
+		res, err := eh.http.Interaction.AddXP(m.GuildID, m.Author.ID, 10)
 		if err != nil {
 			slog.Error("Error while adding XP", "error", err)
+			return
+		}
+
+		if res.LevelUp {
+			utils.SendTempMessage(s, m.ChannelID,
+				fmt.Sprintf("🎉 Congratulations %s! You've leveled up to level %d!", m.Author.Mention(), res.User.Level),
+			)
 		}
 	}
 
