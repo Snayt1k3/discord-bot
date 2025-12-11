@@ -58,7 +58,7 @@ func Rank(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCr
 
 func ShowLeaderBoard(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) {
 	page := 0
-	users, err := http.Interaction.GetUsers(i.GuildID, page, 10)
+	users, err := http.Interaction.GetUsers(i.GuildID, fmt.Sprintf("%d", page), "10")
 
 	if err != nil {
 		slog.Error("Failed to fetch users for leaderboard", "err", err)
@@ -66,7 +66,7 @@ func ShowLeaderBoard(http *http.Container, s *discordgo.Session, i *discordgo.In
 
 	}
 	embed := createLeaderboardEmbed(users, page)
-	keyboard := buttons.LeaderboardButtons(page, users.TotalCount % page)
+	keyboard := buttons.LeaderboardButtons(page, users.TotalCount % 10)
 
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
@@ -82,7 +82,7 @@ func ShowLeaderBoard(http *http.Container, s *discordgo.Session, i *discordgo.In
 }
 
 func ShowLeaderBoardPaginate(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate, page int) {
-	users, err := http.Interaction.GetUsers(i.GuildID, page, 10)
+	users, err := http.Interaction.GetUsers(i.GuildID, fmt.Sprintf("%d", page), "10")
 
 	if err != nil {
 		slog.Error("Failed to fetch users for leaderboard", "err", err)
@@ -90,7 +90,7 @@ func ShowLeaderBoardPaginate(http *http.Container, s *discordgo.Session, i *disc
 
 	}
 	embed := createLeaderboardEmbed(users, page)
-	keyboard := buttons.LeaderboardButtons(page, users.TotalCount % page)
+	keyboard := buttons.LeaderboardButtons(page, users.TotalCount % 10)
 
 	msg := &discordgo.MessageEdit{
 		ID:      i.Message.ID,
@@ -118,7 +118,7 @@ func createLeaderboardEmbed(users dto.UsersResponse, page int) *discordgo.Messag
 		progress := progressBlocks(int(u.Experience), int(u.NextLevelXP), 10)
 
 		entry := fmt.Sprintf(
-			"**%d. Level %d • <@%s>**\n%s\n`%d / %d XP`",
+			"**%d. Level %d • <@%s>**%s`%d / %d XP`",
 			(idx+1)+(page*10),
 			u.Level,
 			u.UserID,
@@ -131,7 +131,7 @@ func createLeaderboardEmbed(users dto.UsersResponse, page int) *discordgo.Messag
 
 	embed := &discordgo.MessageEmbed{
 		Title:       fmt.Sprintf("🏆 Leaderboard — Page %d", page),
-		Color:       0xFFD700,
+		Color:       0x87CEEB,
 		Description: strings.Join(entries, "\n\n"),
 		Timestamp:   time.Now().Format(time.RFC3339),
 	}

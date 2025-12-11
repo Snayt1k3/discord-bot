@@ -67,8 +67,8 @@ func (i *Interaction) GetUser(c *gin.Context) {
 // @Success      200 {object} pb.GetUsersResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
+// @Router 		 /api/v1/interaction/users [get]
 func (i *Interaction) GetUsers(c *gin.Context) {
-
 	page := c.Query("page")
 	size := c.Query("size")
 	guildID := c.Query("guild_id")

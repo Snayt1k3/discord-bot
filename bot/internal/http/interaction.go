@@ -46,10 +46,10 @@ func (i *Interaction) GetUser(guildId, userId string) (dtoGuild.User, error) {
 	return user.User, nil
 }
 
-func (i *Interaction) GetUsers(guildId string, page, size int) (dtoGuild.UsersResponse, error) {
+func (i *Interaction) GetUsers(guildId string, page, size string) (dtoGuild.UsersResponse, error) {
 	params := map[string]string{
-		"page":  string(rune(page)),
-		"size":  string(rune(page)),
+		"page":  page,
+		"size":  size,
 		"guild_id": guildId,
 	}
 
