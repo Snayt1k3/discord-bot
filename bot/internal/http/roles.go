@@ -28,7 +28,7 @@ func (s *Roles) Add(roleId, emoji, guildID string) error {
 
 	_, err := s.http.Post(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/roles/role", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/roles/role", config.GetApiGatewayAddr()),
 		bytes,
 		nil,
 	)
@@ -51,7 +51,7 @@ func (s *Roles) Delete(roleId, emoji, guildID string) error {
 
 	_, err := s.http.Delete(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/roles/role", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/roles/role", config.GetApiGatewayAddr()),
 		bytes,
 		nil,
 	)
@@ -72,7 +72,7 @@ func (s *Roles) SetMessageID(messageID, guildID string) error {
 
 	_, err := s.http.Put(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/roles/message", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/roles/message", config.GetApiGatewayAddr()),
 		bytes,
 		nil,
 	)

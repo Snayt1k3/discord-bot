@@ -26,7 +26,7 @@ func (s *Welcome) SetChannel(guildID, channelID string) error {
 
 	_, err := s.http.Put(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/welcome/channel", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/welcome/channel", config.GetApiGatewayAddr()),
 		bodyBytes,
 		nil,
 	)
@@ -47,7 +47,7 @@ func (s *Welcome) AddMessage(guildID, message string) error {
 
 	_, err := s.http.Post(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/welcome/message", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/welcome/message", config.GetApiGatewayAddr()),
 		bodyBytes,
 		nil,
 	)
@@ -72,7 +72,7 @@ func (s *Welcome) DeleteMessage(guildID, message string) error {
 
 	_, err = s.http.Delete(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/welcome/message", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/welcome/message", config.GetApiGatewayAddr()),
 		bodyBytes,
 		nil,
 	)

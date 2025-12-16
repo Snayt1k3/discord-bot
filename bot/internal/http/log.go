@@ -27,7 +27,7 @@ func (s *Log) Toggle(guildID string, enable bool) error {
 
 	_, err := s.http.Post(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/logging/toggle", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/logging/toggle", config.GetApiGatewayAddr()),
 		bytes,
 		nil,
 	)
@@ -47,7 +47,7 @@ func (s *Log) AddChannel(guildID, channelID string) error {
 
 	_, err := s.http.Post(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/logging/channel", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/logging/channel", config.GetApiGatewayAddr()),
 		bytes,
 		nil,
 	)
@@ -67,7 +67,7 @@ func (s *Log) RemoveChannel(guildID, channelID string) error {
 
 	_, err := s.http.Delete(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/logging/channel", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/logging/channel", config.GetApiGatewayAddr()),
 		bytes,
 		nil,
 	)
