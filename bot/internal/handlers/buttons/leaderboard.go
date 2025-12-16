@@ -6,7 +6,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-
 func LeaderboardButtons(currentPage, totalPages int) []discordgo.MessageComponent {
 	return []discordgo.MessageComponent{
 		discordgo.Button{

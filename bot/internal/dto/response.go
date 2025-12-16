@@ -87,10 +87,10 @@ type UserResponse struct {
 }
 
 type UsersResponse struct {
-	Users []User `json:"users"`
-	TotalCount int   `json:"total_count"`
-	Page 	 int   `json:"page"`
-	Size 	 int   `json:"size"`
+	Users      []User `json:"users"`
+	TotalCount int    `json:"total_count"`
+	Page       int    `json:"page"`
+	Size       int    `json:"size"`
 }
 
 type AddXpResponse struct {

@@ -52,7 +52,7 @@ func (s *LogServer) RemoveLogChannel(ctx context.Context, req *pb.UpdateLogChann
 	for i, et := range req.EventType {
 		eventTypes[i] = models.EventType(et)
 	}
-	
+
 	err := s.Repo.RemoveLogs(req.GuildId, req.ChannelId, eventTypes)
 
 	if err != nil {

@@ -78,7 +78,6 @@ func (s *Settings) GetGuildSettings(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-
 func (s *Settings) CreateSettings(c *gin.Context) {
 	guildID := c.Param("guild_id")
 

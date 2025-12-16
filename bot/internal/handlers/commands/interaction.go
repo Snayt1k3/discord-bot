@@ -66,7 +66,7 @@ func ShowLeaderBoard(http *http.Container, s *discordgo.Session, i *discordgo.In
 
 	}
 	embed := createLeaderboardEmbed(users, page)
-	keyboard := buttons.LeaderboardButtons(page, users.TotalCount % 10)
+	keyboard := buttons.LeaderboardButtons(page, users.TotalCount%10)
 
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
@@ -90,7 +90,7 @@ func ShowLeaderBoardPaginate(http *http.Container, s *discordgo.Session, i *disc
 
 	}
 	embed := createLeaderboardEmbed(users, page)
-	keyboard := buttons.LeaderboardButtons(page, users.TotalCount % 10)
+	keyboard := buttons.LeaderboardButtons(page, users.TotalCount%10)
 
 	msg := &discordgo.MessageEdit{
 		ID:      i.Message.ID,
@@ -109,7 +109,6 @@ func ShowLeaderBoardPaginate(http *http.Container, s *discordgo.Session, i *disc
 		slog.Error("Failed to edit leaderboard message", "err", err)
 	}
 }
-
 
 func createLeaderboardEmbed(users dto.UsersResponse, page int) *discordgo.MessageEmbed {
 	entries := make([]string, 0, len(users.Users))

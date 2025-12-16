@@ -41,8 +41,8 @@ func (r *LogRepositoryImpl) AddLogs(guildId, channelId string, events []models.E
 		}
 
 		log.Events = append(log.Events, models.LogEvent{
-			EventType:     eventType,
-			ChannelID:    channelId,
+			EventType: eventType,
+			ChannelID: channelId,
 		})
 	}
 

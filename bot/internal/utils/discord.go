@@ -62,18 +62,18 @@ func IsAdmin(session *discordgo.Session, guildID, userID string) bool {
 
 func SendErrorMessage(session *discordgo.Session, i *discordgo.InteractionCreate) {
 	err := session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-	Type: discordgo.InteractionResponseChannelMessageWithSource,
-	Data: &discordgo.InteractionResponseData{
-		Embeds: []*discordgo.MessageEmbed{
-			{
-				Title:       "Something went wrong",
-				Description: "⚠️ Oops! Something went wrong. Please try again.",
-				Color:       0xFEE75C, // жёлтый (warning)
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Embeds: []*discordgo.MessageEmbed{
+				{
+					Title:       "Something went wrong",
+					Description: "⚠️ Oops! Something went wrong. Please try again.",
+					Color:       0xFEE75C, // жёлтый (warning)
+				},
 			},
+			Flags: discordgo.MessageFlagsEphemeral,
 		},
-		Flags: discordgo.MessageFlagsEphemeral,
-	},
-})
+	})
 	if err != nil {
 		slog.Error("failed to send interaction response", "error", err)
 	}
@@ -82,18 +82,18 @@ func SendErrorMessage(session *discordgo.Session, i *discordgo.InteractionCreate
 
 func SendNoPermissionMessage(session *discordgo.Session, i *discordgo.InteractionCreate) {
 	err := session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-	Type: discordgo.InteractionResponseChannelMessageWithSource,
-	Data: &discordgo.InteractionResponseData{
-		Embeds: []*discordgo.MessageEmbed{
-			{
-				Title:       "Permission denied",
-				Description: "⛔ You do not have permission to use this command/button.",
-				Color:       0xED4245,
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Embeds: []*discordgo.MessageEmbed{
+				{
+					Title:       "Permission denied",
+					Description: "⛔ You do not have permission to use this command/button.",
+					Color:       0xED4245,
+				},
 			},
+			Flags: discordgo.MessageFlagsEphemeral,
 		},
-		Flags: discordgo.MessageFlagsEphemeral,
-	},
-})
+	})
 
 	if err != nil {
 		slog.Error("failed to send message to channel", "channelId", i.ChannelID, "error", err)

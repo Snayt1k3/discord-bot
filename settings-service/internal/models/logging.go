@@ -15,14 +15,14 @@ const (
 )
 
 type LogSettings struct {
-	ID        uint   `gorm:"primaryKey"`
-	GuildID   string `gorm:"not null"`
-	Events    []LogEvent `gorm:"many2many:log_settings_events;constraint:OnDelete:CASCADE;"`
-	Enabled   bool   `gorm:"default:true"`
+	ID      uint       `gorm:"primaryKey"`
+	GuildID string     `gorm:"not null"`
+	Events  []LogEvent `gorm:"many2many:log_settings_events;constraint:OnDelete:CASCADE;"`
+	Enabled bool       `gorm:"default:true"`
 }
 
 type LogEvent struct {
-	ID         uint      `gorm:"primaryKey"`
-	EventType  EventType `gorm:"not null;index"`
-	ChannelID string `json:"channel_id"`
+	ID        uint      `gorm:"primaryKey"`
+	EventType EventType `gorm:"not null;index"`
+	ChannelID string    `json:"channel_id"`
 }

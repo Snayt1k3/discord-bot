@@ -2,7 +2,6 @@ package models
 
 import "gorm.io/gorm"
 
-
 type RolesSettings struct {
 	gorm.Model
 	GuildID   string `gorm:"not null;uniqueIndex"`

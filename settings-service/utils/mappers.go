@@ -64,10 +64,10 @@ func MapGuildSettings(guildSettings *models.Settings) (*pb.GetSettingsResponse, 
 			Messages:  welcomeMessages,
 		},
 		Log: &pb.LogSettings{
-			Id:        strconv.FormatUint(uint64(guildSettings.Log.ID), 10),
-			GuildId:   guildSettings.GuildID,
-			Events:    events,
-			Enabled:   guildSettings.Log.Enabled,
+			Id:      strconv.FormatUint(uint64(guildSettings.Log.ID), 10),
+			GuildId: guildSettings.GuildID,
+			Events:  events,
+			Enabled: guildSettings.Log.Enabled,
 		},
 		Automode: &pb.AutoModSettings{
 			Id:          strconv.FormatUint(uint64(guildSettings.AutoMode.ID), 10),
@@ -130,9 +130,9 @@ func MapCreateGuildSettings(guildSettings *models.Settings) (*pb.CreateSettingsR
 			Messages:  welcomeMessages,
 		},
 		Log: &pb.LogSettings{
-			Id:        strconv.FormatUint(uint64(guildSettings.Log.ID), 10),
-			GuildId:   guildSettings.GuildID,
-			Enabled:   guildSettings.Log.Enabled,
+			Id:      strconv.FormatUint(uint64(guildSettings.Log.ID), 10),
+			GuildId: guildSettings.GuildID,
+			Enabled: guildSettings.Log.Enabled,
 		},
 		Automode: &pb.AutoModSettings{
 			Id:          strconv.FormatUint(uint64(guildSettings.AutoMode.ID), 10),
