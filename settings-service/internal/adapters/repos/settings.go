@@ -50,6 +50,7 @@ func (r *GuildSettingsRepoImpl) GetGuildSettings(guildID string) (*models.Settin
 		Preload("AutoMode.CapsLocks").
 		Preload("AutoMode.BannedWords").
 		Preload("Log").
+		Preload("Log.Events").
 		Where("guild_id = ?", guildID).First(&settings).Error; err != nil {
 		return nil, err
 	}

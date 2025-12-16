@@ -10,10 +10,18 @@ import (
 func MapGuildSettings(guildSettings *models.Settings) (*pb.GetSettingsResponse, error) {
 	matching := make(map[string]string)
 
+	var events []*pb.EventsType
 	var welcomeMessages []string
 	var bannedWords []*pb.BannedWord
 	var capsLocks []*pb.CapsLock
 	var antiLinks []*pb.AntiLink
+
+	for _, e := range guildSettings.Log.Events {
+		events = append(events, &pb.EventsType{
+			EventType: string(e.EventType),
+			ChannelId: e.ChannelID,
+		})
+	}
 
 	for _, role := range guildSettings.Role.Roles {
 		matching[role.Emoji] = role.RoleID
@@ -56,9 +64,9 @@ func MapGuildSettings(guildSettings *models.Settings) (*pb.GetSettingsResponse, 
 			Messages:  welcomeMessages,
 		},
 		Log: &pb.LogSettings{
-			ChannelId: guildSettings.Log.ChannelID,
 			Id:        strconv.FormatUint(uint64(guildSettings.Log.ID), 10),
 			GuildId:   guildSettings.GuildID,
+			Events:    events,
 			Enabled:   guildSettings.Log.Enabled,
 		},
 		Automode: &pb.AutoModSettings{
@@ -122,7 +130,6 @@ func MapCreateGuildSettings(guildSettings *models.Settings) (*pb.CreateSettingsR
 			Messages:  welcomeMessages,
 		},
 		Log: &pb.LogSettings{
-			ChannelId: guildSettings.Log.ChannelID,
 			Id:        strconv.FormatUint(uint64(guildSettings.Log.ID), 10),
 			GuildId:   guildSettings.GuildID,
 			Enabled:   guildSettings.Log.Enabled,

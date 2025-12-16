@@ -16,7 +16,6 @@ type RolesReactionServer struct {
 }
 
 func (s *RolesReactionServer) AddRole(ctx context.Context, req *pb.AddRoleRequest) (*pb.AddRoleResponse, error) {
-
 	settungs, err := s.GuildRepo.GetGuildSettings(req.GuildId)
 
 	if err != nil {

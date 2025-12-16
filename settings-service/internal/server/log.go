@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"settings-service/internal/interfaces"
+	"settings-service/internal/models"
 	pb "settings-service/proto"
 	// "google.golang.org/grpc/codes"
 	// "google.golang.org/grpc/status"
@@ -28,7 +29,11 @@ func (s *LogServer) ToggleLog(ctx context.Context, req *pb.ToggleLogRequest) (*p
 }
 
 func (s *LogServer) AddLogChannel(ctx context.Context, req *pb.UpdateLogChannelRequest) (*pb.UpdateLogChannelResponse, error) {
-	_, err := s.Repo.AddLogChannel(req.GuildId, req.ChannelId)
+	eventTypes := make([]models.EventType, len(req.EventType))
+	for i, et := range req.EventType {
+		eventTypes[i] = models.EventType(et)
+	}
+	_, err := s.Repo.AddLogs(req.GuildId, req.ChannelId, eventTypes)
 
 	if err != nil {
 		return nil, err
@@ -43,7 +48,12 @@ func (s *LogServer) AddLogChannel(ctx context.Context, req *pb.UpdateLogChannelR
 }
 
 func (s *LogServer) RemoveLogChannel(ctx context.Context, req *pb.UpdateLogChannelRequest) (*pb.UpdateLogChannelResponse, error) {
-	err := s.Repo.RemoveLogChannel(req.GuildId, req.ChannelId)
+	eventTypes := make([]models.EventType, len(req.EventType))
+	for i, et := range req.EventType {
+		eventTypes[i] = models.EventType(et)
+	}
+	
+	err := s.Repo.RemoveLogs(req.GuildId, req.ChannelId, eventTypes)
 
 	if err != nil {
 		return nil, err

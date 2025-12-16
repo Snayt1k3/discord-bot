@@ -57,8 +57,13 @@ message AutoModSettings {
 message LogSettings {
     string id = 1;
     string guild_id = 2;
-    string channel_id = 3;
+    repeated EventsType events = 3;
     bool enabled = 4;
+}
+
+message EventsType {
+    string event_type = 1;
+    string channel_id = 2;
 }
 
 message CapsLock {

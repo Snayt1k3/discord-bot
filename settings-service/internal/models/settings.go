@@ -13,62 +13,6 @@ type Settings struct {
 	Log      LogSettings      `gorm:"foreignKey:GuildID;references:GuildID;constraint:OnDelete:CASCADE"`
 }
 
-type RolesSettings struct {
-	gorm.Model
-	GuildID   string `gorm:"not null;uniqueIndex"`
-	MessageID string `json:"message_id"`
-	Roles     []Role `gorm:"many2many:roles_settings_roles;constraint:OnDelete:CASCADE;"`
-}
-
-type Role struct {
-	ID     uint   `gorm:"primaryKey"`
-	RoleID string `json:"role_id"`
-	Emoji  string `json:"emoji"`
-}
-
-type WelcomeSettings struct {
-	gorm.Model
-	GuildID   string    `gorm:"not null;uniqueIndex"`
-	ChannelId string    `json:"channel_id"`
-	Messages  []Message `gorm:"many2many:welcome_setting_messages;constraint:OnDelete:CASCADE;"`
-}
-
-type Message struct {
-	ID      uint   `gorm:"primaryKey"`
-	Message string `json:"message"`
-}
-
-type AutoModeSettings struct {
-	gorm.Model
-	GuildID     string            `gorm:"not null;index"`
-	CapsLocks   []AntiCapsChannel `gorm:"many2many:auto_mode_capslock;constraint:OnDelete:CASCADE;"`
-	AntiLinks   []AntiLinkChannel `gorm:"many2many:auto_mode_antilink;constraint:OnDelete:CASCADE;"`
-	BannedWords []BannedWord      `gorm:"many2many:auto_mode_bannedwords;constraint:OnDelete:CASCADE;"`
-	Enabled     bool              `json:"enabled"`
-}
-
-type BannedWord struct {
-	ID   uint   `gorm:"primaryKey"`
-	Word string `json:"word"`
-}
-
-type AntiCapsChannel struct {
-	ID        uint   `gorm:"primaryKey"`
-	ChannelID string `json:"channel_id"`
-}
-
-type AntiLinkChannel struct {
-	ID        uint   `gorm:"primaryKey"`
-	ChannelID string `json:"channel_id"`
-}
-
-type LogSettings struct {
-	ID        uint   `gorm:"primaryKey"`
-	GuildID   string `gorm:"not null"`
-	ChannelID string `json:"channel_id"`
-	Enabled   bool
-}
-
 func Migrate(db *gorm.DB) {
 	err := db.AutoMigrate(
 		&Settings{},
