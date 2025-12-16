@@ -78,16 +78,7 @@ func (s *Settings) GetGuildSettings(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-// CreateSettings godoc
-// @Summary      Create http settings
-// @Description  Создаёт настройки гильдии, если их ещё нет
-// @Tags         settings
-// @Produce      json
-// @Param        guild_id path string true "Guild ID"
-// @Success      200 {object} pb.CreateSettingsResponse
-// @Failure      409 {object} dto.APIResponse "Guild settings already exist"
-// @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/http/{guild_id} [post]
+
 func (s *Settings) CreateSettings(c *gin.Context) {
 	guildID := c.Param("guild_id")
 
