@@ -56,8 +56,13 @@ type BannedWord struct {
 
 type LogSettings struct {
 	GuildID   string `json:"guild_id"`
-	ChannelID string `json:"channel_id"`
+	Events    []EventSettings `json:"event"`
 	Enabled   bool   `json:"enabled"`
+}
+
+type EventSettings struct {
+	EventType int32 `json:"event_type"`
+	ChannelID string `json:"channel_id"`
 }
 
 type GuildSettings struct {

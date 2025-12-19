@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"bot/internal/dto"
 	"bot/internal/http"
 	"bot/internal/utils"
 	"fmt"
@@ -224,7 +225,12 @@ func ModerationSettings(http *http.Container, s *discordgo.Session, i *discordgo
 	})
 }
 
-func LoggingSettings(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func LoggingSettings(
+	http *http.Container,
+	s *discordgo.Session,
+	i *discordgo.InteractionCreate,
+) error {
+
 	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
 		utils.SendNoPermissionMessage(s, i)
 		return nil
@@ -233,35 +239,56 @@ func LoggingSettings(http *http.Container, s *discordgo.Session, i *discordgo.In
 	settings, err := http.Settings.Get(i.GuildID)
 
 	if err != nil {
-		slog.Error("Error while fetching welcome settings", "err", err)
+		slog.Error("Error while fetching log settings", "err", err)
 		utils.SendErrorMessage(s, i)
 		return err
 	}
 
-	if !settings.Log.Enabled {
-		utils.Respond(s, i, &discordgo.InteractionResponse{
-			Type: discordgo.InteractionResponseChannelMessageWithSource,
-			Data: &discordgo.InteractionResponseData{
-				Content: "🚨 **Logging is disabled on this server.**",
-			},
-		})
+	logSettings := settings.Log
+
+
+	statusText := "🔴 Disabled"
+	color := 0xED4245
+
+	if logSettings.Enabled {
+		statusText = "🟢 Enabled"
+		color = 0x57F287
 	}
 
-	channelMention := "—"
-	color := 0xED4245 // red
+	channel := "—"
+	eventsValue := "—"
 
-	if settings.Log.ChannelID != "" {
-		channelMention = "<#" + settings.Welcome.ChannelID + ">"
-		color = 0x57F287 // green
+	if len(logSettings.Events) > 0 {
+		lines := make([]string, 0, len(logSettings.Events))
+		groupedEvents := groupEvents(logSettings.Events)
+		
+		for channel, events := range groupedEvents {
+			channel = "<#" + channel + ">"
+			lines = append(lines,
+				"• **"+strings.Join(events, ", ")+"** → "+channel,
+			)
+		}
+
+		eventsValue = strings.Join(lines, "\n")
 	}
 
 	embed := &discordgo.MessageEmbed{
-		Title: "📜 Logging Events configuration",
+		Title: "📜 Logging Events Configuration",
 		Color: color,
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name:  "📍 Channel",
-				Value: channelMention,
+				Name:   "📌 Status",
+				Value:  statusText,
+				Inline: true,
+			},
+			{
+				Name:   "📍 Default Channel",
+				Value:  channel,
+				Inline: true,
+			},
+			{
+				Name:  "🧾 Events",
+				Value: eventsValue,
 			},
 		},
 	}
@@ -272,5 +299,17 @@ func LoggingSettings(http *http.Container, s *discordgo.Session, i *discordgo.In
 			Embeds: []*discordgo.MessageEmbed{embed},
 		},
 	})
+
 	return nil
+}
+
+// groupEvents groups event settings by their channel IDs.
+func groupEvents(events []dto.EventSettings) map[string][]string {
+	grouped := make(map[string][]string)
+
+	for _, event := range events {
+		channelID := event.ChannelID
+		grouped[channelID] = append(grouped[channelID], dto.EventType(event.EventType).String())
+	}
+	return grouped
 }

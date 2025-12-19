@@ -39,10 +39,11 @@ func (s *Log) Toggle(guildID string, enable bool) error {
 	return nil
 }
 
-func (s *Log) AddChannel(guildID, channelID string) error {
-	bytes, _ := json.Marshal(map[string]string{
+func (s *Log) AddLog(guildID, channelID string, events []int32) error {
+	bytes, _ := json.Marshal(map[string]any{
 		"guild_id":   guildID,
 		"channel_id": channelID,
+		"event_type": events,
 	})
 
 	_, err := s.http.Post(
@@ -59,10 +60,11 @@ func (s *Log) AddChannel(guildID, channelID string) error {
 	return nil
 }
 
-func (s *Log) RemoveChannel(guildID, channelID string) error {
-	bytes, _ := json.Marshal(map[string]string{
+func (s *Log) RemoveLog(guildID, channelID string, events []int32) error {
+	bytes, _ := json.Marshal(map[string]any{
 		"guild_id":   guildID,
 		"channel_id": channelID,
+		"event_type": events,
 	})
 
 	_, err := s.http.Delete(

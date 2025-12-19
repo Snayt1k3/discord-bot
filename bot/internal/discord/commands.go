@@ -212,14 +212,70 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		},
 	},
 	{
-		Name:        "log-channel",
-		Description: "Set the logging channel",
+		Name:        "log-edit",
+		Description: "Edit the logging sttings",
 		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionString,
+				Name:        "action",
+				Description: "Action to perform",
+				Required:    true,
+				Choices: []*discordgo.ApplicationCommandOptionChoice{
+					{
+						Name:  "Remove",
+						Value: "remove",
+					},
+					{
+						Name:  "Add",
+						Value: "add",
+					},
+				},
+			},
 			{
 				Type:        discordgo.ApplicationCommandOptionChannel,
 				Name:        "channel",
 				Description: "The channel to send logs",
-				Required:    false,
+				Required:    true,
+			},
+			{
+				Type:        discordgo.ApplicationCommandOptionString,
+				Name:        "Event Type",
+				Description: "The type of log",
+				Required:    true,
+				Choices: []*discordgo.ApplicationCommandOptionChoice{
+					{
+						Name: "Message Delete",
+						Value: 1,
+					},
+					{
+						Name: "Message Edit",
+						Value: 2,
+					},
+					{
+						Name: "User Join",
+						Value: 3,
+					},
+					{
+						Name: "User Leave",
+						Value: 4,
+					},
+					{
+						Name: "Create Invite",
+						Value: 5,
+					},
+					{
+						Name: "Join Channel",
+						Value: 6,
+					},
+					{
+						Name: "Leave Channel",
+						Value: 7,
+					},
+					{
+						Name: "Move Channel",
+						Value: 8,
+					},
+				},
 			},
 		},
 	},

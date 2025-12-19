@@ -46,8 +46,10 @@ func AddLoggingChnl(http *http.Container, s *discordgo.Session, i *discordgo.Int
 		return nil
 	}
 
-	channelID := i.ApplicationCommandData().Options[0].ChannelValue(s).ID
-	err := http.Log.AddChannel(i.GuildID, channelID)
+	channelID := i.ApplicationCommandData().Options[1].ChannelValue(s).ID
+	event_type := i.ApplicationCommandData().Options[2].IntValue()
+
+	err := http.Log.AddLog(i.GuildID, channelID, []int32{int32(event_type)})
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
@@ -57,7 +59,7 @@ func AddLoggingChnl(http *http.Container, s *discordgo.Session, i *discordgo.Int
 	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
-			Content: "Logging channel has been set successfully!",
+			Content: "Logging option has been set successfully!",
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
@@ -71,14 +73,10 @@ func RemoveLoggingChnl(http *http.Container, s *discordgo.Session, i *discordgo.
 		return nil
 	}
 
-	settings, err := http.Settings.Get(i.GuildID)
-
-	if err != nil {
-		utils.SendErrorMessage(s, i)
-		return err
-	}
-
-	err = http.Log.RemoveChannel(i.GuildID, settings.Log.ChannelID)
+	channelID := i.ApplicationCommandData().Options[1].ChannelValue(s).ID
+	event_type := i.ApplicationCommandData().Options[2].IntValue()
+	
+	err := http.Log.RemoveLog(i.GuildID, channelID, []int32{int32(event_type)})
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
@@ -88,7 +86,7 @@ func RemoveLoggingChnl(http *http.Container, s *discordgo.Session, i *discordgo.
 	utils.Respond(s, i, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
-			Content: "Logging channel has been removed successfully!",
+			Content: "Logging option has been removed successfully!",
 			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})

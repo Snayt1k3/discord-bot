@@ -6,7 +6,7 @@ option go_package = "proto/";
 
 service LogService {
   rpc AddLogs(UpdateLogChannelRequest) returns (UpdateLogChannelResponse);
-  rpc RemoveLogs(UpdateLogChannelRequest) returns (UpdateLogChannelResponse);
+  rpc RemoveLogs(UpdateLogChannelRequest) returns (RemoveLogChannelResponse);
   rpc ToggleLog(ToggleLogRequest) returns (ToggleLogResponse);
 }
 
@@ -17,9 +17,12 @@ message UpdateLogChannelRequest {
 }
 
 message UpdateLogChannelResponse {
-  repeated EventType event_type = 1;
-  string channel_id = 2;
-  string guild_id = 3;
+  repeated EventSettings event_settings = 1;
+  string guild_id = 2;
+}
+
+message RemoveLogChannelResponse {
+  string guild_id = 2;
 }
 
 message ToggleLogRequest {
@@ -30,6 +33,11 @@ message ToggleLogRequest {
 message ToggleLogResponse {
   string guild_id = 1;
   bool enabled = 2;
+}
+
+message EventSettings {
+  EventType event = 1;
+  string channel_id = 2;
 }
 
 enum EventType {

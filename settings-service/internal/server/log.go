@@ -33,21 +33,26 @@ func (s *LogServer) AddLogChannel(ctx context.Context, req *pb.UpdateLogChannelR
 	for i, et := range req.EventType {
 		eventTypes[i] = models.EventType(et)
 	}
-	_, err := s.Repo.AddLogs(req.GuildId, req.ChannelId, eventTypes)
+	res, err := s.Repo.AddLogs(req.GuildId, req.ChannelId, eventTypes)
 
 	if err != nil {
 		return nil, err
 	}
 
+	var eventSettings []*pb.EventSettings
+	for _, ev := range res.Events {
+		eventSettings = append(eventSettings, &pb.EventSettings{ChannelId: ev.ChannelID, Event: pb.EventType(ev.EventType)})
+	}
+
 	response := &pb.UpdateLogChannelResponse{
 		GuildId:   req.GuildId,
-		ChannelId: req.ChannelId,
+		EventSettings: eventSettings,
 	}
 
 	return response, nil
 }
 
-func (s *LogServer) RemoveLogChannel(ctx context.Context, req *pb.UpdateLogChannelRequest) (*pb.UpdateLogChannelResponse, error) {
+func (s *LogServer) RemoveLogChannel(ctx context.Context, req *pb.UpdateLogChannelRequest) (*pb.RemoveLogChannelResponse, error) {
 	eventTypes := make([]models.EventType, len(req.EventType))
 	for i, et := range req.EventType {
 		eventTypes[i] = models.EventType(et)
@@ -59,9 +64,8 @@ func (s *LogServer) RemoveLogChannel(ctx context.Context, req *pb.UpdateLogChann
 		return nil, err
 	}
 
-	response := &pb.UpdateLogChannelResponse{
+	response := &pb.RemoveLogChannelResponse{
 		GuildId:   req.GuildId,
-		ChannelId: req.ChannelId,
 	}
 
 	return response, nil
