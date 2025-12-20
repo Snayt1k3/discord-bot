@@ -29,7 +29,7 @@ func NewLogHandlers(cc grpc.ClientConnInterface) *Log {
 // @Success      200 {object} pb.ToggleLogResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/logging/toggle [post]
+// @Router       /api/v1/settings/guild/logging/toggle [post]
 func (s *Log) ToggleLog(c *gin.Context) {
 	var req pb.ToggleLogRequest
 
@@ -52,15 +52,15 @@ func (s *Log) ToggleLog(c *gin.Context) {
 
 // AddLogChannel godoc
 // @Summary      Add log channel
-// @Description  Добавляет новый канал для логирования действий в указанной гильдии
+// @Description  Добавляет настройку для логирования действий в указанной гильдии
 // @Tags         logging
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.UpdateLogChannelRequest true "Add log channel request"
+// @Param        request body pb.UpdateLogChannelRequest true "Add logs setting"
 // @Success      200 {object} pb.UpdateLogChannelResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild//logging/channel [post]
+// @Router       /api/v1/settings/guild/logging/channel [post]
 func (s *Log) AddLogChannel(c *gin.Context) {
 	var req pb.UpdateLogChannelRequest
 
@@ -83,11 +83,11 @@ func (s *Log) AddLogChannel(c *gin.Context) {
 
 // RemoveLogChannel godoc
 // @Summary      Remove log channel
-// @Description  Удаляет канал для логирования действий из указанной гильдии
+// @Description  Удаляет настройку для логирования действий в указанной гильдии
 // @Tags         logging
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.UpdateLogChannelRequest true "Remove log channel request"
+// @Param        request body pb.UpdateLogChannelRequest true "Remove logs settings"
 // @Success      200 {object} pb.UpdateLogChannelResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"

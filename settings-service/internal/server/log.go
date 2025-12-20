@@ -28,7 +28,7 @@ func (s *LogServer) ToggleLog(ctx context.Context, req *pb.ToggleLogRequest) (*p
 	return response, nil
 }
 
-func (s *LogServer) AddLogChannel(ctx context.Context, req *pb.UpdateLogChannelRequest) (*pb.UpdateLogChannelResponse, error) {
+func (s *LogServer) AddLogs(ctx context.Context, req *pb.UpdateLogChannelRequest) (*pb.UpdateLogChannelResponse, error) {
 	eventTypes := make([]models.EventType, len(req.EventType))
 	for i, et := range req.EventType {
 		eventTypes[i] = models.EventType(et)
@@ -52,7 +52,7 @@ func (s *LogServer) AddLogChannel(ctx context.Context, req *pb.UpdateLogChannelR
 	return response, nil
 }
 
-func (s *LogServer) RemoveLogChannel(ctx context.Context, req *pb.UpdateLogChannelRequest) (*pb.RemoveLogChannelResponse, error) {
+func (s *LogServer) RemoveLogs(ctx context.Context, req *pb.UpdateLogChannelRequest) (*pb.RemoveLogChannelResponse, error) {
 	eventTypes := make([]models.EventType, len(req.EventType))
 	for i, et := range req.EventType {
 		eventTypes[i] = models.EventType(et)

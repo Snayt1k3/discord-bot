@@ -18,7 +18,7 @@ func MapGuildSettings(guildSettings *models.Settings) (*pb.GetSettingsResponse, 
 
 	for _, e := range guildSettings.Log.Events {
 		events = append(events, &pb.EventsType{
-			EventType: string(e.EventType),
+			EventType: pb.EventType(e.EventType),
 			ChannelId: e.ChannelID,
 		})
 	}

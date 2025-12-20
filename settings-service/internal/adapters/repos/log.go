@@ -66,14 +66,18 @@ func (r *LogRepositoryImpl) RemoveLogs(guildId, channelId string, events []model
 		return nil
 	}
 
-	if err := r.db.
-		Where(
-			"log_settings_id = ? AND channel_id = ? AND event_type IN ?",
-			log.ID,
-			channelId,
-			events,
-		).
-		Delete(&models.LogEvent{}).Error; err != nil {
+	if err := r.db.Where(`id IN (
+			SELECT log_event_id
+			FROM log_settings_events
+			WHERE log_settings_id = ?
+		)
+		AND channel_id = ?
+		AND event_type IN ?`,
+		log.ID,
+		channelId,
+		events,
+	).
+	Delete(&models.LogEvent{}).Error; err != nil {
 		return err
 	}
 
