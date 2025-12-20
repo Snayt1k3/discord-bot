@@ -246,7 +246,6 @@ func LoggingSettings(
 
 	logSettings := settings.Log
 
-
 	statusText := "🔴 Disabled"
 	color := 0xED4245
 
@@ -261,7 +260,7 @@ func LoggingSettings(
 	if len(logSettings.Events) > 0 {
 		lines := make([]string, 0, len(logSettings.Events))
 		groupedEvents := groupEvents(logSettings.Events)
-		
+
 		for channel, events := range groupedEvents {
 			channel = "<#" + channel + ">"
 			lines = append(lines,

@@ -75,7 +75,7 @@ func RemoveLoggingChnl(http *http.Container, s *discordgo.Session, i *discordgo.
 
 	channelID := i.ApplicationCommandData().Options[1].ChannelValue(s).ID
 	event_type := i.ApplicationCommandData().Options[2].IntValue()
-	
+
 	err := http.Log.RemoveLog(i.GuildID, channelID, []int32{int32(event_type)})
 
 	if err != nil {

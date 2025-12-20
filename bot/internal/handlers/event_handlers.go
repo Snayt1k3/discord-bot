@@ -146,7 +146,7 @@ func (eh *EventHandlers) MessageDelete(s *discordgo.Session, m *discordgo.Messag
 	}
 
 	_ = eh.sendLogMessage(
-		s, 
+		s,
 		dto.EventType(1),
 		m.GuildID,
 		"Message Deleted",
@@ -222,7 +222,7 @@ func (eh *EventHandlers) sendLogMessage(
 				slog.Error("Error while sending log message", "error", err)
 			}
 		}
-		
+
 	}
 	return nil
 }

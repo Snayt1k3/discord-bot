@@ -45,7 +45,7 @@ func (s *LogServer) AddLogChannel(ctx context.Context, req *pb.UpdateLogChannelR
 	}
 
 	response := &pb.UpdateLogChannelResponse{
-		GuildId:   req.GuildId,
+		GuildId:       req.GuildId,
 		EventSettings: eventSettings,
 	}
 
@@ -65,7 +65,7 @@ func (s *LogServer) RemoveLogChannel(ctx context.Context, req *pb.UpdateLogChann
 	}
 
 	response := &pb.RemoveLogChannelResponse{
-		GuildId:   req.GuildId,
+		GuildId: req.GuildId,
 	}
 
 	return response, nil
