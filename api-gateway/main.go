@@ -8,10 +8,8 @@ import (
 	"api-gateway/config"
 	"api-gateway/internal/adapters"
 	"api-gateway/internal/handlers"
-	"api-gateway/internal/metrics"
 	"api-gateway/internal/routes"
 
-	"github.com/prometheus/client_golang/prometheus"
 	"google.golang.org/grpc/credentials/insecure"
 
 	"google.golang.org/grpc"
@@ -19,7 +17,6 @@ import (
 
 func main() {
 	initLogging()
-	InitProm()
 	cfg, err := config.LoadConfig()
 
 	if err != nil {
@@ -78,7 +75,3 @@ func initLogging() {
 	slog.Info("Logger initialized")
 }
 
-func InitProm() {
-	prometheus.MustRegister(metrics.HttpRequestsTotal)
-	prometheus.MustRegister(metrics.HttpRequestDuration)
-}

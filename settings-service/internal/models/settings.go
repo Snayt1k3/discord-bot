@@ -25,6 +25,7 @@ func Migrate(db *gorm.DB) {
 		&AntiCapsChannel{},
 		&AntiLinkChannel{},
 		&LogSettings{},
+		&LogEvent{},
 	)
 	if err != nil {
 		panic("Migration Error: " + err.Error())
