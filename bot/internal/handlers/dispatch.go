@@ -42,7 +42,7 @@ func (cd *CommandsDispatcher) InitHandlers(container *Container) {
 	cd.handlers["rr-message"] = container.SetRoleMsg
 
 	// Logging
-	cd.handlers["log-channel"] = container.LogChannel
+	cd.handlers["log-edit"] = container.LogEdit
 
 	// Moderation
 	cd.handlers["automod-bannedword"] = container.BannedWord

@@ -75,21 +75,15 @@ func (cd *Container) Menu(s *discordgo.Session, i *discordgo.InteractionCreate) 
 	}
 }
 
-func (cd *Container) RemoveLogChnl(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := preferences.RemoveLoggingChnl(cd.Http, s, i)
-	if err != nil {
-		slog.Error(err.Error())
-	}
-}
-
-func (cd *Container) LogChannel(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	channel := i.ApplicationCommandData().Options[0]
+func (cd *Container) LogEdit(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	action := i.ApplicationCommandData().Options[0].StringValue()
 	var err error
 
-	if channel != nil {
-		err = preferences.AddLoggingChnl(cd.Http, s, i)
-	} else {
-		err = preferences.RemoveLoggingChnl(cd.Http, s, i)
+	switch action {
+		case "Add":
+			err = preferences.AddLoggingChnl(cd.Http, s, i)
+		case "Remove":
+			err = preferences.RemoveLoggingChnl(cd.Http, s, i)
 	}
 
 	if err != nil {

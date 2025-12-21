@@ -9,14 +9,12 @@ import (
 	"math/rand"
 	"strings"
 	"time"
-	"unicode"
 
 	"github.com/bwmarrin/discordgo"
 
 	"bot/internal/utils"
 )
 
-// EventHandlers Хендлеры событий Discord отличных от Interaction событий
 type EventHandlers struct {
 	http     *http.Container
 	commands []*discordgo.ApplicationCommand
@@ -108,15 +106,13 @@ func (eh *EventHandlers) OnGuildCreate(s *discordgo.Session, r *discordgo.GuildC
 }
 
 func (eh *EventHandlers) MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	if m.Author.Bot {
-		return
-	}
+	if m.Author.Bot { return }
 
-	res := eh.automodeCheck(s, m)
+	res := eh.messageCheck(s, m)
 
-	// Adding XP to user
 	if !res {
 		res, err := eh.http.Interaction.AddXP(m.GuildID, m.Author.ID, 10)
+		
 		if err != nil {
 			slog.Error("Error while adding XP", "error", err)
 			return
@@ -145,15 +141,96 @@ func (eh *EventHandlers) MessageDelete(s *discordgo.Session, m *discordgo.Messag
 		})
 	}
 
-	_ = eh.sendLogMessage(
-		s,
-		dto.EventType(1),
-		m.GuildID,
-		"Message Deleted",
-		"A message was deleted.",
-		0xFF0000,
-		fields,
+	utils.SendLoggingMessage(eh.http, s, dto.MESSAGE_DELETE, m.GuildID,
+		&discordgo.MessageEmbed{
+			Title: "Message Deleted",
+			Description: "A message was deleted.",
+			Color: 0xFF0000,
+			Fields: fields,
+		},
 	)
+}
+
+func (eh *EventHandlers) MessageUpdate(s *discordgo.Session, m *discordgo.MessageUpdate) {
+	if m.BeforeUpdate == nil || m.BeforeUpdate.Content == m.Content {
+		return
+	}
+
+	fields := []*discordgo.MessageEmbedField{
+		{Name: "Channel", Value: fmt.Sprintf("<#%s>", m.ChannelID), Inline: true},
+		{Name: "Message ID", Value: m.ID, Inline: true},
+		{Name: "Before", Value: m.BeforeUpdate.Content, Inline: false},
+		{Name: "After", Value: m.Content, Inline: false},
+	}
+
+	utils.SendLoggingMessage(eh.http, s, dto.MESSAGE_EDIT, m.GuildID,
+		&discordgo.MessageEmbed{
+			Title:       "Message Updated",
+			Description: "A message was updated.",
+			Color:       0x00FF00,
+			Fields:      fields,
+		},
+	)
+}
+
+func (eh *EventHandlers) VoiceStatusChange(s *discordgo.Session, v *discordgo.VoiceStateUpdate) {
+	beforeChannel := ""
+	if v.BeforeUpdate != nil {
+		beforeChannel = v.BeforeUpdate.ChannelID
+	}
+
+	afterChannel := v.ChannelID
+
+	if beforeChannel == "" && afterChannel != "" {
+		fields := []*discordgo.MessageEmbedField{
+			{Name: "User", Value: fmt.Sprintf("<@%s>", v.UserID), Inline: true},
+			{Name: "Channel", Value: fmt.Sprintf("<#%s>", afterChannel), Inline: true},
+		}
+
+		utils.SendLoggingMessage(eh.http, s, dto.JOIN_CHANNEL, v.GuildID,
+			&discordgo.MessageEmbed{
+				Title:       "Voice Join",
+				Description: "User joined a voice channel.",
+				Color:       0x00FF00,
+				Fields:      fields,
+			},
+		)
+		return
+	}
+
+	if beforeChannel != "" && afterChannel == "" {
+		fields := []*discordgo.MessageEmbedField{
+			{Name: "User", Value: fmt.Sprintf("<@%s>", v.UserID), Inline: true},
+			{Name: "Channel", Value: fmt.Sprintf("<#%s>", beforeChannel), Inline: true},
+		}
+
+		utils.SendLoggingMessage(eh.http, s, dto.LEAVE_CHANNEL, v.GuildID,
+			&discordgo.MessageEmbed{
+				Title:       "Voice Leave",
+				Description: "User left a voice channel.",
+				Color:       0xFF0000,
+				Fields:      fields,
+			},
+		)
+		return
+	}
+
+	if beforeChannel != "" && afterChannel != "" && beforeChannel != afterChannel {
+		fields := []*discordgo.MessageEmbedField{
+			{Name: "User", Value: fmt.Sprintf("<@%s>", v.UserID), Inline: true},
+			{Name: "From", Value: fmt.Sprintf("<#%s>", beforeChannel), Inline: true},
+			{Name: "To", Value: fmt.Sprintf("<#%s>", afterChannel), Inline: true},
+		}
+
+		utils.SendLoggingMessage(eh.http, s, dto.MOVE_CHANNEL, v.GuildID,
+			&discordgo.MessageEmbed{
+				Title:       "Voice Move",
+				Description: "User moved between voice channels.",
+				Color:       0xFFFF00,
+				Fields:      fields,
+			},
+		)
+	}
 }
 
 func (eh *EventHandlers) OnInviteCreate(s *discordgo.Session, m *discordgo.InviteCreate) {
@@ -161,131 +238,42 @@ func (eh *EventHandlers) OnInviteCreate(s *discordgo.Session, m *discordgo.Invit
 		{Name: "Invite Link", Value: fmt.Sprintf("https://discord.gg/%s", m.Code)},
 		{Name: "Created By", Value: fmt.Sprintf("<@%s>", m.Inviter.ID)},
 	}
-	_ = eh.sendLogMessage(s, dto.EventType(5), m.GuildID,
-		"Invite Created",
-		fmt.Sprintf("An invite was created for channel <#%s>.", m.ChannelID),
-		0x00FF00, // green
-		fields,
+
+	utils.SendLoggingMessage(eh.http, s, dto.CREATE_INVITE, m.GuildID,
+		&discordgo.MessageEmbed{
+			Title:       "Invite Created",
+			Description: "An invite was created.",
+			Color:       0x00FF00,
+			Fields:      fields,
+		},
 	)
 }
+
 
 func (eh *EventHandlers) GuildMemberRemove(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 	fields := []*discordgo.MessageEmbedField{
 		{Name: "User", Value: fmt.Sprintf("<@%s>", m.User.ID)},
 	}
-	_ = eh.sendLogMessage(s, dto.EventType(4), m.GuildID,
-		"Member Left",
-		fmt.Sprintf("User %s left or was kicked from the server.", m.User.Username),
-		0x808080, // gray
-		fields,
+
+	utils.SendLoggingMessage(eh.http, s, dto.USER_LEAVE, m.GuildID, 
+		&discordgo.MessageEmbed{
+			Title:       "Member Left",
+			Description: fmt.Sprintf("User %s left or was kicked from the server.", m.User.Username),
+			Color:       0x808080,
+			Fields:      fields,
+		},
 	)
 }
 
-// Вспомогательная функция для отправки логов
-func (eh *EventHandlers) sendLogMessage(
-	s *discordgo.Session,
-	event dto.EventType,
-	guildId string,
-	title string,
-	description string,
-	color int,
-	fields []*discordgo.MessageEmbedField,
-) error {
 
-	settings, err := eh.http.Settings.Get(guildId)
 
-	if err != nil {
-		slog.Error("Error while getting settings", "error", err)
-		return err
-	}
-
-	if !settings.Log.Enabled {
-		return nil
-	}
-
-	embed := &discordgo.MessageEmbed{
-		Title:       title,
-		Description: description,
-		Color:       color,
-		Timestamp:   time.Now().Format(time.RFC3339),
-		Footer: &discordgo.MessageEmbedFooter{
-			Text: "Logs Bots",
-		},
-		Fields: fields,
-	}
-
-	for _, ev := range settings.Log.Events {
-		if int(event) == int(ev.EventType) {
-			_, err = s.ChannelMessageSendEmbed(ev.ChannelID, embed)
-
-			if err != nil {
-				slog.Error("Error while sending log message", "error", err)
-			}
-		}
-
-	}
-	return nil
-}
-
-// Вспомогательная функция для проверки всех условий автомодерации.
-func (eh *EventHandlers) automodeCheck(s *discordgo.Session, m *discordgo.MessageCreate) bool {
+func (eh *EventHandlers) messageCheck(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 	settings, err := eh.http.Settings.Get(m.GuildID)
 
 	if err != nil {
 		slog.Error("Error while fetching http settings", "err", err)
 		return false
-	}
-
-	autoMode := settings.AutoMode
-	if !autoMode.Enabled {
-		return false
-	}
-
-	content := m.Content
-
-	// 🚫 Проверка запрещённых слов
-	for _, bw := range autoMode.BannedWords {
-		if strings.Contains(strings.ToLower(content), strings.ToLower(bw.Word)) {
-			s.ChannelMessageDelete(m.ChannelID, m.ID)
-			utils.SendTempMessage(s, m.ChannelID,
-				fmt.Sprintf("❌ %s, your message contains a banned word!", m.Author.Mention()))
-			return true
-		}
-	}
-
-	// 🔗 Проверка ссылок
-	for _, al := range autoMode.AntiLink {
-		if strings.Contains(content, "http://") || strings.Contains(content, "https://") || strings.Contains(content, "discord.gg/") {
-			if al.ChannelId == m.ChannelID {
-				s.ChannelMessageDelete(m.ChannelID, m.ID)
-				utils.SendTempMessage(s, m.ChannelID,
-					fmt.Sprintf("❌ %s, links are not allowed in this channel!", m.Author.Mention()))
-				return true
-			}
-		}
-	}
-
-	// 🔠 Проверка капслока
-	for _, cl := range autoMode.CapsLock {
-		if cl.ChannelId == m.ChannelID {
-			upperCount := 0
-			letters := 0
-			for _, r := range content {
-				if unicode.IsLetter(r) {
-					letters++
-					if unicode.IsUpper(r) {
-						upperCount++
-					}
-				}
-			}
-			if letters > 0 && float64(upperCount)/float64(letters) > 0.7 {
-				s.ChannelMessageDelete(m.ChannelID, m.ID)
-				utils.SendTempMessage(s, m.ChannelID,
-					fmt.Sprintf("❌ %s, please do not write in caps!", m.Author.Mention()))
-				return true
-			}
-		}
-	}
-
-	return false
+	}	
+	
+	return utils.AutomodeChecks(settings.AutoMode, s, m)
 }

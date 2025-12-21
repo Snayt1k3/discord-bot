@@ -50,11 +50,10 @@ func addEventHandlers(cd *handlers.CommandsDispatcher, eh *handlers.EventHandler
 	discord.Bot.Session.AddHandler(eh.OnMessageReactionRemove)
 	discord.Bot.Session.AddHandler(eh.OnGuildCreate)
 	discord.Bot.Session.AddHandler(eh.MessageCreate)
-	// discord.Bot.Session.AddHandler(eh.GuildBanAdd)
-	// discord.Bot.Session.AddHandler(eh.GuildBanRemove)
 	discord.Bot.Session.AddHandler(eh.GuildMemberRemove)
 	discord.Bot.Session.AddHandler(eh.MessageDelete)
-	// discord.Bot.Session.AddHandler(eh.MessageDeleteBulk)
+	discord.Bot.Session.AddHandler(eh.MessageUpdate)
+	discord.Bot.Session.AddHandler(eh.VoiceStatusChange)
 	discord.Bot.Session.AddHandler(eh.OnInviteCreate)
 
 }

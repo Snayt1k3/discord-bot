@@ -245,35 +245,35 @@ var CommandsList = []*discordgo.ApplicationCommand{
 				Choices: []*discordgo.ApplicationCommandOptionChoice{
 					{
 						Name:  "Message Delete",
-						Value: 1,
+						Value: "1",
 					},
 					{
 						Name:  "Message Edit",
-						Value: 2,
+						Value: "2",
 					},
 					{
 						Name:  "User Join",
-						Value: 3,
+						Value: "3",
 					},
 					{
 						Name:  "User Leave",
-						Value: 4,
+						Value: "4",
 					},
 					{
 						Name:  "Create Invite",
-						Value: 5,
+						Value: "5",
 					},
 					{
 						Name:  "Join Channel",
-						Value: 6,
+						Value: "6",
 					},
 					{
 						Name:  "Leave Channel",
-						Value: 7,
+						Value: "7",
 					},
 					{
 						Name:  "Move Channel",
-						Value: 8,
+						Value: "8",
 					},
 				},
 			},
