@@ -47,7 +47,7 @@ enum EventType {
   USER_JOIN      = 3;
   USER_LEAVE     = 4;
   CREATE_INVITE  = 5;
-  JOIN_CHANNEL   = 6;
-  LEAVE_CHANNEL  = 7;
-  MOVE_CHANNEL   = 8;
+  JOIN_CHANNEL   = 6; // todo Убрать
+  LEAVE_CHANNEL  = 7; // todo Убрать
+  MOVE_CHANNEL   = 8; // todo Убрать
 }
