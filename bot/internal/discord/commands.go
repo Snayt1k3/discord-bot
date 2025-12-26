@@ -239,7 +239,7 @@ var CommandsList = []*discordgo.ApplicationCommand{
 			},
 			{
 				Type:        discordgo.ApplicationCommandOptionString,
-				Name:        "Event Type",
+				Name:        "event",
 				Description: "The type of log",
 				Required:    true,
 				Choices: []*discordgo.ApplicationCommandOptionChoice{

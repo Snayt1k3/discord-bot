@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"log/slog"
 	"net"
@@ -10,7 +11,6 @@ import (
 	"settings-service/internal/models"
 	"settings-service/internal/server"
 	pb "settings-service/proto"
-
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -54,16 +54,15 @@ func main() {
 		Repo: repositories.Welcome, GuildRepo: repositories.Settings,
 	})
 
-	lis, err := net.Listen("tcp", cfg.GrpcPort)
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", cfg.GrpcPort))
+	
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	go func() {
-		slog.Info("Starting gRPC server on port " + cfg.GrpcPort)
-		if err := grpcServer.Serve(lis); err != nil {
-			log.Fatalf("failed to serve: %v", err)
-		}
-	}()
+
+	if err := grpcServer.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 
 	
 

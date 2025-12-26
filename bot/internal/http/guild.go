@@ -24,7 +24,7 @@ func (s *Settings) Get(guildId string) (dtoGuild.GuildSettings, error) {
 	resp, err := s.http.Get(
 		context.Background(),
 		fmt.Sprintf("%v/api/v1/settings/guild", config.GetApiGatewayAddr()),
-		nil,
+		map[string]string{"guild_id": guildId},
 		nil,
 	)
 

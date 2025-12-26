@@ -3,6 +3,7 @@ package utils
 import (
 	"bot/internal/dto"
 	"bot/internal/http"
+
 	"log/slog"
 
 	"github.com/bwmarrin/discordgo"

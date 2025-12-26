@@ -3,6 +3,7 @@ package preferences
 import (
 	"bot/internal/http"
 	"fmt"
+	"strconv"
 
 	"github.com/bwmarrin/discordgo"
 
@@ -47,9 +48,11 @@ func AddLoggingChnl(http *http.Container, s *discordgo.Session, i *discordgo.Int
 	}
 
 	channelID := i.ApplicationCommandData().Options[1].ChannelValue(s).ID
-	event_type := i.ApplicationCommandData().Options[2].IntValue()
+	event_type := i.ApplicationCommandData().Options[2].StringValue()
 
-	err := http.Log.AddLog(i.GuildID, channelID, []int32{int32(event_type)})
+	event, _ := strconv.Atoi(event_type)
+
+	err := http.Log.AddLog(i.GuildID, channelID, []int32{int32(event)})
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)
@@ -74,9 +77,10 @@ func RemoveLoggingChnl(http *http.Container, s *discordgo.Session, i *discordgo.
 	}
 
 	channelID := i.ApplicationCommandData().Options[1].ChannelValue(s).ID
-	event_type := i.ApplicationCommandData().Options[2].IntValue()
+	event_type := i.ApplicationCommandData().Options[2].StringValue()
+	event, _ := strconv.Atoi(event_type)
 
-	err := http.Log.RemoveLog(i.GuildID, channelID, []int32{int32(event_type)})
+	err := http.Log.RemoveLog(i.GuildID, channelID, []int32{int32(event)})
 
 	if err != nil {
 		utils.SendErrorMessage(s, i)

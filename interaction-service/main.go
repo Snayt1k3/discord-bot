@@ -39,10 +39,14 @@ func main() {
 	pb.RegisterInteractionServiceServer(grpcServer, server.NewUserServer(db))
 
 	// run grpc
-	_, err = net.Listen("tcp", fmt.Sprintf(":%v", cfg.GrpcPort))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", cfg.GrpcPort))
 	
 	if err != nil {
 		log.Fatalf("Error listening on grpc port: %v", err)
+	}
+
+	if err := grpcServer.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
 	}
 
 }

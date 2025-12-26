@@ -80,9 +80,9 @@ func (cd *Container) LogEdit(s *discordgo.Session, i *discordgo.InteractionCreat
 	var err error
 
 	switch action {
-		case "Add":
+		case "add":
 			err = preferences.AddLoggingChnl(cd.Http, s, i)
-		case "Remove":
+		case "remove":
 			err = preferences.RemoveLoggingChnl(cd.Http, s, i)
 	}
 

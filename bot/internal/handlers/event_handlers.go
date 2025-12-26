@@ -141,6 +141,19 @@ func (eh *EventHandlers) MessageDelete(s *discordgo.Session, m *discordgo.Messag
 		})
 	}
 
+	if m.BeforeDelete != nil && m.BeforeDelete.Content != "" {
+		content := m.BeforeDelete.Content
+		if len(content) > 1000 {
+			content = content[:1000] + "…"
+		}
+
+		fields = append(fields, &discordgo.MessageEmbedField{
+			Name:   "Content",
+			Value:  content,
+			Inline: false,
+		})
+	}
+
 	utils.SendLoggingMessage(eh.http, s, dto.MESSAGE_DELETE, m.GuildID,
 		&discordgo.MessageEmbed{
 			Title: "Message Deleted",
@@ -187,7 +200,7 @@ func (eh *EventHandlers) VoiceStatusChange(s *discordgo.Session, v *discordgo.Vo
 			{Name: "Channel", Value: fmt.Sprintf("<#%s>", afterChannel), Inline: true},
 		}
 
-		utils.SendLoggingMessage(eh.http, s, dto.JOIN_CHANNEL, v.GuildID,
+		utils.SendLoggingMessage(eh.http, s, dto.USER_JOIN, v.GuildID,
 			&discordgo.MessageEmbed{
 				Title:       "Voice Join",
 				Description: "User joined a voice channel.",
