@@ -2,9 +2,6 @@ package preferences
 
 import (
 	"bot/internal/http"
-	"fmt"
-	"strings"
-	"time"
 
 	"github.com/bwmarrin/discordgo"
 
@@ -193,92 +190,4 @@ func RemoveCapsLockChnl(http *http.Container, s *discordgo.Session, i *discordgo
 	})
 
 	return nil
-}
-
-func AutoModeSettings(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
-	if !utils.IsAdmin(s, i.GuildID, i.Member.User.ID) {
-		utils.SendNoPermissionMessage(s, i)
-		return nil
-	}
-	guildSettings, err := http.Settings.Get(i.GuildID)
-
-	if err != nil {
-		utils.SendErrorMessage(s, i)
-		return err
-	}
-
-	autoMode := guildSettings.AutoMode
-
-	if !autoMode.Enabled {
-		// Если AutoMode полностью выключен
-		return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-			Type: discordgo.InteractionResponseChannelMessageWithSource,
-			Data: &discordgo.InteractionResponseData{
-				Content: "🚨 **AutoMode is disabled on this server.**",
-			},
-		})
-	}
-
-	joinOrDash := func(items []string) string {
-		if len(items) == 0 {
-			return "—"
-		}
-		return strings.Join(items, ", ")
-	}
-
-	mentionChannels := func(list []string) []string {
-		res := make([]string, 0, len(list))
-		for _, id := range list {
-			res = append(res, "<#"+id+">")
-		}
-		return res
-	}
-
-	// Собираем ID каналов
-	antiLinkChannels := make([]string, 0, len(autoMode.AntiLink))
-	for _, v := range autoMode.AntiLink {
-		antiLinkChannels = append(antiLinkChannels, v.ChannelId)
-	}
-
-	capsLockChannels := make([]string, 0, len(autoMode.CapsLock))
-	for _, v := range autoMode.CapsLock {
-		capsLockChannels = append(capsLockChannels, v.ChannelId)
-	}
-
-	bannedWords := make([]string, 0, len(autoMode.BannedWords))
-	for _, v := range autoMode.BannedWords {
-		bannedWords = append(bannedWords, v.Word)
-	}
-
-	// Формируем Embed
-	embed := &discordgo.MessageEmbed{
-		Title:       "⚙️ AutoMode Settings",
-		Color:       0x57F287, // Discord green
-		Description: "Here are the current automatic moderation settings:",
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:   "🚫 Banned Words",
-				Value:  fmt.Sprintf("%s\n**Quota:** %d / 50", joinOrDash(bannedWords), len(bannedWords)),
-				Inline: false,
-			},
-			{
-				Name:   "🔗 Anti-Link (Channels)",
-				Value:  fmt.Sprintf("%s\n**Quota:** %d / 5", joinOrDash(mentionChannels(antiLinkChannels)), len(antiLinkChannels)),
-				Inline: false,
-			},
-			{
-				Name:   "🔠 CapsLock (Channels)",
-				Value:  fmt.Sprintf("%s\n**Quota:** %d / 5", joinOrDash(mentionChannels(capsLockChannels)), len(capsLockChannels)),
-				Inline: false,
-			},
-		},
-		Timestamp: time.Now().Format(time.RFC3339),
-	}
-
-	return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseChannelMessageWithSource,
-		Data: &discordgo.InteractionResponseData{
-			Embeds: []*discordgo.MessageEmbed{embed},
-		},
-	})
 }

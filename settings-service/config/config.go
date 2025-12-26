@@ -23,7 +23,6 @@ func LoadConfig() (*Config, error) {
 		Password: os.Getenv("SETTINGS_POSTGRES_PASSWORD"),
 		DBName:   os.Getenv("SETTINGS_POSTGRES_DB"),
 		SSLMode:  os.Getenv("SETTINGS_POSTGRES_SSLMODE"),
-
 		GrpcPort: os.Getenv("SETTINGS_PORT"),
 	}
 

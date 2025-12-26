@@ -49,3 +49,18 @@ func (r *UserRepo) GetOrCreateUser(userID, guildID string) (*models.User, error)
 func (r *UserRepo) UpdateUser(user *models.User) error {
 	return r.db.Save(user).Error
 }
+
+func (r *UserRepo) GetUsers(guildID string, page, size int) ([]models.User, error) {
+	var users []models.User
+	err := r.db.Where("guild_id = ?", guildID).
+		Offset(page * size).
+		Limit(size).
+		Find(&users).Error
+	return users, err
+}
+
+func (r *UserRepo) GetCountUsers(guildID string) int {
+	var count int64
+	r.db.Model(&models.User{}).Where("guild_id = ?", guildID).Count(&count)
+	return int(count)
+}

@@ -2,10 +2,11 @@ package server
 
 import (
 	"context"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"settings-service/internal/interfaces"
 	pb "settings-service/proto"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type RolesReactionServer struct {
@@ -15,7 +16,6 @@ type RolesReactionServer struct {
 }
 
 func (s *RolesReactionServer) AddRole(ctx context.Context, req *pb.AddRoleRequest) (*pb.AddRoleResponse, error) {
-
 	settungs, err := s.GuildRepo.GetGuildSettings(req.GuildId)
 
 	if err != nil {

@@ -26,7 +26,7 @@ func (s *AutoMode) Toggle(guildID string, enable bool) error {
 
 	_, err := s.http.Post(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/automode/toggle", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/automode/toggle", config.GetApiGatewayAddr()),
 		bodyBytes,
 		nil,
 	)
@@ -46,7 +46,7 @@ func (s *AutoMode) AddCapsLockChannel(guildID, channelID string) error {
 
 	_, err := s.http.Post(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/automode/capslock", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/automode/capslock", config.GetApiGatewayAddr()),
 		bodyBytes,
 		nil,
 	)
@@ -66,7 +66,7 @@ func (s *AutoMode) RemoveCapsLockChannel(guildID, channelID string) error {
 
 	_, err := s.http.Delete(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/automode/capslock", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/automode/capslock", config.GetApiGatewayAddr()),
 		bodyBytes,
 		nil,
 	)
@@ -86,7 +86,7 @@ func (s *AutoMode) AddAntiLinkChannel(guildID, channelID string) error {
 
 	_, err := s.http.Post(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/automode/antilink", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/automode/antilink", config.GetApiGatewayAddr()),
 		bodyBytes,
 		nil,
 	)
@@ -106,7 +106,7 @@ func (s *AutoMode) RemoveAntiLinkChannel(guildID, channelID string) error {
 
 	_, err := s.http.Delete(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/automode/antilink", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/automode/antilink", config.GetApiGatewayAddr()),
 		bodyBytes,
 		nil,
 	)
@@ -126,7 +126,7 @@ func (s *AutoMode) AddBannedWord(guildID, word string) error {
 
 	_, err := s.http.Post(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/automode/bannedword", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/automode/bannedword", config.GetApiGatewayAddr()),
 		bodyBytes,
 		nil,
 	)
@@ -146,7 +146,7 @@ func (s *AutoMode) RemoveBannedWord(guildID, word string) error {
 
 	_, err := s.http.Delete(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v/automode/bannedword", config.GetApiGatewayAddr(), guildID),
+		fmt.Sprintf("%v/api/v1/settings/guild/automode/bannedword", config.GetApiGatewayAddr()),
 		bodyBytes,
 		nil,
 	)

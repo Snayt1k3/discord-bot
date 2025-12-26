@@ -27,14 +27,12 @@ func NewWelcomeHandlers(cc grpc.ClientConnInterface) *Welcome {
 // @Tags         welcome
 // @Accept       json
 // @Produce      json
-// @Param        guild_id path string true "Guild ID"
 // @Param        request body pb.SetWelcomeChannelRequest true "Welcome channel data"
 // @Success      200 {object} pb.SetWelcomeChannelResponse
 // @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/http/{guild_id}/welcome/channel [put]
+// @Router       /api/v1/settings/guild/welcome/channel [put]
 func (s *Welcome) SetWelcomeChannel(c *gin.Context) {
-	guildID := c.Param("guild_id")
 	var req pb.SetWelcomeChannelRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -43,7 +41,6 @@ func (s *Welcome) SetWelcomeChannel(c *gin.Context) {
 		return
 	}
 
-	req.GuildId = guildID
 	resp, err := s.client.SetWelcomeChannel(context.Background(), &req)
 
 	if err != nil {
@@ -61,15 +58,13 @@ func (s *Welcome) SetWelcomeChannel(c *gin.Context) {
 // @Tags         welcome
 // @Accept       json
 // @Produce      json
-// @Param        guild_id path string true "Guild ID"
 // @Param        request body pb.WelcomeMessageRequest true "Welcome message data"
 // @Success      200 {object} pb.WelcomeMessageResponse
 // @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      429 {object} dto.APIResponse "Quota exceeded"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/http/{guild_id}/welcome/message [post]
+// @Router       /api/v1/settings/guild/welcome/message [post]
 func (s *Welcome) AddWelcomeMessage(c *gin.Context) {
-	guildID := c.Param("guild_id")
 	var req pb.WelcomeMessageRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -78,14 +73,12 @@ func (s *Welcome) AddWelcomeMessage(c *gin.Context) {
 		return
 	}
 
-	req.GuildId = guildID
 	resp, err := s.client.AddWelcomeMessage(context.Background(), &req)
 
 	if err != nil {
 		st, ok := status.FromError(err)
 
 		if ok && st.Code() == codes.ResourceExhausted {
-			slog.Warn("Quota exceeded for welcome messages", "guild_id", guildID)
 			c.JSON(http.StatusTooManyRequests, gin.H{"error": "Quota exceeded for welcome messages"})
 			return
 		}
@@ -104,14 +97,12 @@ func (s *Welcome) AddWelcomeMessage(c *gin.Context) {
 // @Tags         welcome
 // @Accept       json
 // @Produce      json
-// @Param        guild_id path string true "Guild ID"
 // @Param        request body pb.WelcomeMessageRequest true "Welcome message data"
 // @Success      200 {object} pb.WelcomeMessageResponse
 // @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/http/{guild_id}/welcome/message [delete]
+// @Router       /api/v1/settings/guild/welcome/message [delete]
 func (s *Welcome) DeleteWelcomeMessage(c *gin.Context) {
-	guildID := c.Param("guild_id")
 	var req pb.WelcomeMessageRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -120,7 +111,6 @@ func (s *Welcome) DeleteWelcomeMessage(c *gin.Context) {
 		return
 	}
 
-	req.GuildId = guildID
 	resp, err := s.client.DeleteWelcomeMessage(context.Background(), &req)
 
 	if err != nil {

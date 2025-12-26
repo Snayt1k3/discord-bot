@@ -1,8 +1,9 @@
 package repos
 
 import (
-	"gorm.io/gorm"
 	"settings-service/internal/interfaces"
+
+	"gorm.io/gorm"
 )
 
 type Repos struct {

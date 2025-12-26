@@ -16,7 +16,7 @@ func NewGuildSettingsRepo(db *gorm.DB) *GuildSettingsRepoImpl {
 	}
 }
 
-func (r *GuildSettingsRepoImpl) CreateGuildSetting(guildId string) (models.Settings, error) {
+func (r *GuildSettingsRepoImpl) CreateGuildSetting(guildId string) (*models.Settings, error) {
 	obj := &models.Settings{
 		GuildID: guildId,
 		Role: models.RolesSettings{
@@ -35,10 +35,10 @@ func (r *GuildSettingsRepoImpl) CreateGuildSetting(guildId string) (models.Setti
 		},
 	}
 	if err := r.db.Create(obj).Error; err != nil {
-		return models.Settings{}, err
+		return &models.Settings{}, err
 	}
 
-	return *obj, nil
+	return obj, nil
 }
 
 func (r *GuildSettingsRepoImpl) GetGuildSettings(guildID string) (*models.Settings, error) {
@@ -50,6 +50,7 @@ func (r *GuildSettingsRepoImpl) GetGuildSettings(guildID string) (*models.Settin
 		Preload("AutoMode.CapsLocks").
 		Preload("AutoMode.BannedWords").
 		Preload("Log").
+		Preload("Log.Events").
 		Where("guild_id = ?", guildID).First(&settings).Error; err != nil {
 		return nil, err
 	}

@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package preferences;
+
+option go_package = "proto/";
+
+service LogService {
+  rpc AddLogs(UpdateLogChannelRequest) returns (UpdateLogChannelResponse);
+  rpc RemoveLogs(UpdateLogChannelRequest) returns (RemoveLogChannelResponse);
+  rpc ToggleLog(ToggleLogRequest) returns (ToggleLogResponse);
+}
+
+message UpdateLogChannelRequest {
+  repeated EventType event_type = 1;
+  string channel_id = 2;
+  string guild_id = 3;
+}
+
+message UpdateLogChannelResponse {
+  repeated EventSettings event_settings = 1;
+  string guild_id = 2;
+}
+
+message RemoveLogChannelResponse {
+  string guild_id = 2;
+}
+
+message ToggleLogRequest {
+  string guild_id = 1;
+  bool enabled = 2;
+}
+
+message ToggleLogResponse {
+  string guild_id = 1;
+  bool enabled = 2;
+}
+
+message EventSettings {
+  EventType event = 1;
+  string channel_id = 2;
+}
+
+enum EventType {
+  EVENT_TYPE_UNSPECIFIED = 0;
+  MESSAGE_DELETE = 1;
+  MESSAGE_EDIT   = 2;
+  USER_JOIN      = 3;
+  USER_LEAVE     = 4;
+  CREATE_INVITE  = 5;
+  JOIN_CHANNEL   = 6; // todo Убрать
+  LEAVE_CHANNEL  = 7; // todo Убрать
+  MOVE_CHANNEL   = 8; // todo Убрать
+}

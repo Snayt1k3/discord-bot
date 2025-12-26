@@ -64,8 +64,14 @@ func SendErrorMessage(session *discordgo.Session, i *discordgo.InteractionCreate
 	err := session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
-			Content: "⚠️ Oops! Something went wrong. Please try again. ⚠️",
-			Flags:   discordgo.MessageFlagsEphemeral,
+			Embeds: []*discordgo.MessageEmbed{
+				{
+					Title:       "Something went wrong",
+					Description: "⚠️ Oops! Something went wrong. Please try again.",
+					Color:       0xFEE75C, // жёлтый (warning)
+				},
+			},
+			Flags: discordgo.MessageFlagsEphemeral,
 		},
 	})
 	if err != nil {
@@ -78,10 +84,17 @@ func SendNoPermissionMessage(session *discordgo.Session, i *discordgo.Interactio
 	err := session.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
-			Content: "⛔ You do not have permission to use this command/button.",
-			Flags:   discordgo.MessageFlagsEphemeral,
+			Embeds: []*discordgo.MessageEmbed{
+				{
+					Title:       "Permission denied",
+					Description: "⛔ You do not have permission to use this command/button.",
+					Color:       0xED4245,
+				},
+			},
+			Flags: discordgo.MessageFlagsEphemeral,
 		},
 	})
+
 	if err != nil {
 		slog.Error("failed to send message to channel", "channelId", i.ChannelID, "error", err)
 	}
@@ -113,6 +126,16 @@ func SendTempMessage(s *discordgo.Session, channelID, content string) {
 
 func Respond(s *discordgo.Session, m *discordgo.InteractionCreate, resp *discordgo.InteractionResponse) {
 	err := s.InteractionRespond(m.Interaction, resp)
+	if err != nil {
+		slog.Error("failed to send interaction response", "error", err)
+	}
+}
+
+func Acknowledge(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseDeferredMessageUpdate,
+	})
+
 	if err != nil {
 		slog.Error("failed to send interaction response", "error", err)
 	}

@@ -48,14 +48,13 @@ func (s *UserServer) AddXP(ctx context.Context, req *pb.AddXPRequest) (*pb.AddXP
 	}
 
 	currentExperience := int32(user.Experience) + req.Xp
-	nextLevelXP := int32(user.NextLevelXP)
 	leveledUp := false
-	user.LastMessageAt = time.Now() // TODO Добавить ограничение
+	user.LastMessageAt = time.Now()
 
 	if currentExperience >= int32(user.NextLevelXP) {
 		user.Experience = int(currentExperience - int32(user.NextLevelXP))
-		user.NextLevelXP = int(float32(nextLevelXP) * 1.5)
 		user.Level += 1
+		user.NextLevelXP = int(5*(user.Level^2) + 50*user.Level + 100)
 		leveledUp = true
 	} else {
 		user.Experience = int(currentExperience)
@@ -78,5 +77,33 @@ func (s *UserServer) AddXP(ctx context.Context, req *pb.AddXPRequest) (*pb.AddXP
 		},
 		LevelUp: leveledUp,
 		AddedXp: req.Xp,
+	}, nil
+}
+
+func (s *UserServer) GetUsers(ctx context.Context, req *pb.GetUsersRequest) (*pb.GetUsersResponse, error) {
+	users, err := s.repo.GetUsers(req.GetGuildId(), int(req.GetPage()), int(req.GetSize()))
+
+	if err != nil {
+		return nil, err
+	}
+	count := s.repo.GetCountUsers(req.GetGuildId())
+
+	var pbUsers []*pb.User
+	for _, user := range users {
+		pbUsers = append(pbUsers, &pb.User{
+			UserId:        user.UserID,
+			GuildId:       user.GuildID,
+			Experience:    int32(user.Experience),
+			Level:         int32(user.Level),
+			NextLevelXp:   int32(user.NextLevelXP),
+			LastMessageAt: user.LastMessageAt.Format(time.RFC3339),
+		})
+	}
+
+	return &pb.GetUsersResponse{
+		Users:      pbUsers,
+		TotalCount: int32(count),
+		Page:       req.GetPage(),
+		Size:       req.GetSize(),
 	}, nil
 }

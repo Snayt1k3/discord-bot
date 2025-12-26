@@ -23,8 +23,8 @@ func NewSettings() *Settings {
 func (s *Settings) Get(guildId string) (dtoGuild.GuildSettings, error) {
 	resp, err := s.http.Get(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/settings/guild/%v", config.GetApiGatewayAddr(), guildId),
-		nil,
+		fmt.Sprintf("%v/api/v1/settings/guild", config.GetApiGatewayAddr()),
+		map[string]string{"guild_id": guildId},
 		nil,
 	)
 
