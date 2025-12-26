@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package preferences;
+
+option go_package = "proto/";
+
+service WelcomeService {
+  rpc SetWelcomeChannel(SetWelcomeChannelRequest) returns (SetWelcomeChannelResponse);
+  rpc AddWelcomeMessage(WelcomeMessageRequest) returns (WelcomeMessageResponse);
+  rpc DeleteWelcomeMessage(WelcomeMessageRequest) returns (WelcomeMessageResponse);
+}
+
+message SetWelcomeChannelRequest {
+  string guild_id = 1;
+  string channel_id = 2;
+}
+
+message SetWelcomeChannelResponse {
+  string guild_id = 1;
+  string channel_id = 2;
+}
+
+message WelcomeMessageRequest {
+  string guild_id = 1;
+  string message = 2;
+}
+
+message WelcomeMessageResponse {
+  string guild_id = 1;
+  string message = 2;
+}

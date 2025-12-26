@@ -1,8 +1,9 @@
 package repos
 
 import (
-	"gorm.io/gorm"
 	"settings-service/internal/models"
+
+	"gorm.io/gorm"
 )
 
 type WelcomeRepositoryImpl struct {

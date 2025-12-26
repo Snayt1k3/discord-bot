@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package preferences;
+
+option go_package = "proto/";
+
+
+service RolesService {
+  rpc AddRole(AddRoleRequest) returns (AddRoleResponse);
+  rpc RemoveRole(RemoveRoleRequest) returns (RemoveRoleResponse);
+  rpc SetRoleMessageId(SetMessageRequest) returns (SetMessageResponse);
+}
+
+message AddRoleRequest {
+  string guild_id = 1;
+  string role_id = 2; 
+  string emoji = 3;         
+}
+
+message AddRoleResponse {
+  string guild_id = 1;
+  string role_id = 2; 
+  string emoji = 3;         
+}
+
+message RemoveRoleRequest {
+  string guild_id = 1;
+  string role_id = 2;        
+}
+
+message RemoveRoleResponse {
+  string guild_id = 1;
+  string role_id = 2;        
+}
+
+message SetMessageRequest{
+  string guild_id = 1;
+  string message_id = 2;          
+}
+
+message SetMessageResponse{
+  string guild_id = 1;
+  string message_id = 2;          
+}

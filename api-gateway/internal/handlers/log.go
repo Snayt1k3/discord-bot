@@ -11,12 +11,12 @@ import (
 	pb "api-gateway/proto"
 )
 
-type LogHandlers struct {
-	clients Clients
+type Log struct {
+	client pb.LogServiceClient
 }
 
-func NewLogHandlers(cc grpc.ClientConnInterface) *LogHandlers {
-	return &LogHandlers{clients: *NewClients(cc)}
+func NewLogHandlers(cc grpc.ClientConnInterface) *Log {
+	return &Log{client: pb.NewLogServiceClient(cc)}
 }
 
 // ToggleLog godoc
@@ -25,14 +25,12 @@ func NewLogHandlers(cc grpc.ClientConnInterface) *LogHandlers {
 // @Tags         logging
 // @Accept       json
 // @Produce      json
-// @Param        guild_id path string true "Guild ID"
 // @Param        request body pb.ToggleLogRequest true "Toggle logging request"
 // @Success      200 {object} pb.ToggleLogResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/logging/toggle [post]
-func (s *LogHandlers) ToggleLog(c *gin.Context) {
-	guildID := c.Param("guild_id")
+// @Router       /api/v1/settings/guild/logging/toggle [post]
+func (s *Log) ToggleLog(c *gin.Context) {
 	var req pb.ToggleLogRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -41,8 +39,7 @@ func (s *LogHandlers) ToggleLog(c *gin.Context) {
 		return
 	}
 
-	req.GuildId = guildID
-	resp, err := s.clients.Log.ToggleLog(context.Background(), &req)
+	resp, err := s.client.ToggleLog(context.Background(), &req)
 
 	if err != nil {
 		slog.Error("Error while toggling log", "error", err)
@@ -55,18 +52,16 @@ func (s *LogHandlers) ToggleLog(c *gin.Context) {
 
 // AddLogChannel godoc
 // @Summary      Add log channel
-// @Description  Добавляет новый канал для логирования действий в указанной гильдии
+// @Description  Добавляет настройку для логирования действий в указанной гильдии
 // @Tags         logging
 // @Accept       json
 // @Produce      json
-// @Param        guild_id path string true "Guild ID"
-// @Param        request body pb.UpdateLogChannelRequest true "Add log channel request"
+// @Param        request body pb.UpdateLogChannelRequest true "Add logs setting"
 // @Success      200 {object} pb.UpdateLogChannelResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/logging/channel [post]
-func (s *LogHandlers) AddLogChannel(c *gin.Context) {
-	guildID := c.Param("guild_id")
+// @Router       /api/v1/settings/guild/logging/channel [post]
+func (s *Log) AddLogChannel(c *gin.Context) {
 	var req pb.UpdateLogChannelRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -75,8 +70,7 @@ func (s *LogHandlers) AddLogChannel(c *gin.Context) {
 		return
 	}
 
-	req.GuildId = guildID
-	resp, err := s.clients.Log.AddLogChannel(context.Background(), &req)
+	resp, err := s.client.AddLogs(context.Background(), &req)
 
 	if err != nil {
 		slog.Error("Error while toggling log", "error", err)
@@ -87,20 +81,18 @@ func (s *LogHandlers) AddLogChannel(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-// AddLogChannel godoc
+// RemoveLogChannel godoc
 // @Summary      Remove log channel
-// @Description  Удаляет канал для логирования действий из указанной гильдии
+// @Description  Удаляет настройку для логирования действий в указанной гильдии
 // @Tags         logging
 // @Accept       json
 // @Produce      json
-// @Param        guild_id path string true "Guild ID"
-// @Param        request body pb.UpdateLogChannelRequest true "Remove log channel request"
+// @Param        request body pb.UpdateLogChannelRequest true "Remove logs settings"
 // @Success      200 {object} pb.UpdateLogChannelResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/logging/channel [delete]
-func (s *LogHandlers) RemoveLogChannel(c *gin.Context) {
-	guildID := c.Param("guild_id")
+// @Router       /api/v1/settings/guild/logging/channel [delete]
+func (s *Log) RemoveLogChannel(c *gin.Context) {
 	var req pb.UpdateLogChannelRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -109,8 +101,7 @@ func (s *LogHandlers) RemoveLogChannel(c *gin.Context) {
 		return
 	}
 
-	req.GuildId = guildID
-	resp, err := s.clients.Log.RemoveLogChannel(context.Background(), &req)
+	resp, err := s.client.RemoveLogs(context.Background(), &req)
 
 	if err != nil {
 		slog.Error("Error while toggling log", "error", err)

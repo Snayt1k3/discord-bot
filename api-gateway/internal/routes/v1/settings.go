@@ -2,32 +2,33 @@ package v1
 
 import (
 	"api-gateway/internal/handlers"
+
 	"github.com/gin-gonic/gin"
 )
 
-func SettingsRoutes(r *gin.Engine, handler *handlers.Handlers) {
+func SettingsRoutes(r *gin.Engine, setting *handlers.Settings, roles *handlers.Roles, welcome *handlers.Welcome, automode *handlers.AutoMode, log *handlers.Log) {
 	settings := r.Group("/api/v1/settings")
 
-	settings.GET("/guild/:guild_id", handler.Settings.GetGuildSettings)
-	settings.POST("/guild/:guild_id", handler.Settings.CreateSettings)
+	settings.GET("/guild", setting.GetGuildSettings)
+	settings.POST("/guild", setting.CreateSettings)
 
-	settings.PUT("/guild/:guild_id/roles/message", handler.Roles.SetRoleMessageId)
-	settings.POST("/guild/:guild_id/roles/role", handler.Roles.AddRole)
-	settings.DELETE("/guild/:guild_id/roles/role", handler.Roles.DeleteRole)
+	settings.PUT("/guild/roles/message", roles.SetRoleMessageId)
+	settings.POST("/guild/roles/role", roles.AddRole)
+	settings.DELETE("/guild/roles/role", roles.DeleteRole)
 
-	settings.PUT("/guild/:guild_id/welcome/channel", handler.Welcome.SetWelcomeChannel)
-	settings.POST("/guild/:guild_id/welcome/message", handler.Welcome.AddWelcomeMessage)
-	settings.DELETE("/guild/:guild_id/welcome/message", handler.Welcome.DeleteWelcomeMessage)
+	settings.PUT("/guild/welcome/channel", welcome.SetWelcomeChannel)
+	settings.POST("/guild/welcome/message", welcome.AddWelcomeMessage)
+	settings.DELETE("/guild/welcome/message", welcome.DeleteWelcomeMessage)
 
-	settings.POST("/guild/:guild_id/automode/toggle", handler.Automode.ToggleAutoMod)
-	settings.POST("/guild/:guild_id/automode/bannedword", handler.Automode.AddBannedWord)
-	settings.DELETE("/guild/:guild_id/automode/bannedword", handler.Automode.RemoveBannedWord)
-	settings.POST("/guild/:guild_id/automode/antilink", handler.Automode.AddAntiLink)
-	settings.DELETE("/guild/:guild_id/automode/antilink", handler.Automode.RemoveAntiLink)
-	settings.POST("/guild/:guild_id/automode/capslock", handler.Automode.AddCapsLock)
-	settings.DELETE("/guild/:guild_id/automode/capslock", handler.Automode.RemoveCapsLock)
+	settings.POST("/guild/automode/toggle", automode.ToggleAutoMod)
+	settings.POST("/guild/automode/bannedword", automode.AddBannedWord)
+	settings.DELETE("/guild/automode/bannedword", automode.RemoveBannedWord)
+	settings.POST("/guild/automode/antilink", automode.AddAntiLink)
+	settings.DELETE("/guild/automode/antilink", automode.RemoveAntiLink)
+	settings.POST("/guild/automode/capslock", automode.AddCapsLock)
+	settings.DELETE("/guild/automode/capslock", automode.RemoveCapsLock)
 
-	settings.POST("/guild/:guild_id/logging/toggle", handler.Log.ToggleLog)
-	settings.POST("/guild/:guild_id/logging/channel", handler.Log.AddLogChannel)
-	settings.DELETE("/guild/:guild_id/logging/channel", handler.Log.RemoveLogChannel)
+	settings.POST("/guild/logging/toggle", log.ToggleLog)
+	settings.POST("/guild/logging/channel", log.AddLogChannel)
+	settings.DELETE("/guild/logging/channel", log.RemoveLogChannel)
 }

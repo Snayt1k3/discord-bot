@@ -1,43 +1,38 @@
 package main
 
 import (
+	"bot/internal/http"
 	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"github.com/bwmarrin/discordgo"
-
 	"bot/config"
-	"bot/internal/adapters"
-	"bot/internal/adapters/guild"
 	"bot/internal/discord"
 	"bot/internal/handlers"
-	guildHandlers "bot/internal/handlers/guild"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 func main() {
 	initLogging()
 	config.Load()
 	discord.InitDiscordBot()
+	ReRegisterCommands(discord.Bot.Session, config.GetApplicationId(), discord.CommandsList)
 
 	// init deps
-	http := adapters.NewDefaultHttpClient()
-	guildAdapter := guild.NewGuildAdapter(http)
+	httpContainer := http.NewContainer()
 
 	// init handlers/commands
-	dispatcher := handlers.NewCommandsDispatcher(*guildAdapter)
-	eventHandlers := handlers.NewEventHandlers(*guildAdapter, discord.CommandsList)
-	guildHandlers := guildHandlers.NewHandlers(*guildAdapter)
-
-	dispatcher.InitHandlers(*guildHandlers)
-	addHandlers(dispatcher, eventHandlers)
+	dispatcher := handlers.NewCommandsDispatcher()
+	eventHandlers := handlers.NewEventHandlers(httpContainer, discord.CommandsList)
+	handlersContainer := handlers.NewContainer(httpContainer)
+	dispatcher.InitHandlers(handlersContainer)
+	addEventHandlers(dispatcher, eventHandlers)
 
 	if err := discord.Bot.Session.UpdateCustomStatus(config.GetBotStatus()); err != nil {
 		slog.Warn("failed to update custom status", "error", err)
 	}
-
-	initBot(discord.Bot.Session, discord.CommandsList)
 
 	defer discord.Bot.Session.Close()
 
@@ -48,45 +43,19 @@ func main() {
 	<-sc
 }
 
-func addHandlers(cd *handlers.CommandsDispatcher, eh *handlers.EventHandlers) {
+func addEventHandlers(cd *handlers.CommandsDispatcher, eh *handlers.EventHandlers) {
 	discord.Bot.Session.AddHandler(cd.Dispatch)
-
 	discord.Bot.Session.AddHandler(eh.OnMemberJoin)
 	discord.Bot.Session.AddHandler(eh.OnMessageReactionAdd)
 	discord.Bot.Session.AddHandler(eh.OnMessageReactionRemove)
 	discord.Bot.Session.AddHandler(eh.OnGuildCreate)
 	discord.Bot.Session.AddHandler(eh.MessageCreate)
-	discord.Bot.Session.AddHandler(eh.GuildBanAdd)
-	discord.Bot.Session.AddHandler(eh.GuildBanRemove)
 	discord.Bot.Session.AddHandler(eh.GuildMemberRemove)
 	discord.Bot.Session.AddHandler(eh.MessageDelete)
-	discord.Bot.Session.AddHandler(eh.MessageDeleteBulk)
+	discord.Bot.Session.AddHandler(eh.MessageUpdate)
+	discord.Bot.Session.AddHandler(eh.VoiceStatusChange)
 	discord.Bot.Session.AddHandler(eh.OnInviteCreate)
 
-}
-
-func initBot(s *discordgo.Session, cmds []*discordgo.ApplicationCommand) {
-	appID := s.State.User.ID
-
-	for _, guild := range s.State.Guilds {
-		// Получаем текущие команды
-		// oldCommands, _ := s.ApplicationCommands(appID, guild.ID)
-		// for _, cmd := range oldCommands {
-		// 	_ = s.ApplicationCommandDelete(appID, guild.ID, cmd.ID)
-		// }
-
-		// slog.Info("Old commands deleted, registering new ones...",
-		// 	"server_name", guild.Name,
-		// 	"server_id", guild.ID,
-		// )
-
-		for _, cmd := range cmds {
-			_, err := s.ApplicationCommandCreate(appID, guild.ID, cmd)
-			if err != nil {
-				slog.Error("Error creating command", "command", cmd.Name, "error", err)
-			}
-		}
-	}
 }
 
 func initLogging() {
@@ -97,4 +66,30 @@ func initLogging() {
 	logger := slog.New(slog.NewTextHandler(os.Stdout, opts))
 	slog.SetDefault(logger)
 	slog.Info("Logger initialized")
+}
+
+func ReRegisterCommands(s *discordgo.Session, appID string, commands []*discordgo.ApplicationCommand) error {
+	// 1. Получаем список всех текущих команд
+	// existing, err := s.ApplicationCommands(appID, "609869875053199366")
+	// if err != nil {
+	//     return fmt.Errorf("failed to get existing commands: %w", err)
+	// }
+
+	// 2. Удаляем все команды
+	// for _, cmd := range existing {
+	//     err := s.ApplicationCommandDelete(appID, "609869875053199366", cmd.ID)
+	//     if err != nil {
+	//         return fmt.Errorf("failed to delete command %s: %w", cmd.Name, err)
+	//     }
+	// }
+
+	// 3. Регистрируем заново из списка (commands)
+	for _, cmd := range commands {
+		_, err := s.ApplicationCommandCreate(appID, "609869875053199366", cmd)
+		if err != nil {
+			slog.Error("failed to create command", "command", cmd.Name, "err", err)
+		}
+	}
+
+	return nil
 }

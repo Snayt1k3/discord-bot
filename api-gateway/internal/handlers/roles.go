@@ -13,12 +13,12 @@ import (
 	pb "api-gateway/proto"
 )
 
-type RolesHandlers struct {
-	clients Clients
+type Roles struct {
+	client pb.RolesServiceClient
 }
 
-func NewRolesHandlers(cc grpc.ClientConnInterface) *RolesHandlers {
-	return &RolesHandlers{clients: *NewClients(cc)}
+func NewRolesHandlers(cc grpc.ClientConnInterface) *Roles {
+	return &Roles{client: pb.NewRolesServiceClient(cc)}
 }
 
 // SetRoleMessageId godoc
@@ -27,14 +27,13 @@ func NewRolesHandlers(cc grpc.ClientConnInterface) *RolesHandlers {
 // @Tags         roles
 // @Accept       json
 // @Produce      json
-// @Param        guild_id path string true "Guild ID"
+
 // @Param        request body pb.SetMessageRequest true "Set role message ID request"
 // @Success      200 {object} pb.SetMessageResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/roles/message [put]
-func (s *RolesHandlers) SetRoleMessageId(c *gin.Context) {
-	guildID := c.Param("guild_id")
+// @Router       /api/v1/settings/guild/roles/message [put]
+func (s *Roles) SetRoleMessageId(c *gin.Context) {
 	var req pb.SetMessageRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -43,8 +42,7 @@ func (s *RolesHandlers) SetRoleMessageId(c *gin.Context) {
 		return
 	}
 
-	req.GuildId = guildID
-	resp, err := s.clients.Roles.SetRoleMessageId(context.Background(), &req)
+	resp, err := s.client.SetRoleMessageId(context.Background(), &req)
 
 	if err != nil {
 		slog.Error("Error while deleting role", "error", err)
@@ -67,9 +65,8 @@ func (s *RolesHandlers) SetRoleMessageId(c *gin.Context) {
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      429 {object} dto.APIResponse "Quota exceeded"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/roles/role [post]
-func (s *RolesHandlers) AddRole(c *gin.Context) {
-	guildID := c.Param("guild_id")
+// @Router       /api/v1/settings/guild/roles/role [post]
+func (s *Roles) AddRole(c *gin.Context) {
 	var req pb.AddRoleRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -78,14 +75,12 @@ func (s *RolesHandlers) AddRole(c *gin.Context) {
 		return
 	}
 
-	req.GuildId = guildID
-	resp, err := s.clients.Roles.AddRole(context.Background(), &req)
+	resp, err := s.client.AddRole(context.Background(), &req)
 
 	if err != nil {
 		st, ok := status.FromError(err)
 
 		if ok && st.Code() == codes.ResourceExhausted {
-			slog.Warn("Quota exceeded for Roles/Reactions", "guild_id", guildID)
 			c.JSON(http.StatusTooManyRequests, gin.H{"error": "Quota exceeded for Roles/Reactions"})
 			return
 		}
@@ -104,14 +99,12 @@ func (s *RolesHandlers) AddRole(c *gin.Context) {
 // @Tags         roles
 // @Accept       json
 // @Produce      json
-// @Param        guild_id path string true "Guild ID"
 // @Param        request body pb.RemoveRoleRequest true "Delete role request"
 // @Success      200 {object} pb.RemoveRoleResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router       /api/v1/settings/guild/{guild_id}/roles/role [delete]
-func (s *RolesHandlers) DeleteRole(c *gin.Context) {
-	guildID := c.Param("guild_id")
+// @Router       /api/v1/settings/guild/roles/role [delete]
+func (s *Roles) DeleteRole(c *gin.Context) {
 	var req pb.RemoveRoleRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -120,8 +113,7 @@ func (s *RolesHandlers) DeleteRole(c *gin.Context) {
 		return
 	}
 
-	req.GuildId = guildID
-	resp, err := s.clients.Roles.RemoveRole(context.Background(), &req)
+	resp, err := s.client.RemoveRole(context.Background(), &req)
 
 	if err != nil {
 		slog.Error("Error while deleting role", "error", err)

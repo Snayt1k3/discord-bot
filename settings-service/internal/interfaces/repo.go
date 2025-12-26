@@ -21,10 +21,10 @@ type AutoModeRepository interface {
 
 type LogRepository interface {
 	// Добавить канал логов
-	AddLogChannel(guildId string, channelId string) (models.LogSettings, error)
+	AddLogs(guildId, channelId string, events []models.EventType) (models.LogSettings, error)
 
 	// Удалить канал логов
-	RemoveLogChannel(guildId string, channelId string) error
+	RemoveLogs(guildId, channelId string, events []models.EventType) error
 
 	// Включить/выключить логи
 	ToggleLog(guildId string, enabled bool) error
@@ -43,7 +43,7 @@ type ReactionRolesRepository interface {
 
 type GuildSettingsRepository interface {
 	// Создать настройки гильдии
-	CreateGuildSetting(guildId string) (models.Settings, error)
+	CreateGuildSetting(guildId string) (*models.Settings, error)
 
 	// Получить настройки гильдии с прелоадами
 	GetGuildSettings(guildID string) (*models.Settings, error)
