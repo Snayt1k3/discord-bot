@@ -29,8 +29,8 @@ func (cd *CommandsDispatcher) InitHandlers(container *Container) {
 	cd.handlers["rank"] = container.Rank
 	cd.handlers["leaderboard"] = container.Leaderboard
 	cd.handlers["LeaderboardPage"] = container.LeaderboardPagination
-	cd.handlers["LeaderboardPageLast"] = container.LeaderboardPaginationLast
-	cd.handlers["LeaderboardPageFirst"] = container.LeaderboardPaginationFirst
+	cd.handlers["LeaderboardLast"] = container.LeaderboardPaginationLast
+	cd.handlers["LeaderboardFirst"] = container.LeaderboardPaginationFirst
 
 	// Welcome
 	cd.handlers["welcome-chnl"] = container.SetWelcomeChnl

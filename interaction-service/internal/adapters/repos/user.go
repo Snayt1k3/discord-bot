@@ -55,6 +55,7 @@ func (r *UserRepo) GetUsers(guildID string, page, size int) ([]models.User, erro
 	err := r.db.Where("guild_id = ?", guildID).
 		Offset(page * size).
 		Limit(size).
+		Order("Level DESC").
 		Find(&users).Error
 	return users, err
 }
