@@ -91,7 +91,8 @@ func ShowLeaderBoardPaginate(http *http.Container, s *discordgo.Session, i *disc
 	}
 	embed := createLeaderboardEmbed(users, page)
 	keyboard := buttons.LeaderboardButtons(page, users.TotalCount%10)
-
+	utils.Acknowledge(s, i)
+	
 	msg := &discordgo.MessageEdit{
 		ID:      i.Message.ID,
 		Channel: i.Message.ChannelID,

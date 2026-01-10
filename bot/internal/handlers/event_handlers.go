@@ -75,6 +75,20 @@ func (eh *EventHandlers) OnMessageReactionRemove(s *discordgo.Session, r *discor
 }
 
 func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMemberAdd) {
+	
+	fields := []*discordgo.MessageEmbedField{
+		{Name: "User", Value: fmt.Sprintf("<@%s>", u.User.ID)},
+	}
+
+	utils.SendLoggingMessage(eh.http, s, dto.USER_JOIN, u.GuildID, 
+		&discordgo.MessageEmbed{
+			Title:       "Member Joined",
+			Description: fmt.Sprintf("User %s Joined to the server.", u.User.Username),
+			Color:       0x57F287,
+			Fields:      fields,
+		},
+	)
+	
 	settings, _ := eh.http.Settings.Get(u.GuildID)
 
 	if len(settings.Welcome.Messages) == 0 {
@@ -200,7 +214,7 @@ func (eh *EventHandlers) VoiceStatusChange(s *discordgo.Session, v *discordgo.Vo
 			{Name: "Channel", Value: fmt.Sprintf("<#%s>", afterChannel), Inline: true},
 		}
 
-		utils.SendLoggingMessage(eh.http, s, dto.USER_JOIN, v.GuildID,
+		utils.SendLoggingMessage(eh.http, s, dto.JOIN_CHANNEL, v.GuildID,
 			&discordgo.MessageEmbed{
 				Title:       "Voice Join",
 				Description: "User joined a voice channel.",

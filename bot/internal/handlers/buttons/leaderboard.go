@@ -11,13 +11,13 @@ func LeaderboardButtons(currentPage, totalPages int) []discordgo.MessageComponen
 		discordgo.Button{
 			Label:    "⏮",
 			Style:    discordgo.PrimaryButton,
-			CustomID: "LeaderboardPageFirst",
+			CustomID: "LeaderboardFirst",
 			Disabled: currentPage == 0,
 		},
 		discordgo.Button{
 			Label:    "◀",
 			Style:    discordgo.SecondaryButton,
-			CustomID: fmt.Sprintf("Leaderboard_%d", currentPage-1),
+			CustomID: fmt.Sprintf("LeaderboardPage_%d", currentPage-1),
 			Disabled: currentPage < 1,
 		},
 		discordgo.Button{
@@ -29,7 +29,7 @@ func LeaderboardButtons(currentPage, totalPages int) []discordgo.MessageComponen
 		discordgo.Button{
 			Label:    "▶",
 			Style:    discordgo.SecondaryButton,
-			CustomID: fmt.Sprintf("Leaderboard_%d", currentPage+1),
+			CustomID: fmt.Sprintf("LeaderboardPage_%d", currentPage+1),
 			Disabled: currentPage > totalPages,
 		},
 		discordgo.Button{
