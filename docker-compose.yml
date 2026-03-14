@@ -20,7 +20,8 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - settings-db
+      settings-db:
+        condition: service_healthy
     restart: always
 
   interaction-service:
@@ -34,7 +35,8 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      - interaction-db
+      interaction-db:
+        condition: service_healthy
     restart: always
 
   api-gateway:
@@ -50,6 +52,7 @@ services:
     restart: always
     depends_on:
       - redis
+
   settings-db:
     image: postgres:15
     restart: on-failure:5
@@ -58,14 +61,17 @@ services:
       POSTGRES_USER: $SETTINGS_POSTGRES_USER
       POSTGRES_PASSWORD: $SETTINGS_POSTGRES_PASSWORD
       POSTGRES_DB: $SETTINGS_POSTGRES_DB
-      POSTGRES_SSLMODE: $SETTINGS_POSTGRES_SSLMODE
-
     ports:
       - "5432:5432"
     volumes:
       - ./docker/volumes/pg/settings:/var/lib/postgresql/data
     networks:
       - bot
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $SETTINGS_POSTGRES_USER" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:latest
@@ -95,6 +101,11 @@ services:
       - ./docker/volumes/pg/interaction:/var/lib/postgresql/data
     ports:
       - "5433:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $INTERACTION_POSTGRES_USER" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   data: 

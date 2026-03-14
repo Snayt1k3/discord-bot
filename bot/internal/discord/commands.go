@@ -282,6 +282,14 @@ var CommandsList = []*discordgo.ApplicationCommand{
 	{
 		Name:        "rank",
 		Description: "View your rank and experience points.",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionUser,
+				Name:        "user",
+				Description: "User",
+				Required:    false,
+			},
+		},
 	},
 	{
 		Name:        "leaderboard",

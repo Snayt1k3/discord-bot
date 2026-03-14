@@ -16,8 +16,17 @@ import (
 
 func Rank(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	guildID := i.GuildID
+	requestedUser := i.ApplicationCommandData().Options[0].UserValue(s)
+	userID := ""
 
-	user, err := http.Interaction.GetUser(guildID, i.Member.User.ID)
+	if requestedUser == nil {
+		userID = i.Member.User.ID
+	} else {
+		userID = requestedUser.ID
+	}
+
+	user, err := http.Interaction.GetUser(guildID, userID)
+
 	if err != nil {
 		slog.Error("Failed to fetch user profile", "err", err)
 		return err
@@ -92,7 +101,7 @@ func ShowLeaderBoardPaginate(http *http.Container, s *discordgo.Session, i *disc
 	embed := createLeaderboardEmbed(users, page)
 	keyboard := buttons.LeaderboardButtons(page, users.TotalCount%10)
 	utils.Acknowledge(s, i)
-	
+
 	msg := &discordgo.MessageEdit{
 		ID:      i.Message.ID,
 		Channel: i.Message.ChannelID,
