@@ -49,6 +49,10 @@ func (cd *CommandsDispatcher) InitHandlers(container *Container) {
 	cd.handlers["automod-antilink"] = container.AntiLink
 	cd.handlers["automod-anticaps"] = container.AntiCaps
 
+	// Info
+	cd.handlers["user-info"] = container.UserInfo
+	cd.handlers["server-info"] = container.ServerInfo
+
 }
 
 func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.InteractionCreate) {

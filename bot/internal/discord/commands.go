@@ -295,4 +295,20 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		Name:        "leaderboard",
 		Description: "View the server leaderboard.",
 	},
+	{
+		Name:        "Server Info",
+		Description: "View the server information.",
+	},
+	{
+		Name:        "User Info",
+		Description: "View user information.",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionUser,
+				Name:        "user",
+				Description: "User",
+				Required:    false,
+			},
+		},
+	},
 }

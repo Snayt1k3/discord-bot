@@ -11,6 +11,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+// Container holds the handlers for the bot's commands and interactions.
+// And injects the http container to be used in the handlers.
 type Container struct {
 	Http *http.Container
 }
@@ -223,4 +225,12 @@ func (cd *Container) LeaderboardPaginationLast(s *discordgo.Session, i *discordg
 	_, pageStr, _ := strings.Cut(i.MessageComponentData().CustomID, "_")
 	page, _ := strconv.Atoi(pageStr)
 	commands.ShowLeaderBoardPaginate(cd.Http, s, i, page)
+}
+
+func (cd *Container) UserInfo(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	commands.UserInfo(s, i)
+}
+
+func (cd *Container) ServerInfo(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	commands.ServerInfo(s, i)
 }
