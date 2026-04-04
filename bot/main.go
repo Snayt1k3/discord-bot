@@ -11,8 +11,8 @@ import (
 	"bot/internal/discord"
 	"bot/internal/handlers"
 
-	"github.com/bwmarrin/discordgo"
 	"bot/internal/utils"
+	"github.com/bwmarrin/discordgo"
 )
 
 func main() {

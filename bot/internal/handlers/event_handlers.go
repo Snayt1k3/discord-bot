@@ -216,9 +216,9 @@ func (eh *EventHandlers) VoiceStatusChange(s *discordgo.Session, v *discordgo.Vo
 	if beforeChannel == "" && afterChannel != "" {
 
 		session := dto.VoiceSession{ChannelID: afterChannel, JoinedAt: time.Now()}
-        if err := eh.redis.SetJSON(ctx, dto.VoiceSessionKey(v.GuildID, v.UserID), session, 24*time.Hour); err != nil {
-            slog.Error("redis: failed to save voice session", "error", err)
-        }
+		if err := eh.redis.SetJSON(ctx, dto.VoiceSessionKey(v.GuildID, v.UserID), session, 24*time.Hour); err != nil {
+			slog.Error("redis: failed to save voice session", "error", err)
+		}
 
 		fields := []*discordgo.MessageEmbedField{
 			{Name: "User", Value: fmt.Sprintf("<@%s>", v.UserID), Inline: true},
@@ -253,7 +253,7 @@ func (eh *EventHandlers) VoiceStatusChange(s *discordgo.Session, v *discordgo.Vo
 			},
 		)
 		eh.http.Interaction.AddVoiceTime(v.GuildID, v.UserID, int64(duration.Seconds()))
-        return
+		return
 	}
 
 	if beforeChannel != "" && afterChannel != "" && beforeChannel != afterChannel {
@@ -316,18 +316,16 @@ func (eh *EventHandlers) messageCheck(s *discordgo.Session, m *discordgo.Message
 	return utils.AutomodeChecks(settings.AutoMode, s, m)
 }
 
-
 func (eh *EventHandlers) popVoiceSession(ctx context.Context, guildID, userID string) time.Duration {
-    key := dto.VoiceSessionKey(guildID, userID)
+	key := dto.VoiceSessionKey(guildID, userID)
 
-    var session dto.VoiceSession
-    if err := eh.redis.GetJSON(ctx, key, &session); err != nil {
-        slog.Error("redis: voice session not found for user", "user_id", userID, "error", err)
-        return 0
-    }
+	var session dto.VoiceSession
+	if err := eh.redis.GetJSON(ctx, key, &session); err != nil {
+		slog.Error("redis: voice session not found for user", "user_id", userID, "error", err)
+		return 0
+	}
 
-    eh.redis.Delete(ctx, key)
+	eh.redis.Delete(ctx, key)
 
-    return time.Since(session.JoinedAt)
+	return time.Since(session.JoinedAt)
 }
-
