@@ -15,6 +15,7 @@ message User {
   int32 level = 4;
   int32 next_level_xp = 5;
   string last_message_at = 6; // ISO timestamp string
+  int64 seconds_in_voice = 7;
 }
 
 message GetUserRequest {
@@ -38,6 +39,16 @@ message AddXPResponse {
   int32 added_xp = 3;
 }
 
+message AddVoiceTimeRequest {
+  string user_id = 1;
+  string guild_id = 2;
+  int64 seconds = 3;
+}
+
+message AddVoiceTimeResponse {
+  User user = 1;
+}
+
 
 message GetUsersRequest {
   string guild_id = 1;
@@ -59,5 +70,6 @@ message GetUsersResponse {
 service InteractionService {
   rpc GetUser (GetUserRequest) returns (GetUserResponse);
   rpc AddXP (AddXPRequest) returns (AddXPResponse);
+  rpc AddVoiceTime (AddVoiceTimeRequest) returns (AddVoiceTimeResponse);
   rpc GetUsers(GetUsersRequest) returns (GetUsersResponse);
 }

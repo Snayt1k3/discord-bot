@@ -85,6 +85,7 @@ type User struct {
 	Level         int32  `json:"level"`
 	NextLevelXP   int32  `json:"next_level_xp"`
 	LastMessageAt string `json:"last_message_at"` // ISO timestamp string
+	SecondsInVoice int64  `json:"seconds_in_voice"`
 }
 
 type UserResponse struct {
@@ -102,4 +103,8 @@ type AddXpResponse struct {
 	AddedXp int  `json:"added_xp"`
 	LevelUp bool `json:"level_up"`
 	User    User `json:"user"`
+}
+
+type AddVoiceTimeResponse struct {
+	User User `json:"user"`
 }

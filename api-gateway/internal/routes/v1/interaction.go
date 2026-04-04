@@ -12,4 +12,5 @@ func InteractionRoutes(r *gin.Engine, handler *handlers.Interaction) {
 	router.GET("/user", handler.GetUser)
 	router.GET("/users", handler.GetUsers)
 	router.POST("/user/addxp", handler.AddXp)
+	router.POST("/user/addvoicetime", handler.AddVoiceTime)
 }

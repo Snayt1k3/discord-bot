@@ -35,7 +35,6 @@ func main() {
 	models.Migrate(db)
 	repositories := repos.NewRepos(db)
 
-	
 	grpcServer := grpc.NewServer()
 
 	pb.RegisterAutoModServiceServer(grpcServer, &server.AutomodeServer{
@@ -55,7 +54,7 @@ func main() {
 	})
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", cfg.GrpcPort))
-	
+
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -64,9 +63,6 @@ func main() {
 		log.Fatalf("failed to serve: %v", err)
 	}
 
-	
-
-	
 }
 
 func initLogging() {

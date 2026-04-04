@@ -74,4 +74,3 @@ func initLogging() {
 	slog.SetDefault(logger)
 	slog.Info("Logger initialized")
 }
-

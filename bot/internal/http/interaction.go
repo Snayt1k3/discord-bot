@@ -102,3 +102,32 @@ func (i *Interaction) AddXP(guildId, userId string, xp int32) (dtoGuild.AddXpRes
 
 	return resp, nil
 }
+
+func (i *Interaction) AddVoiceTime(guildId, userId string, seconds int64) (dtoGuild.AddVoiceTimeResponse, error) {
+	bodyBytes, _ := json.Marshal(map[string]interface{}{
+		"guild_id": guildId,
+		"user_id":  userId,
+		"seconds":  seconds,
+	})
+
+	response, err := i.http.Post(
+		context.Background(),
+		fmt.Sprintf("%v/api/v1/interaction/user/addvoicetime", config.GetApiGatewayAddr()),
+		bodyBytes,
+		nil,
+	)
+
+	if err != nil {
+		slog.Warn("Bad response when adding voice time", "err", err)
+		return dtoGuild.AddVoiceTimeResponse{}, err
+	}
+
+	var resp dtoGuild.AddVoiceTimeResponse
+
+	if err := json.NewDecoder(response.Body).Decode(&resp); err != nil {
+		slog.Warn("Failed to decode user response", "err", err)
+		return dtoGuild.AddVoiceTimeResponse{}, err
+	}
+
+	return resp, nil
+}

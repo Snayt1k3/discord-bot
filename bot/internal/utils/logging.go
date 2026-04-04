@@ -9,7 +9,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-
 func SendLoggingMessage(
 	http *http.Container,
 	s *discordgo.Session,

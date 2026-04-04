@@ -11,6 +11,9 @@ type configuration struct {
 	BotStatus      string
 	DiscordToken   string
 	ApiGatewayAddr string
+	RedisAddr      string
+	RedisPassword  string
+	RedisDB        int
 }
 
 var config *configuration
@@ -24,6 +27,9 @@ func Load() {
 		GuildId:        os.Getenv("GUILD_ID"),
 		BotStatus:      os.Getenv("BOT_STATUS"),
 		ApiGatewayAddr: fmt.Sprintf("%v:%v", ApiGatewayAddr, ApiGatewayPort),
+		RedisAddr:      os.Getenv("REDIS_ADDR"),
+		RedisPassword:  os.Getenv("REDIS_PASSWORD"),
+		RedisDB:        0,
 	}
 }
 
@@ -45,4 +51,16 @@ func GetBotStatus() string {
 
 func GetApiGatewayAddr() string {
 	return config.ApiGatewayAddr
+}
+
+func GetRedisAddr() string {
+	return config.RedisAddr
+}
+
+func GetRedisPassword() string {
+	return config.RedisPassword
+}
+
+func GetRedisDB() int {
+	return config.RedisDB
 }

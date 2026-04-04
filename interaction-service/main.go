@@ -1,17 +1,16 @@
 package main
 
 import (
-
 	"fmt"
 	"interaction-service/config"
 	"log"
 	"log/slog"
 	"net"
 
-	"os"
 	"interaction-service/internal/models"
 	"interaction-service/internal/server"
 	pb "interaction-service/proto"
+	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -40,7 +39,7 @@ func main() {
 
 	// run grpc
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", cfg.GrpcPort))
-	
+
 	if err != nil {
 		log.Fatalf("Error listening on grpc port: %v", err)
 	}
@@ -61,4 +60,3 @@ func initLogging() {
 	slog.SetDefault(logger)
 	slog.Info("Logger initialized")
 }
-

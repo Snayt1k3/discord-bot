@@ -12,6 +12,7 @@ import (
 	"bot/internal/handlers"
 
 	"github.com/bwmarrin/discordgo"
+	"bot/internal/utils"
 )
 
 func main() {
@@ -22,10 +23,16 @@ func main() {
 
 	// init deps
 	httpContainer := http.NewContainer()
+	redisClient, err := utils.NewRedisClient()
+
+	if err != nil {
+		slog.Error("Failed to initialize Redis client", "error", err)
+		return
+	}
 
 	// init handlers/commands
 	dispatcher := handlers.NewCommandsDispatcher()
-	eventHandlers := handlers.NewEventHandlers(httpContainer, discord.CommandsList)
+	eventHandlers := handlers.NewEventHandlers(httpContainer, discord.CommandsList, redisClient)
 	handlersContainer := handlers.NewContainer(httpContainer)
 	dispatcher.InitHandlers(handlersContainer)
 	addEventHandlers(dispatcher, eventHandlers)

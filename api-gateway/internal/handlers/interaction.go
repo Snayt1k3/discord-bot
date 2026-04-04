@@ -138,3 +138,34 @@ func (i *Interaction) AddXp(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 
 }
+
+// AddVoiceTime godoc
+// @Summary      Add Voice Time to user
+// @Description  Add Spended time in voice channel to user
+// @Tags         interaction
+// @Accept       json
+// @Produce      json
+// @Param        request body pb.AddVoiceTimeRequest true "Add Voice Time"
+// @Success      200 {object} pb.AddVoiceTimeResponse
+// @Failure      400 {object} dto.APIResponse "Bad request"
+// @Failure      500 {object} dto.APIResponse "Internal server error"
+// @Router 		 /api/v1/interaction/user/addvoicetime [post]
+func (i *Interaction) AddVoiceTime(c *gin.Context) {
+	var req pb.AddVoiceTimeRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		slog.Error("Error while binding json", "error", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	resp, err := i.client.AddVoiceTime(context.Background(), &req)
+
+	if err != nil {
+		slog.Error("Error while adding voice time", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, resp)
+}
