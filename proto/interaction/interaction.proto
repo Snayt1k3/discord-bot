@@ -15,7 +15,12 @@ message User {
   int32 level = 4;
   int32 next_level_xp = 5;
   string last_message_at = 6; // ISO timestamp string
-  int64 seconds_in_voice = 7;
+  int64 voice_time = 7;
+}
+
+enum UserOrderBy {
+  EXPERIENCE = 0;
+  VOICE_TIME = 1;
 }
 
 message GetUserRequest {
@@ -54,6 +59,8 @@ message GetUsersRequest {
   string guild_id = 1;
   int32 page = 2;
   int32 size = 3;
+  bool is_desc_sort = 4;
+  UserOrderBy order_by = 5;
 }
 
 message GetUsersResponse {

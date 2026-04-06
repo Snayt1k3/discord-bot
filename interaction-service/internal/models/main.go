@@ -12,7 +12,7 @@ type User struct {
 	GuildID        string    `gorm:"not null;index:idx_user_guild,unique"`
 	Experience     int       `json:"experience"`
 	Level          int       `json:"level"`
-	SecondsInVoice int64     `json:"time_in_voice"`
+	VoiceTime      int64     `json:"voice_time"`
 	LastMessageAt  time.Time `json:"last_message_at"`
 	NextLevelXP    int       `json:"next_level_xp"`
 	CreatedAt      time.Time

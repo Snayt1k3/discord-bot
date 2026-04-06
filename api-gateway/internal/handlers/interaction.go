@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
@@ -72,6 +73,8 @@ func (i *Interaction) GetUsers(c *gin.Context) {
 	page := c.Query("page")
 	size := c.Query("size")
 	guildID := c.Query("guild_id")
+	orderBy := c.Query("order_by")
+	isDescSort := c.Query("is_desc_sort")
 
 	if page == "" || guildID == "" || size == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "page, size and guild_id are required"})
@@ -89,15 +92,27 @@ func (i *Interaction) GetUsers(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid size number"})
 		return
 	}
+	orderByValue, ok := pb.UserOrderBy_value[strings.ToUpper(orderBy)]
+
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid order_by value, must be 'experience' or 'voice_time'"})
+		return
+	}
+
+	isDescSortBool, err := strconv.ParseBool(isDescSort)
+	if err != nil {
+		isDescSortBool = false
+	}
 
 	req := pb.GetUsersRequest{
-		GuildId: guildID,
-		Page:    int32(pageInt),
-		Size:    int32(sizeInt),
+		GuildId:    guildID,
+		Page:       int32(pageInt),
+		Size:       int32(sizeInt),
+		OrderBy:    pb.UserOrderBy(orderByValue),
+		IsDescSort: isDescSortBool,
 	}
 
 	resp, err := i.client.GetUsers(context.Background(), &req)
-
 	if err != nil {
 		slog.Error("Error while getting users", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -105,7 +120,7 @@ func (i *Interaction) GetUsers(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, resp)
-}
+}	
 
 // AddXp godoc
 // @Summary      Add Experience to user

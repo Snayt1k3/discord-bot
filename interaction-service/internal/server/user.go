@@ -22,9 +22,10 @@ func NewUserServer(db *gorm.DB) *UserServer {
 }
 
 func (s *UserServer) GetUser(ctx context.Context, request *pb.GetUserRequest) (*pb.GetUserResponse, error) {
+	// if user doesn't exist, we create a new one
 	user, err := s.repo.GetOrCreateUser(request.GetUserId(), request.GetGuildId())
-
-	if err != nil { // if user doesn't exist, we create a new one
+	
+	if err != nil { 
 		return nil, err
 	}
 
@@ -36,6 +37,7 @@ func (s *UserServer) GetUser(ctx context.Context, request *pb.GetUserRequest) (*
 			Level:         int32(user.Level),
 			NextLevelXp:   int32(user.NextLevelXP),
 			LastMessageAt: user.LastMessageAt.Format(time.RFC3339),
+			VoiceTime:     user.VoiceTime,
 		},
 	}, nil
 }
@@ -81,7 +83,7 @@ func (s *UserServer) AddXP(ctx context.Context, req *pb.AddXPRequest) (*pb.AddXP
 }
 
 func (s *UserServer) GetUsers(ctx context.Context, req *pb.GetUsersRequest) (*pb.GetUsersResponse, error) {
-	users, err := s.repo.GetUsers(req.GetGuildId(), int(req.GetPage()), int(req.GetSize()))
+	users, err := s.repo.GetUsers(req.GetGuildId(), int(req.GetPage()), int(req.GetSize()), req.GetOrderBy(), req.GetIsDescSort())
 
 	if err != nil {
 		return nil, err
@@ -97,6 +99,7 @@ func (s *UserServer) GetUsers(ctx context.Context, req *pb.GetUsersRequest) (*pb
 			Level:         int32(user.Level),
 			NextLevelXp:   int32(user.NextLevelXP),
 			LastMessageAt: user.LastMessageAt.Format(time.RFC3339),
+			VoiceTime:     user.VoiceTime,
 		})
 	}
 
