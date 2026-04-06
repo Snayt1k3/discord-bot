@@ -3,8 +3,8 @@ package repos
 import (
 	"errors"
 	"fmt"
-	"interaction-service/internal/models"
-	pb "interaction-service/proto"
+	"user-service/internal/models"
+	pb "user-service/proto"
 	"time"
 
 	"gorm.io/gorm"

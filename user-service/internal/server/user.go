@@ -2,9 +2,9 @@ package server
 
 import (
 	"context"
-	"interaction-service/internal/adapters/repos"
-	"interaction-service/internal/interfaces"
-	pb "interaction-service/proto"
+	"user-service/internal/adapters/repos"
+	"user-service/internal/interfaces"
+	pb "user-service/proto"
 	"time"
 
 	"gorm.io/gorm"

@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
-	"interaction-service/config"
+	"user-service/config"
 	"log"
 	"log/slog"
 	"net"
 
-	"interaction-service/internal/models"
-	"interaction-service/internal/server"
-	pb "interaction-service/proto"
+	"user-service/internal/models"
+	"user-service/internal/server"
+	pb "user-service/proto"
 	"os"
 
 	"gorm.io/driver/postgres"

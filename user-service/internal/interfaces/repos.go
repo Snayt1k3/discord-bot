@@ -1,8 +1,8 @@
 package interfaces
 
 import (
-	"interaction-service/internal/models"
-	pb "interaction-service/proto"
+	"user-service/internal/models"
+	pb "user-service/proto"
 )
 
 type UserRepo interface {
