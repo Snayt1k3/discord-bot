@@ -29,14 +29,14 @@ func main() {
 		panic("Failed to connect to settings service: " + err.Error())
 	}
 
-	interactionServiceConn, err := grpc.NewClient(fmt.Sprintf("%v:%v", cfg.GrpcInteractionHost, cfg.GrpcInteractionPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	userSeviceConn, err := grpc.NewClient(fmt.Sprintf("%v:%v", cfg.GrpcUserHost, cfg.GrpcUserPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
-		panic("Failed to connect to interaction service: " + err.Error())
+		panic("Failed to connect to user service: " + err.Error())
 	}
 
 	defer settingsServiceConn.Close()
-	defer interactionServiceConn.Close()
+	defer userSeviceConn.Close()
 
 	redisClient := adapters.NewRedisAdapter(fmt.Sprintf("%v:%v", cfg.RedisHost, cfg.RedisPort), cfg.RedisPass, cfg.RedisDB)
 
@@ -46,9 +46,9 @@ func main() {
 	welcome := handlers.NewWelcomeHandlers(settingsServiceConn)
 	log := handlers.NewLogHandlers(settingsServiceConn)
 	automode := handlers.NewAutoModeHandlers(settingsServiceConn)
-	interaction := handlers.NewInteraction(interactionServiceConn)
+	user := handlers.NewUserService(userSeviceConn)
 
-	r := routes.SetupRouter(settings, roles, welcome, automode, log, interaction)
+	r := routes.SetupRouter(settings, roles, welcome, automode, log, user)
 
 	port := ":" + cfg.Port
 

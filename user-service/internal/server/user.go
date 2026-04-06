@@ -12,7 +12,7 @@ import (
 
 type UserServer struct {
 	repo interfaces.UserRepo
-	pb.UnimplementedInteractionServiceServer
+	pb.UnimplementedUserServiceServer
 }
 
 func NewUserServer(db *gorm.DB) *UserServer {

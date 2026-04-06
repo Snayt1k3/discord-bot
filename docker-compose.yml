@@ -24,10 +24,10 @@ services:
         condition: service_healthy
     restart: always
 
-  interaction-service:
-    container_name: $INTERACTION_ADDRESS
+  user-service:
+    container_name: $USER_ADDRESS
     build:
-      context: ./interaction-service
+      context: ./user-service
     networks:
       - bot
     env_file:
@@ -35,7 +35,7 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      interaction-db:
+      user-db:
         condition: service_healthy
     restart: always
 
@@ -87,22 +87,22 @@ services:
     volumes:
       - ./docker/volumes/redis_data:/data 
 
-  interaction-db:
+  user-db:
     image: postgres:15
     restart: on-failure:5
-    container_name: $INTERACTION_POSTGRES_HOST
+    container_name: $USER_POSTGRES_HOST
     environment:
-      POSTGRES_USER: $INTERACTION_POSTGRES_USER
-      POSTGRES_PASSWORD: $INTERACTION_POSTGRES_PASSWORD
-      POSTGRES_DB: $INTERACTION_POSTGRES_DB
+      POSTGRES_USER: $USER_POSTGRES_USER
+      POSTGRES_PASSWORD: $USER_POSTGRES_PASSWORD
+      POSTGRES_DB: $USER_POSTGRES_DB
     networks:
         - bot
     volumes:
-      - ./docker/volumes/pg/interaction:/var/lib/postgresql/data
+      - ./docker/volumes/pg/user:/var/lib/postgresql/data
     ports:
       - "5433:5432"
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U $INTERACTION_POSTGRES_USER" ]
+      test: [ "CMD-SHELL", "pg_isready -U $USER_POSTGRES_USER" ]
       interval: 5s
       timeout: 5s
       retries: 5

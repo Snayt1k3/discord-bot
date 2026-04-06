@@ -35,7 +35,7 @@ func main() {
 	models.Migrate(db)
 	grpcServer := grpc.NewServer()
 
-	pb.RegisterInteractionServiceServer(grpcServer, server.NewUserServer(db))
+	pb.RegisterUserServiceServer(grpcServer, server.NewUserServer(db))
 
 	// run grpc
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", cfg.GrpcPort))

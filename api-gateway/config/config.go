@@ -9,8 +9,8 @@ import (
 type Config struct {
 	GrpcSettingsHost    string
 	GrpcSettingsPort    string
-	GrpcInteractionHost string
-	GrpcInteractionPort string
+	GrpcUserHost string
+	GrpcUserPort string
 	RedisHost           string
 	RedisPort           string
 	RedisPass           string
@@ -29,8 +29,8 @@ func LoadConfig() (*Config, error) {
 	config := &Config{
 		GrpcSettingsHost:    os.Getenv("SETTINGS_ADDRESS"),
 		GrpcSettingsPort:    os.Getenv("SETTINGS_PORT"),
-		GrpcInteractionHost: os.Getenv("INTERACTION_ADDRESS"),
-		GrpcInteractionPort: os.Getenv("INTERACTION_PORT"),
+		GrpcUserHost: os.Getenv("USER_ADDRESS"),
+		GrpcUserPort: os.Getenv("USER_PORT"),
 		RedisHost:           os.Getenv("REDIS_HOST"),
 		RedisPort:           os.Getenv("REDIS_PORT"),
 		RedisPass:           os.Getenv("REDIS_PASS"),

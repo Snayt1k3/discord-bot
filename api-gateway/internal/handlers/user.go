@@ -12,18 +12,18 @@ import (
 	"google.golang.org/grpc"
 )
 
-type Interaction struct {
-	client pb.InteractionServiceClient
+type User struct {
+	client pb.UserServiceClient
 }
 
-func NewInteraction(cc grpc.ClientConnInterface) *Interaction {
-	return &Interaction{client: pb.NewInteractionServiceClient(cc)}
+func NewUserService(cc grpc.ClientConnInterface) *User {
+	return &User{client: pb.NewUserServiceClient(cc)}
 }
 
 // GetUser godoc
 // @Summary      Get user
-// @Description  Получает профиль пользователя из interaction-сервиса
-// @Tags         interaction
+// @Description  Получает профиль пользователя из user-сервиса
+// @Tags         user
 // @Accept       json
 // @Produce      json
 // @Param        user_id query string true "User ID"
@@ -31,8 +31,8 @@ func NewInteraction(cc grpc.ClientConnInterface) *Interaction {
 // @Success      200 {object} pb.GetUserResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router 		 /api/v1/interaction/user [get]
-func (i *Interaction) GetUser(c *gin.Context) {
+// @Router 		 /api/v1/user [get]
+func (i *User) GetUser(c *gin.Context) {
 	userID := c.Query("user_id")
 	guildID := c.Query("guild_id")
 
@@ -58,8 +58,8 @@ func (i *Interaction) GetUser(c *gin.Context) {
 
 // GetUsers godoc
 // @Summary      Get users
-// @Description  Получает профиля пользователей из interaction-сервиса
-// @Tags         interaction
+// @Description  Получает профиля пользователей из user-сервиса
+// @Tags         user
 // @Accept       json
 // @Produce      json
 // @Param        guild_id query string false "Guild ID"
@@ -68,8 +68,8 @@ func (i *Interaction) GetUser(c *gin.Context) {
 // @Success      200 {object} pb.GetUsersResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router 		 /api/v1/interaction/users [get]
-func (i *Interaction) GetUsers(c *gin.Context) {
+// @Router 		 /api/v1/users [get]
+func (i *User) GetUsers(c *gin.Context) {
 	page := c.Query("page")
 	size := c.Query("size")
 	guildID := c.Query("guild_id")
@@ -125,15 +125,15 @@ func (i *Interaction) GetUsers(c *gin.Context) {
 // AddXp godoc
 // @Summary      Add Experience to user
 // @Description  Добавляет опыт пользователю
-// @Tags         interaction
+// @Tags         user
 // @Accept       json
 // @Produce      json
 // @Param        request body pb.AddXPRequest true "Add XP"
 // @Success      200 {object} pb.AddXPResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router 		 /api/v1/interaction/user/addxp [post]
-func (i *Interaction) AddXp(c *gin.Context) {
+// @Router 		 /api/v1/user/addxp [post]
+func (i *User) AddXp(c *gin.Context) {
 	var req pb.AddXPRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -157,15 +157,15 @@ func (i *Interaction) AddXp(c *gin.Context) {
 // AddVoiceTime godoc
 // @Summary      Add Voice Time to user
 // @Description  Add Spended time in voice channel to user
-// @Tags         interaction
+// @Tags         user
 // @Accept       json
 // @Produce      json
 // @Param        request body pb.AddVoiceTimeRequest true "Add Voice Time"
 // @Success      200 {object} pb.AddVoiceTimeResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router 		 /api/v1/interaction/user/addvoicetime [post]
-func (i *Interaction) AddVoiceTime(c *gin.Context) {
+// @Router 		 /api/v1/user/addvoicetime [post]
+func (i *User) AddVoiceTime(c *gin.Context) {
 	var req pb.AddVoiceTimeRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {

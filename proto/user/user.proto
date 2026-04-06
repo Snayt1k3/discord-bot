@@ -74,7 +74,7 @@ message GetUsersResponse {
 // Service definition
 // ----------------------
 
-service InteractionService {
+service UserService {
   rpc GetUser (GetUserRequest) returns (GetUserResponse);
   rpc AddXP (AddXPRequest) returns (AddXPResponse);
   rpc AddVoiceTime (AddVoiceTimeRequest) returns (AddVoiceTimeResponse);
