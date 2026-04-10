@@ -280,8 +280,8 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		},
 	},
 	{
-		Name:        "rank",
-		Description: "View your rank and experience points.",
+		Name:        "stats",
+		Description: "View your stats or another user's stats.",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
 				Type:        discordgo.ApplicationCommandOptionUser,

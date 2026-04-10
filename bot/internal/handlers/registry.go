@@ -27,8 +27,8 @@ func (cd *Container) Help(s *discordgo.Session, i *discordgo.InteractionCreate) 
 	commands.Help(s, i)
 }
 
-func (cd *Container) Rank(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := commands.Rank(cd.Http, s, i)
+func (cd *Container) UserStats(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	err := commands.UserStats(cd.Http, s, i)
 	if err != nil {
 		slog.Error(err.Error())
 	}

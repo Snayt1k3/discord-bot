@@ -26,7 +26,7 @@ func (cd *CommandsDispatcher) InitHandlers(container *Container) {
 	cd.handlers["menu"] = container.Menu
 
 	// interactions
-	cd.handlers["rank"] = container.Rank
+	cd.handlers["stats"] = container.UserStats
 	cd.handlers["leaderboard"] = container.Leaderboard
 	cd.handlers["LeaderboardPage"] = container.LeaderboardPagination
 	cd.handlers["LeaderboardLast"] = container.LeaderboardPaginationLast
