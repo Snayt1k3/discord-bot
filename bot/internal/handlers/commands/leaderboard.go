@@ -17,7 +17,7 @@ import (
 
 func ShowLeaderBoard(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) {
 	page := 0
-	users, err := http.Interaction.GetUsers(i.GuildID, fmt.Sprintf("%d", page), "10")
+	users, err := http.User.GetUsers(i.GuildID, fmt.Sprintf("%d", page), "10")
 
 	if err != nil {
 		slog.Error("Failed to fetch users for leaderboard", "err", err)
@@ -41,7 +41,7 @@ func ShowLeaderBoard(http *http.Container, s *discordgo.Session, i *discordgo.In
 }
 
 func ShowLeaderBoardPaginate(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate, page int) {
-	users, err := http.Interaction.GetUsers(i.GuildID, fmt.Sprintf("%d", page), "10")
+	users, err := http.User.GetUsers(i.GuildID, fmt.Sprintf("%d", page), "10")
 
 	if err != nil {
 		slog.Error("Failed to fetch users for leaderboard", "err", err)

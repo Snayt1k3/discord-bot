@@ -10,15 +10,15 @@ import (
 	"log/slog"
 )
 
-type Interaction struct {
+type UserService struct {
 	http interfaces.HttpClient
 }
 
-func NewInteraction() *Interaction {
-	return &Interaction{http: NewDefaultHttpClient()}
+func NewUserService() *UserService {
+	return &UserService{http: NewDefaultHttpClient()}
 }
 
-func (i *Interaction) GetUser(guildId, userId string) (dtoGuild.User, error) {
+func (i *UserService) GetUser(guildId, userId string) (dtoGuild.User, error) {
 	params := map[string]string{
 		"user_id":  userId,
 		"guild_id": guildId,
@@ -26,7 +26,7 @@ func (i *Interaction) GetUser(guildId, userId string) (dtoGuild.User, error) {
 
 	response, err := i.http.Get(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/interaction/user", config.GetApiGatewayAddr()),
+			fmt.Sprintf("%v/api/v1/user", config.GetApiGatewayAddr()),
 		params,
 		nil,
 	)
@@ -46,7 +46,7 @@ func (i *Interaction) GetUser(guildId, userId string) (dtoGuild.User, error) {
 	return user.User, nil
 }
 
-func (i *Interaction) GetUsers(guildId string, page, size string) (dtoGuild.UsersResponse, error) {
+func (i *UserService) GetUsers(guildId string, page, size string) (dtoGuild.UsersResponse, error) {
 	params := map[string]string{
 		"page":     page,
 		"size":     size,
@@ -55,7 +55,7 @@ func (i *Interaction) GetUsers(guildId string, page, size string) (dtoGuild.User
 
 	response, err := i.http.Get(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/interaction/users", config.GetApiGatewayAddr()),
+		fmt.Sprintf("%v/api/v1/users", config.GetApiGatewayAddr()),
 		params,
 		nil,
 	)
@@ -75,7 +75,7 @@ func (i *Interaction) GetUsers(guildId string, page, size string) (dtoGuild.User
 	return users, nil
 }
 
-func (i *Interaction) AddXP(guildId, userId string, xp int32) (dtoGuild.AddXpResponse, error) {
+func (i *UserService) AddXP(guildId, userId string, xp int32) (dtoGuild.AddXpResponse, error) {
 	bodyBytes, _ := json.Marshal(map[string]interface{}{
 		"guild_id": guildId,
 		"user_id":  userId,
@@ -84,7 +84,7 @@ func (i *Interaction) AddXP(guildId, userId string, xp int32) (dtoGuild.AddXpRes
 
 	response, err := i.http.Post(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/interaction/user/addxp", config.GetApiGatewayAddr()),
+		fmt.Sprintf("%v/api/v1/user/addxp", config.GetApiGatewayAddr()),
 		bodyBytes,
 		nil,
 	)
@@ -103,7 +103,7 @@ func (i *Interaction) AddXP(guildId, userId string, xp int32) (dtoGuild.AddXpRes
 	return resp, nil
 }
 
-func (i *Interaction) AddVoiceTime(guildId, userId string, seconds int64) (dtoGuild.AddVoiceTimeResponse, error) {
+func (i *UserService) AddVoiceTime(guildId, userId string, seconds int64) (dtoGuild.AddVoiceTimeResponse, error) {
 	bodyBytes, _ := json.Marshal(map[string]interface{}{
 		"guild_id": guildId,
 		"user_id":  userId,
@@ -112,7 +112,7 @@ func (i *Interaction) AddVoiceTime(guildId, userId string, seconds int64) (dtoGu
 
 	response, err := i.http.Post(
 		context.Background(),
-		fmt.Sprintf("%v/api/v1/interaction/user/addvoicetime", config.GetApiGatewayAddr()),
+		fmt.Sprintf("%v/api/v1/user/addvoicetime", config.GetApiGatewayAddr()),
 		bodyBytes,
 		nil,
 	)

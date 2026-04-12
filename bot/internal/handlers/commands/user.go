@@ -22,7 +22,7 @@ func UserStats(http *http.Container, s *discordgo.Session, i *discordgo.Interact
 		userID = requestedUser.ID
 	}
 
-	user, err := http.Interaction.GetUser(guildID, userID)
+	user, err := http.User.GetUser(guildID, userID)
 
 	if err != nil {
 		slog.Error("Failed to fetch user profile", "err", err)

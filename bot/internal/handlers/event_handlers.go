@@ -128,7 +128,7 @@ func (eh *EventHandlers) MessageCreate(s *discordgo.Session, m *discordgo.Messag
 	res := eh.messageCheck(s, m)
 
 	if !res {
-		res, err := eh.http.Interaction.AddXP(m.GuildID, m.Author.ID, 10)
+		res, err := eh.http.User.AddXP(m.GuildID, m.Author.ID, 10)
 
 		if err != nil {
 			slog.Error("Error while adding XP", "error", err)
@@ -252,7 +252,7 @@ func (eh *EventHandlers) VoiceStatusChange(s *discordgo.Session, v *discordgo.Vo
 				Fields:      fields,
 			},
 		)
-		eh.http.Interaction.AddVoiceTime(v.GuildID, v.UserID, int64(duration.Seconds()))
+		eh.http.User.AddVoiceTime(v.GuildID, v.UserID, int64(duration.Seconds()))
 		return
 	}
 
