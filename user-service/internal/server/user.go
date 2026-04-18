@@ -76,6 +76,7 @@ func (s *UserServer) AddXP(ctx context.Context, req *pb.AddXPRequest) (*pb.AddXP
 			Level:         int32(user.Level),
 			NextLevelXp:   int32(user.NextLevelXP),
 			LastMessageAt: user.LastMessageAt.Format(time.RFC3339),
+			VoiceTime: 	   user.VoiceTime,
 		},
 		LevelUp: leveledUp,
 		AddedXp: req.Xp,
@@ -110,3 +111,32 @@ func (s *UserServer) GetUsers(ctx context.Context, req *pb.GetUsersRequest) (*pb
 		Size:       req.GetSize(),
 	}, nil
 }
+
+func (s *UserServer) AddVoiceTime(ctx context.Context, req *pb.AddVoiceTimeRequest) (*pb.AddVoiceTimeResponse, error) {
+	user, err := s.repo.GetOrCreateUser(req.GetUserId(), req.GetGuildId())
+
+	if err != nil {
+		return nil, err
+	}
+
+	user.VoiceTime = user.VoiceTime + req.GetSeconds()
+
+	err = s.repo.UpdateUser(user)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.AddVoiceTimeResponse{
+		User: &pb.User{
+			UserId:        user.UserID,
+			GuildId:       user.GuildID,
+			Experience:    int32(user.Experience),
+			Level:         int32(user.Level),
+			NextLevelXp:   int32(user.NextLevelXP),
+			LastMessageAt: user.LastMessageAt.Format(time.RFC3339),
+			VoiceTime: 	   user.VoiceTime,
+		},
+	}, nil
+}
+

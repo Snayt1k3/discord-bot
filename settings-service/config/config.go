@@ -11,7 +11,6 @@ type Config struct {
 	User     string
 	Password string
 	DBName   string
-
 	GrpcPort string
 }
 
@@ -22,7 +21,6 @@ func LoadConfig() (*Config, error) {
 		User:     os.Getenv("POSTGRES_USER"),
 		Password: os.Getenv("POSTGRES_PASSWORD"),
 		DBName:   os.Getenv("SETTINGS_POSTGRES_DB"),
-
 		GrpcPort: os.Getenv("SETTINGS_GRPC_PORT"),
 	}
 

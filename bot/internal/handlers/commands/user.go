@@ -13,13 +13,12 @@ import (
 
 func UserStats(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	guildID := i.GuildID
-	requestedUser := i.ApplicationCommandData().Options[0].UserValue(s)
-	userID := ""
+	userID := i.Member.User.ID
 
-	if requestedUser == nil {
-		userID = i.Member.User.ID
-	} else {
-		userID = requestedUser.ID
+	if options := i.ApplicationCommandData().Options; len(options) > 0 {
+		if u := options[0].UserValue(s); u != nil {
+			userID = u.ID
+		}
 	}
 
 	user, err := http.User.GetUser(guildID, userID)
@@ -49,7 +48,7 @@ func UserStats(http *http.Container, s *discordgo.Session, i *discordgo.Interact
 			level,
 			utils.ProgressBlocks(int(curXP), int(nextXP), 10),
 			curXP, nextXP,
-			utils.FormatVoiceTime(user.SecondsInVoice),
+			utils.FormatVoiceTime(user.VoiceTime),
 		),
 
 		Timestamp: time.Now().Format(time.RFC3339),

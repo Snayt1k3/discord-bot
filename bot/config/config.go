@@ -28,7 +28,7 @@ func Load() {
 		BotStatus:      os.Getenv("BOT_STATUS"),
 		ApiGatewayAddr: fmt.Sprintf("%v:%v", ApiGatewayAddr, ApiGatewayPort),
 		RedisAddr:      os.Getenv("REDIS_ADDR"),
-		RedisPassword:  os.Getenv("REDIS_PASSWORD"),
+		RedisPassword:  os.Getenv("REDIS_PASS"),
 		RedisDB:        0,
 	}
 }

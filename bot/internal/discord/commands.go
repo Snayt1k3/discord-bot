@@ -296,11 +296,11 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		Description: "View the server leaderboard.",
 	},
 	{
-		Name:        "Server Info",
+		Name:        "server-info",
 		Description: "View the server information.",
 	},
 	{
-		Name:        "User Info",
+		Name:        "user-info",
 		Description: "View user information.",
 		Options: []*discordgo.ApplicationCommandOption{
 			{

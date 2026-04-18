@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log/slog"
+	"strconv"
 )
 
 type UserService struct {
@@ -46,11 +47,13 @@ func (i *UserService) GetUser(guildId, userId string) (dtoGuild.User, error) {
 	return user.User, nil
 }
 
-func (i *UserService) GetUsers(guildId string, page, size string) (dtoGuild.UsersResponse, error) {
+func (i *UserService) GetUsers(guildId, page, size, order_by string, is_desc_sort bool) (dtoGuild.UsersResponse, error) {
 	params := map[string]string{
 		"page":     page,
 		"size":     size,
 		"guild_id": guildId,
+		"order_by": order_by,
+		"is_desc_sort": strconv.FormatBool(is_desc_sort),
 	}
 
 	response, err := i.http.Get(

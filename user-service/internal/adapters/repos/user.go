@@ -34,6 +34,7 @@ func (r *UserRepo) GetOrCreateUser(userID, guildID string) (*models.User, error)
 				Level:         1,
 				LastMessageAt: time.Now(),
 				NextLevelXP:   50,
+				VoiceTime: 0,
 			}
 
 			err = r.CreateUser(&user)

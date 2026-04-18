@@ -65,6 +65,8 @@ func (i *User) GetUser(c *gin.Context) {
 // @Param        guild_id query string false "Guild ID"
 // @Param        page     query int    false "Page number (starts from 0)"
 // @Param        size     query int    false "Items per page (max 50)"
+// @Param        order_by     query string    false "must be 'experience' or 'voice_time'"
+// @Param        is_desc_sort     query     bool     false     "Sort in descending order"     default(true)
 // @Success      200 {object} pb.GetUsersResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"

@@ -17,7 +17,7 @@ import (
 
 func ShowLeaderBoard(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) {
 	page := 0
-	users, err := http.User.GetUsers(i.GuildID, fmt.Sprintf("%d", page), "10")
+	users, err := http.User.GetUsers(i.GuildID, fmt.Sprintf("%d", page), "10", "experience", true)
 
 	if err != nil {
 		slog.Error("Failed to fetch users for leaderboard", "err", err)
@@ -41,7 +41,7 @@ func ShowLeaderBoard(http *http.Container, s *discordgo.Session, i *discordgo.In
 }
 
 func ShowLeaderBoardPaginate(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate, page int) {
-	users, err := http.User.GetUsers(i.GuildID, fmt.Sprintf("%d", page), "10")
+	users, err := http.User.GetUsers(i.GuildID, fmt.Sprintf("%d", page), "10", "experience", true)
 
 	if err != nil {
 		slog.Error("Failed to fetch users for leaderboard", "err", err)
@@ -89,7 +89,7 @@ func createLeaderboardEmbed(users dto.UsersResponse, page int) *discordgo.Messag
 	}
 
 	embed := &discordgo.MessageEmbed{
-		Title:       fmt.Sprintf("🏆 Leaderboard — Page %d", page),
+		Title:       "🏆 Leaderboard",
 		Color:       0x87CEEB,
 		Description: strings.Join(entries, "\n\n"),
 		Timestamp:   time.Now().Format(time.RFC3339),
