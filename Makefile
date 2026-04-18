@@ -2,7 +2,7 @@
 PROTO_DIR := ./proto
 
 # Список .proto файлов
-PROTO_FILES := $(PROTO_DIR)/settings.proto $(PROTO_DIR)/automode.proto  $(PROTO_DIR)/log.proto  $(PROTO_DIR)/roles.proto  $(PROTO_DIR)/welcome.proto  $(PROTO_DIR)/interaction.proto
+PROTO_FILES := $(PROTO_DIR)/settings.proto $(PROTO_DIR)/automode.proto  $(PROTO_DIR)/log.proto  $(PROTO_DIR)/roles.proto  $(PROTO_DIR)/welcome.proto  $(PROTO_DIR)/user.proto
 
 # Команда генерации gRPC и Go-кода
 PROTOC_COMMAND = protoc -I=$(PROTO_DIR) \
@@ -15,11 +15,11 @@ all: generate
 
 generate-grpc:
 	@echo "Generating Go code from .proto files..."
-	@mkdir -p ./grpc/interaction
-	@protoc -I=./proto/interaction \
-		--go_out=./grpc/interaction \
-		--go-grpc_out=./grpc/interaction \
-		./proto/interaction/*.proto
+	@mkdir -p ./grpc/user
+	@protoc -I=./proto/user \
+		--go_out=./grpc/user \
+		--go-grpc_out=./grpc/user \
+		./proto/user/*.proto
 	@mkdir -p "./grpc/preferences"
 	@protoc -I=./proto/preferences \
 		--go_out=./grpc/preferences \
@@ -27,10 +27,10 @@ generate-grpc:
 		./proto/preferences/*.proto
 	@echo "Go code generated in ./grpc"
 
-interaction-init:
-	@mkdir -p "./interaction-service/proto"
-	@rm -f ./interaction-service/proto/*.go
-	@cp ./grpc/interaction/proto/* ./interaction-service/proto
+user-init:
+	@mkdir -p "./user-service/proto"
+	@rm -f ./user-service/proto/*.go
+	@cp ./grpc/user/proto/* ./user-service/proto
 
 preferences-init:
 	@mkdir -p "./settings-service/proto"
@@ -40,7 +40,7 @@ preferences-init:
 api-gateway-init:
 	@mkdir -p "./api-gateway/proto"
 	@rm -f ./api-gateway/proto/*.go
-	@cp ./grpc/interaction/proto/* ./api-gateway/proto
+	@cp ./grpc/user/proto/* ./api-gateway/proto
 	@cp ./grpc/preferences/proto/* ./api-gateway/proto
 
 grpc-clean:
@@ -62,8 +62,8 @@ grpc-init:
 	@echo "Moving settings proto files to settings-service..."
 	@$(MAKE) preferences-init
 
-	@echo "Moving settings proto files to interaction-service..."
-	@$(MAKE) interaction-init
+	@echo "Moving settings proto files to user-service..."
+	@$(MAKE) user-init
 
 	@echo "gRPC server initialized. Files distributed to services."
 

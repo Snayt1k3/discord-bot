@@ -2,7 +2,9 @@ package repos
 
 import (
 	"errors"
-	"interaction-service/internal/models"
+	"fmt"
+	"user-service/internal/models"
+	pb "user-service/proto"
 	"time"
 
 	"gorm.io/gorm"
@@ -32,6 +34,7 @@ func (r *UserRepo) GetOrCreateUser(userID, guildID string) (*models.User, error)
 				Level:         1,
 				LastMessageAt: time.Now(),
 				NextLevelXP:   50,
+				VoiceTime: 0,
 			}
 
 			err = r.CreateUser(&user)
@@ -50,13 +53,32 @@ func (r *UserRepo) UpdateUser(user *models.User) error {
 	return r.db.Save(user).Error
 }
 
-func (r *UserRepo) GetUsers(guildID string, page, size int) ([]models.User, error) {
+func (r *UserRepo) GetUsers(guildID string, page, size int, orderBy pb.UserOrderBy, isDescSort bool) ([]models.User, error) {
 	var users []models.User
+
+	sortDir := "ASC"
+	
+	if isDescSort {
+		sortDir = "DESC"
+	}
+
+	var orderColumn string
+
+	switch orderBy {
+	case pb.UserOrderBy_VOICE_TIME:
+		orderColumn = "voice_time"
+	case pb.UserOrderBy_EXPERIENCE:
+		orderColumn = "level"
+	default:
+		orderColumn = "level"
+	}
+
 	err := r.db.Where("guild_id = ?", guildID).
 		Offset(page * size).
 		Limit(size).
-		Order("Level DESC").
+		Order(fmt.Sprintf("%s %s", orderColumn, sortDir)).
 		Find(&users).Error
+
 	return users, err
 }
 

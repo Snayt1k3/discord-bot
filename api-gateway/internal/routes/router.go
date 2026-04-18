@@ -10,7 +10,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func SetupRouter(setting *handlers.Settings, roles *handlers.Roles, welcome *handlers.Welcome, automode *handlers.AutoMode, log *handlers.Log, interaction *handlers.Interaction) *gin.Engine {
+func SetupRouter(setting *handlers.Settings, roles *handlers.Roles, welcome *handlers.Welcome, automode *handlers.AutoMode, log *handlers.Log, user *handlers.User) *gin.Engine {
 	r := gin.Default()
 
 	// Swagger and Prometheus endpoints
@@ -18,7 +18,7 @@ func SetupRouter(setting *handlers.Settings, roles *handlers.Roles, welcome *han
 
 	// Setup routes
 	v1.SettingsRoutes(r, setting, roles, welcome, automode, log)
-	v1.InteractionRoutes(r, interaction)
+	v1.UserRoutes(r, user)
 
 	return r
 }

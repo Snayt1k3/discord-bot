@@ -6,23 +6,24 @@ import (
 	"log/slog"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 )
 
-type Interaction struct {
-	client pb.InteractionServiceClient
+type User struct {
+	client pb.UserServiceClient
 }
 
-func NewInteraction(cc grpc.ClientConnInterface) *Interaction {
-	return &Interaction{client: pb.NewInteractionServiceClient(cc)}
+func NewUserService(cc grpc.ClientConnInterface) *User {
+	return &User{client: pb.NewUserServiceClient(cc)}
 }
 
 // GetUser godoc
 // @Summary      Get user
-// @Description  Получает профиль пользователя из interaction-сервиса
-// @Tags         interaction
+// @Description  Получает профиль пользователя из user-сервиса
+// @Tags         user
 // @Accept       json
 // @Produce      json
 // @Param        user_id query string true "User ID"
@@ -30,8 +31,8 @@ func NewInteraction(cc grpc.ClientConnInterface) *Interaction {
 // @Success      200 {object} pb.GetUserResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router 		 /api/v1/interaction/user [get]
-func (i *Interaction) GetUser(c *gin.Context) {
+// @Router 		 /api/v1/user [get]
+func (i *User) GetUser(c *gin.Context) {
 	userID := c.Query("user_id")
 	guildID := c.Query("guild_id")
 
@@ -57,21 +58,25 @@ func (i *Interaction) GetUser(c *gin.Context) {
 
 // GetUsers godoc
 // @Summary      Get users
-// @Description  Получает профиля пользователей из interaction-сервиса
-// @Tags         interaction
+// @Description  Получает профиля пользователей из user-сервиса
+// @Tags         user
 // @Accept       json
 // @Produce      json
 // @Param        guild_id query string false "Guild ID"
 // @Param        page     query int    false "Page number (starts from 0)"
 // @Param        size     query int    false "Items per page (max 50)"
+// @Param        order_by     query string    false "must be 'experience' or 'voice_time'"
+// @Param        is_desc_sort     query     bool     false     "Sort in descending order"     default(true)
 // @Success      200 {object} pb.GetUsersResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router 		 /api/v1/interaction/users [get]
-func (i *Interaction) GetUsers(c *gin.Context) {
+// @Router 		 /api/v1/users [get]
+func (i *User) GetUsers(c *gin.Context) {
 	page := c.Query("page")
 	size := c.Query("size")
 	guildID := c.Query("guild_id")
+	orderBy := c.Query("order_by")
+	isDescSort := c.Query("is_desc_sort")
 
 	if page == "" || guildID == "" || size == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "page, size and guild_id are required"})
@@ -89,15 +94,27 @@ func (i *Interaction) GetUsers(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid size number"})
 		return
 	}
+	orderByValue, ok := pb.UserOrderBy_value[strings.ToUpper(orderBy)]
+
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid order_by value, must be 'experience' or 'voice_time'"})
+		return
+	}
+
+	isDescSortBool, err := strconv.ParseBool(isDescSort)
+	if err != nil {
+		isDescSortBool = false
+	}
 
 	req := pb.GetUsersRequest{
-		GuildId: guildID,
-		Page:    int32(pageInt),
-		Size:    int32(sizeInt),
+		GuildId:    guildID,
+		Page:       int32(pageInt),
+		Size:       int32(sizeInt),
+		OrderBy:    pb.UserOrderBy(orderByValue),
+		IsDescSort: isDescSortBool,
 	}
 
 	resp, err := i.client.GetUsers(context.Background(), &req)
-
 	if err != nil {
 		slog.Error("Error while getting users", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -105,20 +122,20 @@ func (i *Interaction) GetUsers(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, resp)
-}
+}	
 
 // AddXp godoc
 // @Summary      Add Experience to user
 // @Description  Добавляет опыт пользователю
-// @Tags         interaction
+// @Tags         user
 // @Accept       json
 // @Produce      json
 // @Param        request body pb.AddXPRequest true "Add XP"
 // @Success      200 {object} pb.AddXPResponse
 // @Failure      400 {object} dto.APIResponse "Bad request"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router 		 /api/v1/interaction/user/addxp [post]
-func (i *Interaction) AddXp(c *gin.Context) {
+// @Router 		 /api/v1/user/addxp [post]
+func (i *User) AddXp(c *gin.Context) {
 	var req pb.AddXPRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -137,4 +154,35 @@ func (i *Interaction) AddXp(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp)
 
+}
+
+// AddVoiceTime godoc
+// @Summary      Add Voice Time to user
+// @Description  Add Spended time in voice channel to user
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param        request body pb.AddVoiceTimeRequest true "Add Voice Time"
+// @Success      200 {object} pb.AddVoiceTimeResponse
+// @Failure      400 {object} dto.APIResponse "Bad request"
+// @Failure      500 {object} dto.APIResponse "Internal server error"
+// @Router 		 /api/v1/user/addvoicetime [post]
+func (i *User) AddVoiceTime(c *gin.Context) {
+	var req pb.AddVoiceTimeRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		slog.Error("Error while binding json", "error", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	resp, err := i.client.AddVoiceTime(context.Background(), &req)
+
+	if err != nil {
+		slog.Error("Error while adding voice time", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, resp)
 }

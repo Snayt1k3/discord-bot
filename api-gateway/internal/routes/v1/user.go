@@ -6,10 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InteractionRoutes(r *gin.Engine, handler *handlers.Interaction) {
-	router := r.Group("/api/v1/interaction")
+func UserRoutes(r *gin.Engine, handler *handlers.User) {
+	router := r.Group("/api/v1/")
 
 	router.GET("/user", handler.GetUser)
 	router.GET("/users", handler.GetUsers)
 	router.POST("/user/addxp", handler.AddXp)
+	router.POST("/user/addvoicetime", handler.AddVoiceTime)
 }

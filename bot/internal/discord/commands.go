@@ -280,8 +280,8 @@ var CommandsList = []*discordgo.ApplicationCommand{
 		},
 	},
 	{
-		Name:        "rank",
-		Description: "View your rank and experience points.",
+		Name:        "stats",
+		Description: "View your stats or another user's stats.",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
 				Type:        discordgo.ApplicationCommandOptionUser,
@@ -294,5 +294,21 @@ var CommandsList = []*discordgo.ApplicationCommand{
 	{
 		Name:        "leaderboard",
 		Description: "View the server leaderboard.",
+	},
+	{
+		Name:        "server-info",
+		Description: "View the server information.",
+	},
+	{
+		Name:        "user-info",
+		Description: "View user information.",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionUser,
+				Name:        "user",
+				Description: "User",
+				Required:    false,
+			},
+		},
 	},
 }

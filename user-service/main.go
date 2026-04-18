@@ -1,17 +1,16 @@
 package main
 
 import (
-
 	"fmt"
-	"interaction-service/config"
+	"user-service/config"
 	"log"
 	"log/slog"
 	"net"
 
+	"user-service/internal/models"
+	"user-service/internal/server"
+	pb "user-service/proto"
 	"os"
-	"interaction-service/internal/models"
-	"interaction-service/internal/server"
-	pb "interaction-service/proto"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -36,11 +35,11 @@ func main() {
 	models.Migrate(db)
 	grpcServer := grpc.NewServer()
 
-	pb.RegisterInteractionServiceServer(grpcServer, server.NewUserServer(db))
+	pb.RegisterUserServiceServer(grpcServer, server.NewUserServer(db))
 
 	// run grpc
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", cfg.GrpcPort))
-	
+
 	if err != nil {
 		log.Fatalf("Error listening on grpc port: %v", err)
 	}
@@ -61,4 +60,3 @@ func initLogging() {
 	slog.SetDefault(logger)
 	slog.Info("Logger initialized")
 }
-
