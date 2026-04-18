@@ -12,18 +12,16 @@ type Config struct {
 	Password string
 	DBName   string
 	GrpcPort string
-	PromPort string
 }
 
 func LoadConfig() (*Config, error) {
 	config := &Config{
-		Host:     os.Getenv("INTERACTION_POSTGRES_HOST"),
-		Port:     os.Getenv("INTERACTION_POSTGRES_PORT"),
-		User:     os.Getenv("INTERACTION_POSTGRES_USER"),
-		Password: os.Getenv("INTERACTION_POSTGRES_PASSWORD"),
-		DBName:   os.Getenv("INTERACTION_POSTGRES_DB"),
-		GrpcPort: os.Getenv("INTERACTION_PORT"),
-		PromPort: os.Getenv("INTERACTION_PROMETHEUS_PORT"),
+		Host:     os.Getenv("POSTGRES_HOST"),
+		Port:     os.Getenv("POSTGRES_PORT"),
+		User:     os.Getenv("POSTGRES_USER"),
+		Password: os.Getenv("POSTGRES_PASSWORD"),
+		DBName:   os.Getenv("USER_POSTGRES_DB"),
+		GrpcPort: os.Getenv("USER_GRPC_PORT"),
 	}
 
 	if config.Host == "" || config.Port == "" || config.User == "" || config.Password == "" || config.DBName == "" || config.GrpcPort == "" {
