@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package interaction;
+package user;
 
 option go_package = "proto/";
 
@@ -15,6 +15,12 @@ message User {
   int32 level = 4;
   int32 next_level_xp = 5;
   string last_message_at = 6; // ISO timestamp string
+  int64 voice_time = 7;
+}
+
+enum UserOrderBy {
+  EXPERIENCE = 0;
+  VOICE_TIME = 1;
 }
 
 message GetUserRequest {
@@ -38,11 +44,23 @@ message AddXPResponse {
   int32 added_xp = 3;
 }
 
+message AddVoiceTimeRequest {
+  string user_id = 1;
+  string guild_id = 2;
+  int64 seconds = 3;
+}
+
+message AddVoiceTimeResponse {
+  User user = 1;
+}
+
 
 message GetUsersRequest {
   string guild_id = 1;
   int32 page = 2;
   int32 size = 3;
+  bool is_desc_sort = 4;
+  UserOrderBy order_by = 5;
 }
 
 message GetUsersResponse {
@@ -56,8 +74,9 @@ message GetUsersResponse {
 // Service definition
 // ----------------------
 
-service InteractionService {
+service UserService {
   rpc GetUser (GetUserRequest) returns (GetUserResponse);
   rpc AddXP (AddXPRequest) returns (AddXPResponse);
+  rpc AddVoiceTime (AddVoiceTimeRequest) returns (AddVoiceTimeResponse);
   rpc GetUsers(GetUsersRequest) returns (GetUsersResponse);
 }

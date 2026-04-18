@@ -77,7 +77,7 @@ func (r *LogRepositoryImpl) RemoveLogs(guildId, channelId string, events []model
 		channelId,
 		events,
 	).
-	Delete(&models.LogEvent{}).Error; err != nil {
+		Delete(&models.LogEvent{}).Error; err != nil {
 		return err
 	}
 

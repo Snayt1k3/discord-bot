@@ -11,6 +11,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+// Container holds the handlers for the bot's commands and interactions.
+// And injects the http container to be used in the handlers.
 type Container struct {
 	Http *http.Container
 }
@@ -25,8 +27,8 @@ func (cd *Container) Help(s *discordgo.Session, i *discordgo.InteractionCreate) 
 	commands.Help(s, i)
 }
 
-func (cd *Container) Rank(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	err := commands.Rank(cd.Http, s, i)
+func (cd *Container) UserStats(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	err := commands.UserStats(cd.Http, s, i)
 	if err != nil {
 		slog.Error(err.Error())
 	}
@@ -80,10 +82,10 @@ func (cd *Container) LogEdit(s *discordgo.Session, i *discordgo.InteractionCreat
 	var err error
 
 	switch action {
-		case "add":
-			err = preferences.AddLoggingChnl(cd.Http, s, i)
-		case "remove":
-			err = preferences.RemoveLoggingChnl(cd.Http, s, i)
+	case "add":
+		err = preferences.AddLoggingChnl(cd.Http, s, i)
+	case "remove":
+		err = preferences.RemoveLoggingChnl(cd.Http, s, i)
 	}
 
 	if err != nil {
@@ -223,4 +225,12 @@ func (cd *Container) LeaderboardPaginationLast(s *discordgo.Session, i *discordg
 	_, pageStr, _ := strings.Cut(i.MessageComponentData().CustomID, "_")
 	page, _ := strconv.Atoi(pageStr)
 	commands.ShowLeaderBoardPaginate(cd.Http, s, i, page)
+}
+
+func (cd *Container) UserInfo(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	commands.UserInfo(s, i)
+}
+
+func (cd *Container) ServerInfo(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	commands.ServerInfo(s, i)
 }

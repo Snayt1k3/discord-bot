@@ -9,7 +9,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-
 func AutomodeChecks(settings dto.AutoModeSettings, s *discordgo.Session, m *discordgo.MessageCreate) bool {
 	if !settings.Enabled {
 		return false

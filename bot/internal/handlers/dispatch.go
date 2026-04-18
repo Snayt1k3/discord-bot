@@ -26,7 +26,7 @@ func (cd *CommandsDispatcher) InitHandlers(container *Container) {
 	cd.handlers["menu"] = container.Menu
 
 	// interactions
-	cd.handlers["rank"] = container.Rank
+	cd.handlers["stats"] = container.UserStats
 	cd.handlers["leaderboard"] = container.Leaderboard
 	cd.handlers["LeaderboardPage"] = container.LeaderboardPagination
 	cd.handlers["LeaderboardLast"] = container.LeaderboardPaginationLast
@@ -48,6 +48,10 @@ func (cd *CommandsDispatcher) InitHandlers(container *Container) {
 	cd.handlers["automod-bannedword"] = container.BannedWord
 	cd.handlers["automod-antilink"] = container.AntiLink
 	cd.handlers["automod-anticaps"] = container.AntiCaps
+
+	// Info
+	cd.handlers["user-info"] = container.UserInfo
+	cd.handlers["server-info"] = container.ServerInfo
 
 }
 

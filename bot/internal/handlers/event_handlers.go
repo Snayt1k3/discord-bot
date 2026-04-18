@@ -4,6 +4,8 @@ import (
 	"bot/internal/discord"
 	"bot/internal/dto"
 	"bot/internal/http"
+	"bot/internal/interfaces"
+	"context"
 	"fmt"
 	"log/slog"
 	"math/rand"
@@ -18,10 +20,11 @@ import (
 type EventHandlers struct {
 	http     *http.Container
 	commands []*discordgo.ApplicationCommand
+	redis    interfaces.CacheClient
 }
 
-func NewEventHandlers(http *http.Container, commands []*discordgo.ApplicationCommand) *EventHandlers {
-	return &EventHandlers{http: http, commands: commands}
+func NewEventHandlers(http *http.Container, commands []*discordgo.ApplicationCommand, redis interfaces.CacheClient) *EventHandlers {
+	return &EventHandlers{http: http, commands: commands, redis: redis}
 }
 
 func (eh *EventHandlers) OnMessageReactionAdd(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
@@ -75,12 +78,12 @@ func (eh *EventHandlers) OnMessageReactionRemove(s *discordgo.Session, r *discor
 }
 
 func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMemberAdd) {
-	
+
 	fields := []*discordgo.MessageEmbedField{
 		{Name: "User", Value: fmt.Sprintf("<@%s>", u.User.ID)},
 	}
 
-	utils.SendLoggingMessage(eh.http, s, dto.USER_JOIN, u.GuildID, 
+	utils.SendLoggingMessage(eh.http, s, dto.USER_JOIN, u.GuildID,
 		&discordgo.MessageEmbed{
 			Title:       "Member Joined",
 			Description: fmt.Sprintf("User %s Joined to the server.", u.User.Username),
@@ -88,7 +91,7 @@ func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMe
 			Fields:      fields,
 		},
 	)
-	
+
 	settings, _ := eh.http.Settings.Get(u.GuildID)
 
 	if len(settings.Welcome.Messages) == 0 {
@@ -109,24 +112,24 @@ func (eh *EventHandlers) OnMemberJoin(s *discordgo.Session, u *discordgo.GuildMe
 func (eh *EventHandlers) OnGuildCreate(s *discordgo.Session, r *discordgo.GuildCreate) {
 	appID := s.State.User.ID
 
-	for _, guild := range s.State.Guilds {
-		for _, cmd := range discord.CommandsList {
-			_, err := s.ApplicationCommandCreate(appID, guild.ID, cmd)
-			if err != nil {
-				slog.Error("Error creating command", "command", cmd.Name, "error", err)
-			}
+	for _, cmd := range discord.CommandsList {
+		_, err := s.ApplicationCommandCreate(appID, r.Guild.ID, cmd)
+		if err != nil {
+			slog.Error("Error creating command", "command", cmd.Name, "error", err)
 		}
 	}
 }
 
 func (eh *EventHandlers) MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	if m.Author.Bot { return }
+	if m.Author.Bot {
+		return
+	}
 
 	res := eh.messageCheck(s, m)
 
 	if !res {
-		res, err := eh.http.Interaction.AddXP(m.GuildID, m.Author.ID, 10)
-		
+		res, err := eh.http.User.AddXP(m.GuildID, m.Author.ID, 10)
+
 		if err != nil {
 			slog.Error("Error while adding XP", "error", err)
 			return
@@ -170,10 +173,10 @@ func (eh *EventHandlers) MessageDelete(s *discordgo.Session, m *discordgo.Messag
 
 	utils.SendLoggingMessage(eh.http, s, dto.MESSAGE_DELETE, m.GuildID,
 		&discordgo.MessageEmbed{
-			Title: "Message Deleted",
+			Title:       "Message Deleted",
 			Description: "A message was deleted.",
-			Color: 0xFF0000,
-			Fields: fields,
+			Color:       0xFF0000,
+			Fields:      fields,
 		},
 	)
 }
@@ -202,6 +205,8 @@ func (eh *EventHandlers) MessageUpdate(s *discordgo.Session, m *discordgo.Messag
 
 func (eh *EventHandlers) VoiceStatusChange(s *discordgo.Session, v *discordgo.VoiceStateUpdate) {
 	beforeChannel := ""
+	ctx := context.Background()
+
 	if v.BeforeUpdate != nil {
 		beforeChannel = v.BeforeUpdate.ChannelID
 	}
@@ -209,6 +214,12 @@ func (eh *EventHandlers) VoiceStatusChange(s *discordgo.Session, v *discordgo.Vo
 	afterChannel := v.ChannelID
 
 	if beforeChannel == "" && afterChannel != "" {
+
+		session := dto.VoiceSession{ChannelID: afterChannel, JoinedAt: time.Now()}
+		if err := eh.redis.SetJSON(ctx, dto.VoiceSessionKey(v.GuildID, v.UserID), session, 24*time.Hour); err != nil {
+			slog.Error("redis: failed to save voice session", "error", err)
+		}
+
 		fields := []*discordgo.MessageEmbedField{
 			{Name: "User", Value: fmt.Sprintf("<@%s>", v.UserID), Inline: true},
 			{Name: "Channel", Value: fmt.Sprintf("<#%s>", afterChannel), Inline: true},
@@ -226,6 +237,8 @@ func (eh *EventHandlers) VoiceStatusChange(s *discordgo.Session, v *discordgo.Vo
 	}
 
 	if beforeChannel != "" && afterChannel == "" {
+		duration := eh.popVoiceSession(ctx, v.GuildID, v.UserID)
+
 		fields := []*discordgo.MessageEmbedField{
 			{Name: "User", Value: fmt.Sprintf("<@%s>", v.UserID), Inline: true},
 			{Name: "Channel", Value: fmt.Sprintf("<#%s>", beforeChannel), Inline: true},
@@ -239,6 +252,7 @@ func (eh *EventHandlers) VoiceStatusChange(s *discordgo.Session, v *discordgo.Vo
 				Fields:      fields,
 			},
 		)
+		eh.http.User.AddVoiceTime(v.GuildID, v.UserID, int64(duration.Seconds()))
 		return
 	}
 
@@ -276,13 +290,12 @@ func (eh *EventHandlers) OnInviteCreate(s *discordgo.Session, m *discordgo.Invit
 	)
 }
 
-
 func (eh *EventHandlers) GuildMemberRemove(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 	fields := []*discordgo.MessageEmbedField{
 		{Name: "User", Value: fmt.Sprintf("<@%s>", m.User.ID)},
 	}
 
-	utils.SendLoggingMessage(eh.http, s, dto.USER_LEAVE, m.GuildID, 
+	utils.SendLoggingMessage(eh.http, s, dto.USER_LEAVE, m.GuildID,
 		&discordgo.MessageEmbed{
 			Title:       "Member Left",
 			Description: fmt.Sprintf("User %s left or was kicked from the server.", m.User.Username),
@@ -292,15 +305,27 @@ func (eh *EventHandlers) GuildMemberRemove(s *discordgo.Session, m *discordgo.Gu
 	)
 }
 
-
-
 func (eh *EventHandlers) messageCheck(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 	settings, err := eh.http.Settings.Get(m.GuildID)
 
 	if err != nil {
 		slog.Error("Error while fetching http settings", "err", err)
 		return false
-	}	
-	
+	}
+
 	return utils.AutomodeChecks(settings.AutoMode, s, m)
+}
+
+func (eh *EventHandlers) popVoiceSession(ctx context.Context, guildID, userID string) time.Duration {
+	key := dto.VoiceSessionKey(guildID, userID)
+
+	var session dto.VoiceSession
+	if err := eh.redis.GetJSON(ctx, key, &session); err != nil {
+		slog.Error("redis: voice session not found for user", "user_id", userID, "error", err)
+		return 0
+	}
+
+	eh.redis.Delete(ctx, key)
+
+	return time.Since(session.JoinedAt)
 }

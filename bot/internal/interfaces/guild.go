@@ -40,4 +40,5 @@ type LogAdapterInterface interface {
 type InteractionAdapterInterface interface {
 	GetUser(guildId, userId string) (dtoGuild.User, error)
 	AddXP(guildId, userId string, xp int32) error
+	AddVoiceTime(guildId, userId string, seconds int64) error
 }

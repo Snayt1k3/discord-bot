@@ -79,12 +79,13 @@ type GuildSettingsResponse struct {
 }
 
 type User struct {
-	UserID        string `json:"user_id"`
-	GuildID       string `json:"guild_id"`
-	Experience    int32  `json:"experience"`
-	Level         int32  `json:"level"`
-	NextLevelXP   int32  `json:"next_level_xp"`
-	LastMessageAt string `json:"last_message_at"` // ISO timestamp string
+	UserID         string `json:"user_id"`
+	GuildID        string `json:"guild_id"`
+	Experience     int32  `json:"experience"`
+	Level          int32  `json:"level"`
+	NextLevelXP    int32  `json:"next_level_xp"`
+	LastMessageAt  string `json:"last_message_at"` // ISO timestamp string
+	VoiceTime 	   int64  `json:"voice_time"`
 }
 
 type UserResponse struct {
@@ -102,4 +103,8 @@ type AddXpResponse struct {
 	AddedXp int  `json:"added_xp"`
 	LevelUp bool `json:"level_up"`
 	User    User `json:"user"`
+}
+
+type AddVoiceTimeResponse struct {
+	User User `json:"user"`
 }
