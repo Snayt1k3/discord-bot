@@ -14,22 +14,28 @@ import (
 func UserStats(http *http.Container, s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	guildID := i.GuildID
 	userID := i.Member.User.ID
+	targetUser := i.Member.User
 
 	if options := i.ApplicationCommandData().Options; len(options) > 0 {
 		if u := options[0].UserValue(s); u != nil {
 			userID = u.ID
+			targetUser = u 
 		}
 	}
 
 	user, err := http.User.GetUser(guildID, userID)
-
 	if err != nil {
 		slog.Error("Failed to fetch user profile", "err", err)
 		return err
 	}
 
-	username := i.Member.User.Username
-	avatar := discordgo.EndpointUserAvatar(i.Member.User.ID, i.Member.User.Avatar)
+	username := targetUser.Username
+	avatar := discordgo.EndpointUserAvatar(targetUser.ID, targetUser.Avatar)
+
+	if err != nil {
+		slog.Error("Failed to fetch user profile", "err", err)
+		return err
+	}
 
 	level := user.Level
 	curXP := user.Experience

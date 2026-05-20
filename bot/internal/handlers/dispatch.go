@@ -77,6 +77,13 @@ func (cd *CommandsDispatcher) Dispatch(s *discordgo.Session, i *discordgo.Intera
 		handler(s, i)
 	} else {
 		slog.Warn("No handler found for command", "name", name)
+		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+        Type: discordgo.InteractionResponseChannelMessageWithSource,
+        Data: &discordgo.InteractionResponseData{
+            Content: "Command not found.",
+            Flags:   discordgo.MessageFlagsEphemeral,
+        },
+    })
 	}
 
 }
