@@ -113,7 +113,7 @@ func AddWelcomeMessage(http *http.Container, s *discordgo.Session, i *discordgo.
 		return nil
 	}
 
-	msg := i.ApplicationCommandData().Options[0].StringValue()
+	msg := i.ApplicationCommandData().Options[1].StringValue()
 
 	err := http.Welcome.AddMessage(i.GuildID, msg)
 
@@ -140,7 +140,7 @@ func DeleteWelcomeMessage(http *http.Container, s *discordgo.Session, i *discord
 		return nil
 	}
 
-	msg := i.ApplicationCommandData().Options[0].StringValue()
+	msg := i.ApplicationCommandData().Options[1].StringValue()
 
 	err := http.Welcome.DeleteMessage(i.GuildID, msg)
 
