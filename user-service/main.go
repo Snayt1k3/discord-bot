@@ -55,7 +55,7 @@ func initLogging() {
 		Level:     slog.LevelInfo,
 		AddSource: true,
 	}
-	// Вывод логов в консоль
+
 	logger := slog.New(slog.NewTextHandler(os.Stdout, opts))
 	slog.SetDefault(logger)
 	slog.Info("Logger initialized")

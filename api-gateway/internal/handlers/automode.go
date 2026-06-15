@@ -22,14 +22,14 @@ func NewAutoModeHandlers(cc grpc.ClientConnInterface) *AutoMode {
 }
 
 // ToggleAutoMod godoc
-// @Summary      Toggle automoderation
-// @Description  Включает или выключает систему автомодерации для указанной гильдии
+// @Summary      Toggle auto-moderation
+// @Description  Enables or disables auto-moderation for the whole guild.
 // @Tags         automode
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.ToggleAutoModRequest true "Toggle automod request"
-// @Success      200 {object} pb.ToggleAutoModResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
+// @Param        request body pb.ToggleAutoModRequest true "Guild ID and enabled flag"
+// @Success      200 {object} pb.ToggleAutoModResponse "Updated auto-moderation state"
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/automode/toggle [post]
 func (s *AutoMode) ToggleAutoMod(c *gin.Context) {
@@ -54,14 +54,14 @@ func (s *AutoMode) ToggleAutoMod(c *gin.Context) {
 
 // AddBannedWord godoc
 // @Summary      Add banned word
-// @Description  Добавляет новое запрещённое слово для фильтрации сообщений в гильдии
+// @Description  Adds a word to the guild's banned-words filter.
 // @Tags         automode
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.AddBannedWordRequest true "Add banned word request"
-// @Success      200 {object} pb.AddBannedWordResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
-// @Failure      429 {object} dto.APIResponse "Quota exceeded"
+// @Param        request body pb.AddBannedWordRequest true "Guild ID and word"
+// @Success      200 {object} pb.AddBannedWordResponse "Added banned word"
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
+// @Failure      429 {object} dto.APIResponse "Quota exceeded for banned words"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/automode/bannedword [post]
 func (s *AutoMode) AddBannedWord(c *gin.Context) {
@@ -94,13 +94,13 @@ func (s *AutoMode) AddBannedWord(c *gin.Context) {
 
 // RemoveBannedWord godoc
 // @Summary      Remove banned word
-// @Description  Удаляет запрещённое слово из фильтра сообщений в указанной гильдии
+// @Description  Removes a word from the guild's banned-words filter.
 // @Tags         automode
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.RemoveBannedWordRequest true "Remove banned word request"
-// @Success      200 {object} pb.RemoveBannedWordResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
+// @Param        request body pb.RemoveBannedWordRequest true "Guild ID and word"
+// @Success      200 {object} pb.RemoveBannedWordResponse "Removed banned word"
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/automode/bannedword [delete]
 func (s *AutoMode) RemoveBannedWord(c *gin.Context) {
@@ -125,14 +125,14 @@ func (s *AutoMode) RemoveBannedWord(c *gin.Context) {
 
 // RemoveAntiLink godoc
 // @Summary      Remove anti-link channel
-// @Description  Удаляет канал из списка фильтра ссылок для указанной гильдии
+// @Description  Disables the anti-link filter in the given channel.
 // @Tags         automode
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.RemoveAntiLinkChannelRequest true "Remove anti-link channel request"
-// @Success      200 {object} pb.RemoveAntiLinkChannelResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
-// @Failure      429 {object} dto.APIResponse "Quota exceeded"
+// @Param        request body pb.RemoveAntiLinkChannelRequest true "Guild ID and channel ID"
+// @Success      200 {object} pb.RemoveAntiLinkChannelResponse "Disabled anti-link channel"
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
+// @Failure      429 {object} dto.APIResponse "Quota exceeded for anti-link"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/automode/antilink [delete]
 func (s *AutoMode) RemoveAntiLink(c *gin.Context) {
@@ -165,13 +165,13 @@ func (s *AutoMode) RemoveAntiLink(c *gin.Context) {
 
 // AddAntiLink godoc
 // @Summary      Add anti-link channel
-// @Description  Добавляет канал в список фильтра ссылок для указанной гильдии
+// @Description  Enables the anti-link filter in the given channel.
 // @Tags         automode
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.AddAntiLinkChannelRequest true "Add anti-link channel request"
-// @Success      200 {object} pb.AddAntiLinkChannelResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
+// @Param        request body pb.AddAntiLinkChannelRequest true "Guild ID and channel ID"
+// @Success      200 {object} pb.AddAntiLinkChannelResponse "Enabled anti-link channel"
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/automode/antilink [post]
 func (s *AutoMode) AddAntiLink(c *gin.Context) {
@@ -195,15 +195,15 @@ func (s *AutoMode) AddAntiLink(c *gin.Context) {
 }
 
 // AddCapsLock godoc
-// @Summary      Add capslock channel
-// @Description  Добавляет канал в список фильтра капс-лока для указанной гильдии
+// @Summary      Add caps-lock channel
+// @Description  Enables the caps-lock filter in the given channel.
 // @Tags         automode
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.AddCapsLockChannelRequest true "Add capslock channel request"
-// @Success      200 {object} pb.AddCapsLockChannelResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
-// @Failure      429 {object} dto.APIResponse "Quota exceeded"
+// @Param        request body pb.AddCapsLockChannelRequest true "Guild ID and channel ID"
+// @Success      200 {object} pb.AddCapsLockChannelResponse "Enabled caps-lock channel"
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
+// @Failure      429 {object} dto.APIResponse "Quota exceeded for caps-lock"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/automode/capslock [post]
 func (s *AutoMode) AddCapsLock(c *gin.Context) {
@@ -235,14 +235,14 @@ func (s *AutoMode) AddCapsLock(c *gin.Context) {
 }
 
 // RemoveCapsLock godoc
-// @Summary      Remove capslock channel
-// @Description  Удаляет канал из списка фильтра капс-лока для указанной гильдии
+// @Summary      Remove caps-lock channel
+// @Description  Disables the caps-lock filter in the given channel.
 // @Tags         automode
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.RemoveCapsLockChannelRequest true "Remove capslock channel request"
-// @Success      200 {object} pb.RemoveCapsLockChannelResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
+// @Param        request body pb.RemoveCapsLockChannelRequest true "Guild ID and channel ID"
+// @Success      200 {object} pb.RemoveCapsLockChannelResponse "Disabled caps-lock channel"
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/automode/capslock [delete]
 func (s *AutoMode) RemoveCapsLock(c *gin.Context) {

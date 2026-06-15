@@ -4,9 +4,17 @@ package preferences;
 
 option go_package = "proto/";
 
+// LogService manages a guild's audit-log configuration: which events are
+// reported, to which channels, and whether logging is enabled at all.
 service LogService {
+  // AddLogs routes the given event types to the specified channel and
+  // returns the resulting event->channel mapping for the guild.
   rpc AddLogs(UpdateLogChannelRequest) returns (UpdateLogChannelResponse);
+
+  // RemoveLogs stops logging the given event types for the guild.
   rpc RemoveLogs(UpdateLogChannelRequest) returns (RemoveLogChannelResponse);
+
+  // ToggleLog enables or disables event logging for the whole guild.
   rpc ToggleLog(ToggleLogRequest) returns (ToggleLogResponse);
 }
 
@@ -22,7 +30,7 @@ message UpdateLogChannelResponse {
 }
 
 message RemoveLogChannelResponse {
-  string guild_id = 2;
+  string guild_id = 1;
 }
 
 message ToggleLogRequest {

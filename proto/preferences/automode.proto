@@ -5,13 +5,28 @@ package preferences;
 option go_package = "proto/";
 
 
+// AutoModService manages a guild's automatic moderation rules: the global
+// toggle, banned words, and per-channel caps-lock and anti-link filters.
 service AutoModService {
+  // ToggleAutoMod enables or disables auto-moderation for the whole guild.
   rpc ToggleAutoMod(ToggleAutoModRequest) returns (ToggleAutoModResponse);
+
+  // AddBannedWord adds a word to the guild's banned-words list.
   rpc AddBannedWord(AddBannedWordRequest) returns (AddBannedWordResponse);
+
+  // RemoveBannedWord removes a word from the guild's banned-words list.
   rpc RemoveBannedWord(RemoveBannedWordRequest) returns (RemoveBannedWordResponse);
+
+  // AddCapsLockChannel enables the caps-lock filter in the given channel.
   rpc AddCapsLockChannel(AddCapsLockChannelRequest) returns (AddCapsLockChannelResponse);
+
+  // RemoveCapsLockChannel disables the caps-lock filter in the given channel.
   rpc RemoveCapsLockChannel(RemoveCapsLockChannelRequest) returns (RemoveCapsLockChannelResponse);
+
+  // AddAntiLinkChannel enables the anti-link filter in the given channel.
   rpc AddAntiLinkChannel(AddAntiLinkChannelRequest) returns (AddAntiLinkChannelResponse);
+
+  // RemoveAntiLinkChannel disables the anti-link filter in the given channel.
   rpc RemoveAntiLinkChannel(RemoveAntiLinkChannelRequest) returns (RemoveAntiLinkChannelResponse);
 }
 

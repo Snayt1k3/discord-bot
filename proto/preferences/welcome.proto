@@ -4,9 +4,16 @@ package preferences;
 
 option go_package = "proto/";
 
+// WelcomeService manages greetings for new members: the target channel and
+// the pool of welcome messages a guild can use.
 service WelcomeService {
+  // SetWelcomeChannel sets the channel where welcome messages are posted.
   rpc SetWelcomeChannel(SetWelcomeChannelRequest) returns (SetWelcomeChannelResponse);
+
+  // AddWelcomeMessage adds a message to the guild's welcome-message pool.
   rpc AddWelcomeMessage(WelcomeMessageRequest) returns (WelcomeMessageResponse);
+
+  // DeleteWelcomeMessage removes a message from the welcome-message pool.
   rpc DeleteWelcomeMessage(WelcomeMessageRequest) returns (WelcomeMessageResponse);
 }
 

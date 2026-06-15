@@ -15,6 +15,21 @@ import (
 	"google.golang.org/grpc"
 )
 
+// @title           Frieren API Gateway
+// @version         1.0
+// @description     HTTP gateway that exposes the Discord bot's user and guild-settings gRPC services as a REST API.
+// @description     Endpoints are grouped by domain: user progression, reaction roles, welcome messages, auto-moderation and audit logging.
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.email  snayt1k3@gmail.com
+
+// @license.name  MIT
+// @license.url   https://opensource.org/licenses/MIT
+
+// @host      localhost:8080
+// @BasePath  /
+// @schemes   http https
 func main() {
 	initLogging()
 	cfg, err := config.LoadConfig()

@@ -25,12 +25,13 @@ func NewSettingsHandlers(cc grpc.ClientConnInterface, redis interfaces.RedisInte
 }
 
 // GetGuildSettings godoc
-// @Summary      Get http settings
-// @Description  Получить настройки гильдии. Сначала проверяет Redis-кэш, если нет — тянет данные из gRPC.
+// @Summary      Get guild settings
+// @Description  Returns the full settings document for a guild (roles, welcome, auto-moderation, logging).
+// @Description  The response is served from the Redis cache when available and falls back to the settings gRPC service otherwise.
 // @Tags         settings
 // @Produce      json
-// @Param        guild_id query string false "Guild ID"
-// @Success      200 {object} pb.GetSettingsResponse
+// @Param        guild_id query string true "Discord guild ID"
+// @Success      200 {object} pb.GetSettingsResponse "Guild settings"
 // @Failure      404 {object} dto.APIResponse "Guild settings not found"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild [get]
@@ -78,6 +79,17 @@ func (s *Settings) GetGuildSettings(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+// CreateSettings godoc
+// @Summary      Create guild settings
+// @Description  Initializes a default settings document for a guild. Fails if settings already exist.
+// @Tags         settings
+// @Accept       json
+// @Produce      json
+// @Param        guild_id query string true "Discord guild ID"
+// @Success      200 {object} pb.CreateSettingsResponse "Created guild settings"
+// @Failure      409 {object} dto.APIResponse "Guild settings already exist"
+// @Failure      500 {object} dto.APIResponse "Internal server error"
+// @Router       /api/v1/settings/guild [post]
 func (s *Settings) CreateSettings(c *gin.Context) {
 	guildID := c.Param("guild_id")
 

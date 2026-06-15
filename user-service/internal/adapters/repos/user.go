@@ -62,21 +62,23 @@ func (r *UserRepo) GetUsers(guildID string, page, size int, orderBy pb.UserOrder
 		sortDir = "DESC"
 	}
 
-	var orderColumn string
+	var orderClause string
 
 	switch orderBy {
 	case pb.UserOrderBy_VOICE_TIME:
-		orderColumn = "voice_time"
+		orderClause = fmt.Sprintf("voice_time %s", sortDir)
 	case pb.UserOrderBy_EXPERIENCE:
-		orderColumn = "level"
+		// Rank by level first, then by accumulated experience as a tiebreaker
+		// so users on the same level are ordered by how close they are to the next one.
+		orderClause = fmt.Sprintf("level %s, experience %s", sortDir, sortDir)
 	default:
-		orderColumn = "level"
+		orderClause = fmt.Sprintf("level %s, experience %s", sortDir, sortDir)
 	}
 
 	err := r.db.Where("guild_id = ?", guildID).
 		Offset(page * size).
 		Limit(size).
-		Order(fmt.Sprintf("%s %s", orderColumn, sortDir)).
+		Order(orderClause).
 		Find(&users).Error
 
 	return users, err

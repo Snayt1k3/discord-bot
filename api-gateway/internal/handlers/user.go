@@ -21,17 +21,17 @@ func NewUserService(cc grpc.ClientConnInterface) *User {
 }
 
 // GetUser godoc
-// @Summary      Get user
-// @Description  Получает профиль пользователя из user-сервиса
+// @Summary      Get a user
+// @Description  Returns the progression profile (experience, level, voice time) of a single user within a guild.
 // @Tags         user
 // @Accept       json
 // @Produce      json
-// @Param        user_id query string true "User ID"
-// @Param        guild_id query string false "Guild ID"
-// @Success      200 {object} pb.GetUserResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
+// @Param        user_id  query string true  "Discord user ID"
+// @Param        guild_id query string true  "Discord guild ID"
+// @Success      200 {object} pb.GetUserResponse "User profile"
+// @Failure      400 {object} dto.APIResponse "user_id and guild_id are required"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router 		 /api/v1/user [get]
+// @Router       /api/v1/user [get]
 func (i *User) GetUser(c *gin.Context) {
 	userID := c.Query("user_id")
 	guildID := c.Query("guild_id")
@@ -57,20 +57,20 @@ func (i *User) GetUser(c *gin.Context) {
 }
 
 // GetUsers godoc
-// @Summary      Get users
-// @Description  Получает профиля пользователей из user-сервиса
+// @Summary      List users
+// @Description  Returns a paginated, sorted list of user profiles for a guild (e.g. for a leaderboard).
 // @Tags         user
 // @Accept       json
 // @Produce      json
-// @Param        guild_id query string false "Guild ID"
-// @Param        page     query int    false "Page number (starts from 0)"
-// @Param        size     query int    false "Items per page (max 50)"
-// @Param        order_by     query string    false "must be 'experience' or 'voice_time'"
-// @Param        is_desc_sort     query     bool     false     "Sort in descending order"     default(true)
-// @Success      200 {object} pb.GetUsersResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
+// @Param        guild_id     query string true  "Discord guild ID"
+// @Param        page         query int    true  "Page number (zero-based)"
+// @Param        size         query int    true  "Items per page (max 50)"
+// @Param        order_by     query string false "Sort field: 'experience' or 'voice_time'" Enums(experience, voice_time)
+// @Param        is_desc_sort query bool   false "Sort in descending order" default(true)
+// @Success      200 {object} pb.GetUsersResponse "Paginated list of users"
+// @Failure      400 {object} dto.APIResponse "Missing or invalid query parameters"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router 		 /api/v1/users [get]
+// @Router       /api/v1/users [get]
 func (i *User) GetUsers(c *gin.Context) {
 	page := c.Query("page")
 	size := c.Query("size")
@@ -125,16 +125,16 @@ func (i *User) GetUsers(c *gin.Context) {
 }	
 
 // AddXp godoc
-// @Summary      Add Experience to user
-// @Description  Добавляет опыт пользователю
+// @Summary      Add experience to a user
+// @Description  Grants experience to a user and recalculates their level. The response reports whether the user leveled up.
 // @Tags         user
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.AddXPRequest true "Add XP"
-// @Success      200 {object} pb.AddXPResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
+// @Param        request body pb.AddXPRequest true "User and amount of XP to add"
+// @Success      200 {object} pb.AddXPResponse "Updated user with level-up flag"
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router 		 /api/v1/user/addxp [post]
+// @Router       /api/v1/user/addxp [post]
 func (i *User) AddXp(c *gin.Context) {
 	var req pb.AddXPRequest
 
@@ -157,16 +157,16 @@ func (i *User) AddXp(c *gin.Context) {
 }
 
 // AddVoiceTime godoc
-// @Summary      Add Voice Time to user
-// @Description  Add Spended time in voice channel to user
+// @Summary      Add voice time to a user
+// @Description  Adds the given number of seconds spent in voice channels to the user's accumulated voice time.
 // @Tags         user
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.AddVoiceTimeRequest true "Add Voice Time"
-// @Success      200 {object} pb.AddVoiceTimeResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
+// @Param        request body pb.AddVoiceTimeRequest true "User and number of seconds to add"
+// @Success      200 {object} pb.AddVoiceTimeResponse "Updated user"
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
-// @Router 		 /api/v1/user/addvoicetime [post]
+// @Router       /api/v1/user/addvoicetime [post]
 func (i *User) AddVoiceTime(c *gin.Context) {
 	var req pb.AddVoiceTimeRequest
 

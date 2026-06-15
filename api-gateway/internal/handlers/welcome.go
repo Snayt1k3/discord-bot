@@ -23,12 +23,12 @@ func NewWelcomeHandlers(cc grpc.ClientConnInterface) *Welcome {
 
 // SetWelcomeChannel godoc
 // @Summary      Set welcome channel
-// @Description  Устанавливает канал, в который бот будет отправлять приветственные сообщения.
+// @Description  Sets the channel where the bot posts welcome messages for new members.
 // @Tags         welcome
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.SetWelcomeChannelRequest true "Welcome channel data"
-// @Success      200 {object} pb.SetWelcomeChannelResponse
+// @Param        request body pb.SetWelcomeChannelRequest true "Guild ID and channel ID"
+// @Success      200 {object} pb.SetWelcomeChannelResponse "Updated welcome channel"
 // @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/welcome/channel [put]
@@ -54,14 +54,14 @@ func (s *Welcome) SetWelcomeChannel(c *gin.Context) {
 
 // AddWelcomeMessage godoc
 // @Summary      Add welcome message
-// @Description  Добавляет приветственное сообщение для гильдии.
+// @Description  Adds a message to the guild's pool of welcome messages.
 // @Tags         welcome
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.WelcomeMessageRequest true "Welcome message data"
-// @Success      200 {object} pb.WelcomeMessageResponse
+// @Param        request body pb.WelcomeMessageRequest true "Guild ID and message text"
+// @Success      200 {object} pb.WelcomeMessageResponse "Added welcome message"
 // @Failure      400 {object} dto.APIResponse "Invalid request body"
-// @Failure      429 {object} dto.APIResponse "Quota exceeded"
+// @Failure      429 {object} dto.APIResponse "Quota exceeded for welcome messages"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/welcome/message [post]
 func (s *Welcome) AddWelcomeMessage(c *gin.Context) {
@@ -93,12 +93,12 @@ func (s *Welcome) AddWelcomeMessage(c *gin.Context) {
 
 // DeleteWelcomeMessage godoc
 // @Summary      Delete welcome message
-// @Description  Удаляет одно из приветственных сообщений гильдии.
+// @Description  Removes a message from the guild's pool of welcome messages.
 // @Tags         welcome
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.WelcomeMessageRequest true "Welcome message data"
-// @Success      200 {object} pb.WelcomeMessageResponse
+// @Param        request body pb.WelcomeMessageRequest true "Guild ID and message text"
+// @Success      200 {object} pb.WelcomeMessageResponse "Removed welcome message"
 // @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/welcome/message [delete]
