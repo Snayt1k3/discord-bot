@@ -5,9 +5,16 @@ package preferences;
 option go_package = "proto/";
 
 
+// RolesService manages reaction-role configuration: mapping emojis to roles
+// and binding them to the message users react to.
 service RolesService {
+  // AddRole maps an emoji to a role so that reacting with it grants the role.
   rpc AddRole(AddRoleRequest) returns (AddRoleResponse);
+
+  // RemoveRole removes the emoji->role mapping for the given role.
   rpc RemoveRole(RemoveRoleRequest) returns (RemoveRoleResponse);
+
+  // SetRoleMessageId sets the message whose reactions drive role assignment.
   rpc SetRoleMessageId(SetMessageRequest) returns (SetMessageResponse);
 }
 

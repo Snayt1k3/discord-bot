@@ -19,8 +19,9 @@ message User {
 }
 
 enum UserOrderBy {
-  EXPERIENCE = 0;
-  VOICE_TIME = 1;
+  USER_ORDER_BY_UNSPECIFIED = 0; // defaults to EXPERIENCE on the server
+  EXPERIENCE = 1;
+  VOICE_TIME = 2;
 }
 
 message GetUserRequest {
@@ -74,9 +75,22 @@ message GetUsersResponse {
 // Service definition
 // ----------------------
 
+// UserService manages per-guild user progression: experience, levels and
+// accumulated voice activity.
 service UserService {
+  // GetUser returns the user's progression profile for a given guild.
+  // Returns NOT_FOUND if the user has no record in the guild.
   rpc GetUser (GetUserRequest) returns (GetUserResponse);
+
+  // AddXP grants experience to a user and recalculates their level.
+  // The response reports whether the user leveled up and how much XP was added.
   rpc AddXP (AddXPRequest) returns (AddXPResponse);
+
+  // AddVoiceTime adds the given number of seconds spent in voice channels
+  // to the user's total voice time.
   rpc AddVoiceTime (AddVoiceTimeRequest) returns (AddVoiceTimeResponse);
+
+  // GetUsers returns a paginated, sorted list of users in a guild
+  // (e.g. for a leaderboard). Sorting is controlled by order_by/is_desc_sort.
   rpc GetUsers(GetUsersRequest) returns (GetUsersResponse);
 }

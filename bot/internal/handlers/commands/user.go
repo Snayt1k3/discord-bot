@@ -32,11 +32,6 @@ func UserStats(http *http.Container, s *discordgo.Session, i *discordgo.Interact
 	username := targetUser.Username
 	avatar := discordgo.EndpointUserAvatar(targetUser.ID, targetUser.Avatar)
 
-	if err != nil {
-		slog.Error("Failed to fetch user profile", "err", err)
-		return err
-	}
-
 	level := user.Level
 	curXP := user.Experience
 	nextXP := user.NextLevelXP

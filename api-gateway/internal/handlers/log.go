@@ -21,13 +21,13 @@ func NewLogHandlers(cc grpc.ClientConnInterface) *Log {
 
 // ToggleLog godoc
 // @Summary      Toggle logging
-// @Description  Включает или выключает систему логирования для указанной гильдии
+// @Description  Enables or disables event logging for the whole guild.
 // @Tags         logging
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.ToggleLogRequest true "Toggle logging request"
-// @Success      200 {object} pb.ToggleLogResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
+// @Param        request body pb.ToggleLogRequest true "Guild ID and enabled flag"
+// @Success      200 {object} pb.ToggleLogResponse "Updated logging state"
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/logging/toggle [post]
 func (s *Log) ToggleLog(c *gin.Context) {
@@ -52,13 +52,13 @@ func (s *Log) ToggleLog(c *gin.Context) {
 
 // AddLogChannel godoc
 // @Summary      Add log channel
-// @Description  Добавляет настройку для логирования действий в указанной гильдии
+// @Description  Routes the given event types to a channel and returns the resulting event-to-channel mapping for the guild.
 // @Tags         logging
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.UpdateLogChannelRequest true "Add logs setting"
-// @Success      200 {object} pb.UpdateLogChannelResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
+// @Param        request body pb.UpdateLogChannelRequest true "Guild ID, event types and channel ID"
+// @Success      200 {object} pb.UpdateLogChannelResponse "Updated event-to-channel mapping"
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/logging/channel [post]
 func (s *Log) AddLogChannel(c *gin.Context) {
@@ -83,13 +83,13 @@ func (s *Log) AddLogChannel(c *gin.Context) {
 
 // RemoveLogChannel godoc
 // @Summary      Remove log channel
-// @Description  Удаляет настройку для логирования действий в указанной гильдии
+// @Description  Stops logging the given event types for the guild.
 // @Tags         logging
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.UpdateLogChannelRequest true "Remove logs settings"
-// @Success      200 {object} pb.UpdateLogChannelResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
+// @Param        request body pb.UpdateLogChannelRequest true "Guild ID and event types to stop logging"
+// @Success      200 {object} pb.RemoveLogChannelResponse "Updated logging configuration"
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/logging/channel [delete]
 func (s *Log) RemoveLogChannel(c *gin.Context) {

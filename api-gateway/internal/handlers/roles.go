@@ -22,15 +22,14 @@ func NewRolesHandlers(cc grpc.ClientConnInterface) *Roles {
 }
 
 // SetRoleMessageId godoc
-// @Summary      Set role message ID
-// @Description  Устанавливает ID сообщения, к которому будут привязаны реакции для выдачи ролей в указанной гильдии
+// @Summary      Set reaction-role message
+// @Description  Sets the message whose reactions drive reaction-role assignment for the guild.
 // @Tags         roles
 // @Accept       json
 // @Produce      json
-
-// @Param        request body pb.SetMessageRequest true "Set role message ID request"
-// @Success      200 {object} pb.SetMessageResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
+// @Param        request body pb.SetMessageRequest true "Guild ID and target message ID"
+// @Success      200 {object} pb.SetMessageResponse "Updated reaction-role message"
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/roles/message [put]
 func (s *Roles) SetRoleMessageId(c *gin.Context) {
@@ -54,16 +53,15 @@ func (s *Roles) SetRoleMessageId(c *gin.Context) {
 }
 
 // AddRole godoc
-// @Summary      Add role
-// @Description  Добавляет новую реакционную роль в указанной гильдии
+// @Summary      Add reaction role
+// @Description  Maps an emoji to a role so that reacting with it grants the role in the guild.
 // @Tags         roles
 // @Accept       json
 // @Produce      json
-// @Param        guild_id path string true "Guild ID"
-// @Param        request body pb.AddRoleRequest true "Add role request"
-// @Success      200 {object} pb.AddRoleResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
-// @Failure      429 {object} dto.APIResponse "Quota exceeded"
+// @Param        request body pb.AddRoleRequest true "Guild ID, role ID and emoji"
+// @Success      200 {object} pb.AddRoleResponse "Created emoji-to-role mapping"
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
+// @Failure      429 {object} dto.APIResponse "Quota exceeded for roles/reactions"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/roles/role [post]
 func (s *Roles) AddRole(c *gin.Context) {
@@ -94,14 +92,14 @@ func (s *Roles) AddRole(c *gin.Context) {
 }
 
 // DeleteRole godoc
-// @Summary      Delete role
-// @Description  Удаляет реакционную роль из указанной гильдии
+// @Summary      Delete reaction role
+// @Description  Removes the emoji-to-role mapping for the given role in the guild.
 // @Tags         roles
 // @Accept       json
 // @Produce      json
-// @Param        request body pb.RemoveRoleRequest true "Delete role request"
-// @Success      200 {object} pb.RemoveRoleResponse
-// @Failure      400 {object} dto.APIResponse "Bad request"
+// @Param        request body pb.RemoveRoleRequest true "Guild ID and role ID"
+// @Success      200 {object} pb.RemoveRoleResponse "Removed reaction role"
+// @Failure      400 {object} dto.APIResponse "Invalid request body"
 // @Failure      500 {object} dto.APIResponse "Internal server error"
 // @Router       /api/v1/settings/guild/roles/role [delete]
 func (s *Roles) DeleteRole(c *gin.Context) {
